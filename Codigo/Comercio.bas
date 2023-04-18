@@ -1,6 +1,6 @@
 Attribute VB_Name = "modSistemaComercio"
 '*****************************************************
-'Sistema de Comercio para Argentum Online
+'Sistema de Comercio para Nexus AO
 'Programado por Nacho (Integer)
 'integer-x@hotmail.com
 '*****************************************************

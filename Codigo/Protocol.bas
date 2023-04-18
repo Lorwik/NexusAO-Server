@@ -1484,7 +1484,7 @@ Private Sub HandleLoginExistingChar(ByVal UserIndex As Integer)
     End If
 
     If BANCheck(UserName) Then
-        Call WriteErrorMsg(UserIndex, "Se te ha prohibido la entrada a Argentum Online debido a tu mal comportamiento. Puedes consultar el reglamento y el sistema de soporte desde www.argentumonline.com.ar")
+        Call WriteErrorMsg(UserIndex, "Se te ha prohibido la entrada a Nexus AO debido a tu mal comportamiento. Puedes consultar el reglamento y el sistema de soporte desde www.argentumonline.com.ar")
     ElseIf Not VersionOK(version) Then
         Call WriteErrorMsg(UserIndex, "Esta versión del juego es obsoleta, la versión correcta es la " & ULTIMAVERSION & ". La misma se encuentra disponible en www.argentumonline.com.ar")
     Else

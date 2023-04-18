@@ -1,5 +1,5 @@
 Attribute VB_Name = "General"
-'Argentum Online 0.12.2
+'Nexus AO mod Argentum Online 0.13
 'Copyright (C) 2002 Márquez Pablo Ignacio
 '
 'This program is free software; you can redistribute it and/or modify
@@ -14,7 +14,7 @@ Attribute VB_Name = "General"
 'You should have received a copy of the Affero General Public License
 'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
 '
-'Argentum Online is based on Baronsoft's VB6 Online RPG
+'Nexus AO mod Argentum Online is based on Baronsoft's VB6 Online RPG
 'You can contact the original creator of ORE at aaron@baronsoft.com
 'for more information about ORE please visit http://www.baronsoft.com/
 '
@@ -1919,7 +1919,7 @@ Sub PasarSegundo()
                     .Counters.Salir = .Counters.Salir - 1
 
                     If .Counters.Salir <= 0 Then
-                        Call WriteConsoleMsg(i, "Gracias por jugar Argentum Online", FontTypeNames.FONTTYPE_INFO)
+                        Call WriteConsoleMsg(i, "Gracias por jugar Nexus AO", FontTypeNames.FONTTYPE_INFO)
                         Call WriteDisconnect(i)
                         Call FlushBuffer(i)
                         
