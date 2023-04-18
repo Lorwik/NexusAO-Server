@@ -1760,6 +1760,13 @@ Public Function PuedeAtacar(ByVal AttackerIndex As Integer, _
 
     End If
     
+    If UserList(AttackerIndex).flags.Combate = False Then
+        Call WriteConsoleMsg(AttackerIndex, "Debes activar el modo combate para poder atacar.", FontTypeNames.FONTTYPE_INFO)
+        PuedeAtacar = False
+        Exit Function
+
+    End If
+    
     'No podes atacar a alguien muerto
     If UserList(VictimIndex).flags.Muerto = 1 Then
         Call WriteConsoleMsg(AttackerIndex, "No puedes atacar a un espíritu.", FontTypeNames.FONTTYPE_INFO)
@@ -1963,6 +1970,12 @@ Public Function PuedeAtacarNPC(ByVal AttackerIndex As Integer, _
             'No pueden atacar NPC los Consejeros.
             Exit Function
 
+        End If
+        
+        If UserList(AttackerIndex).flags.Combate = False Then
+            Call WriteConsoleMsg(AttackerIndex, "Debes activar el modo combate para poder atacar.", FontTypeNames.FONTTYPE_INFO)
+            Exit Function
+    
         End If
         
         ' No podes atacar si estas en consulta

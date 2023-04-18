@@ -979,15 +979,6 @@ Sub MoveUserChar(ByVal UserIndex As Integer, ByVal nHeading As eHeading)
 
                 ' Los admins invisibles no pueden patear caspers
                 If Not isAdminInvi Then
-                    
-                    If TriggerZonaPelea(UserIndex, CasperIndex) = TRIGGER6_PROHIBE Then
-                        If UserList(CasperIndex).flags.SeguroResu = False Then
-                            UserList(CasperIndex).flags.SeguroResu = True
-                            Call WriteMultiMessage(CasperIndex, eMessages.ResuscitationSafeOn)
-
-                        End If
-
-                    End If
     
                     With UserList(CasperIndex)
                         CasperHeading = InvertHeading(nHeading)
@@ -1714,16 +1705,6 @@ Public Sub UserDie(ByVal UserIndex As Integer)
         .flags.Muerto = 1
         
         .Counters.Trabajando = 0
-        
-        ' No se activa en arenas
-        If TriggerZonaPelea(UserIndex, UserIndex) <> TRIGGER6_PERMITE Then
-            .flags.SeguroResu = True
-            Call WriteMultiMessage(UserIndex, eMessages.ResuscitationSafeOn) 'Call WriteResuscitationSafeOn(UserIndex)
-        Else
-            .flags.SeguroResu = False
-            Call WriteMultiMessage(UserIndex, eMessages.ResuscitationSafeOff) 'Call WriteResuscitationSafeOff(UserIndex)
-
-        End If
         
         aN = .flags.AtacadoPorNpc
 

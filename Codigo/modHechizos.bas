@@ -1378,14 +1378,6 @@ Sub HechizoEstadoUsuario(ByVal UserIndex As Integer, ByRef HechizoCasteado As Bo
         ' <-------- Revive ---------->
         If Hechizos(HechizoIndex).Revivir = 1 Then
             If UserList(TargetIndex).flags.Muerto = 1 Then
-            
-                'Seguro de resurreccion (solo afecta a los hechizos, no al sacerdote ni al comando de GM)
-                If UserList(TargetIndex).flags.SeguroResu Then
-                    Call WriteConsoleMsg(UserIndex, "¡El espíritu no tiene intenciones de regresar al mundo de los vivos!", FontTypeNames.FONTTYPE_INFO)
-                    HechizoCasteado = False
-                    Exit Sub
-
-                End If
         
                 'No usar resu en mapas con ResuSinEfecto
                 If MapInfo(UserList(TargetIndex).Pos.Map).ResuSinEfecto > 0 Then
@@ -2428,6 +2420,7 @@ Public Function CanSupportUser(ByVal CasterIndex As Integer, _
                 If .flags.Seguro Then
                     Call WriteConsoleMsg(CasterIndex, "Para ayudar criminales debes sacarte el seguro ya que te volverás criminal como ellos.", FontTypeNames.FONTTYPE_INFO)
                     Exit Function
+                    
                 Else
 
                     ' Penalizacion
@@ -2470,6 +2463,7 @@ Public Function CanSupportUser(ByVal CasterIndex As Integer, _
                         If .flags.Seguro Then
                             Call WriteConsoleMsg(CasterIndex, "Para ayudar ciudadanos en estado atacable debes sacarte el seguro, pero te puedes volver criminal.", FontTypeNames.FONTTYPE_INFO)
                             Exit Function
+                            
                         Else
                             Call DisNobAuBan(CasterIndex, .Reputacion.NobleRep * 0.5, 10000)
 

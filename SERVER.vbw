@@ -1,5 +1,5 @@
 Acciones = 104, 104, 926, 626, C
-Admin = 0, 0, 904, 522, 
+Admin = 0, 0, 904, 522, Z
 AI = 26, 26, 848, 548, C
 modSistemaComercio = 208, 208, 1030, 730, C
 Declaraciones = 208, 208, 1112, 730, 
@@ -54,7 +54,7 @@ diccionario = 0, 0, 0, 0, C
 ModAreas = 78, 78, 900, 600, C
 clsByteQueue = 0, 0, 822, 522, C
 Statistics = 208, 208, 1030, 730, C
-Protocol = 161, 161, 894, 730, Z
+Protocol = 161, 161, 894, 730, 
 modSendData = 125, 125, 1020, 631, C
 Characters = 46, 46, 779, 615, C
 modForum = 0, 0, 0, 0, C

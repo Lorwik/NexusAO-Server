@@ -172,7 +172,6 @@ Private Enum ClientPacketID
     Attack = 9                  'AT
     PickUp = 10                   'AG
     SafeToggle = 11              '/SEG & SEG  (SEG's behaviour has to be coded in the client)
-    ResuscitationSafeToggle = 12
     RequestGuildLeaderInfo = 13   'GLINFO
     RequestAtributes = 14         'ATR
     RequestFame = 15              'FAMA
@@ -436,9 +435,6 @@ Public Sub HandleIncomingData(ByVal UserIndex As Integer)
         
         Case ClientPacketID.SafeToggle              '/SEG & SEG  (SEG's behaviour has to be coded in the client)
             Call HandleSafeToggle(UserIndex)
-        
-        Case ClientPacketID.ResuscitationSafeToggle
-            Call HandleResuscitationToggle(UserIndex)
         
         Case ClientPacketID.RequestGuildLeaderInfo  'GLINFO
             Call HandleRequestGuildLeaderInfo(UserIndex)
@@ -832,7 +828,7 @@ Public Sub WriteMultiMessage(ByVal UserIndex As Integer, _
         
         Select Case MessageIndex
 
-            Case eMessages.NPCSwing, eMessages.NPCKillUser, eMessages.BlockedWithShieldUser, eMessages.BlockedWithShieldother, eMessages.UserSwing, eMessages.SafeModeOn, eMessages.SafeModeOff, eMessages.ResuscitationSafeOff, eMessages.ResuscitationSafeOn, eMessages.NobilityLost, eMessages.CantUseWhileMeditating, eMessages.CancelHome, eMessages.FinishHome
+            Case eMessages.NPCSwing, eMessages.NPCKillUser, eMessages.BlockedWithShieldUser, eMessages.BlockedWithShieldother, eMessages.UserSwing, eMessages.SafeModeOn, eMessages.SafeModeOff, eMessages.CombatModeOn, eMessages.CombatModeOff, eMessages.NobilityLost, eMessages.CantUseWhileMeditating, eMessages.CancelHome, eMessages.FinishHome
             
             Case eMessages.NPCHitUser
                 Call .WriteByte(Arg1) 'Target
@@ -2353,27 +2349,29 @@ Private Sub HandleSafeToggle(ByVal UserIndex As Integer)
 End Sub
 
 ''
-' Handles the "ResuscitationSafeToggle" message.
+' Handles the "CombatToggle" message.
 '
 ' @param    userIndex The index of the user sending the message.
 
-Private Sub HandleResuscitationToggle(ByVal UserIndex As Integer)
-
+Public Sub HandleCombatToggle(ByVal UserIndex As Integer)
     '***************************************************
-    'Author: Rapsodius
-    'Creation Date: 10/10/07
+    'Author: Lorwik
+    'Last Modification: 18/04/2023
+    '
     '***************************************************
+    
     With UserList(UserIndex)
+        'Remove packet ID
         Call .incomingData.ReadByte
         
-        .flags.SeguroResu = Not .flags.SeguroResu
-        
-        If .flags.SeguroResu Then
-            Call WriteMultiMessage(UserIndex, eMessages.ResuscitationSafeOn) 'Call WriteResuscitationSafeOn(UserIndex)
+        If .flags.Combate Then
+            Call WriteMultiMessage(UserIndex, eMessages.CombatModeOff)
         Else
-            Call WriteMultiMessage(UserIndex, eMessages.ResuscitationSafeOff) 'Call WriteResuscitationSafeOff(UserIndex)
+            Call WriteMultiMessage(UserIndex, eMessages.CombatModeOn)
 
         End If
+        
+        .flags.Combate = Not .flags.Combate
 
     End With
 
