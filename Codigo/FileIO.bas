@@ -1241,16 +1241,16 @@ Sub LoadUserInit(ByVal UserIndex As Integer, ByRef UserFile As clsIniManager)
             .Navegando = CByte(UserFile.GetValue("FLAGS", "Navegando"))
             .Envenenado = CByte(UserFile.GetValue("FLAGS", "Envenenado"))
             .Paralizado = CByte(UserFile.GetValue("FLAGS", "Paralizado"))
+            .Seguro = CBool(UserFile.GetValue("FLAGS", "Seguro"))
+            .Combate = CBool(UserFile.GetValue("FLAGS", "Combate"))
             
             'Matrix
             .lastMap = val(UserFile.GetValue("FLAGS", "LastMap"))
 
         End With
         
-        If .flags.Paralizado = 1 Then
+        If .flags.Paralizado = 1 Then _
             .Counters.Paralisis = IntervaloParalizado
-
-        End If
         
         .Counters.Pena = CLng(UserFile.GetValue("COUNTERS", "Pena"))
         .Counters.AsignedSkills = CByte(val(UserFile.GetValue("COUNTERS", "SkillsAsignados")))
@@ -1997,6 +1997,9 @@ Sub SaveUser(ByVal UserIndex As Integer, _
         Call Manager.ChangeValue("FLAGS", "Navegando", CStr(.flags.Navegando))
         Call Manager.ChangeValue("FLAGS", "Envenenado", CStr(.flags.Envenenado))
         Call Manager.ChangeValue("FLAGS", "Paralizado", CStr(.flags.Paralizado))
+        Call Manager.ChangeValue("FLAGS", "Seguro", CStr(.flags.Seguro))
+        Call Manager.ChangeValue("FLAGS", "Combate", CStr(.flags.Combate))
+        
         'Matrix
         Call Manager.ChangeValue("FLAGS", "LastMap", CStr(.flags.lastMap))
     

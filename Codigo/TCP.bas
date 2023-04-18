@@ -1587,14 +1587,22 @@ Sub ConnectUser(ByVal UserIndex As Integer, _
 
         End If
     
-        If criminal(UserIndex) Then
-            Call WriteMultiMessage(UserIndex, eMessages.SafeModeOff) 'Call WriteSafeModeOff(UserIndex)
-            .flags.Seguro = False
+        If Not .flags.Seguro Then
+            Call WriteMultiMessage(UserIndex, eMessages.SafeModeOff)
+            
         Else
-            .flags.Seguro = True
-            Call WriteMultiMessage(UserIndex, eMessages.SafeModeOn) 'Call WriteSafeModeOn(UserIndex)
+            Call WriteMultiMessage(UserIndex, eMessages.SafeModeOn)
 
         End If
+        
+        If Not .flags.Combate Then
+            Call WriteMultiMessage(UserIndex, eMessages.CombatModeOff)
+        
+        Else
+            Call WriteMultiMessage(UserIndex, eMessages.CombatModeOn)
+            
+        End If
+
     
         If .GuildIndex > 0 Then
 

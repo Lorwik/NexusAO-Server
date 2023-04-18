@@ -172,6 +172,7 @@ Private Enum ClientPacketID
     Attack = 9                  'AT
     PickUp = 10                   'AG
     SafeToggle = 11              '/SEG & SEG  (SEG's behaviour has to be coded in the client)
+    CombatToggle = 12
     RequestGuildLeaderInfo = 13   'GLINFO
     RequestAtributes = 14         'ATR
     RequestFame = 15              'FAMA
@@ -435,6 +436,9 @@ Public Sub HandleIncomingData(ByVal UserIndex As Integer)
         
         Case ClientPacketID.SafeToggle              '/SEG & SEG  (SEG's behaviour has to be coded in the client)
             Call HandleSafeToggle(UserIndex)
+            
+        Case ClientPacketID.CombatToggle
+            Call HandleCombatToggle(UserIndex)
         
         Case ClientPacketID.RequestGuildLeaderInfo  'GLINFO
             Call HandleRequestGuildLeaderInfo(UserIndex)
@@ -2366,6 +2370,7 @@ Public Sub HandleCombatToggle(ByVal UserIndex As Integer)
         
         If .flags.Combate Then
             Call WriteMultiMessage(UserIndex, eMessages.CombatModeOff)
+            
         Else
             Call WriteMultiMessage(UserIndex, eMessages.CombatModeOn)
 
