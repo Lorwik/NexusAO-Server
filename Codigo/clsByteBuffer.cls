@@ -17,7 +17,7 @@ Private Declare Sub CopyMemory _
                 Lib "kernel32" _
                 Alias "RtlMoveMemory" (ByRef destination As Any, _
                                        ByRef source As Any, _
-                                       ByVal length As Long)
+                                       ByVal Length As Long)
 
 Private data()                      As Byte
 
@@ -63,10 +63,10 @@ Public Sub initializeWriter(ByVal fileHandler As Integer)
 
 End Sub
 
-Public Sub getBytes(ByRef destination() As Byte, Optional ByVal length As Long = -1)
+Public Sub getBytes(ByRef destination() As Byte, Optional ByVal Length As Long = -1)
 
-    If length >= 0 Then
-        Call CopyMemory(destination(0), data(CurrentPos), length)
+    If Length >= 0 Then
+        Call CopyMemory(destination(0), data(CurrentPos), Length)
     Else
         Call CopyMemory(destination(0), data(0), lastPos + 1)
 
@@ -110,22 +110,22 @@ Public Function getDouble() As Double
 
 End Function
 
-Public Function getString(Optional ByVal length As Integer = -1) As String
+Public Function getString(Optional ByVal Length As Integer = -1) As String
 
     Dim ret() As Byte
 
-    If length < 0 Then
-        length = getInteger()
-        getString = getString(length)
+    If Length < 0 Then
+        Length = getInteger()
+        getString = getString(Length)
     Else
 
-        If length > 0 Then
-            ReDim ret(length - 1) As Byte
+        If Length > 0 Then
+            ReDim ret(Length - 1) As Byte
         
-            Call CopyMemory(ret(0), data(CurrentPos), length)
+            Call CopyMemory(ret(0), data(CurrentPos), Length)
         
             getString = StrConv(ret, vbUnicode)
-            CurrentPos = CurrentPos + length
+            CurrentPos = CurrentPos + Length
 
         End If
 
@@ -133,57 +133,57 @@ Public Function getString(Optional ByVal length As Integer = -1) As String
 
 End Function
 
-Public Sub putByte(ByVal value As Byte)
-    data(lastPos + 1) = value
+Public Sub putByte(ByVal Value As Byte)
+    data(lastPos + 1) = Value
     lastPos = lastPos + BYTE_SIZE
 
 End Sub
 
-Public Sub putBoolean(ByVal value As Boolean)
-    Call CopyMemory(data(lastPos + 1), value, BOOL_SIZE)
+Public Sub putBoolean(ByVal Value As Boolean)
+    Call CopyMemory(data(lastPos + 1), Value, BOOL_SIZE)
     lastPos = lastPos + BOOL_SIZE
 
 End Sub
 
-Public Sub putInteger(ByVal value As Integer)
-    Call CopyMemory(data(lastPos + 1), value, INTEGER_SIZE)
+Public Sub putInteger(ByVal Value As Integer)
+    Call CopyMemory(data(lastPos + 1), Value, INTEGER_SIZE)
     lastPos = lastPos + INTEGER_SIZE
 
 End Sub
 
-Public Sub putLong(ByVal value As Long)
-    Call CopyMemory(data(lastPos + 1), value, LONG_SIZE)
+Public Sub putLong(ByVal Value As Long)
+    Call CopyMemory(data(lastPos + 1), Value, LONG_SIZE)
     lastPos = lastPos + LONG_SIZE
 
 End Sub
 
-Public Sub putSingle(ByVal value As Single)
-    Call CopyMemory(data(lastPos + 1), value, SINGLE_SIZE)
+Public Sub putSingle(ByVal Value As Single)
+    Call CopyMemory(data(lastPos + 1), Value, SINGLE_SIZE)
     lastPos = lastPos + SINGLE_SIZE
 
 End Sub
 
-Public Sub putDouble(ByVal value As Double)
-    Call CopyMemory(data(lastPos + 1), value, DOUBLE_SIZE)
+Public Sub putDouble(ByVal Value As Double)
+    Call CopyMemory(data(lastPos + 1), Value, DOUBLE_SIZE)
     lastPos = lastPos + DOUBLE_SIZE
 
 End Sub
 
 Public Sub putString(ByRef str As String, Optional ByVal withLength As Boolean = True)
 
-    Dim length As Long
+    Dim Length As Long
 
-    length = Len(str)
+    Length = Len(str)
 
     If withLength Then
-        Call putInteger(length)
+        Call putInteger(Length)
         Call putString(str, False)
     Else
 
-        If length > 0 Then
-            Call CopyMemory(data(lastPos + 1), ByVal StrPtr(StrConv(str, vbFromUnicode)), length)
+        If Length > 0 Then
+            Call CopyMemory(data(lastPos + 1), ByVal StrPtr(StrConv(str, vbFromUnicode)), Length)
     
-            lastPos = lastPos + length
+            lastPos = lastPos + Length
 
         End If
 
@@ -191,13 +191,13 @@ Public Sub putString(ByRef str As String, Optional ByVal withLength As Boolean =
 
 End Sub
 
-Public Sub getVoid(ByVal length As Integer)
-    CurrentPos = CurrentPos + length
+Public Sub getVoid(ByVal Length As Integer)
+    CurrentPos = CurrentPos + Length
 
 End Sub
 
-Public Sub putVoid(ByVal length As Integer)
-    lastPos = lastPos + length
+Public Sub putVoid(ByVal Length As Integer)
+    lastPos = lastPos + Length
 
 End Sub
 

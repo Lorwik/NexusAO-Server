@@ -1,19 +1,20 @@
 VERSION 5.00
 Begin VB.Form frmDebugNpc 
-   BackColor       =   &H00FFC0C0&
+   BackColor       =   &H00E0E0E0&
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Debug Npcs"
    ClientHeight    =   2460
    ClientLeft      =   45
    ClientTop       =   330
    ClientWidth     =   4680
+   ControlBox      =   0   'False
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    ScaleHeight     =   2460
    ScaleWidth      =   4680
    StartUpPosition =   2  'CenterScreen
    Begin VB.CommandButton Command2 
-      BackColor       =   &H00FFC0C0&
+      BackColor       =   &H00E0E0E0&
       Cancel          =   -1  'True
       Caption         =   "Salir (Esc)"
       BeginProperty Font 
@@ -33,7 +34,7 @@ Begin VB.Form frmDebugNpc
       Width           =   4455
    End
    Begin VB.CommandButton Command1 
-      BackColor       =   &H00FFC0C0&
+      BackColor       =   &H00E0E0E0&
       Caption         =   "ActualizarInfo"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
@@ -129,8 +130,8 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-'Nexus AO mod Argentum Online 0.13
-'Copyright (C) 2002 Márquez Pablo Ignacio
+'Argentum Online 0.12.2
+'Copyright (C) 2002 Marquez Pablo Ignacio
 '
 'This program is free software; you can redistribute it and/or modify
 'it under the terms of the Affero General Public License;
@@ -144,7 +145,7 @@ Attribute VB_Exposed = False
 'You should have received a copy of the Affero General Public License
 'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
 '
-'Nexus AO mod Argentum Online is based on Baronsoft's VB6 Online RPG
+'Argentum Online is based on Baronsoft's VB6 Online RPG
 'You can contact the original creator of ORE at aaron@baronsoft.com
 'for more information about ORE please visit http://www.baronsoft.com/
 '
@@ -152,24 +153,24 @@ Attribute VB_Exposed = False
 'You can contact me at:
 'morgolock@speedy.com.ar
 'www.geocities.com/gmorgolock
-'Calle 3 número 983 piso 7 dto A
+'Calle 3 numero 983 piso 7 dto A
 'La Plata - Pcia, Buenos Aires - Republica Argentina
-'Código Postal 1900
-'Pablo Ignacio Márquez
+'Codigo Postal 1900
+'Pablo Ignacio Marquez
 
 Option Explicit
 
 Private Sub Command1_Click()
 
-    Dim i As Integer, k As Integer
+    Dim i As Integer, K As Integer
 
     For i = 1 To LastNPC
 
-        If Npclist(i).flags.NPCActive Then k = k + 1
+        If Npclist(i).flags.NPCActive Then K = K + 1
     Next i
 
-    Label1.Caption = "Npcs Activos:" & k
-    Label2.Caption = "Npcs Libres:" & MAXNPCS - k
+    Label1.Caption = "Npcs Activos:" & K
+    Label2.Caption = "Npcs Libres:" & MAXNPCS - K
     Label3.Caption = "LastNpcIndex:" & LastNPC
     Label4.Caption = "MAXNPCS:" & MAXNPCS
 

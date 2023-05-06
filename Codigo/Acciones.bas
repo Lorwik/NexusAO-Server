@@ -1,6 +1,6 @@
 Attribute VB_Name = "Acciones"
-'Nexus AO mod Argentum Online 0.13
-'Copyright (C) 2002 Márquez Pablo Ignacio
+'Argentum Online 0.12.2
+'Copyright (C) 2002 Marquez Pablo Ignacio
 '
 'This program is free software; you can redistribute it and/or modify
 'it under the terms of the Affero General Public License;
@@ -14,7 +14,7 @@ Attribute VB_Name = "Acciones"
 'You should have received a copy of the Affero General Public License
 'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
 '
-'Nexus AO mod Argentum Online is based on Baronsoft's VB6 Online RPG
+'Argentum Online is based on Baronsoft's VB6 Online RPG
 'You can contact the original creator of ORE at aaron@baronsoft.com
 'for more information about ORE please visit http://www.baronsoft.com/
 '
@@ -22,10 +22,10 @@ Attribute VB_Name = "Acciones"
 'You can contact me at:
 'morgolock@speedy.com.ar
 'www.geocities.com/gmorgolock
-'Calle 3 número 983 piso 7 dto A
+'Calle 3 numero 983 piso 7 dto A
 'La Plata - Pcia, Buenos Aires - Republica Argentina
-'Código Postal 1900
-'Pablo Ignacio Márquez
+'Codigo Postal 1900
+'Pablo Ignacio Marquez
 
 Option Explicit
 
@@ -55,13 +55,13 @@ Sub Accion(ByVal UserIndex As Integer, _
     
     On Error Resume Next
 
-    '¿Rango Visión? (ToxicWaste)
+    'Rango Vision? (ToxicWaste)
     If (Abs(UserList(UserIndex).Pos.Y - Y) > RANGO_VISION_Y) Or (Abs(UserList(UserIndex).Pos.X - X) > RANGO_VISION_X) Then
         Exit Sub
 
     End If
     
-    '¿Posicion valida?
+    'Posicion valida?
     If InMapBounds(Map, X, Y) Then
 
         With UserList(UserIndex)
@@ -74,9 +74,8 @@ Sub Accion(ByVal UserIndex As Integer, _
                 
                 If Npclist(tempIndex).Comercia = 1 Then
 
-                    '¿Esta el user muerto? Si es asi no puede comerciar
+                    'Esta el user muerto? Si es asi no puede comerciar
                     If .flags.Muerto = 1 Then
-                        'Call WriteConsoleMsg(UserIndex, "¡¡Estás muerto!!", FontTypeNames.FONTTYPE_INFO)
                         Call WriteMultiMessage(UserIndex, eMessages.UserMuerto)
                         Exit Sub
 
@@ -89,7 +88,7 @@ Sub Accion(ByVal UserIndex As Integer, _
                     End If
                     
                     If Distancia(Npclist(tempIndex).Pos, .Pos) > 3 Then
-                        Call WriteConsoleMsg(UserIndex, "Estás demasiado lejos del vendedor.", FontTypeNames.FONTTYPE_INFO)
+                        Call WriteConsoleMsg(UserIndex, "Estas demasiado lejos del vendedor.", FontTypeNames.FONTTYPE_INFO)
                         Exit Sub
 
                     End If
@@ -99,9 +98,8 @@ Sub Accion(ByVal UserIndex As Integer, _
                 
                 ElseIf Npclist(tempIndex).NPCtype = eNPCType.Banquero Then
 
-                    '¿Esta el user muerto? Si es asi no puede comerciar
+                    'Esta el user muerto? Si es asi no puede comerciar
                     If .flags.Muerto = 1 Then
-                        'Call WriteConsoleMsg(UserIndex, "¡¡Estás muerto!!", FontTypeNames.FONTTYPE_INFO)
                         Call WriteMultiMessage(UserIndex, eMessages.UserMuerto)
                         Exit Sub
 
@@ -114,38 +112,69 @@ Sub Accion(ByVal UserIndex As Integer, _
                     End If
                     
                     If Distancia(Npclist(tempIndex).Pos, .Pos) > 3 Then
-                        Call WriteConsoleMsg(UserIndex, "Estás demasiado lejos del vendedor.", FontTypeNames.FONTTYPE_INFO)
+                        Call WriteConsoleMsg(UserIndex, "Estas demasiado lejos del vendedor.", FontTypeNames.FONTTYPE_INFO)
                         Exit Sub
 
                     End If
                     
                     'A depositar de una
-                    Call IniciarDeposito(UserIndex)
+                    Call WriteAbrirGoliath(UserIndex)
                 
-                ElseIf Npclist(tempIndex).NPCtype = eNPCType.Revividor Or Npclist(tempIndex).NPCtype = eNPCType.ResucitadorNewbie Then
+                ElseIf Npclist(tempIndex).NPCtype = eNPCType.Revividor Then
 
                     If Distancia(.Pos, Npclist(tempIndex).Pos) > 10 Then
-                        Call WriteConsoleMsg(UserIndex, "El sacerdote no puede curarte debido a que estás demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
+                        Call WriteConsoleMsg(UserIndex, "El sacerdote no puede curarte debido a que estas demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
                         Exit Sub
 
                     End If
                     
                     'Revivimos si es necesario
                     If .flags.Muerto = 1 And (Npclist(tempIndex).NPCtype = eNPCType.Revividor Or EsNewbie(UserIndex)) Then
-                        Call RevivirUsuario(UserIndex)
-
+                        Call SacerdoteResucitateUser(UserIndex)
                     End If
                     
                     If Npclist(tempIndex).NPCtype = eNPCType.Revividor Or EsNewbie(UserIndex) Then
-                        'curamos totalmente
-                        .Stats.MinHp = .Stats.MaxHp
-                        Call WriteUpdateUserStats(UserIndex)
+                        Call SacerdoteHealUser(UserIndex)
+                    End If
+                    
+                ElseIf Npclist(tempIndex).NPCtype = eNPCType.Veterinario Then
+                
+                    If Distancia(.Pos, Npclist(tempIndex).Pos) > 10 Then
+                        Call WriteConsoleMsg(UserIndex, "El veterinario no puede atender a tu familiar debido a que estas demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
+                        Exit Sub
 
                     End If
+                    
+                    If .Familiar.Tipo < 1 Then
+                        Call WriteConsoleMsg(UserIndex, "No tienes familiares.", FontTypeNames.FONTTYPE_INFO)
+                        Exit Sub
 
-                End If
+                    End If
+                    
+                    If .Familiar.Muerto = 0 And .Familiar.MaxHp = .Familiar.MinHp Then
+                        Call WriteConsoleMsg(UserIndex, "Tu familiar esta sano.", FontTypeNames.FONTTYPE_INFO)
+                        Exit Sub
+                    End If
+                    
+                    Call Familiar_Muerte(UserIndex, False)
+                    
+                ElseIf Npclist(tempIndex).NPCtype = eNPCType.Entrenador Then
                 
-                '¿Es un obj?
+                    Call AccionParaEntrenador(UserIndex)
+                    
+                ElseIf Npclist(tempIndex).NPCtype = eNPCType.Subastador Then
+                
+                    If Distancia(Npclist(tempIndex).Pos, .Pos) > 1 Then
+                        Call WriteConsoleMsg(UserIndex, "El subastador pide que te acerques más.", FontTypeNames.FONTTYPE_INFO)
+                        Exit Sub
+                    End If
+                
+                    .flags.Subastando = True
+                    Call WriteIniciarSubastasOrConsulta(UserIndex)
+                  
+                End If
+
+                'Es un obj?
             ElseIf MapData(Map, X, Y).ObjInfo.ObjIndex > 0 Then
                 tempIndex = MapData(Map, X, Y).ObjInfo.ObjIndex
                 
@@ -162,12 +191,15 @@ Sub Accion(ByVal UserIndex As Integer, _
                     Case eOBJType.otForos 'Foro
                         Call AccionParaForo(Map, X, Y, UserIndex)
 
-                    Case eOBJType.otLeña    'Leña
+                    Case eOBJType.otLena    'Lena
 
                         If tempIndex = FOGATA_APAG And .flags.Muerto = 0 Then
                             Call AccionParaRamita(Map, X, Y, UserIndex)
 
                         End If
+                        
+                    Case eOBJType.OtPozos 'Pozos
+                        Call AccionParaPozos(Map, X, Y, UserIndex)
 
                 End Select
 
@@ -265,7 +297,7 @@ Sub AccionParaPuerta(ByVal Map As Integer, _
                     
                     MapData(Map, X, Y).ObjInfo.ObjIndex = ObjData(MapData(Map, X, Y).ObjInfo.ObjIndex).IndexAbierta
                     
-                    Call modSendData.SendToAreaByPos(Map, X, Y, PrepareMessageObjectCreate(ObjData(MapData(Map, X, Y).ObjInfo.ObjIndex).GrhIndex, X, Y))
+                    Call modSendData.SendToAreaByPos(Map, X, Y, PrepareMessageObjectCreate(ObjData(MapData(Map, X, Y).ObjInfo.ObjIndex).GrhIndex, 0, 0, 0, X, Y))
                     
                     'Desbloquea
                     MapData(Map, X, Y).Blocked = 0
@@ -287,7 +319,7 @@ Sub AccionParaPuerta(ByVal Map As Integer, _
                 'Cierra puerta
                 MapData(Map, X, Y).ObjInfo.ObjIndex = ObjData(MapData(Map, X, Y).ObjInfo.ObjIndex).IndexCerrada
                 
-                Call modSendData.SendToAreaByPos(Map, X, Y, PrepareMessageObjectCreate(ObjData(MapData(Map, X, Y).ObjInfo.ObjIndex).GrhIndex, X, Y))
+                Call modSendData.SendToAreaByPos(Map, X, Y, PrepareMessageObjectCreate(ObjData(MapData(Map, X, Y).ObjInfo.ObjIndex).GrhIndex, 0, 0, 0, X, Y))
                                 
                 MapData(Map, X, Y).Blocked = 1
                 MapData(Map, X - 1, Y).Blocked = 1
@@ -301,12 +333,12 @@ Sub AccionParaPuerta(ByVal Map As Integer, _
         
             UserList(UserIndex).flags.TargetObj = MapData(Map, X, Y).ObjInfo.ObjIndex
         Else
-            Call WriteConsoleMsg(UserIndex, "La puerta está cerrada con llave.", FontTypeNames.FONTTYPE_INFO)
+            Call WriteConsoleMsg(UserIndex, "La puerta esta cerrada con llave.", FontTypeNames.FONTTYPE_INFO)
 
         End If
 
     Else
-        Call WriteConsoleMsg(UserIndex, "Estás demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
+        Call WriteConsoleMsg(UserIndex, "Estas demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
 
     End If
 
@@ -349,27 +381,30 @@ Sub AccionParaRamita(ByVal Map As Integer, _
 
     Dim Suerte             As Byte
 
-    Dim exito              As Byte
+    Dim Exito              As Byte
 
-    Dim Obj                As Obj
+    Dim obj                As obj
 
     Dim SkillSupervivencia As Byte
 
     Dim Pos                As WorldPos
-
-    Pos.Map = Map
-    Pos.X = X
-    Pos.Y = Y
+    
+    With Pos
+        .Map = Map
+        .X = X
+        .Y = Y
+    End With
+    
 
     With UserList(UserIndex)
 
         If Distancia(Pos, .Pos) > 2 Then
-            Call WriteConsoleMsg(UserIndex, "Estás demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
+            Call WriteConsoleMsg(UserIndex, "Estas demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
             Exit Sub
 
         End If
     
-        If MapData(Map, X, Y).trigger = eTrigger.ZONASEGURA Or MapInfo(Map).Pk = False Then
+        If MapData(Map, X, Y).Trigger = eTrigger.ZONASEGURA Or MapInfo(Map).Pk = False Then
             Call WriteConsoleMsg(UserIndex, "No puedes hacer fogatas en zona segura.", FontTypeNames.FONTTYPE_INFO)
             Exit Sub
 
@@ -388,25 +423,21 @@ Sub AccionParaRamita(ByVal Map As Integer, _
 
         End If
     
-        exito = RandomNumber(1, Suerte)
+        Exito = RandomNumber(1, Suerte)
     
-        If exito = 1 Then
+        If Exito = 1 Then
             If MapInfo(.Pos.Map).Zona <> Ciudad Then
-                Obj.ObjIndex = FOGATA
-                Obj.Amount = 1
+            
+                With obj
+                    .ObjIndex = FOGATA
+                    .Amount = 1
+                End With
             
                 Call WriteConsoleMsg(UserIndex, "Has prendido la fogata.", FontTypeNames.FONTTYPE_INFO)
             
-                Call MakeObj(Obj, Map, X, Y)
+                Call MakeObj(obj, Map, X, Y)
             
-                'Las fogatas prendidas se deben eliminar
-                Dim Fogatita As cGarbage
-
-                Set Fogatita = New cGarbage
-                Fogatita.Map = Map
-                Fogatita.X = X
-                Fogatita.Y = Y
-                Call TrashCollector.Add(Fogatita)
+                Call mLimpieza.AgregarObjetoLimpieza(Pos)
             
                 Call SubirSkill(UserIndex, eSkill.Supervivencia, True)
             Else
@@ -424,3 +455,126 @@ Sub AccionParaRamita(ByVal Map As Integer, _
     End With
 
 End Sub
+
+Public Sub AccionParaSacerdote(ByVal UserIndex As Integer)
+'******************************
+'Adaptacion a 13.0: Kaneidra
+'Last Modification: 07/01/2020
+'Refactorizo para que el Sacerdote haga una sola cosa y no 20 diferentes alrededor del codigo dependiendo de como se usa (Recox)
+'******************************
+    
+    With UserList(UserIndex)
+        
+        ' Si esta muerto...
+        If .flags.Muerto = 1 Then
+            Call SacerdoteResucitateUser(UserIndex)
+
+        End If
+        
+        ' Si esta herido... lo curamos.
+        If .Stats.MinHp < .Stats.MaxHp Then
+            Call SacerdoteHealUser(UserIndex)
+        End If
+        
+    End With
+ 
+End Sub
+
+Public Sub AccionParaEntrenador(ByVal UserIndex As Integer)
+'******************************
+'Autor: Lorwik
+'Last Modification: 18/05/2020
+'Refactorizo para que el Entrenador mande la lista para entrenar
+'******************************
+    With UserList(UserIndex)
+        'Dead users can't use pets
+        If .flags.Muerto = 1 Then
+            Call WriteMultiMessage(UserIndex, eMessages.UserMuerto)
+            Exit Sub
+    
+        End If
+            
+        'Make sure it's close enough
+        If Distancia(Npclist(.flags.TargetNPC).Pos, .Pos) > 10 Then
+            Call WriteConsoleMsg(UserIndex, "Estas demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
+            Exit Sub
+    
+        End If
+            
+        'Make sure it's the trainer
+        If Npclist(.flags.TargetNPC).NPCtype <> eNPCType.Entrenador Then Exit Sub
+            
+        Call WriteTrainerCreatureList(UserIndex, .flags.TargetNPC)
+    End With
+End Sub
+
+Sub AccionParaPozos(ByVal Map As Integer, ByVal X As Integer, ByVal Y As Integer, ByVal UserIndex As Integer)
+        
+    On Error GoTo AccionParaPozos_Err
+
+    Dim Pos As WorldPos
+
+    Pos.Map = Map
+    Pos.X = X
+    Pos.Y = Y
+
+    With UserList(UserIndex)
+    
+        'Comprobacion de distancia
+        If Distancia(Pos, .Pos) > 2 Then
+            Call WriteConsoleMsg(UserIndex, "¡Estas demasiado lejos!", FontTypeNames.FONTTYPE_INFO)
+            Exit Sub
+        
+        End If
+        
+        
+        If MapData(Map, X, Y).ObjInfo.Amount <= 1 Then
+            Call WriteConsoleMsg(UserIndex, "El pozo esta drenado, regresa mas tarde...", FontTypeNames.FONTTYPE_INFO)
+            Exit Sub
+        
+        End If
+        
+        'Tipo de pozo 1
+        If ObjData(MapData(Map, X, Y).ObjInfo.ObjIndex).Subtipo = 1 Then
+            If .Stats.MinMAN = .Stats.MaxMAN Then
+                Call WriteConsoleMsg(UserIndex, "No tenes necesidad del pozo...", FontTypeNames.FONTTYPE_INFO)
+                Exit Sub
+        
+                End If
+        
+            .Stats.MinMAN = .Stats.MaxMAN
+            MapData(Map, X, Y).ObjInfo.Amount = MapData(Map, X, Y).ObjInfo.Amount - 1
+            Call WriteConsoleMsg(UserIndex, "El pozo sacia tu sed. ¡Tu maná a sido restaurada!", FontTypeNames.FONTTYPE_EJECUCION)
+            Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessagePlayWave(SND_BEBER, .Pos.X, .Pos.Y))
+            Call WriteUpdateUserStats(UserIndex)
+            Exit Sub
+        
+        End If
+    
+        'Tipo de pozo 2
+        If ObjData(MapData(Map, X, Y).ObjInfo.ObjIndex).Subtipo = 2 Then
+            If .Stats.MinAGU = .Stats.MaxAGU Then
+                Call WriteConsoleMsg(UserIndex, "No tenes necesidad del pozo...", FontTypeNames.FONTTYPE_INFO)
+                Exit Sub
+        
+            End If
+        
+            .Stats.MinAGU = .Stats.MaxAGU
+            .flags.Sed = 0 'Bug reparado 27/01/13
+            MapData(Map, X, Y).ObjInfo.Amount = MapData(Map, X, Y).ObjInfo.Amount - 1
+            Call WriteConsoleMsg(UserIndex, "Sientes la frescura del pozo. ¡Ya no sientes sed!", FontTypeNames.FONTTYPE_EJECUCION)
+            Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessagePlayWave(SND_BEBER, .Pos.X, .Pos.Y))
+            Call WriteUpdateHungerAndThirst(UserIndex)
+            Exit Sub
+        
+        End If
+    
+    End With
+    
+    Exit Sub
+
+AccionParaPozos_Err:
+    Call LogError(Err.Number & " - " & Err.description & "Acciones.AccionParaPozos")
+    
+End Sub
+

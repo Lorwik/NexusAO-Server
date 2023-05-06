@@ -1,6 +1,6 @@
 Attribute VB_Name = "modUserRecords"
-'Nexus AO mod Argentum Online 0.13.0
-'Copyright (C) 2002 Márquez Pablo Ignacio
+'Argentum Online 0.13.0
+'Copyright (C) 2002 Marquez Pablo Ignacio
 '
 'This program is free software; you can redistribute it and/or modify
 'it under the terms of the Affero General Public License;
@@ -14,7 +14,7 @@ Attribute VB_Name = "modUserRecords"
 'You should have received a copy of the Affero General Public License
 'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
 '
-'Nexus AO mod Argentum Online is based on Baronsoft's VB6 Online RPG
+'Argentum Online is based on Baronsoft's VB6 Online RPG
 'You can contact the original creator of ORE at aaron@baronsoft.com
 'for more information about ORE please visit http://www.baronsoft.com/
 '
@@ -22,10 +22,10 @@ Attribute VB_Name = "modUserRecords"
 'You can contact me at:
 'morgolock@speedy.com.ar
 'www.geocities.com/gmorgolock
-'Calle 3 número 983 piso 7 dto A
+'Calle 3 numero 983 piso 7 dto A
 'La Plata - Pcia, Buenos Aires - Republica Argentina
-'Código Postal 1900
-'Pablo Ignacio Márquez
+'Codigo Postal 1900
+'Pablo Ignacio Marquez
 
 Option Explicit
 
@@ -125,7 +125,7 @@ Public Sub SaveRecords()
 
 End Sub
 
-Public Sub AddRecord(ByVal UserIndex As Integer, _
+Public Sub AddRecord(ByVal Userindex As Integer, _
                      ByVal Nickname As String, _
                      ByVal Reason As String)
     '**************************************************************
@@ -139,7 +139,7 @@ Public Sub AddRecord(ByVal UserIndex As Integer, _
     With Records(NumRecords)
         .Usuario = UCase$(Nickname)
         .Fecha = Format(Now, "DD/MM/YYYY hh:mm:ss")
-        .Creador = UCase$(UserList(UserIndex).Name)
+        .Creador = UCase$(UserList(Userindex).Name)
         .Motivo = Reason
         .NumObs = 0
 
@@ -147,20 +147,20 @@ Public Sub AddRecord(ByVal UserIndex As Integer, _
 
 End Sub
 
-Public Sub AddObs(ByVal UserIndex As Integer, _
+Public Sub AddObs(ByVal Userindex As Integer, _
                   ByVal RecordIndex As Integer, _
                   ByVal Obs As String)
 
     '**************************************************************
     'Author: Amraphen
     'Last Modify Date: 29/11/2010
-    'Agrega una observación.
+    'Agrega una observacion.
     '**************************************************************
     With Records(RecordIndex)
         .NumObs = .NumObs + 1
         ReDim Preserve .Obs(1 To .NumObs)
         
-        .Obs(.NumObs).Creador = UCase$(UserList(UserIndex).Name)
+        .Obs(.NumObs).Creador = UCase$(UserList(Userindex).Name)
         .Obs(.NumObs).Fecha = Now
         .Obs(.NumObs).Detalles = Obs
 

@@ -1,8 +1,8 @@
 VERSION 5.00
 Begin VB.Form frmServidor 
-   BackColor       =   &H00FFC0C0&
-   Caption         =   "Configuración del Servidor"
-   ClientHeight    =   6000
+   BackColor       =   &H00E0E0E0&
+   Caption         =   "Configuracion del Servidor"
+   ClientHeight    =   5820
    ClientLeft      =   60
    ClientTop       =   345
    ClientWidth     =   6600
@@ -17,202 +17,209 @@ Begin VB.Form frmServidor
       Strikethrough   =   0   'False
    EndProperty
    LinkTopic       =   "Form1"
-   ScaleHeight     =   400
+   ScaleHeight     =   388
    ScaleMode       =   3  'Pixel
    ScaleWidth      =   440
    StartUpPosition =   2  'CenterScreen
+   Begin VB.ListBox listDats 
+      Height          =   1425
+      Left            =   2160
+      TabIndex        =   21
+      Top             =   360
+      Width           =   4095
+   End
    Begin VB.CommandButton cmdReiniciar 
-      BackColor       =   &H00FFC0C0&
+      BackColor       =   &H00E0E0E0&
       Caption         =   "Reiniciar"
       Enabled         =   0   'False
       Height          =   375
       Left            =   1920
       Style           =   1  'Graphical
-      TabIndex        =   17
-      Top             =   5520
+      TabIndex        =   10
+      Top             =   5400
       Width           =   1695
    End
    Begin VB.Frame Frame3 
-      BackColor       =   &H00FFC0C0&
-      Caption         =   "Administración"
+      BackColor       =   &H00E0E0E0&
+      Caption         =   "Administracion"
       Height          =   2415
       Left            =   120
-      TabIndex        =   16
+      TabIndex        =   9
       Top             =   2040
       Width           =   6375
-      Begin VB.CommandButton cmdResetListen 
-         BackColor       =   &H00FFC0C0&
-         Caption         =   "Reset Listen"
-         Height          =   375
-         Left            =   2280
-         Style           =   1  'Graphical
-         TabIndex        =   28
-         Top             =   1920
-         Width           =   1935
-      End
-      Begin VB.CommandButton cmdResetSockets 
-         BackColor       =   &H00FFC0C0&
-         Caption         =   "Reset sockets"
-         Height          =   375
-         Left            =   240
-         Style           =   1  'Graphical
-         TabIndex        =   27
-         Top             =   1920
-         Width           =   1935
-      End
-      Begin VB.CommandButton cmdDebugUserlist 
-         BackColor       =   &H00FFC0C0&
-         Caption         =   "Debug UserList"
-         Height          =   495
-         Left            =   4320
-         Style           =   1  'Graphical
-         TabIndex        =   26
-         Top             =   1320
-         Width           =   1935
-      End
-      Begin VB.CommandButton cmdUnbanAllIps 
-         BackColor       =   &H00FFC0C0&
-         Caption         =   "Unban All IPs (PELIGRO!)"
-         Height          =   495
-         Left            =   2280
-         Style           =   1  'Graphical
-         TabIndex        =   25
-         Top             =   1320
-         Width           =   1935
-      End
-      Begin VB.CommandButton cmdUnbanAll 
-         BackColor       =   &H00FFC0C0&
-         Caption         =   "Unban All (PELIGRO!)"
-         Height          =   495
-         Left            =   240
-         Style           =   1  'Graphical
-         TabIndex        =   24
-         Top             =   1320
-         Width           =   1935
-      End
-      Begin VB.CommandButton cmdDebugNpcs 
-         BackColor       =   &H00FFC0C0&
-         Caption         =   "Debug Npcs"
+      Begin VB.CommandButton cmdCrearNueva 
+         BackColor       =   &H00E0E0E0&
+         Caption         =   "Crear Nueva Cuenta"
          Height          =   375
          Left            =   4320
          Style           =   1  'Graphical
          TabIndex        =   23
-         Top             =   840
+         Top             =   1440
          Width           =   1935
       End
-      Begin VB.CommandButton frmAdministracion 
-         BackColor       =   &H00FFC0C0&
-         Caption         =   "Administración"
-         Height          =   375
-         Left            =   2280
+      Begin VB.CommandButton cmdRecargarGuardiasPosOrig 
+         BackColor       =   &H00E0E0E0&
+         Caption         =   "Guardias en pos original"
+         Height          =   495
+         Left            =   4320
          Style           =   1  'Graphical
          TabIndex        =   22
          Top             =   840
          Width           =   1935
       End
-      Begin VB.CommandButton cmdPausarServidor 
-         BackColor       =   &H00FFC0C0&
-         Caption         =   "Pausar el servidor"
-         Height          =   375
-         Left            =   240
-         Style           =   1  'Graphical
-         TabIndex        =   21
-         Top             =   840
-         Width           =   1935
-      End
-      Begin VB.CommandButton cmdStatsSlots 
-         BackColor       =   &H00FFC0C0&
-         Caption         =   "Stats de Slots"
-         Height          =   375
-         Left            =   4320
-         Style           =   1  'Graphical
-         TabIndex        =   20
-         Top             =   360
-         Width           =   1935
-      End
-      Begin VB.CommandButton cmdVerTrafico 
-         BackColor       =   &H00FFC0C0&
-         Caption         =   "Tráfico"
+      Begin VB.CommandButton cmdResetListen 
+         BackColor       =   &H00E0E0E0&
+         Caption         =   "Reset Listen"
          Height          =   375
          Left            =   2280
          Style           =   1  'Graphical
          TabIndex        =   19
-         Top             =   360
+         Top             =   1920
          Width           =   1935
       End
-      Begin VB.CommandButton cmdConfigIntervalos 
-         BackColor       =   &H00FFC0C0&
-         Caption         =   "Config. Intervalos"
+      Begin VB.CommandButton cmdResetSockets 
+         BackColor       =   &H00E0E0E0&
+         Caption         =   "Reset sockets"
          Height          =   375
          Left            =   240
          Style           =   1  'Graphical
          TabIndex        =   18
+         Top             =   1920
+         Width           =   1935
+      End
+      Begin VB.CommandButton cmdDebugUserlist 
+         BackColor       =   &H00E0E0E0&
+         Caption         =   "Debug UserList"
+         Height          =   375
+         Left            =   4320
+         Style           =   1  'Graphical
+         TabIndex        =   17
+         Top             =   360
+         Width           =   1935
+      End
+      Begin VB.CommandButton cmdUnbanAllIps 
+         BackColor       =   &H00E0E0E0&
+         Caption         =   "Unban All IPs (PELIGRO!)"
+         Height          =   495
+         Left            =   2280
+         Style           =   1  'Graphical
+         TabIndex        =   16
+         Top             =   1320
+         Width           =   1935
+      End
+      Begin VB.CommandButton cmdUnbanAll 
+         BackColor       =   &H00E0E0E0&
+         Caption         =   "Unban All (PELIGRO!)"
+         Height          =   495
+         Left            =   240
+         Style           =   1  'Graphical
+         TabIndex        =   15
+         Top             =   1320
+         Width           =   1935
+      End
+      Begin VB.CommandButton frmAdministracion 
+         BackColor       =   &H00E0E0E0&
+         Caption         =   "Administracion"
+         Height          =   375
+         Left            =   2280
+         Style           =   1  'Graphical
+         TabIndex        =   14
+         Top             =   840
+         Width           =   1935
+      End
+      Begin VB.CommandButton cmdPausarServidor 
+         BackColor       =   &H00E0E0E0&
+         Caption         =   "Pausar el servidor"
+         Height          =   375
+         Left            =   240
+         Style           =   1  'Graphical
+         TabIndex        =   13
+         Top             =   840
+         Width           =   1935
+      End
+      Begin VB.CommandButton cmdVerTrafico 
+         BackColor       =   &H00E0E0E0&
+         Caption         =   "Trafico"
+         Height          =   375
+         Left            =   2280
+         Style           =   1  'Graphical
+         TabIndex        =   12
+         Top             =   360
+         Width           =   1935
+      End
+      Begin VB.CommandButton cmdConfigIntervalos 
+         BackColor       =   &H00E0E0E0&
+         Caption         =   "Config. Intervalos"
+         Height          =   375
+         Left            =   240
+         Style           =   1  'Graphical
+         TabIndex        =   11
          Top             =   360
          Width           =   1935
       End
    End
    Begin VB.CommandButton cmdCerrar 
-      BackColor       =   &H00FFC0C0&
+      BackColor       =   &H00E0E0E0&
       Cancel          =   -1  'True
       Caption         =   "Salir (Esc)"
       Height          =   375
       Left            =   120
       Style           =   1  'Graphical
-      TabIndex        =   15
-      Top             =   5520
+      TabIndex        =   8
+      Top             =   5400
       Width           =   1695
    End
-   Begin VB.CommandButton cmdApagarServer 
+   Begin VB.CommandButton cmdForzarCierre 
       BackColor       =   &H00C0C0FF&
-      Caption         =   "Apagar Server con Backup"
+      Caption         =   "Forzar Cierre del Servidor"
       Height          =   375
       Left            =   3720
       Style           =   1  'Graphical
-      TabIndex        =   14
-      Top             =   5520
+      TabIndex        =   7
+      Top             =   5400
       Width           =   2775
    End
    Begin VB.Frame Frame2 
-      BackColor       =   &H00FFC0C0&
+      BackColor       =   &H00E0E0E0&
       Caption         =   "Backup"
       Height          =   735
       Left            =   120
-      TabIndex        =   10
+      TabIndex        =   3
       Top             =   4560
       Width           =   6375
       Begin VB.CommandButton cmdLoadWorldBackup 
-         BackColor       =   &H00FFC0C0&
+         BackColor       =   &H00E0E0E0&
          Caption         =   "Cargar Mapas"
          Height          =   375
          Left            =   4320
          Style           =   1  'Graphical
-         TabIndex        =   13
+         TabIndex        =   6
          Top             =   240
          Width           =   1935
       End
       Begin VB.CommandButton cmdCharBackup 
-         BackColor       =   &H00FFC0C0&
+         BackColor       =   &H00E0E0E0&
          Caption         =   "Guardar Chars"
          Height          =   375
          Left            =   2280
          Style           =   1  'Graphical
-         TabIndex        =   12
+         TabIndex        =   5
          Top             =   240
          Width           =   1935
       End
       Begin VB.CommandButton cmdWorldBackup 
-         BackColor       =   &H00FFC0C0&
+         BackColor       =   &H00E0E0E0&
          Caption         =   "Guardar Mapas"
          Height          =   375
          Left            =   240
          Style           =   1  'Graphical
-         TabIndex        =   11
+         TabIndex        =   4
          Top             =   240
          Width           =   1935
       End
    End
    Begin VB.Frame Frame1 
-      BackColor       =   &H00FFC0C0&
+      BackColor       =   &H00E0E0E0&
       Caption         =   "Recargar"
       Height          =   1815
       Left            =   120
@@ -223,101 +230,31 @@ Begin VB.Form frmServidor
          BackColor       =   &H0080C0FF&
          Caption         =   "Administradores"
          Height          =   375
-         Left            =   1680
+         Left            =   240
          Style           =   1  'Graphical
-         TabIndex        =   29
-         Top             =   1320
-         Width           =   1455
-      End
-      Begin VB.CommandButton cmdRecargarGuardiasPosOrig 
-         BackColor       =   &H00FFC0C0&
-         Caption         =   "Guardias en pos originales"
-         Height          =   375
-         Left            =   3240
-         Style           =   1  'Graphical
-         TabIndex        =   9
-         Top             =   1320
-         Width           =   3015
-      End
-      Begin VB.CommandButton cmdRecargarMOTD 
-         BackColor       =   &H00FFC0C0&
-         Caption         =   "MOTD"
-         Height          =   375
-         Left            =   120
-         Style           =   1  'Graphical
-         TabIndex        =   8
-         Top             =   1320
-         Width           =   1455
-      End
-      Begin VB.CommandButton cmdRecargarMD5s 
-         BackColor       =   &H00FFC0C0&
-         Caption         =   "MD5s"
-         Height          =   375
-         Left            =   3240
-         Style           =   1  'Graphical
-         TabIndex        =   7
-         Top             =   360
-         Width           =   1455
-      End
-      Begin VB.CommandButton cmdRecargarServerIni 
-         BackColor       =   &H00FFC0C0&
-         Caption         =   "Server.ini"
-         Height          =   375
-         Left            =   4800
-         Style           =   1  'Graphical
-         TabIndex        =   6
-         Top             =   360
-         Width           =   1455
-      End
-      Begin VB.CommandButton cmdRecargarNombresInvalidos 
-         BackColor       =   &H00FFC0C0&
-         Caption         =   "NombresInvalidos.txt"
-         Height          =   375
-         Left            =   3240
-         Style           =   1  'Graphical
-         TabIndex        =   5
+         TabIndex        =   20
          Top             =   840
-         Width           =   3015
+         Width           =   1575
       End
-      Begin VB.CommandButton cmdRecargarNPCs 
-         BackColor       =   &H00FFC0C0&
-         Caption         =   "Npcs.dat"
+      Begin VB.CommandButton cmdRecargarClanes 
+         BackColor       =   &H00E0E0E0&
+         Caption         =   "Clanes"
          Height          =   375
-         Left            =   120
-         Style           =   1  'Graphical
-         TabIndex        =   4
-         Top             =   840
-         Width           =   1455
-      End
-      Begin VB.CommandButton cmdRecargarBalance 
-         BackColor       =   &H00FFC0C0&
-         Caption         =   "Balance.dat"
-         Height          =   375
-         Left            =   1680
-         Style           =   1  'Graphical
-         TabIndex        =   3
-         Top             =   840
-         Width           =   1455
-      End
-      Begin VB.CommandButton cmdRecargarHechizos 
-         BackColor       =   &H00FFC0C0&
-         Caption         =   "Hechizos.dat"
-         Height          =   375
-         Left            =   1680
+         Left            =   240
          Style           =   1  'Graphical
          TabIndex        =   2
-         Top             =   360
-         Width           =   1455
+         Top             =   1290
+         Width           =   1575
       End
-      Begin VB.CommandButton cmdRecargarObjetos 
-         BackColor       =   &H00FFC0C0&
-         Caption         =   "Obj.dat"
+      Begin VB.CommandButton cmdRecargarConfigIni 
+         BackColor       =   &H00E0E0E0&
+         Caption         =   "Configuración"
          Height          =   375
-         Left            =   120
+         Left            =   240
          Style           =   1  'Graphical
          TabIndex        =   1
          Top             =   360
-         Width           =   1455
+         Width           =   1575
       End
    End
 End
@@ -326,8 +263,8 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-'Nexus AO mod Argentum Online 0.13
-'Copyright (C) 2002 Márquez Pablo Ignacio
+'Argentum Online 0.12.2
+'Copyright (C) 2002 Marquez Pablo Ignacio
 '
 'This program is free software; you can redistribute it and/or modify
 'it under the terms of the Affero General Public License;
@@ -341,7 +278,7 @@ Attribute VB_Exposed = False
 'You should have received a copy of the Affero General Public License
 'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
 '
-'Nexus AO mod Argentum Online is based on Baronsoft's VB6 Online RPG
+'Argentum Online is based on Baronsoft's VB6 Online RPG
 'You can contact the original creator of ORE at aaron@baronsoft.com
 'for more information about ORE please visit http://www.baronsoft.com/
 '
@@ -349,47 +286,45 @@ Attribute VB_Exposed = False
 'You can contact me at:
 'morgolock@speedy.com.ar
 'www.geocities.com/gmorgolock
-'Calle 3 número 983 piso 7 dto A
+'Calle 3 numero 983 piso 7 dto A
 'La Plata - Pcia, Buenos Aires - Republica Argentina
-'Código Postal 1900
-'Pablo Ignacio Márquez
+'Codigo Postal 1900
+'Pablo Ignacio Marquez
 
 Option Explicit
 
-Private Sub Form_Load()
-
-    #If UsarQueSocket = 1 Then
-        cmdResetSockets.Visible = True
-        cmdResetListen.Visible = True
-    #ElseIf UsarQueSocket = 0 Then
-        cmdResetSockets.Visible = False
-        cmdResetListen.Visible = False
-    #ElseIf UsarQueSocket = 2 Then
-        cmdResetSockets.Visible = True
-        cmdResetListen.Visible = False
-    #End If
-
+Private Sub cmdCrearNueva_Click()
+    Unload Me
+    frmCrearCuenta.Show
 End Sub
 
-Private Sub cmdApagarServer_Click()
-    
-    If MsgBox("¿Está seguro que desea hacer WorldSave, guardar pjs y cerrar?", vbYesNo, "Apagar Magicamente") = vbNo Then Exit Sub
-    
-    Me.MousePointer = 11
-    
-    FrmStat.Show
-   
-    'WorldSave
-    Call ES.DoBackUp
+Private Sub cmdRecargarClanes_Click()
+    Call LoadGuildsDB
+End Sub
 
-    'commit experiencia
-    Call mdParty.ActualizaExperiencias
+Private Sub Form_Load()
 
-    'Guardar Pjs
-    Call GuardarUsuarios
+    cmdResetSockets.Visible = True
+    cmdResetListen.Visible = True
     
-    'Chauuu
-    Unload frmMain
+    'Listamos el contenido de la carpeta Dats
+    Dim sFilename As String
+        sFilename = Dir$(DatPath)
+    
+    Do While sFilename > vbNullString
+    
+      Call listDats.AddItem(sFilename)
+      sFilename = Dir$()
+    
+    Loop
+  
+End Sub
+
+Private Sub cmdForzarCierre_Click()
+        
+    If MsgBox("Desea FORZAR el CIERRE del SERVIDOR?", vbYesNo, "CIERRE DEL SERVIDOR!!!") = vbNo Then Exit Sub
+        
+    Call CloseServer
 
 End Sub
 
@@ -412,12 +347,7 @@ Private Sub cmdConfigIntervalos_Click()
 
 End Sub
 
-Private Sub cmdDebugNpcs_Click()
-    frmDebugNpc.Show
-
-End Sub
-
-Private Sub cmdDebugUserlist_Click()
+Private Sub cmdDebugUserList_Click()
     frmUserList.Show
 
 End Sub
@@ -427,7 +357,7 @@ Private Sub cmdLoadWorldBackup_Click()
     'Se asegura de que los sockets estan cerrados e ignora cualquier err
     On Error Resume Next
 
-    If frmMain.Visible Then frmMain.txStatus.Caption = "Reiniciando."
+    If frmMain.Visible Then frmMain.txtStatus.Text = "Reiniciando."
     
     FrmStat.Show
     
@@ -438,19 +368,11 @@ Private Sub cmdLoadWorldBackup_Click()
     If FileExist(App.Path & "\logs\Resurrecciones.log", vbNormal) Then Kill App.Path & "\logs\Resurrecciones.log"
     If FileExist(App.Path & "\logs\Teleports.Log", vbNormal) Then Kill App.Path & "\logs\Teleports.Log"
 
-    #If UsarQueSocket = 1 Then
-        Call apiclosesocket(SockListen)
-    #ElseIf UsarQueSocket = 0 Then
-        frmMain.Socket1.Cleanup
-        frmMain.Socket2(0).Cleanup
-    #ElseIf UsarQueSocket = 2 Then
-        frmMain.Serv.Detener
-    #End If
+    Call apiclosesocket(SockListen)
 
     Dim LoopC As Integer
-    
     For LoopC = 1 To MaxUsers
-        Call CloseSocket(LoopC)
+        Call CloseUser(LoopC)
     Next
     
     LastUser = 0
@@ -462,31 +384,11 @@ Private Sub cmdLoadWorldBackup_Click()
     Call LoadSini
     Call CargarBackUp
     Call LoadOBJData
+    Call LoadGlobalDrop
 
-    #If UsarQueSocket = 1 Then
-        SockListen = ListenForConnect(Puerto, hWndMsg, "")
+    SockListen = ListenForConnect(Puerto, hWndMsg, vbNullString)
 
-    #ElseIf UsarQueSocket = 0 Then
-        frmMain.Socket1.AddressFamily = AF_INET
-        frmMain.Socket1.Protocol = IPPROTO_IP
-        frmMain.Socket1.SocketType = SOCK_STREAM
-        frmMain.Socket1.Binary = False
-        frmMain.Socket1.Blocking = False
-        frmMain.Socket1.BufferSize = 1024
-    
-        frmMain.Socket2(0).AddressFamily = AF_INET
-        frmMain.Socket2(0).Protocol = IPPROTO_IP
-        frmMain.Socket2(0).SocketType = SOCK_STREAM
-        frmMain.Socket2(0).Blocking = False
-        frmMain.Socket2(0).BufferSize = 2048
-    
-        'Escucha
-        frmMain.Socket1.LocalPort = Puerto
-        frmMain.Socket1.listen
-    #End If
-
-    If frmMain.Visible Then frmMain.txStatus.Caption = "Escuchando conexiones entrantes ..."
-
+    If frmMain.Visible Then frmMain.txtStatus.Text = Date & " " & time & " - Reiniciando Terminado. Escuchando conexiones entrantes ..."
 End Sub
 
 Private Sub cmdPausarServidor_Click()
@@ -504,55 +406,15 @@ Private Sub cmdPausarServidor_Click()
 
 End Sub
 
-Private Sub cmdRecargarBalance_Click()
-    Call LoadBalance
-
-End Sub
-
-Private Sub cmdRecargarGuardiasPosOrig_Click()
-    Call ReSpawnOrigPosNpcs
-
-End Sub
-
-Private Sub cmdRecargarHechizos_Click()
-    Call CargarHechizos
-
-End Sub
-
-Private Sub cmdRecargarMD5s_Click()
-    Call MD5sCarga
-
-End Sub
-
-Private Sub cmdRecargarMOTD_Click()
-    Call LoadMotd
-
-End Sub
-
-Private Sub cmdRecargarNombresInvalidos_Click()
-    Call CargarForbidenWords
-
-End Sub
-
-Private Sub cmdRecargarNPCs_Click()
-    Call CargaNpcsDat
-
-End Sub
-
-Private Sub cmdRecargarObjetos_Click()
-    Call ResetForums
-    Call LoadOBJData
-
-End Sub
-
-Private Sub cmdRecargarServerIni_Click()
+Private Sub cmdRecargarConfigIni_Click()
     Call LoadSini
-
+    Call Load_Rates
+    Call loadAdministrativeUsers
 End Sub
 
 Private Sub cmdReiniciar_Click()
 
-    If MsgBox("¡¡Atencion!! Si reinicia el servidor puede provocar la pérdida de datos de los usarios. " & "¿Desea reiniciar el servidor de todas maneras?", vbYesNo) = vbNo Then Exit Sub
+    If MsgBox("Atencion!! Si reinicia el servidor puede provocar la perdida de datos de los usarios. " & "Desea reiniciar el servidor de todas maneras?", vbYesNo) = vbNo Then Exit Sub
     
     Me.Visible = False
     Call General.Restart
@@ -561,52 +423,19 @@ End Sub
 
 Private Sub cmdResetListen_Click()
 
-    #If UsarQueSocket = 1 Then
-
-        'Cierra el socket de escucha
-        If SockListen >= 0 Then Call apiclosesocket(SockListen)
+    'Cierra el socket de escucha
+    If SockListen >= 0 Then Call apiclosesocket(SockListen)
     
-        'Inicia el socket de escucha
-        SockListen = ListenForConnect(Puerto, hWndMsg, "")
-    #End If
+    'Inicia el socket de escucha
+    SockListen = ListenForConnect(Puerto, hWndMsg, vbNullString)
 
 End Sub
 
 Private Sub cmdResetSockets_Click()
 
-    #If UsarQueSocket = 1 Then
-
-        If MsgBox("¿Está seguro que desea reiniciar los sockets? Se cerrarán todas las conexiones activas.", vbYesNo, "Reiniciar Sockets") = vbYes Then
-            Call WSApiReiniciarSockets
-
-        End If
-
-    #ElseIf UsarQueSocket = 2 Then
-
-        Dim LoopC As Integer
-    
-        If MsgBox("¿Está seguro que desea reiniciar los sockets? Se cerrarán todas las conexiones activas.", vbYesNo, "Reiniciar Sockets") = vbYes Then
-
-            For LoopC = 1 To MaxUsers
-
-                If UserList(LoopC).ConnID <> -1 And UserList(LoopC).ConnIDValida Then
-                    Call CloseSocket(LoopC)
-
-                End If
-
-            Next LoopC
-        
-            Call frmMain.Serv.Detener
-            Call frmMain.Serv.Iniciar(Puerto)
-
-        End If
-
-    #End If
-
-End Sub
-
-Private Sub cmdStatsSlots_Click()
-    frmConID.Show
+    If MsgBox("Esta seguro que desea reiniciar los sockets? Se cerraran todas las conexiones activas.", vbYesNo, "Reiniciar Sockets") = vbYes Then
+        Call WSApiReiniciarSockets
+    End If
 
 End Sub
 
@@ -615,31 +444,28 @@ Private Sub cmdUnbanAll_Click()
     On Error Resume Next
 
     Dim Fn       As String
-
     Dim cad$
-
-    Dim N        As Integer, k As Integer
-    
+    Dim n        As Integer, K As Integer
     Dim sENtrada As String
     
-    sENtrada = InputBox("Escribe ""estoy DE acuerdo"" entre comillas y con distinción de mayúsculas minúsculas para desbanear a todos los personajes.", "UnBan", "hola")
+    sENtrada = InputBox("Escribe ""estoy DE acuerdo"" entre comillas y con distincion de mayusculas minusculas para desbanear a todos los personajes.", "UnBan", "hola")
 
     If sENtrada = "estoy DE acuerdo" Then
     
         Fn = App.Path & "\logs\GenteBanned.log"
         
         If FileExist(Fn, vbNormal) Then
-            N = FreeFile
-            Open Fn For Input Shared As #N
+            n = FreeFile
+            Open Fn For Input Shared As #n
 
-            Do While Not EOF(N)
-                k = k + 1
-                Input #N, cad$
+            Do While Not EOF(n)
+                K = K + 1
+                Input #n, cad$
                 Call UnBan(cad$)
                 
             Loop
-            Close #N
-            MsgBox "Se han habilitado " & k & " personajes."
+            Close #n
+            MsgBox "Se han habilitado " & K & " personajes."
             Kill Fn
 
         End If
@@ -650,21 +476,20 @@ End Sub
 
 Private Sub cmdUnbanAllIps_Click()
 
-    Dim i        As Long, N As Long
-    
+    Dim i        As Long, n As Long
     Dim sENtrada As String
     
-    sENtrada = InputBox("Escribe ""estoy DE acuerdo"" sin comillas y con distinción de mayúsculas minúsculas para desbanear a todos los personajes", "UnBan", "hola")
+    sENtrada = InputBox("Escribe ""estoy DE acuerdo"" sin comillas y con distincion de mayusculas minusculas para desbanear a todos los personajes", "UnBan", "hola")
 
     If sENtrada = "estoy DE acuerdo" Then
         
-        N = BanIps.Count
+        n = BanIps.Count
 
         For i = 1 To BanIps.Count
-            BanIps.Remove 1
+            Call BanIpQuita(BanIps(i))
         Next i
         
-        MsgBox "Se han habilitado " & N & " ipes"
+        MsgBox "Se han habilitado " & n & " ipes"
 
     End If
 
@@ -677,7 +502,7 @@ End Sub
 
 Private Sub cmdWorldBackup_Click()
 
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
 
     Me.MousePointer = 11
     FrmStat.Show
@@ -687,10 +512,23 @@ Private Sub cmdWorldBackup_Click()
     
     Exit Sub
 
-ErrHandler:
+errHandler:
     Call LogError("Error en WORLDSAVE")
 
 End Sub
+
+Private Sub cmdRecargarGuardiasPosOrig_Click()
+
+    On Error GoTo errHandler
+
+    ReSpawnOrigPosNpcs
+    Exit Sub
+
+errHandler:
+    Call LogError("Error en cmdRecargarGuardiasPosOrig")
+
+End Sub
+
 
 Private Sub Form_Deactivate()
     frmServidor.Visible = False
@@ -704,7 +542,60 @@ Private Sub frmAdministracion_Click()
 End Sub
 
 Private Sub cmdRecargarAdministradores_Click()
-    loadAdministrativeUsers
+    Call loadAdministrativeUsers
 
 End Sub
 
+Private Sub listDats_Click()
+    
+    'Chequeamos si hay algun item seleccionado.
+    'Lo pongo para prevenir errores.
+    If listDats.ListIndex < 0 Then Exit Sub
+    
+    Select Case UCase$(listDats.Text)
+        
+        Case "APUESTAS.DAT"
+            Call CargaApuestas
+        
+        Case "ARMADURASFACCIONARIAS.DAT"
+            Call LoadArmadurasFaccion
+        
+        Case "BALANCE.DAT"
+            Call LoadBalance
+        
+        Case "CUIDADES.DAT"
+            Call CargarCiudades
+        
+        Case "CONSULTAS.DAT"
+            Call ConsultaPopular.LoadData
+        
+        Case "HECHIZOS.DAT"
+            Call CargarHechizos
+        
+        Case "INVOKAR.DAT"
+            Call CargarSpawnList
+            
+        Case "MOTD.INI"
+            Call LoadMotd
+
+        Case "NOMBRESINVALIDOS.txt"
+            Call CargarForbidenWords
+          
+        Case "NPCS.DAT"
+            Call CargaNpcsDat
+
+        Case "OBJ.DAT"
+            Call LoadOBJData
+            
+        Case "GLOBAL_DROP.dat"
+            Call LoadGlobalDrop
+        
+        Case "RETOS.DAT"
+            Call LoadArenas
+            
+        Case Else
+            Exit Sub
+            
+    End Select
+    
+End Sub

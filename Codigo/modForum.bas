@@ -1,6 +1,6 @@
 Attribute VB_Name = "modForum"
-'Nexus AO mod Argentum Online 0.13
-'Copyright (C) 2002 Márquez Pablo Ignacio
+'Argentum Online 0.12.2
+'Copyright (C) 2002 Marquez Pablo Ignacio
 '
 'This program is free software; you can redistribute it and/or modify
 'it under the terms of the Affero General Public License;
@@ -14,7 +14,7 @@ Attribute VB_Name = "modForum"
 'You should have received a copy of the Affero General Public License
 'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
 '
-'Nexus AO mod Argentum Online is based on Baronsoft's VB6 Online RPG
+'Argentum Online is based on Baronsoft's VB6 Online RPG
 'You can contact the original creator of ORE at aaron@baronsoft.com
 'for more information about ORE please visit http://www.baronsoft.com/
 '
@@ -22,10 +22,10 @@ Attribute VB_Name = "modForum"
 'You can contact me at:
 'morgolock@speedy.com.ar
 'www.geocities.com/gmorgolock
-'Calle 3 número 983 piso 7 dto A
+'Calle 3 numero 983 piso 7 dto A
 'La Plata - Pcia, Buenos Aires - Republica Argentina
-'Código Postal 1900
-'Pablo Ignacio Márquez
+'Codigo Postal 1900
+'Pablo Ignacio Marquez
 
 Option Explicit
 
@@ -313,7 +313,7 @@ Public Sub CleanForum(ByVal ForumIndex As Integer)
 
 End Sub
 
-Public Function SendPosts(ByVal UserIndex As Integer, ByRef ForoID As String) As Boolean
+Public Function SendPosts(ByVal Userindex As Integer, ByRef ForoID As String) As Boolean
     '***************************************************
     'Author: ZaMa
     'Last Modification: 22/02/2010
@@ -336,7 +336,7 @@ Public Function SendPosts(ByVal UserIndex As Integer, ByRef ForoID As String) As
             For PostIndex = 1 To .CantPosts
 
                 With .vsPost(PostIndex)
-                    Call WriteAddForumMsg(UserIndex, eForumMsgType.ieGeneral, .sTitulo, .Autor, .sPost)
+                    Call WriteAddForumMsg(Userindex, eForumMsgType.ieGeneral, .sTitulo, .Autor, .sPost)
 
                 End With
 
@@ -346,7 +346,7 @@ Public Function SendPosts(ByVal UserIndex As Integer, ByRef ForoID As String) As
             For PostIndex = 1 To .CantAnuncios
 
                 With .vsAnuncio(PostIndex)
-                    Call WriteAddForumMsg(UserIndex, eForumMsgType.ieGENERAL_STICKY, .sTitulo, .Autor, .sPost)
+                    Call WriteAddForumMsg(Userindex, eForumMsgType.ieGENERAL_STICKY, .sTitulo, .Autor, .sPost)
 
                 End With
 
@@ -354,10 +354,10 @@ Public Function SendPosts(ByVal UserIndex As Integer, ByRef ForoID As String) As
             
         End With
         
-        bEsGm = EsGm(UserIndex)
+        bEsGm = EsGm(Userindex)
         
         ' Caos?
-        If esCaos(UserIndex) Or bEsGm Then
+        If esCaos(Userindex) Or bEsGm Then
             
             ForumIndex = GetForumIndex(FORO_CAOS_ID)
             
@@ -367,7 +367,7 @@ Public Function SendPosts(ByVal UserIndex As Integer, ByRef ForoID As String) As
                 For PostIndex = 1 To .CantPosts
                 
                     With .vsPost(PostIndex)
-                        Call WriteAddForumMsg(UserIndex, eForumMsgType.ieCAOS, .sTitulo, .Autor, .sPost)
+                        Call WriteAddForumMsg(Userindex, eForumMsgType.ieCAOS, .sTitulo, .Autor, .sPost)
 
                     End With
                     
@@ -377,7 +377,7 @@ Public Function SendPosts(ByVal UserIndex As Integer, ByRef ForoID As String) As
                 For PostIndex = 1 To .CantAnuncios
 
                     With .vsAnuncio(PostIndex)
-                        Call WriteAddForumMsg(UserIndex, eForumMsgType.ieCAOS_STICKY, .sTitulo, .Autor, .sPost)
+                        Call WriteAddForumMsg(Userindex, eForumMsgType.ieCAOS_STICKY, .sTitulo, .Autor, .sPost)
 
                     End With
 
@@ -388,7 +388,7 @@ Public Function SendPosts(ByVal UserIndex As Integer, ByRef ForoID As String) As
         End If
             
         ' Caos?
-        If esArmada(UserIndex) Or bEsGm Then
+        If esArmada(Userindex) Or bEsGm Then
             
             ForumIndex = GetForumIndex(FORO_REAL_ID)
             
@@ -398,7 +398,7 @@ Public Function SendPosts(ByVal UserIndex As Integer, ByRef ForoID As String) As
                 For PostIndex = 1 To .CantPosts
                 
                     With .vsPost(PostIndex)
-                        Call WriteAddForumMsg(UserIndex, eForumMsgType.ieREAL, .sTitulo, .Autor, .sPost)
+                        Call WriteAddForumMsg(Userindex, eForumMsgType.ieREAL, .sTitulo, .Autor, .sPost)
 
                     End With
                     
@@ -408,7 +408,7 @@ Public Function SendPosts(ByVal UserIndex As Integer, ByRef ForoID As String) As
                 For PostIndex = 1 To .CantAnuncios
 
                     With .vsAnuncio(PostIndex)
-                        Call WriteAddForumMsg(UserIndex, eForumMsgType.ieREAL_STICKY, .sTitulo, .Autor, .sPost)
+                        Call WriteAddForumMsg(Userindex, eForumMsgType.ieREAL_STICKY, .sTitulo, .Autor, .sPost)
 
                     End With
 

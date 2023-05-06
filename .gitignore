@@ -2,10 +2,12 @@ Account/*
 Logs/*
 Charfile/*
 Logs/*
-Foros/*
 WorldBackup/*
 Guilds/*
 Codigo/*.log
+Reportes/*
+Configuracion/DataBase.ini
+R
 .DS_Store
 *.vbw
 *.csi
@@ -13,3 +15,4 @@ Codigo/*.log
 bkNpcs.dat
 server.exe
 Guilds/guildsinfo.inf
+comctl32.oca

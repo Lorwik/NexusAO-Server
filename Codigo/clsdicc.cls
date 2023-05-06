@@ -42,7 +42,7 @@ Private Const MAX_ELEM = 100
 
 Private Type diccElem
 
-    clave As String
+    Clave As String
     def As Variant
 
 End Type
@@ -68,15 +68,15 @@ Public Property Get CantElem() As Integer
 
 End Property
 
-Public Function AtPut(ByVal clave As String, ByRef elem As Variant) As Boolean
+Public Function AtPut(ByVal Clave As String, ByRef elem As Variant) As Boolean
 
     Dim i As Integer
 
     AtPut = False
 
-    If LenB(clave) = 0 Then Exit Function
+    If LenB(Clave) = 0 Then Exit Function
 
-    clave = UCase$(clave)
+    Clave = UCase$(Clave)
 
     If p_cant = MAX_ELEM Then
         AtPut = False
@@ -84,7 +84,7 @@ Public Function AtPut(ByVal clave As String, ByRef elem As Variant) As Boolean
 
         For i = 1 To p_cant
 
-            If clave = p_elementos(i).clave Then
+            If Clave = p_elementos(i).Clave Then
                 p_elementos(i).def = elem
                 AtPut = True
 
@@ -97,7 +97,7 @@ Public Function AtPut(ByVal clave As String, ByRef elem As Variant) As Boolean
         If Not AtPut Then
             p_cant = p_cant + 1
             p_elementos(p_cant).def = elem
-            p_elementos(p_cant).clave = clave
+            p_elementos(p_cant).Clave = Clave
             AtPut = True
 
         End If
@@ -106,17 +106,17 @@ Public Function AtPut(ByVal clave As String, ByRef elem As Variant) As Boolean
 
 End Function
 
-Public Function At(ByVal clave As String) As Variant
+Public Function At(ByVal Clave As String) As Variant
 
     Dim i As Integer
 
-    clave = UCase$(clave)
+    Clave = UCase$(Clave)
 
     At = Null
 
     For i = 1 To p_cant
 
-        If clave = p_elementos(i).clave Then
+        If Clave = p_elementos(i).Clave Then
             At = p_elementos(i).def
             Exit Function
 
@@ -127,7 +127,7 @@ Public Function At(ByVal clave As String) As Variant
 End Function
 
 Public Function AtIndex(ByVal i As Integer) As String
-    AtIndex = p_elementos(i).clave
+    AtIndex = p_elementos(i).Clave
 
 End Function
 
@@ -139,24 +139,24 @@ Public Function MayorValor(ByRef cant As Integer) As String
 
     Dim max   As Integer
 
-    Dim clave As String
+    Dim Clave As String
 
     max = -1
     cant = 0
-    clave = vbNullString
+    Clave = vbNullString
 
     For i = 1 To p_cant
 
         If max <= CInt(p_elementos(i).def) Then
             cant = IIf(max = CInt(p_elementos(i).def), cant + 1, 1)
-            clave = IIf(max = CInt(p_elementos(i).def), clave & "," & p_elementos(i).clave, p_elementos(i).clave)
+            Clave = IIf(max = CInt(p_elementos(i).def), Clave & "," & p_elementos(i).Clave, p_elementos(i).Clave)
             max = CInt(p_elementos(i).def)
 
         End If
 
     Next i
 
-    MayorValor = clave
+    MayorValor = Clave
 
 End Function
 
@@ -165,7 +165,7 @@ Public Sub DumpAll()
     Dim i As Integer
 
     For i = 1 To MAX_ELEM
-        p_elementos(i).clave = vbNullString
+        p_elementos(i).Clave = vbNullString
         p_elementos(i).def = Null
     Next i
 

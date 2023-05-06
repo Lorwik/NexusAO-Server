@@ -1,19 +1,21 @@
 VERSION 5.00
 Begin VB.Form frmAdmin 
-   BackColor       =   &H00FFC0C0&
+   BackColor       =   &H00E0E0E0&
    BorderStyle     =   1  'Fixed Single
-   Caption         =   "Administración del servidor"
+   Caption         =   "Administracion del servidor"
    ClientHeight    =   2865
    ClientLeft      =   45
    ClientTop       =   435
    ClientWidth     =   4680
+   ControlBox      =   0   'False
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
+   MinButton       =   0   'False
    ScaleHeight     =   2865
    ScaleWidth      =   4680
    StartUpPosition =   2  'CenterScreen
    Begin VB.Frame Frame1 
-      BackColor       =   &H00FFC0C0&
+      BackColor       =   &H00E0E0E0&
       Caption         =   "Personajes"
       BeginProperty Font 
          Name            =   "Tahoma"
@@ -42,7 +44,7 @@ Begin VB.Form frmAdmin
          Width           =   3135
       End
       Begin VB.CommandButton Command3 
-         BackColor       =   &H00FFC0C0&
+         BackColor       =   &H00E0E0E0&
          Caption         =   "Echar todos los PJS no privilegiados"
          BeginProperty Font 
             Name            =   "MS Sans Serif"
@@ -61,7 +63,7 @@ Begin VB.Form frmAdmin
          Width           =   3135
       End
       Begin VB.CommandButton Command2 
-         BackColor       =   &H00FFC0C0&
+         BackColor       =   &H00E0E0E0&
          Caption         =   "R"
          BeginProperty Font 
             Name            =   "MS Sans Serif"
@@ -88,7 +90,7 @@ Begin VB.Form frmAdmin
          Width           =   3135
       End
       Begin VB.CommandButton Command1 
-         BackColor       =   &H00FFC0C0&
+         BackColor       =   &H00E0E0E0&
          Caption         =   "Echar"
          BeginProperty Font 
             Name            =   "MS Sans Serif"
@@ -152,7 +154,7 @@ Private Sub Command1_Click()
 
     If tIndex > 0 Then
         Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg("Servidor> " & UserList(tIndex).Name & " ha sido echado.", FontTypeNames.FONTTYPE_SERVER))
-        Call CloseSocket(tIndex)
+        Call CloseUser(tIndex)
 
     End If
 
@@ -196,7 +198,7 @@ Private Sub ActualizaPjInfo()
     If tIndex > 0 Then
 
         With UserList(tIndex)
-            Text1.Text = .outgoingData.length & " elementos en cola." & vbCrLf
+            Text1.Text = .outgoingData.Length & " elementos en cola." & vbCrLf
 
         End With
 

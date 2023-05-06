@@ -1,104 +1,66 @@
 [INIT]
-NumObjs=34
+NumObjs=19
 
-[OBJ1] 'Flecha
-Index=480
-
-[OBJ2] 'Flecha +1
-Index=551
-
-[OBJ3] 'Flecha +2
-Index=552
-
-[OBJ4] 'Flecha +3
-Index=553
-
-[OBJ5] 'Laud Mágico
-Index=696
-
-[OBJ6] 'Laud Élfico
-Index=1049
-
-[OBJ7] 'Flauta Mágica
-Index=208
-
-[OBJ8] 'Flauta Élfica
-Index=1050
-
-[OBJ9] ' Báculo Engarzado
-Index=660
-
-[OBJ10] 'Arco de Cazador
-Index=665
-
-[OBJ11] 'Arco Compuesto Reforzado
-Index=664
-
-[OBJ12] 'Arco compuesto
-Index=479
-
-[OBJ13] 'Arco Simple Reforzado
-Index=663
-
-[OBJ14] 'Arco simple
-Index=478
-
-[OBJ15] 'Barca
-Index=474
-
-[OBJ16] 'Galera
-Index=475
-
-[OBJ17] 'Galeón
-Index=476
-
-[OBJ18] 'Tambor
-Index=362
-
-[OBJ19] 'Laud
-Index=469
-
-[OBJ20] 'Flauta
-Index=540
-
-[OBJ21] 'Cuchara
+[Obj1] ' Cuchara
 Index=163
 
-[OBJ22] 'Silla
+[Obj2] ' Silla
 Index=168
 
-[OBJ23] 'Silla
-Index=162
+[Obj2] ' Laud
+Index=469
 
-[OBJ24] 'Butaca
-Index=733
+[Obj3] ' Tambor
+Index=362
 
-[OBJ25] 'Banqueta
-Index=799
+[Obj4] ' Flauta
+Index=540
 
-[OBJ26] 'Mueble Rústico 
+[Obj5] ' Mueble 
 Index=167
 
-[OBJ27] 'Mueble Rústico
-Index=756
+[Obj6] ' Arco simple
+Index=478
 
-[OBJ28] 'Sillón
-Index=748
+[Obj7] ' Arco simple reforzado
+Index=596
 
-[OBJ29] 'Sillón
-Index=788
+[Obj8] ' Arco compuesto
+Index=479
 
-[OBJ30] 'Sillón
-Index=789
+[Obj9] ' Arco de las tinieblas
+Index=597
+Recompensa=1
 
-[OBJ31] 'Sillón Azul
-Index=790
+[Obj10] ' Arco elfico
+Index=600
+Recompensa=1
 
-[OBJ32] 'Sillón Azul Doble
-Index=791
+[Obj11] ' vara
+Index=726
 
-[OBJ33] 'Armario
-Index=800
+[Obj12] ' baston
+Index=728
 
-[OBJ34] 'Caña de Pescar
-Index=138
+[Obj13] ' baculo
+Index=705
+Recompensa=2
+
+[Obj14] ' Flecha
+Index=480
+
+[Obj15] ' Flecha +1
+Index=551
+
+[Obj16] ' Flecha +2
+Index=552
+
+[Obj17] ' Fragata
+Index=474
+
+[Obj18] ' Fragata reforzada
+Index=475
+
+[Obj19] ' Fragata guerra
+Index=476
+

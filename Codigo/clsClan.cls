@@ -42,48 +42,29 @@ Option Explicit
 ' by el oso :p
 
 Private p_GuildName             As String
-
 Private p_Alineacion            As ALINEACION_GUILD
-
 Private p_OnlineMembers         As Collection   'Array de UserIndexes!
-
 Private p_GMsOnline             As Collection
-
 Private p_PropuestasDePaz       As Collection
-
 Private p_PropuestasDeAlianza   As Collection
-
 Private p_IteradorRelaciones    As Integer
-
 Private p_IteradorOnlineMembers As Integer
-
 Private p_IteradorPropuesta     As Integer
-
 Private p_IteradorOnlineGMs     As Integer
-
 Private p_GuildNumber           As Integer      'Numero de guild en el mundo
-
 Private p_Relaciones()          As RELACIONES_GUILD 'array de relaciones con los otros clanes
 
 Private GUILDINFOFILE           As String
-
 Private GUILDPATH               As String       'aca pq me es mas comodo setearlo y pq en ningun disenio
-
 Private MEMBERSFILE             As String       'decente la capa de arriba se entera donde estan
-
 Private SOLICITUDESFILE         As String       'los datos fisicamente
-
 Private PROPUESTASFILE          As String
-
 Private RELACIONESFILE          As String
-
 Private VOTACIONESFILE          As String
 
-Private Const NEWSLENGTH = 1024
-
-Private Const DESCLENGTH = 256
-
-Private Const CODEXLENGTH = 256
+Private Const NEWSLENGTH        As Integer = 1024
+Private Const DESCLENGTH        As Integer = 256
+Private Const CODEXLENGTH       As Integer = 256
 
 Public Property Get GuildName() As String
     GuildName = p_GuildName
@@ -197,23 +178,27 @@ Public Sub InicializarNuevoClan(ByRef Fundador As String)
     Dim NewQ As Integer
 
     'para que genere los archivos
-    Call WriteVar(MEMBERSFILE, "INIT", "NroMembers", "0")
-    Call WriteVar(SOLICITUDESFILE, "INIT", "CantSolicitudes", "0")
-
+    If Not FileExist(MEMBERSFILE, vbNormal) Then
+        Call WriteVar(MEMBERSFILE, "INIT", "NroMembers", "0")
+    End If
+    
+    If Not FileExist(SOLICITUDESFILE, vbNormal) Then
+        Call WriteVar(SOLICITUDESFILE, "INIT", "CantSolicitudes", "0")
+    End If
+    
     OldQ = GetVar(GUILDINFOFILE, "INIT", "nroguilds")
 
     If IsNumeric(OldQ) Then
         NewQ = CInt(Trim$(OldQ)) + 1
     Else
         NewQ = 1
-
     End If
 
-    Call WriteVar(GUILDINFOFILE, "INIT", "NroGuilds", NewQ)
-
-    Call WriteVar(GUILDINFOFILE, "GUILD" & NewQ, "Founder", Fundador)
+    Call WriteVar(GUILDINFOFILE, "INIT", "NroGuilds", NewQ & vbNewLine)
+    
     Call WriteVar(GUILDINFOFILE, "GUILD" & NewQ, "GuildName", p_GuildName)
-    Call WriteVar(GUILDINFOFILE, "GUILD" & NewQ, "Date", Date)
+    Call WriteVar(GUILDINFOFILE, "GUILD" & NewQ, "Founder", Fundador)
+    Call WriteVar(GUILDINFOFILE, "GUILD" & NewQ, "Date", Date$)
     Call WriteVar(GUILDINFOFILE, "GUILD" & NewQ, "Antifaccion", "0")
     Call WriteVar(GUILDINFOFILE, "GUILD" & NewQ, "Alineacion", Alineacion2String(p_Alineacion))
 
@@ -264,7 +249,6 @@ End Function
 Public Function GetMemberList() As String()
 
     Dim OldQ   As Integer
-
     Dim list() As String
 
     Dim i      As Long
@@ -281,15 +265,15 @@ Public Function GetMemberList() As String()
 
 End Function
 
-Public Sub ConectarMiembro(ByVal UserIndex As Integer)
+Public Sub ConectarMiembro(ByVal Userindex As Integer)
     '***************************************************
     'Autor: Unknown (orginal version)
     'Last Modification: 28/05/2010
     '28/05/2010: ZaMa - No avisa cuando loguea un dios o admin.
     '***************************************************
-    p_OnlineMembers.Add UserIndex
+    p_OnlineMembers.Add Userindex
 
-    With UserList(UserIndex)
+    With UserList(Userindex)
 
         ' No avisa cuando loguea un dios
         If (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) = 0 Then
@@ -301,7 +285,7 @@ Public Sub ConectarMiembro(ByVal UserIndex As Integer)
 
 End Sub
 
-Public Sub DesConectarMiembro(ByVal UserIndex As Integer)
+Public Sub DesConectarMiembro(ByVal Userindex As Integer)
 
     '***************************************************
     'Autor: Unknown (orginal version)
@@ -312,10 +296,10 @@ Public Sub DesConectarMiembro(ByVal UserIndex As Integer)
 
     For i = 1 To p_OnlineMembers.Count
 
-        If p_OnlineMembers.Item(i) = UserIndex Then
+        If p_OnlineMembers.Item(i) = Userindex Then
             p_OnlineMembers.Remove i
             
-            With UserList(UserIndex)
+            With UserList(Userindex)
 
                 ' No avisa cuando se desconecta un dios
                 If (.flags.Privilegios And (PlayerType.Admin Or PlayerType.Dios)) = 0 Then
@@ -339,20 +323,10 @@ Public Sub AceptarNuevoMiembro(ByRef Nombre As String)
 
     Dim OldQs As String
 
-    Dim ruta  As String
+    If PersonajeExiste(Nombre) Then
+        Call SaveUserGuildIndex(Nombre, p_GuildNumber)
+        Call SaveUserGuildAspirant(Nombre, 0)
 
-    ruta = CharPath & Nombre & ".chr"
-
-    If FileExist(ruta) Then
-        Call WriteVar(ruta, "GUILD", "GUILDINDEX", p_GuildNumber)
-        Call WriteVar(ruta, "GUILD", "AspiranteA", "0")
-        'CantPs = GetVar(CharPath & Nombre & ".chr", "GUILD", "ClanesParticipo")
-        'If IsNumeric(CantPs) Then
-        '    CantP = CInt(CantPs)
-        'Else
-        '    CantP = 0
-        'End If
-        'Call WriteVar(CharPath & Nombre & ".chr", "GUILD", "ClanesParticipo", CantP + 1)
         OldQs = GetVar(MEMBERSFILE, "INIT", "NroMembers")
 
         If IsNumeric(OldQs) Then
@@ -381,7 +355,7 @@ Public Sub ExpulsarMiembro(ByRef Nombre As String)
 
     Dim MiembroDe As String
 
-    If LenB(Dir$(CharPath & Nombre & ".chr")) <> 0 Then
+    If PersonajeExiste(Nombre) Then
         OldQ = CInt(GetVar(MEMBERSFILE, "INIT", "NroMembers"))
         i = 1
         Nombre = UCase$(Nombre)
@@ -393,7 +367,7 @@ Public Sub ExpulsarMiembro(ByRef Nombre As String)
         EsMiembro = i <= OldQ
         
         If EsMiembro Then
-            Call WriteVar(CharPath & Nombre & ".chr", "GUILD", "GuildIndex", vbNullString)
+            Call SaveUserGuildIndex(Nombre, 0)
 
             While i < OldQ
 
@@ -405,7 +379,7 @@ Public Sub ExpulsarMiembro(ByRef Nombre As String)
             'seteo la cantidad de miembros nueva
             Call WriteVar(MEMBERSFILE, "INIT", "NroMembers", OldQ - 1)
             'lo echo a el
-            MiembroDe = GetVar(CharPath & Nombre & ".chr", "GUILD", "Miembro")
+            MiembroDe = GetUserGuildMember(Nombre)
 
             If Not InStr(1, MiembroDe, p_GuildName, vbTextCompare) > 0 Then
                 If LenB(MiembroDe) <> 0 Then
@@ -414,7 +388,7 @@ Public Sub ExpulsarMiembro(ByRef Nombre As String)
                 End If
 
                 MiembroDe = MiembroDe & p_GuildName
-                Call WriteVar(CharPath & Nombre & ".chr", "GUILD", "Miembro", MiembroDe)
+                Call SaveUserGuildMember(Nombre, MiembroDe)
 
             End If
 
@@ -515,7 +489,7 @@ Public Sub NuevoAspirante(ByRef Nombre As String, ByRef Peticion As String)
             Call WriteVar(SOLICITUDESFILE, "SOLICITUD" & i, "Nombre", Nombre)
             Call WriteVar(SOLICITUDESFILE, "SOLICITUD" & i, "Detalle", IIf(Trim$(Peticion) = vbNullString, "Peticion vacia", Peticion))
             Call WriteVar(SOLICITUDESFILE, "INIT", "CantSolicitudes", OldQI + 1)
-            Call WriteVar(CharPath & Nombre & ".chr", "GUILD", "ASPIRANTEA", p_GuildNumber)
+            Call SaveUserGuildAspirant(Nombre, p_GuildNumber)
             Exit Sub
 
         End If
@@ -543,10 +517,8 @@ Public Sub RetirarAspirante(ByRef Nombre As String, ByRef NroAspirante As Intege
 
     End If
 
-    'Call WriteVar(SOLICITUDESFILE, "SOLICITUD" & NroAspirante, "Nombre", vbNullString)
-    'Call WriteVar(SOLICITUDESFILE, "SOLICITUD" & NroAspirante, "Detalle", vbNullString)
-    Call WriteVar(CharPath & Nombre & ".chr", "GUILD", "ASPIRANTEA", "0")
-    Pedidos = GetVar(CharPath & Nombre & ".chr", "GUILD", "Pedidos")
+    Call SaveUserGuildAspirant(Nombre, 0)
+    Pedidos = GetUserGuildPedidos(Nombre)
 
     If Not InStr(1, Pedidos, p_GuildName, vbTextCompare) > 0 Then
         If LenB(Pedidos) <> 0 Then
@@ -555,7 +527,7 @@ Public Sub RetirarAspirante(ByRef Nombre As String, ByRef NroAspirante As Intege
         End If
 
         Pedidos = Pedidos & p_GuildName
-        Call WriteVar(CharPath & Nombre & ".chr", "GUILD", "Pedidos", Pedidos)
+        Call SaveUserGuildPedidos(Nombre, Pedidos)
 
     End If
     
@@ -568,11 +540,6 @@ Public Sub RetirarAspirante(ByRef Nombre As String, ByRef NroAspirante As Intege
     
     Call WriteVar(SOLICITUDESFILE, "SOLICITUD" & modGuilds.MAXASPIRANTES, "Nombre", vbNullString)
     Call WriteVar(SOLICITUDESFILE, "SOLICITUD" & modGuilds.MAXASPIRANTES, "Detalle", vbNullString)
-    
-End Sub
-
-Public Sub InformarRechazoEnChar(ByRef Nombre As String, ByRef Detalles As String)
-    Call WriteVar(CharPath & Nombre & ".chr", "GUILD", "MotivoRechazo", Detalles)
 
 End Sub
 
@@ -767,7 +734,7 @@ Public Function RevisarElecciones() As Boolean
 
             If CantGanadores > 1 Then
                 'empate en la votacion
-                Call SetGuildNews("*Empate en la votación. " & Ganador & " con " & CantGanadores & " votos ganaron las elecciones del clan.")
+                Call SetGuildNews("*Empate en la votacion. " & Ganador & " con " & CantGanadores & " votos ganaron las elecciones del clan.")
             ElseIf CantGanadores = 1 Then
                 list = Me.GetMemberList()
                 
@@ -777,16 +744,16 @@ Public Function RevisarElecciones() As Boolean
                 Next i
                 
                 If i <= UBound(list()) Then
-                    Call SetGuildNews("*" & Ganador & " ganó la elección del clan*")
+                    Call SetGuildNews("*" & Ganador & " gano la eleccion del clan*")
                     Call Me.SetLeader(Ganador)
                     RevisarElecciones = True
                 Else
-                    Call SetGuildNews("*" & Ganador & " ganó la elección del clan pero abandonó las filas por lo que la votación queda desierta*")
+                    Call SetGuildNews("*" & Ganador & " gano la eleccion del clan pero abandono las filas por lo que la votacion queda desierta*")
 
                 End If
 
             Else
-                Call SetGuildNews("*El período de votación se cerró sin votos*")
+                Call SetGuildNews("*El periodo de votacion se cerro sin votos*")
 
             End If
             
@@ -1013,13 +980,13 @@ Public Function Iterador_ProximoGM() As Integer
 
 End Function
 
-Public Function Iterador_ProximaRelacion(ByVal r As RELACIONES_GUILD) As Integer
+Public Function Iterador_ProximaRelacion(ByVal R As RELACIONES_GUILD) As Integer
     
     While p_IteradorRelaciones < UBound(p_Relaciones)
         
         p_IteradorRelaciones = p_IteradorRelaciones + 1
 
-        If p_Relaciones(p_IteradorRelaciones) = r Then
+        If p_Relaciones(p_IteradorRelaciones) = R Then
             Iterador_ProximaRelacion = p_IteradorRelaciones
             Exit Function
 
@@ -1042,18 +1009,18 @@ End Function
 'ADMINISTRATIVAS
 '
 
-Public Sub ConectarGM(ByVal UserIndex As Integer)
-    p_GMsOnline.Add UserIndex
+Public Sub ConectarGM(ByVal Userindex As Integer)
+    p_GMsOnline.Add Userindex
 
 End Sub
 
-Public Sub DesconectarGM(ByVal UserIndex As Integer)
+Public Sub DesconectarGM(ByVal Userindex As Integer)
 
     Dim i As Integer
 
     For i = 1 To p_GMsOnline.Count
 
-        If p_GMsOnline.Item(i) = UserIndex Then
+        If p_GMsOnline.Item(i) = Userindex Then
             p_GMsOnline.Remove (i)
 
         End If

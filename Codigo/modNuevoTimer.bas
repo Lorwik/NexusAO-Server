@@ -1,6 +1,6 @@
 Attribute VB_Name = "modNuevoTimer"
-'Nexus AO mod Argentum Online 0.13
-'Copyright (C) 2002 Márquez Pablo Ignacio
+'Argentum Online 0.12.2
+'Copyright (C) 2002 Marquez Pablo Ignacio
 '
 'This program is free software; you can redistribute it and/or modify
 'it under the terms of the Affero General Public License;
@@ -14,7 +14,7 @@ Attribute VB_Name = "modNuevoTimer"
 'You should have received a copy of the Affero General Public License
 'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
 '
-'Nexus AO mod Argentum Online is based on Baronsoft's VB6 Online RPG
+'Argentum Online is based on Baronsoft's VB6 Online RPG
 'You can contact the original creator of ORE at aaron@baronsoft.com
 'for more information about ORE please visit http://www.baronsoft.com/
 '
@@ -22,10 +22,10 @@ Attribute VB_Name = "modNuevoTimer"
 'You can contact me at:
 'morgolock@speedy.com.ar
 'www.geocities.com/gmorgolock
-'Calle 3 número 983 piso 7 dto A
+'Calle 3 numero 983 piso 7 dto A
 'La Plata - Pcia, Buenos Aires - Republica Argentina
-'Código Postal 1900
-'Pablo Ignacio Márquez
+'Codigo Postal 1900
+'Pablo Ignacio Marquez
 
 Option Explicit
 
@@ -35,7 +35,67 @@ Option Explicit
 ' timer para que no se pueda hacer la accion hasta el nuevo ciclo.
 '
 
-Public Function IntervaloPermiteAtacarNpc(ByVal NpcIndex As Integer, _
+Public Function IntervaloPermiteChatGlobal(ByVal UserIndex As Integer, _
+                                          Optional ByVal Actualizar As Boolean = True) As Boolean
+    '***************************************************
+    'Author: Lorwik
+    'Last Modification: 25/10/2020
+    ' Verificamos si ya puede volver hablar por global
+    '***************************************************
+
+    Dim TActual As Long
+
+    TActual = GetTickCount() And &H7FFFFFFF
+
+    With UserList(UserIndex)
+
+        If TActual - .Counters.LastGlobalMsg >= INTERVALO_GLOBAL Then
+            If Actualizar Then
+                .Counters.LastGlobalMsg = TActual
+
+            End If
+
+            IntervaloPermiteChatGlobal = True
+        Else
+            IntervaloPermiteChatGlobal = False
+
+        End If
+
+    End With
+
+End Function
+
+Public Function IntervaloNpcVelocidadVariable(ByVal NPCIndex As Integer, _
+                                          Optional ByVal Actualizar As Boolean = True) As Boolean
+    '***************************************************
+    'Author: Lorwik
+    'Last Modification: 24/10/2020
+    ' Verificamos si la criatura puede comenzar a perseguir
+    '***************************************************
+
+    Dim TActual As Long
+
+    TActual = GetTickCount() And &H7FFFFFFF
+
+    With Npclist(NPCIndex)
+
+        If TActual - .Contadores.VelocidadVariable >= .SpeedVar Then
+            If Actualizar Then
+                .Contadores.VelocidadVariable = TActual
+
+            End If
+
+            IntervaloNpcVelocidadVariable = True
+        Else
+            IntervaloNpcVelocidadVariable = False
+
+        End If
+
+    End With
+
+End Function
+
+Public Function IntervaloPermiteAtacarNpc(ByVal NPCIndex As Integer, _
                                           Optional ByVal Actualizar As Boolean = True) As Boolean
     '***************************************************
     'Author: Shak
@@ -47,9 +107,9 @@ Public Function IntervaloPermiteAtacarNpc(ByVal NpcIndex As Integer, _
 
     TActual = GetTickCount() And &H7FFFFFFF
 
-    With Npclist(NpcIndex)
+    With Npclist(NPCIndex)
 
-        If TActual - .Contadores.Ataque >= 3000 Then
+        If TActual - .Contadores.Ataque >= IntervaloNPCPuedeAtacar Then
             If Actualizar Then
                 .Contadores.Ataque = TActual
 
@@ -84,10 +144,11 @@ Public Function IntervaloPermiteLanzarSpell(ByVal UserIndex As Integer, _
 
         End If
 
+        Call modAntiCheat.RestaCount(UserIndex, 0, 0, 1, 0)
         IntervaloPermiteLanzarSpell = True
     Else
         IntervaloPermiteLanzarSpell = False
-
+        Call modAntiCheat.AddCount(UserIndex, 0, 0, 1, 0)
     End If
 
 End Function
@@ -101,21 +162,35 @@ Public Function IntervaloPermiteAtacar(ByVal UserIndex As Integer, _
     '***************************************************
 
     Dim TActual As Long
+    Dim Aumenta As Integer
 
     TActual = GetTickCount() And &H7FFFFFFF
-
-    If TActual - UserList(UserIndex).Counters.TimerPuedeAtacar >= IntervaloUserPuedeAtacar Then
-        If Actualizar Then
-            UserList(UserIndex).Counters.TimerPuedeAtacar = TActual
-            UserList(UserIndex).Counters.TimerGolpeUsar = TActual
-
+    
+    With UserList(UserIndex)
+    
+        '¿Tiene arma equipada?
+        If .Invent.WeaponEqpObjIndex > 0 Then
+            'El peso del arma aumenta el intervalo
+            If ObjData(.Invent.WeaponEqpObjIndex).Peso > 0 Then _
+                Aumenta = ObjData(.Invent.WeaponEqpObjIndex).Peso
+        
         End If
 
-        IntervaloPermiteAtacar = True
-    Else
-        IntervaloPermiteAtacar = False
-
-    End If
+        If TActual - .Counters.TimerPuedeAtacar >= (IntervaloUserPuedeAtacar + Aumenta) Then
+            If Actualizar Then
+                .Counters.TimerPuedeAtacar = TActual
+                .Counters.TimerGolpeUsar = TActual
+    
+            End If
+    
+            Call modAntiCheat.RestaCount(UserIndex, 0, 1, 0, 0)
+            IntervaloPermiteAtacar = True
+        Else
+            IntervaloPermiteAtacar = False
+            Call modAntiCheat.AddCount(UserIndex, 0, 1, 0, 0)
+        End If
+    
+    End With
 
 End Function
 
@@ -271,17 +346,11 @@ Public Function IntervaloPermiteUsar(ByVal UserIndex As Integer, _
             'UserList(UserIndex).Counters.failedUsageAttempts = 0
         End If
 
+        Call modAntiCheat.RestaCount(UserIndex, 0, 0, 0, 1)
         IntervaloPermiteUsar = True
     Else
         IntervaloPermiteUsar = False
-        
-        'UserList(UserIndex).Counters.failedUsageAttempts = UserList(UserIndex).Counters.failedUsageAttempts + 1
-        
-        'Tolerancia arbitraria - 20 es MUY alta, la está chiteando zarpado
-        'If UserList(UserIndex).Counters.failedUsageAttempts = 20 Then
-        'Call SendData(SendTarget.ToAdmins, 0, PrepareMessageConsoleMsg(UserList(UserIndex).name & " kicked by the server por posible modificación de intervalos.", FontTypeNames.FONTTYPE_FIGHT))
-        'Call CloseSocket(UserIndex)
-        'End If
+        Call modAntiCheat.AddCount(UserIndex, 0, 0, 0, 1)
     End If
 
 End Function
@@ -300,12 +369,21 @@ Public Function IntervaloPermiteUsarArcos(ByVal UserIndex As Integer, _
     
     If TActual - UserList(UserIndex).Counters.TimerPuedeUsarArco >= IntervaloFlechasCazadores Then
         If Actualizar Then UserList(UserIndex).Counters.TimerPuedeUsarArco = TActual
+        Call modAntiCheat.RestaCount(UserIndex, 1, 0, 0, 0)
         IntervaloPermiteUsarArcos = True
     Else
         IntervaloPermiteUsarArcos = False
-
+        Call modAntiCheat.AddCount(UserIndex, 1, 0, 0, 0)
     End If
 
+End Function
+
+Public Function getInterval(ByVal timeNow As Long, ByVal startTime As Long) As Long ' 0.13.5
+    If timeNow < startTime Then
+        getInterval = &H7FFFFFFF - startTime + timeNow + 1
+    Else
+        getInterval = timeNow - startTime
+    End If
 End Function
 
 Public Function IntervaloPermiteSerAtacado(ByVal UserIndex As Integer, _
@@ -412,36 +490,57 @@ Public Function IntervaloEstadoAtacable(ByVal UserIndex As Integer, _
 
 End Function
 
-Public Function IntervaloGoHome(ByVal UserIndex As Integer, _
-                                Optional ByVal TimeInterval As Long, _
-                                Optional ByVal Actualizar As Boolean = False) As Boolean
+Public Function IntervaloPuedeOcultar(ByVal UserIndex As Integer, _
+                                     Optional ByVal Actualizar As Boolean = True) As Boolean
+    '**************************************************************
+    'Author: Lorwik
+    'Last Modify Date: 18/03/2021
+    '**************************************************************
 
-    '**************************************************************
-    'Author: ZaMa
-    'Last Modify by: ZaMa
-    'Last Modify Date: 01/06/2010
-    '01/06/2010: ZaMa - Add the Timer which determines wether the user can be teleported to its home or not
-    '**************************************************************
     Dim TActual As Long
     
     TActual = GetTickCount() And &H7FFFFFFF
     
-    With UserList(UserIndex)
-
-        ' Inicializa el timer
+    If TActual - UserList(UserIndex).Counters.TimerPuedeOcultar >= IntervaloOcultable Then
         If Actualizar Then
-            .flags.Traveling = 1
-            .Counters.goHome = TActual + TimeInterval
-        Else
+            UserList(UserIndex).Counters.TimerPuedeOcultar = TActual
 
-            If TActual >= .Counters.goHome Then
-                IntervaloGoHome = True
-
-            End If
-
+            'UserList(UserIndex).Counters.failedUsageAttempts = 0
         End If
 
-    End With
+        Call modAntiCheat.RestaCount(UserIndex, 0, 0, 0, 1)
+        IntervaloPuedeOcultar = True
+    Else
+        IntervaloPuedeOcultar = False
+        Call modAntiCheat.AddCount(UserIndex, 0, 0, 0, 1)
+    End If
+
+End Function
+
+Public Function IntervaloPuedeTocar(ByVal UserIndex As Integer, _
+                                     Optional ByVal Actualizar As Boolean = True) As Boolean
+    '**************************************************************
+    'Author: Lorwik
+    'Last Modify Date: 28/03/2021
+    '**************************************************************
+
+    Dim TActual As Long
+    
+    TActual = GetTickCount() And &H7FFFFFFF
+    
+    If TActual - UserList(UserIndex).Counters.TimerPuedeTocar >= IntervaloTocar Then
+        If Actualizar Then
+            UserList(UserIndex).Counters.TimerPuedeTocar = TActual
+
+            'UserList(UserIndex).Counters.failedUsageAttempts = 0
+        End If
+
+        Call modAntiCheat.RestaCount(UserIndex, 0, 0, 0, 1)
+        IntervaloPuedeTocar = True
+    Else
+        IntervaloPuedeTocar = False
+        Call modAntiCheat.AddCount(UserIndex, 0, 0, 0, 1)
+    End If
 
 End Function
 

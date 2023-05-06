@@ -1,6 +1,6 @@
 Attribute VB_Name = "PathFinding"
-'Nexus AO mod Argentum Online 0.13
-'Copyright (C) 2002 Márquez Pablo Ignacio
+'Argentum Online 0.12.2
+'Copyright (C) 2002 Marquez Pablo Ignacio
 '
 'This program is free software; you can redistribute it and/or modify
 'it under the terms of the Affero General Public License;
@@ -14,7 +14,7 @@ Attribute VB_Name = "PathFinding"
 'You should have received a copy of the Affero General Public License
 'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
 '
-'Nexus AO mod Argentum Online is based on Baronsoft's VB6 Online RPG
+'Argentum Online is based on Baronsoft's VB6 Online RPG
 'You can contact the original creator of ORE at aaron@baronsoft.com
 'for more information about ORE please visit http://www.baronsoft.com/
 '
@@ -22,10 +22,10 @@ Attribute VB_Name = "PathFinding"
 'You can contact me at:
 'morgolock@speedy.com.ar
 'www.geocities.com/gmorgolock
-'Calle 3 número 983 piso 7 dto A
+'Calle 3 numero 983 piso 7 dto A
 'La Plata - Pcia, Buenos Aires - Republica Argentina
-'Código Postal 1900
-'Pablo Ignacio Márquez
+'Codigo Postal 1900
+'Pablo Ignacio Marquez
 
 '#######################################################
 'PathFinding Module
@@ -78,7 +78,7 @@ Attribute VB_Name = "PathFinding"
 
 Option Explicit
 
-Private Const ROWS   As Integer = 100
+Private Const rows   As Integer = 100
 
 Private Const COLUMS As Integer = 100
 
@@ -91,7 +91,7 @@ Private Type tIntermidiateWork
 
 End Type
 
-Private TmpArray(1 To ROWS, 1 To COLUMS) As tIntermidiateWork
+Private TmpArray(1 To rows, 1 To COLUMS) As tIntermidiateWork
 
 Private Function Limites(ByVal vfila As Integer, ByVal vcolu As Integer) As Boolean
     '***************************************************
@@ -100,7 +100,7 @@ Private Function Limites(ByVal vfila As Integer, ByVal vcolu As Integer) As Bool
     '
     '***************************************************
 
-    Limites = ((vcolu >= 1) And (vcolu <= COLUMS) And (vfila >= 1) And (vfila <= ROWS))
+    Limites = ((vcolu >= 1) And (vcolu <= COLUMS) And (vfila >= 1) And (vfila <= rows))
 
 End Function
 
@@ -117,8 +117,8 @@ Private Function IsWalkable(ByVal Map As Integer, _
     With MapData(Map, row, Col)
         IsWalkable = ((.Blocked Or .NpcIndex) = 0)
     
-        If .UserIndex <> 0 Then
-            If .UserIndex <> Npclist(NpcIndex).PFINFO.TargetUser Then IsWalkable = False
+        If .Userindex <> 0 Then
+            If .Userindex <> Npclist(NpcIndex).PFINFO.TargetUser Then IsWalkable = False
 
         End If
 
@@ -149,14 +149,14 @@ Private Sub ProcessAdjacents(ByVal MapIndex As Integer, _
 
             With T(j, vcolu)
 
-                'Nos aseguramos que no hay un camino más corto
+                'Nos aseguramos que no hay un camino mas corto
                 If .DistV = MAXINT Then
                     'Actualizamos la tabla de calculos intermedios
                     .DistV = T(vfila, vcolu).DistV + 1
-                    .PrevV.X = vcolu
+                    .PrevV.x = vcolu
                     .PrevV.Y = vfila
                     'Mete el vertice en la cola
-                    V.X = vcolu
+                    V.x = vcolu
                     V.Y = j
                     Call Push(V)
 
@@ -176,14 +176,14 @@ Private Sub ProcessAdjacents(ByVal MapIndex As Integer, _
 
             With T(j, vcolu)
 
-                'Nos aseguramos que no hay un camino más corto
+                'Nos aseguramos que no hay un camino mas corto
                 If .DistV = MAXINT Then
                     'Actualizamos la tabla de calculos intermedios
                     .DistV = T(vfila, vcolu).DistV + 1
-                    .PrevV.X = vcolu
+                    .PrevV.x = vcolu
                     .PrevV.Y = vfila
                     'Mete el vertice en la cola
-                    V.X = vcolu
+                    V.x = vcolu
                     V.Y = j
                     Call Push(V)
 
@@ -203,14 +203,14 @@ Private Sub ProcessAdjacents(ByVal MapIndex As Integer, _
 
             With T(vfila, j)
 
-                'Nos aseguramos que no hay un camino más corto
+                'Nos aseguramos que no hay un camino mas corto
                 If .DistV = MAXINT Then
                     'Actualizamos la tabla de calculos intermedios
                     .DistV = T(vfila, vcolu).DistV + 1
-                    .PrevV.X = vcolu
+                    .PrevV.x = vcolu
                     .PrevV.Y = vfila
                     'Mete el vertice en la cola
-                    V.X = j
+                    V.x = j
                     V.Y = vfila
                     Call Push(V)
 
@@ -230,14 +230,14 @@ Private Sub ProcessAdjacents(ByVal MapIndex As Integer, _
 
             With T(vfila, j)
 
-                'Nos aseguramos que no hay un camino más corto
+                'Nos aseguramos que no hay un camino mas corto
                 If .DistV = MAXINT Then
                     'Actualizamos la tabla de calculos intermedios
                     .DistV = T(vfila, vcolu).DistV + 1
-                    .PrevV.X = vcolu
+                    .PrevV.x = vcolu
                     .PrevV.Y = vfila
                     'Mete el vertice en la cola
-                    V.X = j
+                    V.x = j
                     V.Y = vfila
                     Call Push(V)
 
@@ -274,10 +274,10 @@ Public Sub SeekPath(ByVal NpcIndex As Integer, Optional ByVal MaxSteps As Intege
     With Npclist(NpcIndex)
         NpcMap = .Pos.Map
         
-        cur_npc_pos.X = .Pos.Y
-        cur_npc_pos.Y = .Pos.X
+        cur_npc_pos.x = .Pos.Y
+        cur_npc_pos.Y = .Pos.x
         
-        tar_npc_pos.X = .PFINFO.Target.X '  UserList(.PFINFO.TargetUser).Pos.X
+        tar_npc_pos.x = .PFINFO.Target.x '  UserList(.PFINFO.TargetUser).Pos.X
         tar_npc_pos.Y = .PFINFO.Target.Y '  UserList(.PFINFO.TargetUser).Pos.Y
         
         Call InitializeTable(TmpArray, cur_npc_pos)
@@ -291,8 +291,8 @@ Public Sub SeekPath(ByVal NpcIndex As Integer, Optional ByVal MaxSteps As Intege
             If steps > MaxSteps Then Exit Do
             V = Pop
 
-            If (V.X = tar_npc_pos.X) And (V.Y = tar_npc_pos.Y) Then Exit Do
-            Call ProcessAdjacents(NpcMap, TmpArray, V.Y, V.X, NpcIndex)
+            If (V.x = tar_npc_pos.x) And (V.Y = tar_npc_pos.Y) Then Exit Do
+            Call ProcessAdjacents(NpcMap, TmpArray, V.Y, V.x, NpcIndex)
         Loop
         
         Call MakePath(NpcIndex)
@@ -315,7 +315,7 @@ Private Sub MakePath(ByVal NpcIndex As Integer)
     Dim i     As Integer
     
     With Npclist(NpcIndex)
-        Pasos = TmpArray(.PFINFO.Target.Y, .PFINFO.Target.X).DistV
+        Pasos = TmpArray(.PFINFO.Target.Y, .PFINFO.Target.x).DistV
         .PFINFO.PathLenght = Pasos
         
         If Pasos = MAXINT Then
@@ -328,12 +328,12 @@ Private Sub MakePath(ByVal NpcIndex As Integer)
         
         ReDim .PFINFO.Path(1 To Pasos) As tVertice
         
-        miV.X = .PFINFO.Target.X
+        miV.x = .PFINFO.Target.x
         miV.Y = .PFINFO.Target.Y
         
         For i = Pasos To 1 Step -1
             .PFINFO.Path(i) = miV
-            miV = TmpArray(miV.Y, miV.X).PrevV
+            miV = TmpArray(miV.Y, miV.x).PrevV
         Next i
         
         .PFINFO.CurPos = 1
@@ -352,27 +352,27 @@ Private Sub InitializeTable(ByRef T() As tIntermidiateWork, _
     'Initialize the array where we calculate the path
     '***************************************************
 
-    Dim j As Integer, k As Integer
+    Dim j As Integer, K As Integer
 
     Const anymap = 1
 
     For j = S.Y - MaxSteps To S.Y + MaxSteps
-        For k = S.X - MaxSteps To S.X + MaxSteps
+        For K = S.x - MaxSteps To S.x + MaxSteps
 
-            If InMapBounds(anymap, j, k) Then
+            If InMapBounds(anymap, j, K) Then
 
-                With T(j, k)
+                With T(j, K)
                     .DistV = MAXINT
-                    .PrevV.X = 0
+                    .PrevV.x = 0
                     .PrevV.Y = 0
 
                 End With
 
             End If
 
-        Next k
+        Next K
     Next j
 
-    T(S.Y, S.X).DistV = 0
+    T(S.Y, S.x).DistV = 0
 
 End Sub

@@ -2,7 +2,7 @@ Attribute VB_Name = "Statistics"
 '**************************************************************
 ' modStatistics.bas - Takes statistics on the game for later study.
 '
-' Implemented by Juan Martín Sotuyo Dodero (Maraxus)
+' Implemented by Juan Martin Sotuyo Dodero (Maraxus)
 ' (juansotuyo@gmail.com)
 '**************************************************************
 
@@ -22,16 +22,16 @@ Attribute VB_Name = "Statistics"
 
 Option Explicit
 
-Private Type trainningData
+Private Type trainingData
 
     startTick As Long
-    trainningTime As Long
+    trainingTime As Long
 
 End Type
 
 Private Type fragLvlRace
 
-    matrix(1 To 50, 1 To 5) As Long
+    matrix(1 To 50, 1 To NUMRAZAS) As Long
 
 End Type
 
@@ -41,11 +41,11 @@ Private Type fragLvlLvl
 
 End Type
 
-Private trainningInfo()                       As trainningData
+Private trainingInfo()                        As trainingData
 
-Private fragLvlRaceData(1 To 7)               As fragLvlRace
+Private fragLvlRaceData(1 To NUMRAZAS)        As fragLvlRace
 
-Private fragLvlLvlData(1 To 7)                As fragLvlLvl
+Private fragLvlLvlData(1 To 8)                As fragLvlLvl
 
 Private fragAlignmentLvlData(1 To 50, 1 To 4) As Long
 
@@ -53,7 +53,7 @@ Private fragAlignmentLvlData(1 To 50, 1 To 4) As Long
 Private keyOcurrencies(255)                   As Currency
 
 Public Sub Initialize()
-    ReDim trainningInfo(1 To MaxUsers) As trainningData
+    ReDim trainingInfo(1 To MaxUsers) As trainingData
 
 End Sub
 
@@ -64,10 +64,10 @@ Public Sub UserConnected(ByVal UserIndex As Integer)
     '
     '***************************************************
 
-    'A new user connected, load it's trainning time count
-    trainningInfo(UserIndex).trainningTime = val(GetVar(CharPath & UCase$(UserList(UserIndex).Name) & ".chr", "RESEARCH", "TrainningTime", 30))
+    'A new user connected, load it's training time count
+    trainingInfo(UserIndex).trainingTime = GetUserTrainingTime(UserList(UserIndex).Name)
     
-    trainningInfo(UserIndex).startTick = (GetTickCount() And &H7FFFFFFF)
+    trainingInfo(UserIndex).startTick = (GetTickCount() And &H7FFFFFFF)
 
 End Sub
 
@@ -78,14 +78,14 @@ Public Sub UserDisconnected(ByVal UserIndex As Integer)
     '
     '***************************************************
 
-    With trainningInfo(UserIndex)
-        'Update trainning time
-        .trainningTime = .trainningTime + ((GetTickCount() And &H7FFFFFFF) - .startTick) / 1000
+    With trainingInfo(UserIndex)
+        'Update training time
+        .trainingTime = .trainingTime + ((GetTickCount() And &H7FFFFFFF) - .startTick) / 1000
         
         .startTick = (GetTickCount() And &H7FFFFFFF)
         
         'Store info in char file
-        Call WriteVar(CharPath & UCase$(UserList(UserIndex).Name) & ".chr", "RESEARCH", "TrainningTime", CStr(.trainningTime))
+        Call SaveUserTrainingTime(UserList(UserIndex).Name, .trainingTime)
 
     End With
 
@@ -102,22 +102,48 @@ Public Sub UserLevelUp(ByVal UserIndex As Integer)
 
     handle = FreeFile()
     
-    With trainningInfo(UserIndex)
+    With trainingInfo(UserIndex)
         'Log the data
         Open App.Path & "\logs\statistics.log" For Append Shared As handle
         
-        Print #handle, UCase$(UserList(UserIndex).Name) & " completó el nivel " & CStr(UserList(UserIndex).Stats.ELV) & " en " & CStr(.trainningTime + ((GetTickCount() And &H7FFFFFFF) - .startTick) / 1000) & " segundos."
+        Print #handle, UCase$(UserList(UserIndex).Name) & " completo el nivel " & CStr(UserList(UserIndex).Stats.ELV) & " en " & CStr(.trainingTime + ((GetTickCount() And &H7FFFFFFF) - .startTick) / 1000) & " segundos."
         
         Close handle
         
         'Reset data
-        .trainningTime = 0
+        .trainingTime = 0
         .startTick = (GetTickCount() And &H7FFFFFFF)
 
     End With
 
 End Sub
 
+Public Sub FamilyLevelUp(ByVal UserIndex As Integer)
+    '***************************************************
+    'Author: Unknown
+    'Last Modification: -
+    '
+    '***************************************************
+
+    Dim handle As Integer
+
+    handle = FreeFile()
+    
+    With trainingInfo(UserIndex)
+        'Log the data
+        Open App.Path & "\logs\statistics.log" For Append Shared As handle
+        
+        Print #handle, "El familiar de " & UCase$(UserList(UserIndex).Name) & " completo el nivel " & CStr(UserList(UserIndex).Familiar.Nivel) & " en " & CStr(.trainingTime + ((GetTickCount() And &H7FFFFFFF) - .startTick) / 1000) & " segundos."
+        
+        Close handle
+        
+        'Reset data
+        .trainingTime = 0
+        .startTick = (GetTickCount() And &H7FFFFFFF)
+
+    End With
+
+End Sub
 Public Sub StoreFrag(ByVal killer As Integer, ByVal victim As Integer)
     '***************************************************
     'Author: Unknown
@@ -127,7 +153,7 @@ Public Sub StoreFrag(ByVal killer As Integer, ByVal victim As Integer)
 
     Dim clase     As Integer
 
-    Dim raza      As Integer
+    Dim Raza      As Integer
 
     Dim alignment As Integer
     
@@ -155,29 +181,35 @@ Public Sub StoreFrag(ByVal killer As Integer, ByVal victim As Integer)
         
         Case eClass.Hunter
             clase = 7
+            
+        Case eClass.Nigromante
+            clase = 8
         
         Case Else
             Exit Sub
 
     End Select
     
-    Select Case UserList(killer).raza
+    Select Case UserList(killer).Raza
 
         Case eRaza.Elfo
-            raza = 1
+            Raza = 1
         
         Case eRaza.Drow
-            raza = 2
+            Raza = 2
         
         Case eRaza.Enano
-            raza = 3
+            Raza = 3
         
         Case eRaza.Gnomo
-            raza = 4
+            Raza = 4
         
         Case eRaza.Humano
-            raza = 5
-        
+            Raza = 5
+            
+        Case eRaza.Orco
+            Raza = 6
+            
         Case Else
             Exit Sub
 
@@ -201,9 +233,8 @@ Public Sub StoreFrag(ByVal killer As Integer, ByVal victim As Integer)
         End If
 
     End If
-    
-    fragLvlRaceData(clase).matrix(UserList(killer).Stats.ELV, raza) = fragLvlRaceData(clase).matrix(UserList(killer).Stats.ELV, raza) + 1
-    
+    fragLvlRaceData(clase).matrix(UserList(killer).Stats.ELV, Raza) = fragLvlRaceData(clase).matrix(UserList(killer).Stats.ELV, Raza) + 1
+    Debug.Print "Frag: " & fragLvlRaceData(clase).matrix(UserList(killer).Stats.ELV, Raza)
     fragLvlLvlData(clase).matrix(UserList(killer).Stats.ELV, UserList(victim).Stats.ELV) = fragLvlLvlData(clase).matrix(UserList(killer).Stats.ELV, UserList(victim).Stats.ELV) + 1
     
     fragAlignmentLvlData(UserList(killer).Stats.ELV, alignment) = fragAlignmentLvlData(UserList(killer).Stats.ELV, alignment) + 1

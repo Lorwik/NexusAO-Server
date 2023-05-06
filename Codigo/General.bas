@@ -1,6 +1,6 @@
 Attribute VB_Name = "General"
-'Nexus AO mod Argentum Online 0.13
-'Copyright (C) 2002 M·rquez Pablo Ignacio
+'Argentum Online 0.12.2
+'Copyright (C) 2002 Marquez Pablo Ignacio
 '
 'This program is free software; you can redistribute it and/or modify
 'it under the terms of the Affero General Public License;
@@ -14,7 +14,7 @@ Attribute VB_Name = "General"
 'You should have received a copy of the Affero General Public License
 'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
 '
-'Nexus AO mod Argentum Online is based on Baronsoft's VB6 Online RPG
+'Argentum Online is based on Baronsoft's VB6 Online RPG
 'You can contact the original creator of ORE at aaron@baronsoft.com
 'for more information about ORE please visit http://www.baronsoft.com/
 '
@@ -22,12 +22,18 @@ Attribute VB_Name = "General"
 'You can contact me at:
 'morgolock@speedy.com.ar
 'www.geocities.com/gmorgolock
-'Calle 3 n˙mero 983 piso 7 dto A
+'Calle 3 numero 983 piso 7 dto A
 'La Plata - Pcia, Buenos Aires - Republica Argentina
-'CÛdigo Postal 1900
-'Pablo Ignacio M·rquez
+'Codigo Postal 1900
+'Pablo Ignacio Marquez
 
 Option Explicit
+
+#If False Then
+
+    Dim X, Y, Map, K, errHandler, obj, index, n, Email As Variant
+
+#End If
 
 Global LeerNPCs As clsIniManager
 
@@ -40,60 +46,16 @@ Sub DarCuerpoDesnudo(ByVal UserIndex As Integer, _
     '23/11/2009: ZaMa - Optimizacion de codigo.
     '***************************************************
 
-    Dim CuerpoDesnudo As Integer
+    Dim MiCuerpoDesnudo As Integer
 
     With UserList(UserIndex)
 
-        Select Case .Genero
-
-            Case eGenero.Hombre
-
-                Select Case .raza
-
-                    Case eRaza.Humano
-                        CuerpoDesnudo = 21
-
-                    Case eRaza.Drow
-                        CuerpoDesnudo = 32
-
-                    Case eRaza.Elfo
-                        CuerpoDesnudo = 210
-
-                    Case eRaza.Gnomo
-                        CuerpoDesnudo = 222
-
-                    Case eRaza.Enano
-                        CuerpoDesnudo = 53
-
-                End Select
-
-            Case eGenero.Mujer
-
-                Select Case .raza
-
-                    Case eRaza.Humano
-                        CuerpoDesnudo = 39
-
-                    Case eRaza.Drow
-                        CuerpoDesnudo = 40
-
-                    Case eRaza.Elfo
-                        CuerpoDesnudo = 259
-
-                    Case eRaza.Gnomo
-                        CuerpoDesnudo = 260
-
-                    Case eRaza.Enano
-                        CuerpoDesnudo = 60
-
-                End Select
-
-        End Select
+        MiCuerpoDesnudo = CuerpoDesnudo(.Genero, .Raza)
     
         If Mimetizado Then
-            .CharMimetizado.body = CuerpoDesnudo
+            .CharMimetizado.body = MiCuerpoDesnudo
         Else
-            .Char.body = CuerpoDesnudo
+            .Char.body = MiCuerpoDesnudo
 
         End If
     
@@ -102,6 +64,66 @@ Sub DarCuerpoDesnudo(ByVal UserIndex As Integer, _
     End With
 
 End Sub
+
+Public Function CuerpoDesnudo(ByVal Genero As eGenero, ByVal Raza As eRaza)
+'************************************************
+'Autor: Lorwik
+'Fecha: 01/05/2020
+'Descripcion: Devuelve el cuerpo desnudo correspondiente a la raza y sexo
+'************************************************
+
+    Select Case Genero
+
+            Case eGenero.Hombre
+
+                Select Case Raza
+
+                    Case eRaza.Humano
+                        CuerpoDesnudo = 21
+
+                    Case eRaza.Drow
+                        CuerpoDesnudo = 32
+
+                    Case eRaza.Elfo
+                        CuerpoDesnudo = 21
+
+                    Case eRaza.Gnomo
+                        CuerpoDesnudo = 53
+
+                    Case eRaza.Enano
+                        CuerpoDesnudo = 53
+                        
+                    Case eRaza.Orco
+                        CuerpoDesnudo = 248
+
+                End Select
+
+            Case eGenero.Mujer
+
+                Select Case Raza
+
+                    Case eRaza.Humano
+                        CuerpoDesnudo = 39
+
+                    Case eRaza.Drow
+                        CuerpoDesnudo = 40
+
+                    Case eRaza.Elfo
+                        CuerpoDesnudo = 39
+
+                    Case eRaza.Gnomo
+                        CuerpoDesnudo = 60
+
+                    Case eRaza.Enano
+                        CuerpoDesnudo = 60
+                        
+                    Case eRaza.Orco
+                        CuerpoDesnudo = 249
+
+                End Select
+
+        End Select
+End Function
 
 Sub Bloquear(ByVal toMap As Boolean, _
              ByVal sndIndex As Integer, _
@@ -130,18 +152,24 @@ Sub Bloquear(ByVal toMap As Boolean, _
 End Sub
 
 Function HayAgua(ByVal Map As Integer, ByVal X As Integer, ByVal Y As Integer) As Boolean
-    '***************************************************
+    '*******************************************
     'Author: Unknown
     'Last Modification: -
     '
-    '***************************************************
+    '*******************************************
 
-    If Map > 0 And Map < NumMaps + 1 And X > 0 And X < 101 And Y > 0 And Y < 101 Then
+    If Map > 0 And Map < NumMaps + 1 And X > XMinMapSize And X < XMaxMapSize + 1 And Y > YMinMapSize And Y < YMaxMapSize + 1 Then
 
         With MapData(Map, X, Y)
 
-            If ((.Graphic(1) >= 1505 And .Graphic(1) <= 1520) Or (.Graphic(1) >= 5665 And .Graphic(1) <= 5680) Or (.Graphic(1) >= 13547 And .Graphic(1) <= 13562)) And .Graphic(2) = 0 Then
+            If ((.Graphic(1) >= 1505 And .Graphic(1) <= 1520) Or _
+                (.Graphic(1) >= 12439 And .Graphic(1) <= 12454) Or _
+                (.Graphic(1) >= 5665 And .Graphic(1) <= 5680) Or _
+                (.Graphic(1) >= 13547 And .Graphic(1) <= 13562)) And _
+                .Graphic(2) = 0 Then
+                
                 HayAgua = True
+            
             Else
                 HayAgua = False
 
@@ -179,37 +207,39 @@ Private Function HayLava(ByVal Map As Integer, _
 
 End Function
 
-Sub LimpiarMundo()
-
-    '***************************************************
-    'Author: Unknow
-    'Last Modification: 04/15/2008
-    '01/14/2008: Marcos Martinez (ByVal) - La funcion FOR estaba mal. En ves de i habia un 1.
-    '04/15/2008: (NicoNZ) - La funcion FOR estaba mal, de la forma que se hacia tiraba error.
-    '***************************************************
-    On Error GoTo ErrHandler
-
-    Dim i As Integer
-
-    Dim d As cGarbage
-
-    Set d = New cGarbage
+Function HaySacerdote(ByVal UserIndex As Integer) As Boolean
+    '******************************
+    'Adaptacion a 13.0: Kaneidra
+    'Last Modification: 15/05/2012
+    '******************************
+ 
+    Dim X As Integer, Y As Integer
     
-    For i = TrashCollector.Count To 1 Step -1
-        Set d = TrashCollector(i)
-        Call EraseObj(1, d.Map, d.X, d.Y)
-        Call TrashCollector.Remove(i)
-        Set d = Nothing
-    Next i
+    With UserList(UserIndex)
     
-    Call SecurityIp.IpSecurityMantenimientoLista
+        For Y = .Pos.Y - MinYBorder + 1 To .Pos.Y + MinYBorder - 1
+            For X = .Pos.X - MinXBorder + 1 To .Pos.X + MinXBorder - 1
+       
+                If MapData(.Pos.Map, X, Y).NPCIndex > 0 Then
+                    If Npclist(MapData(.Pos.Map, X, Y).NPCIndex).NPCtype = eNPCType.Revividor Then
+                       
+                        If Distancia(.Pos, Npclist(MapData(.Pos.Map, X, Y).NPCIndex).Pos) < 5 Then
+                            HaySacerdote = True
+                            Exit Function
+                        End If
+
+                    End If
+
+                End If
+           
+            Next X
+        Next Y
     
-    Exit Sub
-
-ErrHandler:
-    Call LogError("Error producido en el sub LimpiarMundo: " & Err.description)
-
-End Sub
+    End With
+ 
+    HaySacerdote = False
+ 
+End Function
 
 Sub EnviarSpawnList(ByVal UserIndex As Integer)
     '***************************************************
@@ -218,42 +248,22 @@ Sub EnviarSpawnList(ByVal UserIndex As Integer)
     '
     '***************************************************
 
-    Dim k          As Long
-
+    Dim K          As Long
     Dim npcNames() As String
     
     ReDim npcNames(1 To UBound(SpawnList)) As String
     
-    For k = 1 To UBound(SpawnList)
-        npcNames(k) = SpawnList(k).NpcName
-    Next k
+    For K = 1 To UBound(SpawnList)
+        npcNames(K) = SpawnList(K).NpcName
+    Next K
     
     Call WriteSpawnList(UserIndex, npcNames())
 
 End Sub
 
-Sub ConfigListeningSocket(ByRef Obj As Object, ByVal Port As Integer)
-    '***************************************************
-    'Author: Unknown
-    'Last Modification: -
-    '
-    '***************************************************
-
-    #If UsarQueSocket = 0 Then
-
-        Obj.AddressFamily = AF_INET
-        Obj.Protocol = IPPROTO_IP
-        Obj.SocketType = SOCK_STREAM
-        Obj.Binary = False
-        Obj.Blocking = False
-        Obj.BufferSize = 1024
-        Obj.LocalPort = Port
-        Obj.backlog = 5
-        Obj.listen
-
-    #End If
-
-End Sub
+Public Function GetVersionOfTheServer() As String
+    GetVersionOfTheServer = GetVar(App.Path & "\Server.ini", "INIT", "VersionTagRelease")
+End Function
 
 Sub Main()
     '***************************************************
@@ -267,12 +277,13 @@ Sub Main()
     ChDir App.Path
     ChDrive App.Path
     
-    Call LoadMotd
+    'Inicializamos la cabecera
+    Call IniciarCabecera
+    
     Call BanIpCargar
     
-    UltimoSlotLimpieza = -1
-    
-    frmMain.Caption = frmMain.Caption & " V." & App.Major & "." & App.Minor & "." & App.Revision
+    Call BanGlobalChatCargar
+    GlobalChatActive = True
     
     ' Start loading..
     frmCargando.Show
@@ -280,17 +291,38 @@ Sub Main()
     ' Constants & vars
     frmCargando.Label1(2).Caption = "Cargando constantes..."
     Call LoadConstants
+    Call InicializarSonidos
+    DoEvents
+    
+    ' Motd
+    frmCargando.Label1(2).Caption = "Cargando Motd..."
+    Call LoadMotd
     DoEvents
     
     ' Arrays
     frmCargando.Label1(2).Caption = "Iniciando Arrays..."
     Call LoadArrays
     
-    ' Server.ini & Apuestas.dat
+    ' Server.ini & Apuestas.dat & Ciudades.dat
     frmCargando.Label1(2).Caption = "Cargando Server.ini"
-    Call LoadSini
+    Call LoadSini 'ConfiguraciÛn general (Server.ini)
+    Call Load_Rates 'Rates (Rates.ini)
+    Call loadAdministrativeUsers 'Gms (GameMasters.ini)
+    Call CargarCiudades
     Call CargaApuestas
     
+    'Base de datos MySQL
+#If DBConexionUnica = 1 Then
+    frmCargando.Label1(2).Caption = "Cargando Base de datos"
+    
+    Set User_Database = New clsDataBase
+    Set Account_Database = New clsDataBase
+    
+    Call Load_ConfigDatBase
+    Call User_Database.Database_Connect
+    Call Account_Database.Database_Connect
+#End If
+
     ' Npcs.dat
     frmCargando.Label1(2).Caption = "Cargando NPCs.Dat"
     Call CargaNpcsDat
@@ -298,19 +330,18 @@ Sub Main()
     ' Obj.dat
     frmCargando.Label1(2).Caption = "Cargando Obj.Dat"
     Call LoadOBJData
+    Call LoadGlobalDrop
     
     ' Hechizos.dat
     frmCargando.Label1(2).Caption = "Cargando Hechizos.Dat"
     Call CargarHechizos
-        
-    ' Objetos de Herreria
-    frmCargando.Label1(2).Caption = "Cargando Objetos de HerrerÌa"
+    
+    frmCargando.Label1(2).Caption = "Cargando Objetos de Profesiones"
     Call LoadArmasHerreria
     Call LoadArmadurasHerreria
-    
-    ' Objetos de Capinteria
-    frmCargando.Label1(2).Caption = "Cargando Objetos de CarpinterÌa"
     Call LoadObjCarpintero
+    Call LoadObjAlquimia
+    Call LoadObjSastre
     
     ' Balance.dat
     frmCargando.Label1(2).Caption = "Cargando Balance.Dat"
@@ -319,14 +350,11 @@ Sub Main()
     ' Armaduras faccionarias
     frmCargando.Label1(2).Caption = "Cargando ArmadurasFaccionarias.dat"
     Call LoadArmadurasFaccion
-    
-    ' Pretorianos
-    frmCargando.Label1(2).Caption = "Cargando Pretorianos.dat"
-    Call LoadPretorianData
 
+    
     ' Mapas
     If BootDelBackUp Then
-        frmCargando.Label1(2).Caption = "Cargando BackUp"
+        frmCargando.Label1(2).Caption = "Cargando Backup"
         Call CargarBackUp
     Else
         frmCargando.Label1(2).Caption = "Cargando Mapas"
@@ -334,17 +362,22 @@ Sub Main()
 
     End If
     
-    ' Home distance
-    Call generateMatrix(MATRIX_INITIAL_MAP)
+    Call InitializeAreas
+    
+    'Arenas de Retos
+    Call LoadArenas
     
     ' Connections
     Call ResetUsersConnections
     
-    ' Timers
-    Call InitMainTimers
-    
     ' Sockets
     Call SocketConfig
+    
+    frmCargando.Label1(2).Caption = "Cargando Clima"
+    Call SortearHorario 'Lorwik> Lo coloco aqui o no funciona
+    
+    ' Timers
+    Call InitMainTimers
     
     ' End loading..
     Unload frmCargando
@@ -353,17 +386,27 @@ Sub Main()
     LogServerStartTime
     
     'Ocultar
-    If HideMe = 1 Then
+    If HideMe Then
         Call frmMain.InitMain(1)
     Else
         Call frmMain.InitMain(0)
-
     End If
     
     tInicioServer = GetTickCount() And &H7FFFFFFF
-    Call InicializaEstadisticas
 
-    Call MainLoop
+    NombreServidor = GetVar(ConfigPath & "Server.ini", "INIT", "Nombre")
+
+    frmMain.Caption = NombreServidor & " Server v. " & ULTIMAVERSION & " - Iniciado en el puerto: " & Puerto
+
+    'Este ultimo es para saber siempre los records en el frmMain
+    frmMain.txtRecordOnline.Text = RecordUsuariosOnline
+
+    'En caso que la API este activada, la abrimos :)
+    'el repositorio para hacer funcionar esto, es este: https://github.com/ao-libre/ao-api-server
+    'Si no tienen interes en usarlo pueden desactivarlo en el Server.ini
+    If ConexionAPI Then
+        ApiNodeJsTaskId = Shell("cmd /c cd " & ApiPath & " && npm start")
+    End If
 
 End Sub
 
@@ -374,68 +417,22 @@ Private Sub LoadConstants()
     'Last Modify Date: 15/03/2011
     'Loads all constants and general parameters.
     '*****************************************************************
+    Dim i As Integer
+    
     On Error Resume Next
    
     LastBackup = Format(Now, "Short Time")
     Minutos = Format(Now, "Short Time")
     
     ' Paths
-    IniPath = App.Path & "\"
-    ConfigPath = App.Path & "\Configuracion\"
     DatPath = App.Path & "\Dat\"
-    CharPath = App.Path & "\Charfile\"
+    ConfigPath = App.Path & "\Configuracion\"
     
-    ' Skills by level
-    LevelSkill(1).LevelValue = 3
-    LevelSkill(2).LevelValue = 5
-    LevelSkill(3).LevelValue = 7
-    LevelSkill(4).LevelValue = 10
-    LevelSkill(5).LevelValue = 13
-    LevelSkill(6).LevelValue = 15
-    LevelSkill(7).LevelValue = 17
-    LevelSkill(8).LevelValue = 20
-    LevelSkill(9).LevelValue = 23
-    LevelSkill(10).LevelValue = 25
-    LevelSkill(11).LevelValue = 27
-    LevelSkill(12).LevelValue = 30
-    LevelSkill(13).LevelValue = 33
-    LevelSkill(14).LevelValue = 35
-    LevelSkill(15).LevelValue = 37
-    LevelSkill(16).LevelValue = 40
-    LevelSkill(17).LevelValue = 43
-    LevelSkill(18).LevelValue = 45
-    LevelSkill(19).LevelValue = 47
-    LevelSkill(20).LevelValue = 50
-    LevelSkill(21).LevelValue = 53
-    LevelSkill(22).LevelValue = 55
-    LevelSkill(23).LevelValue = 57
-    LevelSkill(24).LevelValue = 60
-    LevelSkill(25).LevelValue = 63
-    LevelSkill(26).LevelValue = 65
-    LevelSkill(27).LevelValue = 67
-    LevelSkill(28).LevelValue = 70
-    LevelSkill(29).LevelValue = 73
-    LevelSkill(30).LevelValue = 75
-    LevelSkill(31).LevelValue = 77
-    LevelSkill(32).LevelValue = 80
-    LevelSkill(33).LevelValue = 83
-    LevelSkill(34).LevelValue = 85
-    LevelSkill(35).LevelValue = 87
-    LevelSkill(36).LevelValue = 90
-    LevelSkill(37).LevelValue = 93
-    LevelSkill(38).LevelValue = 95
-    LevelSkill(39).LevelValue = 97
-    LevelSkill(40).LevelValue = 100
-    LevelSkill(41).LevelValue = 100
-    LevelSkill(42).LevelValue = 100
-    LevelSkill(43).LevelValue = 100
-    LevelSkill(44).LevelValue = 100
-    LevelSkill(45).LevelValue = 100
-    LevelSkill(46).LevelValue = 100
-    LevelSkill(47).LevelValue = 100
-    LevelSkill(48).LevelValue = 100
-    LevelSkill(49).LevelValue = 100
-    LevelSkill(50).LevelValue = 100
+    'Lorwik: Nueva subida de Skills, subira de 2 en 2 hasta el lvl max.
+    LevelSkill(1).LevelValue = 2
+    For i = 2 To 50
+        LevelSkill(i).LevelValue = LevelSkill(i - 1).LevelValue + 2
+    Next i
     
     ' Races
     ListaRazas(eRaza.Humano) = "Humano"
@@ -443,6 +440,7 @@ Private Sub LoadConstants()
     ListaRazas(eRaza.Drow) = "Drow"
     ListaRazas(eRaza.Gnomo) = "Gnomo"
     ListaRazas(eRaza.Enano) = "Enano"
+    ListaRazas(eRaza.Orco) = "Orco"
     
     ' Classes
     ListaClases(eClass.Mage) = "Mago"
@@ -455,19 +453,26 @@ Private Sub LoadConstants()
     ListaClases(eClass.Bandit) = "Bandido"
     ListaClases(eClass.Paladin) = "Paladin"
     ListaClases(eClass.Hunter) = "Cazador"
-    ListaClases(eClass.Worker) = "Trabajador"
-    ListaClases(eClass.Pirat) = "Pirata"
+    ListaClases(eClass.Nigromante) = "Nigromante"
+    ListaClases(eClass.Mercenario) = "Mercenario"
+    ListaClases(eClass.Gladiador) = "Gladiador"
+    ListaClases(eClass.Pescador) = "Pescador"
+    ListaClases(eClass.Herrero) = "Herrero"
+    ListaClases(eClass.Lenador) = "LeÒador"
+    ListaClases(eClass.Minero) = "Minero"
+    ListaClases(eClass.Carpintero) = "Carpintero"
+    ListaClases(eClass.Sastre) = "Sastre"
     
     ' Skills
     SkillsNames(eSkill.Magia) = "Magia"
     SkillsNames(eSkill.Robar) = "Robar"
-    SkillsNames(eSkill.Tacticas) = "EvasiÛn en combate"
+    SkillsNames(eSkill.Tacticas) = "Evasion en combate"
     SkillsNames(eSkill.Armas) = "Combate con armas"
     SkillsNames(eSkill.Meditar) = "Meditar"
-    SkillsNames(eSkill.ApuÒalar) = "ApuÒalar"
+    SkillsNames(eSkill.Apunalar) = "Apunalar"
     SkillsNames(eSkill.Ocultarse) = "Ocultarse"
     SkillsNames(eSkill.Supervivencia) = "Supervivencia"
-    SkillsNames(eSkill.Talar) = "Talar"
+    SkillsNames(eSkill.talar) = "Talar"
     SkillsNames(eSkill.Comerciar) = "Comercio"
     SkillsNames(eSkill.Defensa) = "Defensa con escudos"
     SkillsNames(eSkill.Pesca) = "Pesca"
@@ -477,8 +482,14 @@ Private Sub LoadConstants()
     SkillsNames(eSkill.Liderazgo) = "Liderazgo"
     SkillsNames(eSkill.Domar) = "Domar animales"
     SkillsNames(eSkill.Proyectiles) = "Combate a distancia"
-    SkillsNames(eSkill.Wrestling) = "Combate sin armas"
+    SkillsNames(eSkill.Marciales) = "Combate sin armas"
     SkillsNames(eSkill.Navegacion) = "Navegacion"
+    SkillsNames(eSkill.Equitacion) = "Equitacion"
+    SkillsNames(eSkill.Botanica) = "Botanica"
+    SkillsNames(eSkill.Alquimia) = "Alquimia"
+    SkillsNames(eSkill.Arrojadizas) = "Armas Arrojadizas"
+    SkillsNames(eSkill.Resistencia) = "Resistencia Magica"
+    SkillsNames(eSkill.Musica) = "Musica"
     
     ' Attributes
     ListaAtributos(eAtributos.Fuerza) = "Fuerza"
@@ -503,20 +514,6 @@ Private Sub LoadConstants()
     Set Denuncias = New cCola
     Denuncias.MaxLenght = MAX_DENOUNCES
 
-    With Prision
-        .Map = 66
-        .X = 75
-        .Y = 47
-
-    End With
-    
-    With Libertad
-        .Map = 66
-        .X = 75
-        .Y = 65
-
-    End With
-
     MaxUsers = 0
 
     ' Initialize classes
@@ -539,10 +536,10 @@ Private Sub LoadArrays()
 
     ' Load Records
     Call LoadRecords
+    
     ' Load guilds info
     Call LoadGuildsDB
-    ' Load spawn list
-    Call CargarSpawnList
+    
     ' Load forbidden words
     Call CargarForbidenWords
 
@@ -580,6 +577,10 @@ Private Sub InitMainTimers()
     With frmMain
         .AutoSave.Enabled = True
 
+        .GameTimer.Enabled = True
+        .PacketResend.Enabled = True
+        .TIMER_AI.Enabled = True
+        .Auditoria.Enabled = True
     End With
     
 End Sub
@@ -595,55 +596,23 @@ Private Sub SocketConfig()
 
     Call SecurityIp.InitIpTables(1000)
     
-    #If UsarQueSocket = 1 Then
-    
-        Call IniciaWsApi(frmMain.hWnd)
-        SockListen = ListenForConnect(Puerto, hWndMsg, "")
-    
-    #ElseIf UsarQueSocket = 0 Then
-    
-        frmCargando.Label1(2).Caption = "Configurando Sockets"
-    
-        frmMain.Socket2(0).AddressFamily = AF_INET
-        frmMain.Socket2(0).Protocol = IPPROTO_IP
-        frmMain.Socket2(0).SocketType = SOCK_STREAM
-        frmMain.Socket2(0).Binary = False
-        frmMain.Socket2(0).Blocking = False
-        frmMain.Socket2(0).BufferSize = 2048
-    
-        Call ConfigListeningSocket(frmMain.Socket1, Puerto)
-    
-    #ElseIf UsarQueSocket = 2 Then
-    
-        frmMain.Serv.Iniciar Puerto
-    
-    #ElseIf UsarQueSocket = 3 Then
-    
-        frmMain.TCPServ.Encolar True
-        frmMain.TCPServ.IniciarTabla 1009
-        frmMain.TCPServ.SetQueueLim 51200
-        frmMain.TCPServ.Iniciar Puerto
-    
-    #End If
-    
-    If frmMain.Visible Then frmMain.txStatus.Caption = "Escuchando conexiones entrantes ..."
-    
-End Sub
+    If LastSockListen >= 0 Then
+        Call apiclosesocket(LastSockListen) 'Cierra el socket de escucha
+    End If
 
-Private Sub LogServerStartTime()
+    Call IniciaWsApi(frmMain.hWnd)
+    
+    SockListen = ListenForConnect(Puerto, hWndMsg, vbNullString)
 
-    '*****************************************************************
-    'Author: ZaMa
-    'Last Modify Date: 15/03/2011
-    'Logs Server Start Time.
-    '*****************************************************************
-    Dim N As Integer
-
-    N = FreeFile
-    Open App.Path & "\logs\Main.log" For Append Shared As #N
-    Print #N, Date & " " & time & " server iniciado " & App.Major & "."; App.Minor & "." & App.Revision
-    Close #N
-
+    If SockListen <> -1 Then
+        ' Guarda el socket escuchando
+        Call WriteVar(ConfigPath & "Server.ini", "INIT", "LastSockListen", SockListen)
+    Else
+        Call MsgBox("Ha ocurrido un error al iniciar el socket del Servidor.", vbCritical + vbOKOnly)
+    End If
+    
+    frmMain.txtStatus.Text = Date & " " & time & " - Escuchando conexiones entrantes ..."
+    
 End Sub
 
 Function FileExist(ByVal File As String, _
@@ -660,17 +629,14 @@ Function ReadField(ByVal Pos As Integer, _
                    ByRef Text As String, _
                    ByVal SepASCII As Byte) As String
     '*****************************************************************
-    'Author: Juan MartÌn Sotuyo Dodero (Maraxus)
+    'Author: Juan Martin Sotuyo Dodero (Maraxus)
     'Last Modify Date: 11/15/2004
     'Gets a field from a delimited string
     '*****************************************************************
 
     Dim i          As Long
-
     Dim lastPos    As Long
-
     Dim CurrentPos As Long
-
     Dim delimiter  As String * 1
     
     delimiter = Chr$(SepASCII)
@@ -711,369 +677,14 @@ Sub MostrarNumUsers()
 
 End Sub
 
-Public Sub LogCriticEvent(desc As String)
+Sub MostrarNumCuentas()
     '***************************************************
-    'Author: Unknown
-    'Last Modification: -
+    'Author: Lorwik
+    'Last Modification: 21/05/2020
     '
     '***************************************************
 
-    On Error GoTo ErrHandler
-
-    Dim nfile As Integer
-
-    nfile = FreeFile ' obtenemos un canal
-    Open App.Path & "\logs\Eventos.log" For Append Shared As #nfile
-    Print #nfile, Date & " " & time & " " & desc
-    Close #nfile
-    
-    Exit Sub
-
-ErrHandler:
-
-End Sub
-
-Public Sub LogEjercitoReal(desc As String)
-    '***************************************************
-    'Author: Unknown
-    'Last Modification: -
-    '
-    '***************************************************
-
-    On Error GoTo ErrHandler
-
-    Dim nfile As Integer
-
-    nfile = FreeFile ' obtenemos un canal
-    Open App.Path & "\logs\EjercitoReal.log" For Append Shared As #nfile
-    Print #nfile, desc
-    Close #nfile
-    
-    Exit Sub
-
-ErrHandler:
-
-End Sub
-
-Public Sub LogEjercitoCaos(desc As String)
-    '***************************************************
-    'Author: Unknown
-    'Last Modification: -
-    '
-    '***************************************************
-
-    On Error GoTo ErrHandler
-
-    Dim nfile As Integer
-
-    nfile = FreeFile ' obtenemos un canal
-    Open App.Path & "\logs\EjercitoCaos.log" For Append Shared As #nfile
-    Print #nfile, desc
-    Close #nfile
-
-    Exit Sub
-
-ErrHandler:
-
-End Sub
-
-Public Sub LogIndex(ByVal index As Integer, ByVal desc As String)
-    '***************************************************
-    'Author: Unknown
-    'Last Modification: -
-    '
-    '***************************************************
-
-    On Error GoTo ErrHandler
-
-    Dim nfile As Integer
-
-    nfile = FreeFile ' obtenemos un canal
-    Open App.Path & "\logs\" & index & ".log" For Append Shared As #nfile
-    Print #nfile, Date & " " & time & " " & desc
-    Close #nfile
-    
-    Exit Sub
-
-ErrHandler:
-
-End Sub
-
-Public Sub LogError(desc As String)
-    '***************************************************
-    'Author: Unknown
-    'Last Modification: -
-    '
-    '***************************************************
-
-    On Error GoTo ErrHandler
-
-    Dim nfile As Integer
-
-    nfile = FreeFile ' obtenemos un canal
-    Open App.Path & "\logs\errores.log" For Append Shared As #nfile
-    Print #nfile, Date & " " & time & " " & desc
-    Close #nfile
-    
-    Exit Sub
-
-ErrHandler:
-
-End Sub
-
-Public Sub LogStatic(desc As String)
-    '***************************************************
-    'Author: Unknown
-    'Last Modification: -
-    '
-    '***************************************************
-
-    On Error GoTo ErrHandler
-
-    Dim nfile As Integer
-
-    nfile = FreeFile ' obtenemos un canal
-    Open App.Path & "\logs\Stats.log" For Append Shared As #nfile
-    Print #nfile, Date & " " & time & " " & desc
-    Close #nfile
-
-    Exit Sub
-
-ErrHandler:
-
-End Sub
-
-Public Sub LogTarea(desc As String)
-    '***************************************************
-    'Author: Unknown
-    'Last Modification: -
-    '
-    '***************************************************
-
-    On Error GoTo ErrHandler
-
-    Dim nfile As Integer
-
-    nfile = FreeFile(1) ' obtenemos un canal
-    Open App.Path & "\logs\haciendo.log" For Append Shared As #nfile
-    Print #nfile, Date & " " & time & " " & desc
-    Close #nfile
-
-    Exit Sub
-
-ErrHandler:
-
-End Sub
-
-Public Sub LogClanes(ByVal str As String)
-    '***************************************************
-    'Author: Unknown
-    'Last Modification: -
-    '
-    '***************************************************
-
-    Dim nfile As Integer
-
-    nfile = FreeFile ' obtenemos un canal
-    Open App.Path & "\logs\clanes.log" For Append Shared As #nfile
-    Print #nfile, Date & " " & time & " " & str
-    Close #nfile
-
-End Sub
-
-Public Sub LogIP(ByVal str As String)
-    '***************************************************
-    'Author: Unknown
-    'Last Modification: -
-    '
-    '***************************************************
-
-    Dim nfile As Integer
-
-    nfile = FreeFile ' obtenemos un canal
-    Open App.Path & "\logs\IP.log" For Append Shared As #nfile
-    Print #nfile, Date & " " & time & " " & str
-    Close #nfile
-
-End Sub
-
-Public Sub LogDesarrollo(ByVal str As String)
-    '***************************************************
-    'Author: Unknown
-    'Last Modification: -
-    '
-    '***************************************************
-
-    Dim nfile As Integer
-
-    nfile = FreeFile ' obtenemos un canal
-    Open App.Path & "\logs\desarrollo" & Month(Date) & Year(Date) & ".log" For Append Shared As #nfile
-    Print #nfile, Date & " " & time & " " & str
-    Close #nfile
-
-End Sub
-
-Public Sub LogGM(Nombre As String, texto As String)
-    '***************************************************
-    'Author: Unknown
-    'Last Modification: -
-    '
-    '***************************************************Á
-
-    On Error GoTo ErrHandler
-
-    Dim nfile As Integer
-
-    nfile = FreeFile ' obtenemos un canal
-    'Guardamos todo en el mismo lugar. Pablo (ToxicWaste) 18/05/07
-    Open App.Path & "\logs\" & Nombre & ".log" For Append Shared As #nfile
-    Print #nfile, Date & " " & time & " " & texto
-    Close #nfile
-    
-    Exit Sub
-
-ErrHandler:
-
-End Sub
-
-Public Sub LogAsesinato(texto As String)
-    '***************************************************
-    'Author: Unknown
-    'Last Modification: -
-    '
-    '***************************************************
-
-    On Error GoTo ErrHandler
-
-    Dim nfile As Integer
-    
-    nfile = FreeFile ' obtenemos un canal
-    
-    Open App.Path & "\logs\asesinatos.log" For Append Shared As #nfile
-    Print #nfile, Date & " " & time & " " & texto
-    Close #nfile
-    
-    Exit Sub
-
-ErrHandler:
-
-End Sub
-
-Public Sub logVentaCasa(ByVal texto As String)
-    '***************************************************
-    'Author: Unknown
-    'Last Modification: -
-    '
-    '***************************************************
-
-    On Error GoTo ErrHandler
-
-    Dim nfile As Integer
-
-    nfile = FreeFile ' obtenemos un canal
-    
-    Open App.Path & "\logs\propiedades.log" For Append Shared As #nfile
-    Print #nfile, "----------------------------------------------------------"
-    Print #nfile, Date & " " & time & " " & texto
-    Print #nfile, "----------------------------------------------------------"
-    Close #nfile
-    
-    Exit Sub
-
-ErrHandler:
-
-End Sub
-
-Public Sub LogHackAttemp(texto As String)
-    '***************************************************
-    'Author: Unknown
-    'Last Modification: -
-    '
-    '***************************************************
-
-    On Error GoTo ErrHandler
-
-    Dim nfile As Integer
-
-    nfile = FreeFile ' obtenemos un canal
-    Open App.Path & "\logs\HackAttemps.log" For Append Shared As #nfile
-    Print #nfile, "----------------------------------------------------------"
-    Print #nfile, Date & " " & time & " " & texto
-    Print #nfile, "----------------------------------------------------------"
-    Close #nfile
-    
-    Exit Sub
-
-ErrHandler:
-
-End Sub
-
-Public Sub LogCheating(texto As String)
-    '***************************************************
-    'Author: Unknown
-    'Last Modification: -
-    '
-    '***************************************************
-
-    On Error GoTo ErrHandler
-
-    Dim nfile As Integer
-
-    nfile = FreeFile ' obtenemos un canal
-    Open App.Path & "\logs\CH.log" For Append Shared As #nfile
-    Print #nfile, Date & " " & time & " " & texto
-    Close #nfile
-    
-    Exit Sub
-
-ErrHandler:
-
-End Sub
-
-Public Sub LogCriticalHackAttemp(texto As String)
-    '***************************************************
-    'Author: Unknown
-    'Last Modification: -
-    '
-    '***************************************************
-
-    On Error GoTo ErrHandler
-
-    Dim nfile As Integer
-
-    nfile = FreeFile ' obtenemos un canal
-    Open App.Path & "\logs\CriticalHackAttemps.log" For Append Shared As #nfile
-    Print #nfile, "----------------------------------------------------------"
-    Print #nfile, Date & " " & time & " " & texto
-    Print #nfile, "----------------------------------------------------------"
-    Close #nfile
-    
-    Exit Sub
-
-ErrHandler:
-
-End Sub
-
-Public Sub LogAntiCheat(texto As String)
-    '***************************************************
-    'Author: Unknown
-    'Last Modification: -
-    '
-    '***************************************************
-
-    On Error GoTo ErrHandler
-
-    Dim nfile As Integer
-
-    nfile = FreeFile ' obtenemos un canal
-    Open App.Path & "\logs\AntiCheat.log" For Append Shared As #nfile
-    Print #nfile, Date & " " & time & " " & texto
-    Print #nfile, ""
-    Close #nfile
-    
-    Exit Sub
-
-ErrHandler:
+    frmMain.txtNumCuentas.Text = NumCuentas
 
 End Sub
 
@@ -1110,29 +721,16 @@ Sub Restart()
     'Se asegura de que los sockets estan cerrados e ignora cualquier err
     On Error Resume Next
 
-    If frmMain.Visible Then frmMain.txStatus.Caption = "Reiniciando."
+    If frmMain.Visible Then frmMain.txtStatus.Text = "Reiniciando."
     
     Dim LoopC As Long
-  
-    #If UsarQueSocket = 0 Then
 
-        frmMain.Socket1.Cleanup
-        frmMain.Socket1.Startup
-      
-        frmMain.Socket2(0).Cleanup
-        frmMain.Socket2(0).Startup
 
-    #ElseIf UsarQueSocket = 1 Then
-
-        'Cierra el socket de escucha
-        If SockListen >= 0 Then Call apiclosesocket(SockListen)
+    'Cierra el socket de escucha
+    If SockListen >= 0 Then Call apiclosesocket(SockListen)
     
-        'Inicia el socket de escucha
-        SockListen = ListenForConnect(Puerto, hWndMsg, "")
-
-    #ElseIf UsarQueSocket = 2 Then
-
-    #End If
+    'Inicia el socket de escucha
+    SockListen = ListenForConnect(Puerto, hWndMsg, "")
 
     For LoopC = 1 To MaxUsers
         Call CloseSocket(LoopC)
@@ -1157,6 +755,7 @@ Sub Restart()
     
     LastUser = 0
     NumUsers = 0
+    NumCuentas = 0
     
     Call FreeNPCs
     Call FreeCharIndexes
@@ -1165,50 +764,25 @@ Sub Restart()
     
     Call ResetForums
     Call LoadOBJData
+    Call LoadGlobalDrop
     
     Call LoadMapData
     
     Call CargarHechizos
 
-    #If UsarQueSocket = 0 Then
-
-        '*****************Setup socket
-        frmMain.Socket1.AddressFamily = AF_INET
-        frmMain.Socket1.Protocol = IPPROTO_IP
-        frmMain.Socket1.SocketType = SOCK_STREAM
-        frmMain.Socket1.Binary = False
-        frmMain.Socket1.Blocking = False
-        frmMain.Socket1.BufferSize = 1024
-    
-        frmMain.Socket2(0).AddressFamily = AF_INET
-        frmMain.Socket2(0).Protocol = IPPROTO_IP
-        frmMain.Socket2(0).SocketType = SOCK_STREAM
-        frmMain.Socket2(0).Blocking = False
-        frmMain.Socket2(0).BufferSize = 2048
-    
-        'Escucha
-        frmMain.Socket1.LocalPort = val(Puerto)
-        frmMain.Socket1.listen
-
-    #ElseIf UsarQueSocket = 1 Then
-
-    #ElseIf UsarQueSocket = 2 Then
-
-    #End If
-
-    If frmMain.Visible Then frmMain.txStatus.Caption = "Escuchando conexiones entrantes ..."
+    If frmMain.Visible Then frmMain.txtStatus.Text = Date & " " & time & " servidor reiniciado correctamente. - Escuchando conexiones entrantes ..."
     
     'Log it
-    Dim N As Integer
+    Dim n As Integer
 
-    N = FreeFile
-    Open App.Path & "\logs\Main.log" For Append Shared As #N
-    Print #N, Date & " " & time & " servidor reiniciado."
-    Close #N
+    n = FreeFile
+    Open App.Path & "\logs\Main.log" For Append Shared As #n
+    Print #n, Date & " " & time & " servidor reiniciado."
+    Close #n
     
     'Ocultar
     
-    If HideMe = 1 Then
+    If HideMe Then
         Call frmMain.InitMain(1)
     Else
         Call frmMain.InitMain(0)
@@ -1228,7 +802,10 @@ Public Function Intemperie(ByVal UserIndex As Integer) As Boolean
     With UserList(UserIndex)
 
         If MapInfo(.Pos.Map).Zona <> "DUNGEON" Then
-            If MapData(.Pos.Map, .Pos.X, .Pos.Y).trigger <> 1 And MapData(.Pos.Map, .Pos.X, .Pos.Y).trigger <> 2 And MapData(.Pos.Map, .Pos.X, .Pos.Y).trigger <> 4 Then Intemperie = True
+            If MapData(.Pos.Map, .Pos.X, .Pos.Y).Trigger <> eTrigger.BAJOTECHO And _
+             MapData(.Pos.Map, .Pos.X, .Pos.Y).Trigger <> eTrigger.CASA And _
+            MapData(.Pos.Map, .Pos.X, .Pos.Y).Trigger <> eTrigger.ZONASEGURA Then _
+                Intemperie = True
         Else
             Intemperie = False
 
@@ -1240,34 +817,6 @@ Public Function Intemperie(ByVal UserIndex As Integer) As Boolean
     If IsArena(UserIndex) Then Intemperie = False
 
 End Function
-
-Public Sub EfectoLluvia(ByVal UserIndex As Integer)
-    '***************************************************
-    'Author: Unknown
-    'Last Modification: -
-    '
-    '***************************************************
-
-    On Error GoTo ErrHandler
-
-    If UserList(UserIndex).flags.UserLogged Then
-        If Intemperie(UserIndex) Then
-
-            Dim modifi As Long
-
-            modifi = Porcentaje(UserList(UserIndex).Stats.MaxSta, 3)
-            Call QuitarSta(UserIndex, modifi)
-            Call FlushBuffer(UserIndex)
-
-        End If
-
-    End If
-    
-    Exit Sub
-ErrHandler:
-    LogError ("Error en EfectoLluvia")
-
-End Sub
 
 Public Sub TiempoInvocacion(ByVal UserIndex As Integer)
     '***************************************************
@@ -1312,15 +861,15 @@ Public Sub EfectoFrio(ByVal UserIndex As Integer)
 
         If .Counters.Frio < IntervaloFrio Then
             .Counters.Frio = .Counters.Frio + 1
-        Else
+        Else '
 
-            If MapInfo(.Pos.Map).Terreno = eTerrain.terrain_nieve Then
-                Call WriteConsoleMsg(UserIndex, "°°Est·s muriendo de frÌo, abrigate o morir·s!!", FontTypeNames.FONTTYPE_INFO)
+            If TerrainStringToByte(MapInfo(.Pos.Map).Terreno) = eTerrain.terrain_nieve Then
+                Call WriteConsoleMsg(UserIndex, "Estas muriendo de frio, abrigate o moriras!!", FontTypeNames.FONTTYPE_INFO)
                 modifi = Porcentaje(.Stats.MaxHp, 5)
                 .Stats.MinHp = .Stats.MinHp - modifi
                 
                 If .Stats.MinHp < 1 Then
-                    Call WriteConsoleMsg(UserIndex, "°°Has muerto de frÌo!!", FontTypeNames.FONTTYPE_INFO)
+                    Call WriteConsoleMsg(UserIndex, "Has muerto de frio!!", FontTypeNames.FONTTYPE_INFO)
                     .Stats.MinHp = 0
                     Call UserDie(UserIndex)
 
@@ -1357,11 +906,11 @@ Public Sub EfectoLava(ByVal UserIndex As Integer)
         Else
 
             If HayLava(.Pos.Map, .Pos.X, .Pos.Y) Then
-                Call WriteConsoleMsg(UserIndex, "°°Quitate de la lava, te est·s quemando!!", FontTypeNames.FONTTYPE_INFO)
+                Call WriteConsoleMsg(UserIndex, "Quitate de la lava, te estas quemando!!", FontTypeNames.FONTTYPE_INFO)
                 .Stats.MinHp = .Stats.MinHp - Porcentaje(.Stats.MaxHp, 5)
                     
                 If .Stats.MinHp < 1 Then
-                    Call WriteConsoleMsg(UserIndex, "°°Has muerto quemado!!", FontTypeNames.FONTTYPE_INFO)
+                    Call WriteConsoleMsg(UserIndex, "Has muerto quemado!!", FontTypeNames.FONTTYPE_INFO)
                     .Stats.MinHp = 0
                     Call UserDie(UserIndex)
 
@@ -1411,26 +960,6 @@ Public Sub EfectoEstadoAtacable(ByVal UserIndex As Integer)
 End Sub
 
 ''
-' Maneja el tiempo de arrivo al hogar
-'
-' @param UserIndex  El index del usuario a ser afectado por el /hogar
-'
-
-Public Sub TravelingEffect(ByVal UserIndex As Integer)
-    '******************************************************
-    'Author: ZaMa
-    'Last Update: 01/06/2010 (ZaMa)
-    '******************************************************
-
-    ' Si ya paso el tiempo de penalizacion
-    If IntervaloGoHome(UserIndex) Then
-        Call HomeArrival(UserIndex)
-
-    End If
-
-End Sub
-
-''
 ' Maneja el tiempo y el efecto del mimetismo
 '
 ' @param UserIndex  El index del usuario a ser afectado por el mimetismo
@@ -1462,6 +991,8 @@ Public Sub EfectoMimetismo(ByVal UserIndex As Integer)
                     .Char.ShieldAnim = NingunEscudo
                     .Char.WeaponAnim = NingunArma
                     .Char.CascoAnim = NingunCasco
+                    .Char.AuraAnim = NingunAura
+                    .Char.AuraColor = NingunAura
 
                 End If
 
@@ -1471,11 +1002,13 @@ Public Sub EfectoMimetismo(ByVal UserIndex As Integer)
                 .Char.CascoAnim = .CharMimetizado.CascoAnim
                 .Char.ShieldAnim = .CharMimetizado.ShieldAnim
                 .Char.WeaponAnim = .CharMimetizado.WeaponAnim
+                .Char.AuraAnim = .CharMimetizado.AuraAnim
+                .Char.AuraColor = .CharMimetizado.AuraColor
 
             End If
             
             With .Char
-                Call ChangeUserChar(UserIndex, .body, .Head, .heading, .WeaponAnim, .ShieldAnim, .CascoAnim)
+                Call ChangeUserChar(UserIndex, .body, .Head, .Heading, .WeaponAnim, .ShieldAnim, .CascoAnim, .AuraAnim, .AuraColor)
 
             End With
             
@@ -1522,14 +1055,14 @@ Public Sub EfectoInvisibilidad(ByVal UserIndex As Integer)
 
 End Sub
 
-Public Sub EfectoParalisisNpc(ByVal NpcIndex As Integer)
+Public Sub EfectoParalisisNpc(ByVal NPCIndex As Integer)
     '***************************************************
     'Author: Unknown
     'Last Modification: -
     '
     '***************************************************
 
-    With Npclist(NpcIndex)
+    With Npclist(NPCIndex)
 
         If .Contadores.Paralisis > 0 Then
             .Contadores.Paralisis = .Contadores.Paralisis - 1
@@ -1684,20 +1217,22 @@ Public Sub RecStamina(ByVal UserIndex As Integer, _
 
     With UserList(UserIndex)
 
-        If MapData(.Pos.Map, .Pos.X, .Pos.Y).trigger = 1 And MapData(.Pos.Map, .Pos.X, .Pos.Y).trigger = 2 And MapData(.Pos.Map, .Pos.X, .Pos.Y).trigger = 4 Then Exit Sub
-        
         Dim massta As Integer
+
+        'Si esta trabajando no recupera energia
+        If .flags.MacroTrabajo Then Exit Sub
 
         If .Stats.MinSta < .Stats.MaxSta Then
             If .Counters.STACounter < Intervalo Then
                 .Counters.STACounter = .Counters.STACounter + 1
+                
             Else
                 EnviarStats = True
                 .Counters.STACounter = 0
 
-                If .flags.Desnudo Then Exit Sub 'Desnudo no sube energÌa. (ToxicWaste)
+                If .flags.Desnudo Then Exit Sub 'Desnudo no sube energia. (ToxicWaste)
                
-                massta = RandomNumber(1, Porcentaje(.Stats.MaxSta, 5))
+                massta = RandomNumber(1, Porcentaje(.Stats.MaxSta, (.Stats.UserSkills(eSkill.Supervivencia) / 2) + 5))
                 .Stats.MinSta = .Stats.MinSta + massta
 
                 If .Stats.MinSta > .Stats.MaxSta Then
@@ -1720,17 +1255,45 @@ Public Sub EfectoVeneno(ByVal UserIndex As Integer)
     '
     '***************************************************
 
-    Dim N As Integer
+    Dim n As Integer
     
     With UserList(UserIndex)
 
         If .Counters.Veneno < IntervaloVeneno Then
             .Counters.Veneno = .Counters.Veneno + 1
         Else
-            Call WriteConsoleMsg(UserIndex, "Est·s envenenado, si no te curas morir·s.", FontTypeNames.FONTTYPE_VENENO)
+            Call WriteConsoleMsg(UserIndex, "Estas envenenado, si no te curas moriras.", FontTypeNames.FONTTYPE_VENENO)
             .Counters.Veneno = 0
-            N = RandomNumber(1, 5)
-            .Stats.MinHp = .Stats.MinHp - N
+            n = RandomNumber(1, 5)
+            .Stats.MinHp = .Stats.MinHp - n
+
+            If .Stats.MinHp < 1 Then Call UserDie(UserIndex)
+            Call WriteUpdateHP(UserIndex)
+
+        End If
+
+    End With
+
+End Sub
+
+Public Sub EfectoIncinerado(ByVal UserIndex As Integer)
+    '***************************************************
+    'Author: Lorwik
+    'Last Modification: 05/09/2020
+    '
+    '***************************************************
+
+    Dim n As Integer
+    
+    With UserList(UserIndex)
+
+        If .Counters.Quema < IntervaloIncinerado Then
+            .Counters.Quema = .Counters.Quema + 1
+        Else
+            Call WriteConsoleMsg(UserIndex, "Estas ardiendo, si no te apagas moriras.", FontTypeNames.FONTTYPE_WARNING)
+            .Counters.Quema = 0
+            n = RandomNumber(5, 20)
+            .Stats.MinHp = .Stats.MinHp - n
 
             If .Stats.MinHp < 1 Then Call UserDie(UserIndex)
             Call WriteUpdateHP(UserIndex)
@@ -1746,7 +1309,7 @@ Public Sub DuracionPociones(ByVal UserIndex As Integer)
     '***************************************************
     'Author: ??????
     'Last Modification: 11/27/09 (Budi)
-    'Cuando se pierde el efecto de la pociÛn updatea fz y agi (No me gusta que ambos atributos aunque se haya modificado solo uno, pero bueno :p)
+    'Cuando se pierde el efecto de la pocion updatea fz y agi (No me gusta que ambos atributos aunque se haya modificado solo uno, pero bueno :p)
     '***************************************************
     With UserList(UserIndex)
 
@@ -1792,7 +1355,13 @@ Public Sub HambreYSed(ByVal UserIndex As Integer, ByRef fenviarAyS As Boolean)
                 .Counters.AGUACounter = .Counters.AGUACounter + 1
             Else
                 .Counters.AGUACounter = 0
-                .Stats.MinAGU = .Stats.MinAGU - 10
+                
+                If Lloviendo And TerrainStringToByte(MapInfo(.Pos.Map).Terreno) = eTerrain.terrain_desierto And MapInfo(.Pos.Map).Zona = "BOSQUE" Then
+                    .Stats.MinAGU = .Stats.MinAGU - 20
+                    Call WriteConsoleMsg(UserIndex, "Estas en una tormenta de arena, sientes el doble de sed.", FontTypeNames.FONTTYPE_INFO)
+                Else
+                    .Stats.MinAGU = .Stats.MinAGU - 10
+                End If
                 
                 If .Stats.MinAGU <= 0 Then
                     .Stats.MinAGU = 0
@@ -1812,8 +1381,14 @@ Public Sub HambreYSed(ByVal UserIndex As Integer, ByRef fenviarAyS As Boolean)
                 .Counters.COMCounter = .Counters.COMCounter + 1
             Else
                 .Counters.COMCounter = 0
-                .Stats.MinHam = .Stats.MinHam - 10
-
+                
+                If Lloviendo And TerrainStringToByte(MapInfo(.Pos.Map).Terreno) = eTerrain.terrain_nieve And MapInfo(.Pos.Map).Zona = "BOSQUE" Then
+                    .Stats.MinHam = .Stats.MinHam - 20
+                    Call WriteConsoleMsg(UserIndex, "Estas en una tormenta de nieve, sientes el doble de hambre.", FontTypeNames.FONTTYPE_INFO)
+                Else
+                    .Stats.MinHam = .Stats.MinHam - 10
+                End If
+                
                 If .Stats.MinHam <= 0 Then
                     .Stats.MinHam = 0
                     .flags.Hambre = 1
@@ -1840,10 +1415,14 @@ Public Sub Sanar(ByVal UserIndex As Integer, _
     '***************************************************
 
     With UserList(UserIndex)
-
-        If MapData(.Pos.Map, .Pos.X, .Pos.Y).trigger = 1 And MapData(.Pos.Map, .Pos.X, .Pos.Y).trigger = 2 And MapData(.Pos.Map, .Pos.X, .Pos.Y).trigger = 4 Then Exit Sub
-        
+    
         Dim mashit As Integer
+
+        If .Invent.AnilloEqpObjIndex <> 0 Then
+            If ObjData(.Invent.AnilloEqpObjIndex).Efectomagico = eEfectos.AceleraVida Then
+                Intervalo = Intervalo - Porcentaje(Intervalo, 40)
+            End If
+        End If
 
         'con el paso del tiempo va sanando....pero muy lentamente ;-)
         If .Stats.MinHp < .Stats.MaxHp Then
@@ -1873,125 +1452,23 @@ Public Sub CargaNpcsDat()
     'Last Modification: -
     '
     '***************************************************
-
-    Dim npcfile As String
+    If frmMain.Visible Then frmMain.txtStatus.Text = "Cargando NPCs.dat."
     
-    npcfile = DatPath & "NPCs.dat"
+    ' Leemos el NPCs.dat y lo almacenamos en la memoria.
     Set LeerNPCs = New clsIniManager
-    Call LeerNPCs.Initialize(npcfile)
+    Call LeerNPCs.Initialize(DatPath & "NPCs.dat")
+    
+    'Cargamos el total de NPC
+    TotalNPCDat = GetVar(DatPath & "NPCs.dat", "INIT", "NumNPCs")
+    
+    ' Cargamos la lista de NPC's hostiles disponibles para spawnear.
+    Call CargarSpawnList
+
+    If frmMain.Visible Then frmMain.txtStatus.Text = Date & " " & time & " - Se cargo el archivo NPCs.dat."
 
 End Sub
 
-Sub PasarSegundo()
-    '***************************************************
-    'Author: Unknown
-    'Last Modification: -
-    '
-    '***************************************************
 
-    On Error GoTo ErrHandler
-
-    Dim i As Long
-    
-    'Limpieza del mundo
-    If counterSV.Limpieza > 0 Then
-        counterSV.Limpieza = counterSV.Limpieza - 1
-        
-        If counterSV.Limpieza < 6 Then Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg("Limpieza del mundo en " & counterSV.Limpieza & " segundos. °°Atentos!!", FontTypeNames.FONTTYPE_SERVER))
-        
-        If counterSV.Limpieza = 0 Then
-            Call BorrarObjetosLimpieza
-            Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg("Limpieza del mundo finalizada.", FontTypeNames.FONTTYPE_SERVER))
-            UltimoSlotLimpieza = -1
-
-        End If
-
-    End If
-    
-    For i = 1 To LastUser
-
-        With UserList(i)
-
-            If .flags.UserLogged Then
-
-                'Cerrar usuario
-                If .Counters.Saliendo Then
-                    .Counters.Salir = .Counters.Salir - 1
-
-                    If .Counters.Salir <= 0 Then
-                        Call WriteConsoleMsg(i, "Gracias por jugar Nexus AO", FontTypeNames.FONTTYPE_INFO)
-                        Call WriteDisconnect(i)
-                        Call FlushBuffer(i)
-                        
-                        Call CloseSocket(i)
-
-                    End If
-
-                End If
-            
-                If .Counters.Pena > 0 Then
-
-                    'Restamos las penas del personaje
-                    If UserList(ArrayPenas(i)).Counters.Pena > 0 Then
-                        UserList(ArrayPenas(i)).Counters.Pena = UserList(ArrayPenas(i)).Counters.Pena - 1
-                    
-                        If UserList(ArrayPenas(i)).Counters.Pena < 1 Then
-                            UserList(ArrayPenas(i)).Counters.Pena = 0
-                            Call WarpUserChar(i, Libertad.Map, Libertad.X, Libertad.Y, True)
-                            Call WriteConsoleMsg(i, "°Has sido liberado!", FontTypeNames.FONTTYPE_INFO)
-                            Call QuitarArrayCarcel(i)
-                            Call FlushBuffer(i)
-
-                        End If
-
-                    End If
-
-                End If
-                
-                'Sacamos energÌa
-                If Lloviendo Then Call EfectoLluvia(i)
-                
-                If Not .Pos.Map = 0 Then
-
-                    'Counter de piquete
-                    If MapData(.Pos.Map, .Pos.X, .Pos.Y).trigger = eTrigger.ANTIPIQUETE Then
-                        If .flags.Muerto = 0 Then
-                            .Counters.PiqueteC = .Counters.PiqueteC + 1
-                            Call WriteConsoleMsg(i, "°°°Est·s obstruyendo la vÌa p˙blica, muÈvete o ser·s encarcelado!!!", FontTypeNames.FONTTYPE_INFO)
-                                
-                            If .Counters.PiqueteC >= 5 Then
-                                .Counters.PiqueteC = 0
-                                Call Encarcelar(i, TIEMPO_CARCEL_PIQUETE)
-
-                            End If
-                                
-                            Call FlushBuffer(i)
-                        Else
-                            .Counters.PiqueteC = 0
-
-                        End If
-
-                    Else
-                        .Counters.PiqueteC = 0
-
-                    End If
-
-                End If
-
-            End If
-
-        End With
-
-    Next i
-
-    Exit Sub
-
-ErrHandler:
-    Call LogError("Error en PasarSegundo. Err: " & Err.description & " - " & Err.Number & " - UserIndex: " & i)
-
-    Resume Next
-
-End Sub
  
 Public Function ReiniciarAutoUpdate() As Double
     '***************************************************
@@ -2037,14 +1514,14 @@ Sub GuardarUsuarios()
     haciendoBK = True
     
     Call SendData(SendTarget.ToAll, 0, PrepareMessagePauseToggle())
-    Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg("Servidor> Grabando Personajes", FontTypeNames.FONTTYPE_SERVER))
+    Call SendData(SendTarget.ToGM, 0, PrepareMessageConsoleMsg("Servidor> Grabando Personajes", FontTypeNames.FONTTYPE_SERVER))
     
     Dim i As Integer
 
     For i = 1 To LastUser
 
         If UserList(i).flags.UserLogged Then
-            Call SaveUser(i, CharPath & UCase$(UserList(i).Name) & ".chr", False)
+            Call SaveUser(i, False)
 
         End If
 
@@ -2053,37 +1530,161 @@ Sub GuardarUsuarios()
     'se guardan los seguimientos
     Call SaveRecords
     
-    Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg("Servidor> Personajes Grabados", FontTypeNames.FONTTYPE_SERVER))
+    Call SendData(SendTarget.ToGM, 0, PrepareMessageConsoleMsg("Servidor> Personajes Grabados", FontTypeNames.FONTTYPE_SERVER))
     Call SendData(SendTarget.ToAll, 0, PrepareMessagePauseToggle())
 
     haciendoBK = False
 
 End Sub
 
-Sub InicializaEstadisticas()
-    '***************************************************
-    'Author: Unknown
-    'Last Modification: -
-    '
-    '***************************************************
+Sub SaveUser(ByVal UserIndex As Integer, Optional ByVal SaveTimeOnline As Boolean = True)
+    '*************************************************
+    'Author: Juan Andres Dalmasso (CHOTS)
+    'Last modified: 06/12/2018 (CHOTS)
+    'Saves the User, in the database or charfile
+    '*************************************************
 
-    Dim Ta As Long
+    On Error GoTo ErrorHandler
 
-    Ta = GetTickCount() And &H7FFFFFFF
-    
-    Set EstadisticasWeb = New clsEstadisticasIPC
-    Call EstadisticasWeb.Inicializa(frmMain.hWnd)
-    Call EstadisticasWeb.Informar(CANTIDAD_MAPAS, NumMaps)
-    Call EstadisticasWeb.Informar(CANTIDAD_ONLINE, NumUsers)
-    Call EstadisticasWeb.Informar(UPTIME_SERVER, (Ta - tInicioServer) / 1000)
-    Call EstadisticasWeb.Informar(RECORD_USUARIOS, RECORDusuarios)
+    With UserList(UserIndex)
+
+        If .clase = 0 Or .Stats.ELV = 0 Then
+            Call LogCriticEvent("Estoy intentantdo guardar un usuario nulo de nombre: " & .Name)
+            Exit Sub
+
+        End If
+
+        If .flags.Mimetizado = 1 Then
+            .Char.body = .CharMimetizado.body
+            .Char.Head = .CharMimetizado.Head
+            .Char.CascoAnim = .CharMimetizado.CascoAnim
+            .Char.ShieldAnim = .CharMimetizado.ShieldAnim
+            .Char.WeaponAnim = .CharMimetizado.WeaponAnim
+            .Char.AuraAnim = .CharMimetizado.AuraAnim
+            .Char.AuraColor = .CharMimetizado.AuraColor
+            .Counters.Mimetismo = 0
+            .flags.Mimetizado = 0
+            ' Se fue el efecto del mimetismo, puede ser atacado por npcs
+            .flags.Ignorado = False
+
+        End If
+
+        Dim Prom As Long
+
+        Prom = (-.Reputacion.AsesinoRep) + (-.Reputacion.BandidoRep) + .Reputacion.BurguesRep + (-.Reputacion.LadronesRep) + .Reputacion.NobleRep + .Reputacion.PlebeRep
+        Prom = Prom / 6
+        .Reputacion.Promedio = Prom
+        
+        Call SaveUserToDatabase(UserIndex, SaveTimeOnline)
+
+    End With
+
+    Exit Sub
+
+ErrorHandler:
+    Call LogError("Error en SaveUser - Userindex: " & UserIndex)
+
+End Sub
+
+Sub LoadUser(ByVal UserIndex As Integer)
+    '*************************************************
+    'Author: Juan Andres Dalmasso (CHOTS)
+    'Last modified: 09/10/2018 (CHOTS)
+    'Loads the user from the database or charfile
+    '*************************************************
+
+    On Error GoTo ErrorHandler
+
+    Call LoadUserFromDatabase(UserIndex)
+
+    With UserList(UserIndex)
+
+        If .flags.Paralizado = 1 Then
+            .Counters.Paralisis = IntervaloParalizado
+
+        End If
+
+        'Obtiene el indice-objeto del arma
+        If .Invent.WeaponEqpSlot > 0 Then
+            .Invent.WeaponEqpObjIndex = .Invent.Object(.Invent.WeaponEqpSlot).ObjIndex
+
+        End If
+        
+        'Obtiene el indice-objeto del arma
+        If .Invent.NudiEqpIndex > 0 Then
+            .Invent.NudiEqpIndex = .Invent.Object(.Invent.NudiEqpSlot).ObjIndex
+
+        End If
+
+        'Obtiene el indice-objeto del armadura
+        If .Invent.ArmourEqpSlot > 0 Then
+            .Invent.ArmourEqpObjIndex = .Invent.Object(.Invent.ArmourEqpSlot).ObjIndex
+            .flags.Desnudo = 0
+        Else
+            .flags.Desnudo = 1
+
+        End If
+
+        'Obtiene el indice-objeto del escudo
+        If .Invent.EscudoEqpSlot > 0 Then
+            .Invent.EscudoEqpObjIndex = .Invent.Object(.Invent.EscudoEqpSlot).ObjIndex
+
+        End If
+        
+        'Obtiene el indice-objeto del casco
+        If .Invent.CascoEqpSlot > 0 Then
+            .Invent.CascoEqpObjIndex = .Invent.Object(.Invent.CascoEqpSlot).ObjIndex
+
+        End If
+
+        'Obtiene el indice-objeto barco
+        If .Invent.BarcoSlot > 0 Then
+            .Invent.BarcoObjIndex = .Invent.Object(.Invent.BarcoSlot).ObjIndex
+
+        End If
+
+        'Obtiene el indice-objeto municion
+        If .Invent.MunicionEqpSlot > 0 Then
+            .Invent.MunicionEqpObjIndex = .Invent.Object(.Invent.MunicionEqpSlot).ObjIndex
+
+        End If
+
+        '[Alejo]
+        'Obtiene el indice-objeto anilo
+        If .Invent.AnilloEqpSlot > 0 Then
+            .Invent.AnilloEqpObjIndex = .Invent.Object(.Invent.AnilloEqpSlot).ObjIndex
+
+        End If
+
+        If .Invent.MonturaObjIndex > 0 Then
+            .Invent.MonturaObjIndex = .Invent.Object(.Invent.MonturaObjIndex).ObjIndex
+        End If
+
+        If .flags.Muerto = 0 Then
+            .Char = .OrigChar
+        Else
+            .Char.body = iCuerpoMuerto
+            .Char.Head = iCabezaMuerto
+            .Char.WeaponAnim = NingunArma
+            .Char.ShieldAnim = NingunEscudo
+            .Char.CascoAnim = NingunCasco
+            .Char.Heading = eHeading.SOUTH
+
+        End If
+
+    End With
+
+    Exit Sub
+
+ErrorHandler:
+    Call LogError("Error en LoadUser: " & UserList(UserIndex).Name & " - " & Err.Number & " - " & Err.description)
 
 End Sub
 
 Public Sub FreeNPCs()
 
     '***************************************************
-    'Autor: Juan MartÌn Sotuyo Dodero (Maraxus)
+    'Autor: Juan Martin Sotuyo Dodero (Maraxus)
     'Last Modification: 05/17/06
     'Releases all NPC Indexes
     '***************************************************
@@ -2098,7 +1699,7 @@ End Sub
 
 Public Sub FreeCharIndexes()
     '***************************************************
-    'Autor: Juan MartÌn Sotuyo Dodero (Maraxus)
+    'Autor: Juan Martin Sotuyo Dodero (Maraxus)
     'Last Modification: 05/17/06
     'Releases all char indexes
     '***************************************************
@@ -2113,3 +1714,228 @@ Public Sub ReproducirSonido(ByVal Destino As SendTarget, _
     Call SendData(Destino, index, PrepareMessagePlayWave(SoundIndex, UserList(index).Pos.X, UserList(index).Pos.Y))
 
 End Sub
+
+
+Public Function Tilde(ByRef data As String) As String
+
+    Dim temp As String
+
+    'Pato
+    temp = UCase$(data)
+ 
+    If InStr(1, temp, "√Å") Then temp = Replace$(temp, "√Å", "A")
+   
+    If InStr(1, temp, "e") Then temp = Replace$(temp, "e", "E")
+   
+    If InStr(1, temp, "√ç") Then temp = Replace$(temp, "√ç", "I")
+   
+    If InStr(1, temp, "√ì") Then temp = Replace$(temp, "√ì", "O")
+   
+    If InStr(1, temp, "U") Then temp = Replace$(temp, "U", "U")
+   
+    Tilde = temp
+        
+End Function
+
+Public Sub CloseServer()
+    
+    'Si tenemos la API activada, la matamos.
+    If ConexionAPI Then
+        Shell ("taskkill /PID " & ApiNodeJsTaskId)
+    End If
+    
+    End
+End Sub
+
+Private Sub InicializarSonidos()
+'****************************************
+'Autor: Lorwik
+'Fecha: 01/05/2020
+'DescripciÛn: Inicializa las variable de los Sonidos
+'****************************************
+
+    SND_SWING = 2
+    SND_TALAR = 13
+    SND_PESCAR = 14
+    SND_MINERO = 15
+    SND_WARP = 3
+    SND_PUERTA = 5
+    SND_NIVEL = 128
+    SND_USERMUERTE = 11
+    SND_IMPACTO = 10
+    SND_IMPACTO2 = 12
+    SND_LENADOR = 13
+    SND_FOGATA = 14
+    SND_AVE(1) = 21
+    SND_AVE(2) = 22
+    SND_AVE(3) = 34
+    SND_GRILLO(1) = 28
+    SND_GRILLO(2) = 29
+    SND_SACARARMA = 25
+    SND_ESCUDO(1) = 211
+    SND_ESCUDO(2) = 212
+    SND_ESCUDO(3) = 213
+    SND_ESCUDO(4) = 214
+    SND_TRABAJO_HERRERO = 150
+    SND_TRABAJO_CARPINTERO = 168
+    SND_BEBER = 135
+    SND_RESUCITAR_SACERDOTE = 103
+    SND_CURAR_SACERDOTE = 104
+    SND_DUMMY = 115
+    SND_DUMMY2 = 116
+    
+End Sub
+
+Public Sub LogGlobal(ByVal Str As String)
+'***************************************************
+'Autor: Lorwik
+'Fecha: 09/06/2020
+'Descripcion: Guardamos todo lo que se habla por el chat global
+'***************************************************
+
+    Dim nfile As Integer
+    
+    nfile = FreeFile ' obtenemos un canal
+    Open App.Path & "\logs\GlobalChat(" & Month(Date) & "-" & Year(Date) & ").log" For Append Shared As #nfile
+    
+        Print #nfile, Date & " " & time & " " & Str
+        
+    Close #nfile
+
+End Sub
+
+Public Sub BanGlobalChatCargar()
+'***************************************************
+'Autor: Lorwik
+'Fecha: 09/06/2020
+'Descripcion: Carga la lista de baneados del chat global
+'***************************************************
+    Dim ArchN As Long
+    Dim Tmp As String
+    Dim ArchivoLog As String
+
+    ArchivoLog = App.Path & "\Dat\BanGlobalChat.dat"
+
+    Set BanUsersChatGlobal = New Collection
+
+    ArchN = FreeFile()
+    Open ArchivoLog For Input As #ArchN
+
+    Do While Not EOF(ArchN)
+        Line Input #ArchN, Tmp
+        BanUsersChatGlobal.Add Tmp
+    Loop
+
+    Close #ArchN
+End Sub
+
+Public Sub BanGlobalChatAgregar(ByVal UserName As String)
+'***************************************************
+'Autor: Lorwik
+'Fecha: 09/06/2020
+'Descripcion: Agrega un nuevo baneado del chat global
+'***************************************************
+
+    BanUsersChatGlobal.Add UserName
+
+    Call BanGlobalChatGuardar
+End Sub
+
+Public Function BanGlobalChatBuscar(ByVal UserName As String) As Long
+'***************************************************
+'Autor: Lorwik
+'Fecha: 09/06/2020
+'Descripcion: Busca un usuario baneado del chat global de entre la lista
+'***************************************************
+
+    Dim Dale As Boolean
+    Dim LoopC As Long
+
+    Dale = True
+    LoopC = 1
+    Do While LoopC <= BanUsersChatGlobal.Count And Dale
+        Dale = (BanUsersChatGlobal.Item(LoopC) <> UserName)
+        LoopC = LoopC + 1
+    Loop
+
+    If Dale Then
+        BanGlobalChatBuscar = 0
+    Else
+        BanGlobalChatBuscar = LoopC - 1
+    End If
+End Function
+
+Public Function BanGlobalChatQuitar(ByVal UserName As String) As Boolean
+'***************************************************
+'Autor: Lorwik
+'Fecha: 09/06/2020
+'Descripcion: Elimina a un usuario baneado del chat global de la lista
+'***************************************************
+On Error Resume Next
+
+    Dim n As Long
+
+    n = BanGlobalChatBuscar(UserName)
+    If n > 0 Then
+        BanUsersChatGlobal.Remove n
+        BanGlobalChatGuardar
+        BanGlobalChatQuitar = True
+    Else
+        BanGlobalChatQuitar = False
+    End If
+
+End Function
+
+Public Sub BanGlobalChatGuardar()
+'***************************************************
+'Autor: Lorwik
+'Fecha: 09/06/2020
+'Descripcion: Guarda la lista de usuarios baneados del chat global
+'***************************************************
+
+    Dim ArchivoLog As String
+    Dim ArchN As Long
+    Dim LoopC As Long
+
+    ArchivoLog = App.Path & "\Dat\BanGlobalChat.dat"
+
+    ArchN = FreeFile()
+    Open ArchivoLog For Output As #ArchN
+
+    For LoopC = 1 To BanUsersChatGlobal.Count
+        Print #ArchN, BanUsersChatGlobal.Item(LoopC)
+    Next LoopC
+
+    Close #ArchN
+End Sub
+
+Public Function HexToColor(ByRef HexColor As String) As Long
+'**********************************
+'Autor: Lorwik
+'Fecha: 08/03/2021
+'Descripcion: Convierte colores Hexadecimales en Long
+'**********************************
+
+    ' variable size byte array
+    Dim bytHex() As Byte
+    ' we only accept one length, 6 characters = 12 bytes
+    If LenB(HexColor) = 12 Then
+        ' convert string to byte array
+        bytHex = HexColor
+        ' if a value is now higher than 57, we reduce it by 7
+        If bytHex(0) > &H39 Then bytHex(0) = bytHex(0) - 7
+        If bytHex(2) > &H39 Then bytHex(2) = bytHex(2) - 7
+        If bytHex(4) > &H39 Then bytHex(4) = bytHex(4) - 7
+        If bytHex(6) > &H39 Then bytHex(6) = bytHex(6) - 7
+        If bytHex(8) > &H39 Then bytHex(8) = bytHex(8) - 7
+        If bytHex(10) > &H39 Then bytHex(10) = bytHex(10) - 7
+        ' this function is "stupid", it assumes it gets correct data...
+        '  makes it faster, but you can give it any string that is 6 characters long, no error, ever!
+        '  we take 4 bits for each six characters, and place it in the correct position of a Long,
+        '  making up 24 bits that are required to represent a color value
+        HexToColor = ((bytHex(0) And &HF&) * &H10&) Or (bytHex(2) And &HF&) _
+            Or ((bytHex(4) And &HF&) * &H1000&) Or ((bytHex(6) And &HF&) * &H100&) _
+            Or ((bytHex(8) And &HF&) * &H100000) Or ((bytHex(10) And &HF&) * &H10000)
+    End If
+End Function
+

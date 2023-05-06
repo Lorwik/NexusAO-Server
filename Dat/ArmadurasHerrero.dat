@@ -1,186 +1,75 @@
 [INIT]
-NumArmaduras=61
+NumArmaduras=22
 
+[Armadura1] ' Armadura de cuero (hombre)
+Index=30
 
-[Armadura1] ' Casco de hierro
-Index=132
+[Armadura2] ' Armadura de cuero (mujer) 
+Index=529
 
-[Armadura2] ' Casco de hierro completo
-Index=131
-
-[Armadura3] ' Casco de plata
-Index=405
-
-[Armadura4] ' Escudo de tortuga
-Index=404
-
-[Armadura5] ' Escudo de hierro
-Index=128
-
-[Armadura6] ' Escudo de plata
-Index=130
-
-[Armadura7] ' Escudo Real
-Index=1038
-
-[Armadura8] ' Escudo imperial
-Index=133
-
-[Armadura9] ' Escudo Legionario
-Index=1037
-
-[Armadura10] ' Escudo infernal
-Index=708
-
-[Armadura11] ' Manto de Noble
-Index=484
-
-[Armadura12] ' Cota de Mallas
-Index=359
-
-[Armadura13] ' Cota de Mallas (Mujer)
-Index=499
-
-[Armadura14] ' Cota de Mallas (E/G)
-Index=667
-
-[Armadura15] ' Cota de Mallas Larga (E/G)
-Index=975
-
-[Armadura16] ' Armadura de Campeón
-Index=903
-
-[Armadura17] ' Armadura placas
-Index=195
-
-[Armadura18] ' Armadura placas + 1
-Index=390
-
-[Armadura19] ' Armadura placas + 2
-Index=391
-
-[Armadura20] ' Armadura placas enanos
-Index=243
-
-[Armadura21] ' Armadura placas enanos + 1
-Index=392
-
-[Armadura22] ' Armadura placas enanos + 2
-Index=393
-
-[Armadura23] ' Armadura de Placas Rojas
-Index=493
-
-[Armadura24] ' Armadura de Placas Azul
-Index=489
-
-[Armadura25] ' Armadura de Placas de Gala
-Index=497
-
-[Armadura26] ' Trampa Visual (H/E/EO-M)
-Index=503
-
-[Armadura27] ' Placas Combinadas (H/E/EO-M)
-Index=904
-
-[Armadura28] ' Suprema Armadura Dorada (H/E/EO-M)
-Index=905
-
-[Armadura29] ' Armadura de las Sombras
-Index=356
-
-[Armadura30] ' Armadura de Elite (E/G)
+[Armadura3] ' Armadura reforzada
 Index=672
 
-[Armadura31] ' Armadura Bruñida (E/G)
+[Armadura4] ' Cota de Mallas (Hombre/Normal)
+Index=359
+
+[Armadura5] ' Cota de Mallas (Mujer/Normal)
+Index=499
+
+[Armadura6] ' Cota de Mallas (Enanos/Gnomos)
+Index=671
+
+[Armadura7] ' Armadura de las sombras
+Index=356
+
+[Armadura8] ' Armadura de Cazador
+Index=360
+
+[Armadura9] ' Armaduras de Placas
+Index=391
+
+[Armadura10] ' Armaduras de Placas (Enanos)
+Index=243
+
+[Armadura11] ' Armadura de placas de Gala
+Index=497
+
+[Armadura12] ' Armadura Bruñida
 Index=500
 
-[Armadura32] ' Armadura Pesada de Hierro y Bronce (E/G)
-Index=976
-
-[Armadura33] ' Cienaga
+[Armadura13] ' Armadura de la Ciénaga
 Index=496
 
-[Armadura34] ' Escarlata
-Index=495
-
-[Armadura35] ' Dama de las tinieblas
-Index=487
-
-[Armadura36] ' Armadura Legendaria
-Index=485
-
-[Armadura37] ' Armadura de Dragón (Hombre)
-Index=481
-
-[Armadura38] ' Armadura de Dragón (Mujer)
-Index=482
-
-[Armadura39] ' Armadura de Dragón (Enano/Enana)
-Index=483
-
-[Armadura40] ' Manto del Dragón (H/E/EO)
-Index=906
-
-[Armadura41] ' Anillo Mágico
-Index=697
-
-[Armadura42] ' Anillo de resistencia Mágica
-Index=698
-
-[Armadura43] ' Anillo de Disolución Mágica
-Index=699
-
-[Armadura44] ' Armadura Real
-Index=521
-
-[Armadura45] ' Armadura Real (E/G)
-Index=492
-
-[Armadura46] ' Armadura de Gran Sacerdote Imperial
-Index=680
-
-[Armadura47] ' Armadura de Gran Sacerdotisa Imperial (H/E/EO-M)
-Index=520
-
-[Armadura48] ' Armadura Nobilísima
-Index=629
-
-[Armadura49] ' Armadura Nobilísima (E/G)
-Index=681
-
-[Armadura50] ' Armadura de Ilustre Caballero
-Index=691
-
-[Armadura51] ' Armadura de Ilustre Caballero (E/G)
-Index=694
-
-[Armadura52] ' Armadura de las Sombras (E/G)
-Index=854
-
-[Armadura53] ' Armadura Magna (H/E/EO-M)
+[Armadura14] ' Armadura de la Ciénaga (Enano/Gnomo)
 Index=693
 
-[Armadura54] ' Armadura Legionaria
-Index=369
+[Armadura15] ' Armadura Escarlata
+Index=495
 
-[Armadura55] ' Armadura Legionaria (E/G)
-Index=379
+[Armadura16] ' Armadura de las tinieblas (Hombre)
+Index=650
+Recompensa=1
 
-[Armadura56] ' Armadura de Gran Sacerdote Demoníaco
-Index=684
+[Armadura17] ' Armadura  de las tinieblas (Mujer)
+Index=487
+Recompensa=1
 
-[Armadura57] ' Armadura Lóbrega
-Index=683
+[Armadura18] ' Armadura de las tinieblas (Enano/Gnomo)
+Index=667
+Recompensa=1
 
-[Armadura58] ' Armadura Lóbrega (H/E/EO-M)
-Index=635
+[Armadura19] ' Armadura Legendaria
+Index=485
+Recompensa=1
 
-[Armadura59] ' Armadura Lóbrega (E/G)
-Index=685
+[Armadura20] ' Armadura del Dragón (Hombre)
+Index=481
+Recompensa=1
 
-[Armadura60] ' Armadura de Pequeño Pandemonium (E/G)
-Index=695
+[Armadura21] ' Armadura del Dragón (Mujer)
+Index=482
+Recompensa=1
 
-[Armadura61] ' Armadura Infame
-Index=701
+[Armadura22] ' Armadura del Dragón (Enano/Gnomo)
+Index=483
+Recompensa=1

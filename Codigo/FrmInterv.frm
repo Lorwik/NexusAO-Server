@@ -1,19 +1,75 @@
 VERSION 5.00
 Begin VB.Form FrmInterv 
-   BackColor       =   &H00FFC0C0&
+   BackColor       =   &H00E0E0E0&
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Intervalos"
-   ClientHeight    =   4920
+   ClientHeight    =   5610
    ClientLeft      =   45
    ClientTop       =   330
    ClientWidth     =   7650
+   ControlBox      =   0   'False
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
-   ScaleHeight     =   4920
+   MinButton       =   0   'False
+   ScaleHeight     =   5610
    ScaleWidth      =   7650
    StartUpPosition =   2  'CenterScreen
+   Begin VB.Frame Suerte 
+      BackColor       =   &H00E0E0E0&
+      Caption         =   "Suerte"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   1215
+      Left            =   120
+      TabIndex        =   55
+      Top             =   4320
+      Width           =   2055
+      Begin VB.TextBox txtExtraerSuerte 
+         BackColor       =   &H00C0FFFF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   285
+         Left            =   120
+         TabIndex        =   56
+         Text            =   "6"
+         Top             =   720
+         Width           =   450
+      End
+      Begin VB.Label extraer 
+         BackColor       =   &H00E0E0E0&
+         Caption         =   "Extraer"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   255
+         Left            =   120
+         TabIndex        =   57
+         Top             =   360
+         Width           =   615
+      End
+   End
    Begin VB.CommandButton Command2 
-      BackColor       =   &H00FFC0C0&
+      BackColor       =   &H00E0E0E0&
       Caption         =   "Guardar Intervalos"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
@@ -25,14 +81,14 @@ Begin VB.Form FrmInterv
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
-      Left            =   4680
+      Left            =   4560
       Style           =   1  'Graphical
       TabIndex        =   36
-      Top             =   4320
+      Top             =   4440
       Width           =   2895
    End
    Begin VB.CommandButton Command1 
-      BackColor       =   &H00FFC0C0&
+      BackColor       =   &H00E0E0E0&
       Caption         =   "Aplicar"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
@@ -44,14 +100,14 @@ Begin VB.Form FrmInterv
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
-      Left            =   2880
+      Left            =   2280
       Style           =   1  'Graphical
       TabIndex        =   0
-      Top             =   4320
-      Width           =   1695
+      Top             =   4440
+      Width           =   2175
    End
    Begin VB.Frame Frame11 
-      BackColor       =   &H00FFC0C0&
+      BackColor       =   &H00E0E0E0&
       Caption         =   "NPCs"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
@@ -68,7 +124,7 @@ Begin VB.Form FrmInterv
       Top             =   2160
       Width           =   1695
       Begin VB.Frame Frame4 
-         BackColor       =   &H00FFC0C0&
+         BackColor       =   &H00E0E0E0&
          Caption         =   "A.I"
          BeginProperty Font 
             Name            =   "MS Sans Serif"
@@ -161,7 +217,7 @@ Begin VB.Form FrmInterv
       End
    End
    Begin VB.Frame Frame12 
-      BackColor       =   &H00FFC0C0&
+      BackColor       =   &H00E0E0E0&
       Caption         =   "Clima && Ambiente"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
@@ -178,7 +234,7 @@ Begin VB.Form FrmInterv
       Top             =   2160
       Width           =   2865
       Begin VB.Frame Frame7 
-         BackColor       =   &H00FFC0C0&
+         BackColor       =   &H00E0E0E0&
          Caption         =   "Frio y Fx Ambientales"
          BeginProperty Font 
             Name            =   "MS Sans Serif"
@@ -326,7 +382,7 @@ Begin VB.Form FrmInterv
          Begin VB.Label Label12 
             AutoSize        =   -1  'True
             BackStyle       =   0  'Transparent
-            Caption         =   "Frío"
+            Caption         =   "Frio"
             BeginProperty Font 
                Name            =   "MS Sans Serif"
                Size            =   8.25
@@ -345,7 +401,7 @@ Begin VB.Form FrmInterv
       End
    End
    Begin VB.Frame Frame6 
-      BackColor       =   &H00FFC0C0&
+      BackColor       =   &H00E0E0E0&
       Caption         =   "Usuarios"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
@@ -362,7 +418,7 @@ Begin VB.Form FrmInterv
       Top             =   0
       Width           =   7455
       Begin VB.Frame Frame9 
-         BackColor       =   &H00FFC0C0&
+         BackColor       =   &H00E0E0E0&
          Caption         =   "Otros"
          BeginProperty Font 
             Name            =   "MS Sans Serif"
@@ -454,7 +510,7 @@ Begin VB.Form FrmInterv
          End
       End
       Begin VB.Frame Frame8 
-         BackColor       =   &H00FFC0C0&
+         BackColor       =   &H00E0E0E0&
          Caption         =   "Combate"
          BeginProperty Font 
             Name            =   "MS Sans Serif"
@@ -546,7 +602,7 @@ Begin VB.Form FrmInterv
          End
       End
       Begin VB.Frame Frame3 
-         BackColor       =   &H00FFC0C0&
+         BackColor       =   &H00E0E0E0&
          Caption         =   "Hambre y sed"
          BeginProperty Font 
             Name            =   "MS Sans Serif"
@@ -638,7 +694,7 @@ Begin VB.Form FrmInterv
          End
       End
       Begin VB.Frame Frame1 
-         BackColor       =   &H00FFC0C0&
+         BackColor       =   &H00E0E0E0&
          Caption         =   "Sanar"
          BeginProperty Font 
             Name            =   "MS Sans Serif"
@@ -730,7 +786,7 @@ Begin VB.Form FrmInterv
          End
       End
       Begin VB.Frame Frame2 
-         BackColor       =   &H00FFC0C0&
+         BackColor       =   &H00E0E0E0&
          Caption         =   "Stamina"
          BeginProperty Font 
             Name            =   "MS Sans Serif"
@@ -742,9 +798,9 @@ Begin VB.Form FrmInterv
             Strikethrough   =   0   'False
          EndProperty
          Height          =   1710
-         Left            =   3015
+         Left            =   3000
          TabIndex        =   4
-         Top             =   210
+         Top             =   240
          Width           =   1410
          Begin VB.TextBox txtStaminaIntervaloSinDescansar 
             BackColor       =   &H00C0FFFF&
@@ -823,7 +879,7 @@ Begin VB.Form FrmInterv
       End
    End
    Begin VB.Frame Frame5 
-      BackColor       =   &H00FFC0C0&
+      BackColor       =   &H00E0E0E0&
       Caption         =   "Magia"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
@@ -840,7 +896,7 @@ Begin VB.Form FrmInterv
       Top             =   2160
       Width           =   2655
       Begin VB.Frame Frame10 
-         BackColor       =   &H00FFC0C0&
+         BackColor       =   &H00E0E0E0&
          Caption         =   "Duracion Spells"
          BeginProperty Font 
             Name            =   "MS Sans Serif"
@@ -931,7 +987,7 @@ Begin VB.Form FrmInterv
          Begin VB.Label Label18 
             AutoSize        =   -1  'True
             BackStyle       =   0  'Transparent
-            Caption         =   "Invocación"
+            Caption         =   "Invocacion"
             BeginProperty Font 
                Name            =   "MS Sans Serif"
                Size            =   8.25
@@ -1007,7 +1063,7 @@ Begin VB.Form FrmInterv
       End
    End
    Begin VB.CommandButton ok 
-      BackColor       =   &H00FFC0C0&
+      BackColor       =   &H00E0E0E0&
       Cancel          =   -1  'True
       Caption         =   "Salir (Esc)"
       BeginProperty Font 
@@ -1020,11 +1076,11 @@ Begin VB.Form FrmInterv
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
-      Left            =   120
+      Left            =   2280
       Style           =   1  'Graphical
       TabIndex        =   1
-      Top             =   4320
-      Width           =   1695
+      Top             =   5040
+      Width           =   2175
    End
 End
 Attribute VB_Name = "FrmInterv"
@@ -1032,8 +1088,8 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-'Nexus AO mod Argentum Online 0.13
-'Copyright (C) 2002 Márquez Pablo Ignacio
+'Argentum Online 0.12.2
+'Copyright (C) 2002 Marquez Pablo Ignacio
 '
 'This program is free software; you can redistribute it and/or modify
 'it under the terms of the Affero General Public License;
@@ -1047,7 +1103,7 @@ Attribute VB_Exposed = False
 'You should have received a copy of the Affero General Public License
 'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
 '
-'Nexus AO mod Argentum Online is based on Baronsoft's VB6 Online RPG
+'Argentum Online is based on Baronsoft's VB6 Online RPG
 'You can contact the original creator of ORE at aaron@baronsoft.com
 'for more information about ORE please visit http://www.baronsoft.com/
 '
@@ -1055,16 +1111,16 @@ Attribute VB_Exposed = False
 'You can contact me at:
 'morgolock@speedy.com.ar
 'www.geocities.com/gmorgolock
-'Calle 3 número 983 piso 7 dto A
+'Calle 3 numero 983 piso 7 dto A
 'La Plata - Pcia, Buenos Aires - Republica Argentina
-'Código Postal 1900
-'Pablo Ignacio Márquez
+'Codigo Postal 1900
+'Pablo Ignacio Marquez
 
 Option Explicit
 
 Public Sub AplicarIntervalos()
 
-    '¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿ Intervalos del main loop ¿?¿?¿?¿?¿?¿?¿?¿?¿
+    '?????????? Intervalos del main loop ????????
     SanaIntervaloSinDescansar = val(txtSanaIntervaloSinDescansar.Text)
     StaminaIntervaloSinDescansar = val(txtStaminaIntervaloSinDescansar.Text)
     SanaIntervaloDescansar = val(txtSanaIntervaloDescansar.Text)
@@ -1084,7 +1140,11 @@ Public Sub AplicarIntervalos()
     IntervaloUserPuedeCastear = val(txtIntervaloLanzaHechizo.Text)
     IntervaloUserPuedeTrabajar = val(txtTrabajo.Text)
     IntervaloUserPuedeAtacar = val(txtPuedeAtacar.Text)
-
+    
+    '///////////////////Suerte \\\\\\\\\\\\\\\\\\
+    
+    DificultadExtraer = val(txtExtraerSuerte.Text)
+    
 End Sub
 
 Private Sub Command1_Click()
@@ -1100,32 +1160,61 @@ Private Sub Command2_Click()
     On Error GoTo Err
 
     'Intervalos
-    Call WriteVar(ConfigPath & "Server.ini", "INTERVALOS", "SanaIntervaloSinDescansar", str(SanaIntervaloSinDescansar))
-    Call WriteVar(ConfigPath & "Server.ini", "INTERVALOS", "StaminaIntervaloSinDescansar", str(StaminaIntervaloSinDescansar))
-    Call WriteVar(ConfigPath & "Server.ini", "INTERVALOS", "SanaIntervaloDescansar", str(SanaIntervaloDescansar))
-    Call WriteVar(ConfigPath & "Server.ini", "INTERVALOS", "StaminaIntervaloDescansar", str(StaminaIntervaloDescansar))
-    Call WriteVar(ConfigPath & "Server.ini", "INTERVALOS", "IntervaloSed", str(IntervaloSed))
-    Call WriteVar(ConfigPath & "Server.ini", "INTERVALOS", "IntervaloHambre", str(IntervaloHambre))
-    Call WriteVar(ConfigPath & "Server.ini", "INTERVALOS", "IntervaloVeneno", str(IntervaloVeneno))
-    Call WriteVar(ConfigPath & "Server.ini", "INTERVALOS", "IntervaloParalizado", str(IntervaloParalizado))
-    Call WriteVar(ConfigPath & "Server.ini", "INTERVALOS", "IntervaloInvisible", str(IntervaloInvisible))
-    Call WriteVar(ConfigPath & "Server.ini", "INTERVALOS", "IntervaloFrio", str(IntervaloFrio))
-    Call WriteVar(ConfigPath & "Server.ini", "INTERVALOS", "IntervaloWAVFX", str(IntervaloWavFx))
-    Call WriteVar(ConfigPath & "Server.ini", "INTERVALOS", "IntervaloInvocacion", str(IntervaloInvocacion))
-    Call WriteVar(ConfigPath & "Server.ini", "INTERVALOS", "IntervaloParaConexion", str(IntervaloParaConexion))
+    Call WriteVar(ConfigPath & "Server.ini", "INTERVALOS", "SanaIntervaloSinDescansar", Str(SanaIntervaloSinDescansar))
+    Call WriteVar(ConfigPath & "Server.ini", "INTERVALOS", "StaminaIntervaloSinDescansar", Str(StaminaIntervaloSinDescansar))
+    Call WriteVar(ConfigPath & "Server.ini", "INTERVALOS", "SanaIntervaloDescansar", Str(SanaIntervaloDescansar))
+    Call WriteVar(ConfigPath & "Server.ini", "INTERVALOS", "StaminaIntervaloDescansar", Str(StaminaIntervaloDescansar))
+    Call WriteVar(ConfigPath & "Server.ini", "INTERVALOS", "IntervaloSed", Str(IntervaloSed))
+    Call WriteVar(ConfigPath & "Server.ini", "INTERVALOS", "IntervaloHambre", Str(IntervaloHambre))
+    Call WriteVar(ConfigPath & "Server.ini", "INTERVALOS", "IntervaloVeneno", Str(IntervaloVeneno))
+    Call WriteVar(ConfigPath & "Server.ini", "INTERVALOS", "IntervaloParalizado", Str(IntervaloParalizado))
+    Call WriteVar(ConfigPath & "Server.ini", "INTERVALOS", "IntervaloInvisible", Str(IntervaloInvisible))
+    Call WriteVar(ConfigPath & "Server.ini", "INTERVALOS", "IntervaloFrio", Str(IntervaloFrio))
+    Call WriteVar(ConfigPath & "Server.ini", "INTERVALOS", "IntervaloWAVFX", Str(IntervaloWavFx))
+    Call WriteVar(ConfigPath & "Server.ini", "INTERVALOS", "IntervaloInvocacion", Str(IntervaloInvocacion))
+    Call WriteVar(ConfigPath & "Server.ini", "INTERVALOS", "IntervaloParaConexion", Str(IntervaloParaConexion))
 
     '&&&&&&&&&&&&&&&&&&&&& TIMERS &&&&&&&&&&&&&&&&&&&&&&&
 
-    Call WriteVar(ConfigPath & "Server.ini", "INTERVALOS", "IntervaloLanzaHechizo", str(IntervaloUserPuedeCastear))
-    Call WriteVar(ConfigPath & "Server.ini", "INTERVALOS", "IntervaloTrabajo", str(IntervaloUserPuedeTrabajar))
-    Call WriteVar(ConfigPath & "Server.ini", "INTERVALOS", "IntervaloUserPuedeAtacar", str(IntervaloUserPuedeAtacar))
-
+    Call WriteVar(ConfigPath & "Server.ini", "INTERVALOS", "IntervaloLanzaHechizo", Str(IntervaloUserPuedeCastear))
+    Call WriteVar(ConfigPath & "Server.ini", "INTERVALOS", "IntervaloTrabajo", Str(IntervaloUserPuedeTrabajar))
+    Call WriteVar(ConfigPath & "Server.ini", "INTERVALOS", "IntervaloUserPuedeAtacar", Str(IntervaloUserPuedeAtacar))
+    
+    '&&&&&&&&&&&&&&&&&&&& Suerte desde INIT &&&&&&&&&&&&&&&&&&&&&&&&&
+    
+    Call WriteVar(ConfigPath & "Rates.ini", "DIFICULTAD", "DificultadExtraer", Str(DificultadExtraer))
+    
+    
     MsgBox "Los intervalos se han guardado sin problemas."
 
     Exit Sub
 Err:
     MsgBox "Error al intentar grabar los intervalos"
 
+End Sub
+
+Private Sub Form_Load()
+    With Me
+        .txtExtraerSuerte.Text = DificultadExtraer
+        .txtSanaIntervaloSinDescansar.Text = SanaIntervaloSinDescansar
+        .txtStaminaIntervaloSinDescansar.Text = StaminaIntervaloSinDescansar
+        .txtSanaIntervaloDescansar.Text = SanaIntervaloDescansar
+        .txtStaminaIntervaloDescansar.Text = StaminaIntervaloDescansar
+        .txtIntervaloSed.Text = IntervaloSed
+        .txtIntervaloHambre.Text = IntervaloHambre
+        .txtIntervaloVeneno.Text = IntervaloVeneno
+        .txtIntervaloParalizado.Text = IntervaloParalizado
+        .txtIntervaloInvisible.Text = IntervaloInvisible
+        .txtIntervaloFrio.Text = IntervaloFrio
+        .txtIntervaloWAVFX.Text = IntervaloWavFx
+        .txtInvocacion.Text = IntervaloInvocacion
+        .txtIntervaloParaConexion.Text = IntervaloParaConexion
+        .txtIntervaloLanzaHechizo.Text = IntervaloUserPuedeCastear
+        .txtTrabajo.Text = IntervaloUserPuedeTrabajar
+        .txtPuedeAtacar.Text = IntervaloUserPuedeAtacar
+    
+    End With
+    
 End Sub
 
 Private Sub ok_Click()

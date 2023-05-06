@@ -1,19 +1,20 @@
 VERSION 5.00
 Begin VB.Form frmConID 
-   BackColor       =   &H00FFC0C0&
+   BackColor       =   &H00E0E0E0&
    BorderStyle     =   1  'Fixed Single
    Caption         =   "ConID"
    ClientHeight    =   4440
    ClientLeft      =   45
    ClientTop       =   330
    ClientWidth     =   4680
+   ControlBox      =   0   'False
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    ScaleHeight     =   4440
    ScaleWidth      =   4680
    StartUpPosition =   2  'CenterScreen
    Begin VB.CommandButton Command3 
-      BackColor       =   &H00FFC0C0&
+      BackColor       =   &H00E0E0E0&
       Caption         =   "Liberar todos los slots"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
@@ -28,11 +29,11 @@ Begin VB.Form frmConID
       Left            =   135
       Style           =   1  'Graphical
       TabIndex        =   3
-      Top             =   3495
+      Top             =   3480
       Width           =   4290
    End
    Begin VB.CommandButton Command2 
-      BackColor       =   &H00FFC0C0&
+      BackColor       =   &H00E0E0E0&
       Caption         =   "Ver estado"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
@@ -68,7 +69,7 @@ Begin VB.Form frmConID
       Width           =   4215
    End
    Begin VB.CommandButton Command1 
-      BackColor       =   &H00FFC0C0&
+      BackColor       =   &H00E0E0E0&
       Caption         =   "Cerrar"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
@@ -98,7 +99,7 @@ Begin VB.Form frmConID
          Strikethrough   =   0   'False
       EndProperty
       Height          =   510
-      Left            =   180
+      Left            =   240
       TabIndex        =   4
       Top             =   2430
       Width           =   4230
@@ -109,8 +110,8 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-'Nexus AO mod Argentum Online 0.13
-'Copyright (C) 2002 Márquez Pablo Ignacio
+'Argentum Online 0.12.2
+'Copyright (C) 2002 Marquez Pablo Ignacio
 '
 'This program is free software; you can redistribute it and/or modify
 'it under the terms of the Affero General Public License;
@@ -124,7 +125,7 @@ Attribute VB_Exposed = False
 'You should have received a copy of the Affero General Public License
 'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
 '
-'Nexus AO mod Argentum Online is based on Baronsoft's VB6 Online RPG
+'Argentum Online is based on Baronsoft's VB6 Online RPG
 'You can contact the original creator of ORE at aaron@baronsoft.com
 'for more information about ORE please visit http://www.baronsoft.com/
 '
@@ -132,10 +133,10 @@ Attribute VB_Exposed = False
 'You can contact me at:
 'morgolock@speedy.com.ar
 'www.geocities.com/gmorgolock
-'Calle 3 número 983 piso 7 dto A
+'Calle 3 numero 983 piso 7 dto A
 'La Plata - Pcia, Buenos Aires - Republica Argentina
-'Código Postal 1900
-'Pablo Ignacio Márquez
+'Codigo Postal 1900
+'Pablo Ignacio Marquez
 
 Option Explicit
 
@@ -159,9 +160,9 @@ Private Sub Command2_Click()
     Next i
 
     If c = MaxUsers Then
-        Label1.Caption = "¡No hay slots vacios!"
+        Label1.Caption = "No hay slots vacios!"
     Else
-        Label1.Caption = "¡Hay " & MaxUsers - c & " slots vacios!"
+        Label1.Caption = "Hay " & MaxUsers - c & " slots vacios!"
 
     End If
 
@@ -173,7 +174,7 @@ Private Sub Command3_Click()
 
     For i = 1 To MaxUsers
 
-        If UserList(i).ConnID <> -1 And UserList(i).ConnIDValida And Not UserList(i).flags.UserLogged Then Call CloseSocket(i)
+        If UserList(i).ConnID <> -1 And UserList(i).ConnIDValida And Not UserList(i).flags.UserLogged Then Call CloseUser(i)
     Next i
 
 End Sub

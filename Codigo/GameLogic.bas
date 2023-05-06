@@ -1,6 +1,6 @@
 Attribute VB_Name = "Extra"
-'Nexus AO mod Argentum Online 0.13
-'Copyright (C) 2002 Márquez Pablo Ignacio
+'Argentum Online 0.12.2
+'Copyright (C) 2002 Marquez Pablo Ignacio
 '
 'This program is free software; you can redistribute it and/or modify
 'it under the terms of the Affero General Public License;
@@ -14,7 +14,7 @@ Attribute VB_Name = "Extra"
 'You should have received a copy of the Affero General Public License
 'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
 '
-'Nexus AO mod Argentum Online is based on Baronsoft's VB6 Online RPG
+'Argentum Online is based on Baronsoft's VB6 Online RPG
 'You can contact the original creator of ORE at aaron@baronsoft.com
 'for more information about ORE please visit http://www.baronsoft.com/
 '
@@ -22,12 +22,21 @@ Attribute VB_Name = "Extra"
 'You can contact me at:
 'morgolock@speedy.com.ar
 'www.geocities.com/gmorgolock
-'Calle 3 número 983 piso 7 dto A
+'Calle 3 numero 983 piso 7 dto A
 'La Plata - Pcia, Buenos Aires - Republica Argentina
-'Código Postal 1900
-'Pablo Ignacio Márquez
+'Codigo Postal 1900
+'Pablo Ignacio Marquez
 
 Option Explicit
+
+Public Function ClaseToEnum(ByVal clase As String) As eClass
+Dim i As Byte
+For i = 1 To NUMCLASES
+    If UCase$(ListaClases(i)) = UCase$(clase) Then
+        ClaseToEnum = i
+    End If
+Next i
+End Function
 
 Public Function EsNewbie(ByVal UserIndex As Integer) As Boolean
     '***************************************************
@@ -92,7 +101,7 @@ Public Sub DoTileEvents(ByVal UserIndex As Integer, _
 
     Dim DestPos    As WorldPos
     
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
 
     'Controla las salidas
     If InMapBounds(Map, X, Y) Then
@@ -106,6 +115,18 @@ Public Sub DoTileEvents(ByVal UserIndex As Integer, _
             End If
             
             If .TileExit.Map > 0 And .TileExit.Map <= NumMaps Then
+            
+                If UserList(UserIndex).Stats.ELV < MapInfo(.TileExit.Map).lvlMinimo Then
+                
+                    Call WriteConsoleMsg(UserIndex, "Percibes un gran peligro más allá donde vas y no te atreves a continuar. Sientes que al nivel " & MapInfo(.TileExit.Map).lvlMinimo & " estarás preparado para afrontar el peligro.", FontTypeNames.FONTTYPE_INFO)
+                    Call ClosestStablePos(UserList(UserIndex).Pos, nPos)
+            
+                    If nPos.X <> 0 And nPos.Y <> 0 Then
+                        Call WarpUserChar(UserIndex, nPos.Map, nPos.X, nPos.Y, False)
+                    End If
+                    Exit Sub
+                    
+                End If
                 
                 ' Es un teleport, entra en una posicion random, acorde al radio (si es 0, es pos fija)
                 ' We have 5 attempts to not falling into another teleport or a map exit.. If we get to the fifth attemp,
@@ -141,7 +162,7 @@ Public Sub DoTileEvents(ByVal UserIndex As Integer, _
                 DestPos.Map = .TileExit.Map
                 
                 If EsGm(UserIndex) Then
-                    Call LogGM(UserList(UserIndex).Name, "Utilizó un teleport hacia el mapa " & DestPos.Map & " (" & DestPos.X & "," & DestPos.Y & ")")
+                    Call LogGM(UserList(UserIndex).Name, "Utilizo un teleport hacia el mapa " & DestPos.Map & " (" & DestPos.X & "," & DestPos.Y & ")")
 
                 End If
                 
@@ -150,7 +171,7 @@ Public Sub DoTileEvents(ByVal UserIndex As Integer, _
 
                     ' Si esta muerto no puede entrar
                     If UserList(UserIndex).flags.Muerto = 1 Then
-                        Call WriteConsoleMsg(UserIndex, "Sólo se permite entrar al mapa a los personajes vivos.", FontTypeNames.FONTTYPE_INFO)
+                        Call WriteConsoleMsg(UserIndex, "Solo se permite entrar al mapa a los personajes vivos.", FontTypeNames.FONTTYPE_INFO)
                         Call ClosestStablePos(UserList(UserIndex).Pos, nPos)
                         
                         If nPos.X <> 0 And nPos.Y <> 0 Then
@@ -164,10 +185,10 @@ Public Sub DoTileEvents(ByVal UserIndex As Integer, _
 
                 End If
                 
-                '¿Es mapa de newbies?
+                'Es mapa de newbies?
                 If MapInfo(DestPos.Map).Restringir = eRestrict.restrict_newbie Then
 
-                    '¿El usuario es un newbie?
+                    'El usuario es un newbie?
                     If EsNewbie(UserIndex) Or EsGm(UserIndex) Then
                         If LegalPos(DestPos.Map, DestPos.X, DestPos.Y, PuedeAtravesarAgua(UserIndex)) Then
                             Call WarpUserChar(UserIndex, DestPos.Map, DestPos.X, DestPos.Y, FxFlag)
@@ -192,9 +213,9 @@ Public Sub DoTileEvents(ByVal UserIndex As Integer, _
 
                     End If
 
-                ElseIf MapInfo(DestPos.Map).Restringir = eRestrict.restrict_armada Then '¿Es mapa de Armadas?
+                ElseIf MapInfo(DestPos.Map).Restringir = eRestrict.restrict_armada Then 'Es mapa de Armadas?
 
-                    '¿El usuario es Armada?
+                    'El usuario es Armada?
                     If esArmada(UserIndex) Or EsGm(UserIndex) Then
                         If LegalPos(DestPos.Map, DestPos.X, DestPos.Y, PuedeAtravesarAgua(UserIndex)) Then
                             Call WarpUserChar(UserIndex, DestPos.Map, DestPos.X, DestPos.Y, FxFlag)
@@ -209,7 +230,7 @@ Public Sub DoTileEvents(ByVal UserIndex As Integer, _
                         End If
 
                     Else 'No es armada
-                        Call WriteConsoleMsg(UserIndex, "Mapa exclusivo para miembros del ejército real.", FontTypeNames.FONTTYPE_INFO)
+                        Call WriteConsoleMsg(UserIndex, "Mapa exclusivo para miembros del ejercito real.", FontTypeNames.FONTTYPE_INFO)
                         Call ClosestStablePos(UserList(UserIndex).Pos, nPos)
                         
                         If nPos.X <> 0 And nPos.Y <> 0 Then
@@ -219,9 +240,9 @@ Public Sub DoTileEvents(ByVal UserIndex As Integer, _
 
                     End If
 
-                ElseIf MapInfo(DestPos.Map).Restringir = eRestrict.restrict_caos Then '¿Es mapa de Caos?
+                ElseIf MapInfo(DestPos.Map).Restringir = eRestrict.restrict_caos Then 'Es mapa de Caos?
 
-                    '¿El usuario es Caos?
+                    'El usuario es Caos?
                     If esCaos(UserIndex) Or EsGm(UserIndex) Then
                         If LegalPos(DestPos.Map, DestPos.X, DestPos.Y, PuedeAtravesarAgua(UserIndex)) Then
                             Call WarpUserChar(UserIndex, DestPos.Map, DestPos.X, DestPos.Y, FxFlag)
@@ -236,7 +257,7 @@ Public Sub DoTileEvents(ByVal UserIndex As Integer, _
                         End If
 
                     Else 'No es caos
-                        Call WriteConsoleMsg(UserIndex, "Mapa exclusivo para miembros de la legión oscura.", FontTypeNames.FONTTYPE_INFO)
+                        Call WriteConsoleMsg(UserIndex, "Mapa exclusivo para miembros de la legion oscura.", FontTypeNames.FONTTYPE_INFO)
                         Call ClosestStablePos(UserList(UserIndex).Pos, nPos)
                         
                         If nPos.X <> 0 And nPos.Y <> 0 Then
@@ -246,9 +267,9 @@ Public Sub DoTileEvents(ByVal UserIndex As Integer, _
 
                     End If
 
-                ElseIf MapInfo(DestPos.Map).Restringir = eRestrict.restrict_faccion Then '¿Es mapa de faccionarios?
+                ElseIf MapInfo(DestPos.Map).Restringir = eRestrict.restrict_faccion Then 'Es mapa de faccionarios?
 
-                    '¿El usuario es Armada o Caos?
+                    'El usuario es Armada o Caos?
                     If esArmada(UserIndex) Or esCaos(UserIndex) Or EsGm(UserIndex) Then
                         If LegalPos(DestPos.Map, DestPos.X, DestPos.Y, PuedeAtravesarAgua(UserIndex)) Then
                             Call WarpUserChar(UserIndex, DestPos.Map, DestPos.X, DestPos.Y, FxFlag)
@@ -263,7 +284,7 @@ Public Sub DoTileEvents(ByVal UserIndex As Integer, _
                         End If
 
                     Else 'No es Faccionario
-                        Call WriteConsoleMsg(UserIndex, "Solo se permite entrar al mapa si eres miembro de alguna facción.", FontTypeNames.FONTTYPE_INFO)
+                        Call WriteConsoleMsg(UserIndex, "Solo se permite entrar al mapa si eres miembro de alguna faccion.", FontTypeNames.FONTTYPE_INFO)
                         Call ClosestStablePos(UserList(UserIndex).Pos, nPos)
                         
                         If nPos.X <> 0 And nPos.Y <> 0 Then
@@ -279,17 +300,17 @@ Public Sub DoTileEvents(ByVal UserIndex As Integer, _
                         Call WarpUserChar(UserIndex, DestPos.Map, DestPos.X, DestPos.Y, FxFlag)
                     Else
                         Call ClosestLegalPos(DestPos, nPos)
-
+    
                         If nPos.X <> 0 And nPos.Y <> 0 Then
                             Call WarpUserChar(UserIndex, nPos.Map, nPos.X, nPos.Y, FxFlag)
-
+    
                         End If
-
+    
                     End If
 
                 End If
 
-                'Te fusite del mapa. La criatura ya no es más tuya ni te reconoce como que vos la atacaste.
+                'Te fusite del mapa. La criatura ya no es mas tuya ni te reconoce como que vos la atacaste.
                 Dim aN As Integer
                 
                 aN = UserList(UserIndex).flags.AtacadoPorNpc
@@ -322,7 +343,7 @@ Public Sub DoTileEvents(ByVal UserIndex As Integer, _
 
     Exit Sub
 
-ErrHandler:
+errHandler:
     Call LogError("Error en DotileEvents. Error: " & Err.Number & " - Desc: " & Err.description)
 
 End Sub
@@ -510,7 +531,7 @@ Public Function RhombLegalTilePos(ByRef Pos As WorldPos, _
     ' which starts at Pos.x - Distance and Pos.y
     ' and searchs for a valid position to drop items
     '***************************************************
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
 
     Dim i           As Long
 
@@ -622,12 +643,12 @@ Public Function RhombLegalTilePos(ByRef Pos As WorldPos, _
     
     Exit Function
     
-ErrHandler:
+errHandler:
     Call LogError("Error en RhombLegalTilePos. Error: " & Err.Number & " - " & Err.description)
 
 End Function
 
-Public Function HayObjeto(ByVal mapa As Integer, _
+Public Function HayObjeto(ByVal Mapa As Integer, _
                           ByVal X As Long, _
                           ByVal Y As Long, _
                           ByVal ObjIndex As Integer, _
@@ -640,7 +661,7 @@ Public Function HayObjeto(ByVal mapa As Integer, _
     '***************************************************
     Dim MapObjIndex As Integer
 
-    MapObjIndex = MapData(mapa, X, Y).ObjInfo.ObjIndex
+    MapObjIndex = MapData(Mapa, X, Y).ObjInfo.ObjIndex
             
     ' Hay un objeto tirado?
     If MapObjIndex <> 0 Then
@@ -648,7 +669,7 @@ Public Function HayObjeto(ByVal mapa As Integer, _
         ' Es el mismo objeto?
         If MapObjIndex = ObjIndex Then
             ' La suma es menor a 10k?
-            HayObjeto = (MapData(mapa, X, Y).ObjInfo.Amount + ObjAmount > MAX_INVENTORY_OBJS)
+            HayObjeto = (MapData(Mapa, X, Y).ObjInfo.Amount + ObjAmount > MAX_INVENTORY_OBJS)
         Else
             HayObjeto = True
 
@@ -717,7 +738,7 @@ Sub ClosestLegalPos(Pos As WorldPos, _
 
 End Sub
 
-Private Sub ClosestStablePos(Pos As WorldPos, ByRef nPos As WorldPos)
+Public Sub ClosestStablePos(Pos As WorldPos, ByRef nPos As WorldPos)
     '***************************************************
     'Author: Unknown
     'Last Modification: 09/14/2010
@@ -737,21 +758,21 @@ Function NameIndex(ByVal Name As String) As Integer
 
     Dim UserIndex As Long
     
-    '¿Nombre valido?
+    'Nombre valido?
     If LenB(Name) = 0 Then
         NameIndex = 0
         Exit Function
-
     End If
-    
+                                        
+    Name = UCase$(Name)
+                                        
     If InStrB(Name, "+") <> 0 Then
-        Name = UCase$(Replace(Name, "+", " "))
-
+        Name = Replace(Name, "+", " ")
     End If
     
     UserIndex = 1
-
-    Do Until UCase$(UserList(UserIndex).Name) = UCase$(Name)
+    
+     Do Until StrComp(UCase$(UserList(UserIndex).Name), Name) = 0
         
         UserIndex = UserIndex + 1
         
@@ -779,7 +800,7 @@ Function CheckForSameIP(ByVal UserIndex As Integer, ByVal UserIP As String) As B
     For LoopC = 1 To MaxUsers
 
         If UserList(LoopC).flags.UserLogged = True Then
-            If UserList(LoopC).ip = UserIP And UserIndex <> LoopC Then
+            If UserList(LoopC).IP = UserIP And UserIndex <> LoopC Then
                 CheckForSameIP = True
                 Exit Function
 
@@ -827,6 +848,53 @@ Function CheckForSameName(ByVal Name As String) As Boolean
 
 End Function
 
+Function CheckForSameNameAccount(ByVal Name As String) As Boolean
+    '***************************************************
+    'Author: Unknown
+    'Last Modification: -
+    'Lorwik: Ahora tenemos en cuenta las cuentas que se cerraron, pero quedo tambien algun PJ colgado
+    '***************************************************
+
+    'Controlo que no existan usuarios con el mismo nombre
+    Dim LoopC As Long
+    
+    For LoopC = 1 To LastUser
+    
+        'Buscamos entre las cuentas logeadas
+        If UserList(LoopC).flags.AccountLogged Then
+
+            'If UCase$(UserList(LoopC).Name) = UCase$(Name) And UserList(LoopC).ConnID <> -1 Then
+            'OJO PREGUNTAR POR EL CONNID <> -1 PRODUCE QUE UN PJ EN DETERMINADO
+            'MOMENTO PUEDA ESTAR LOGUEADO 2 VECES (IE: CIERRA EL SOCKET DESDE ALLA)
+            'ESE EVENTO NO DISPARA UN SAVE USER, LO QUE PUEDE SER UTILIZADO PARA DUPLICAR ITEMS
+            'ESTE BUG EN ALKON PRODUJO QUE EL SERVIDOR ESTE CAIDO DURANTE 3 DIAS. ATENTOS.
+            
+            If UCase$(UserList(LoopC).AccountInfo.UserName) = UCase$(Name) Then
+            
+                CheckForSameNameAccount = True
+                Exit Function
+
+            End If
+
+        'Buscamos cuentas que se han podido quedar con algun PJ colgado
+        ElseIf (UserList(LoopC).flags.AccountLogged = False And UserList(LoopC).flags.UserLogged) Then
+            
+            If UCase$(UserList(LoopC).AccountName) = UCase$(Name) Then
+            
+                CheckForSameNameAccount = True
+                Exit Function
+
+            End If
+        
+        End If
+
+    Next LoopC
+    
+    CheckForSameNameAccount = False
+
+End Function
+
+
 Sub HeadtoPos(ByVal Head As eHeading, ByRef Pos As WorldPos)
     '***************************************************
     'Author: Unknown
@@ -864,7 +932,7 @@ Function LegalPos(ByVal Map As Integer, _
     'Checks if the position is Legal.
     '***************************************************
 
-    '¿Es un mapa valido?
+    'Es un mapa valido?
     If (Map <= 0 Or Map > NumMaps) Or (X < MinXBorder Or X > MaxXBorder Or Y < MinYBorder Or Y > MaxYBorder) Then
         LegalPos = False
     Else
@@ -900,9 +968,10 @@ Function MoveToLegalPos(ByVal Map As Integer, _
                         Optional ByVal PuedeTierra As Boolean = True) As Boolean
     '***************************************************
     'Autor: ZaMa
-    'Last Modification: 13/07/2009
+    'Last Modification: 06/04/2020
     'Checks if the position is Legal, but considers that if there's a casper, it's a legal movement.
     '13/07/2009: ZaMa - Now it's also legal move where an invisible admin is.
+    '06/04/2020: FrankoH298 - Si estamos por movernos a dentro de una casa montado, no nos deja.
     '***************************************************
 
     Dim UserIndex        As Integer
@@ -911,7 +980,7 @@ Function MoveToLegalPos(ByVal Map As Integer, _
 
     Dim IsAdminInvisible As Boolean
 
-    '¿Es un mapa valido?
+    'Es un mapa valido?
     If (Map <= 0 Or Map > NumMaps) Or (X < MinXBorder Or X > MaxXBorder Or Y < MinYBorder Or Y > MaxYBorder) Then
         MoveToLegalPos = False
     Else
@@ -927,7 +996,7 @@ Function MoveToLegalPos(ByVal Map As Integer, _
                 IsAdminInvisible = False
 
             End If
-        
+
             If PuedeAgua And PuedeTierra Then
                 MoveToLegalPos = (.Blocked <> 1) And (UserIndex = 0 Or IsDeadChar Or IsAdminInvisible) And (.NpcIndex = 0)
             ElseIf PuedeTierra And Not PuedeAgua Then
@@ -1008,21 +1077,19 @@ Public Sub FindLegalPos(ByVal UserIndex As Integer, _
                     If UserList(UserList(OtherUserIndex).ComUsu.DestUsu).flags.UserLogged Then
                         Call FinComerciarUsu(UserList(OtherUserIndex).ComUsu.DestUsu)
                         Call WriteConsoleMsg(UserList(OtherUserIndex).ComUsu.DestUsu, "Comercio cancelado. El otro usuario se ha desconectado.", FontTypeNames.FONTTYPE_TALK)
-                        Call FlushBuffer(UserList(OtherUserIndex).ComUsu.DestUsu)
 
                     End If
 
                     'Lo sacamos.
                     If UserList(OtherUserIndex).flags.UserLogged Then
                         Call FinComerciarUsu(OtherUserIndex)
-                        Call WriteErrorMsg(OtherUserIndex, "Alguien se ha conectado donde te encontrabas, por favor reconéctate...")
-                        Call FlushBuffer(OtherUserIndex)
+                        Call WriteErrorMsg(OtherUserIndex, "Alguien se ha conectado donde te encontrabas, por favor reconectate...")
 
                     End If
 
                 End If
             
-                Call CloseSocket(OtherUserIndex)
+                Call CloseUser(OtherUserIndex)
 
             End If
 
@@ -1069,9 +1136,9 @@ Function LegalPosNPC(ByVal Map As Integer, _
         End If
     
         If AguaValida = 0 Then
-            LegalPosNPC = (.Blocked <> 1) And (.UserIndex = 0 Or IsDeadChar Or IsAdminInvisible) And (.NpcIndex = 0) And (.trigger <> eTrigger.POSINVALIDA Or IsPet) And Not HayAgua(Map, X, Y)
+            LegalPosNPC = (.Blocked <> 1) And (.UserIndex = 0 Or IsDeadChar Or IsAdminInvisible) And (.NpcIndex = 0) And (.Trigger <> eTrigger.POSINVALIDA Or IsPet) And Not HayAgua(Map, X, Y)
         Else
-            LegalPosNPC = (.Blocked <> 1) And (.UserIndex = 0 Or IsDeadChar Or IsAdminInvisible) And (.NpcIndex = 0) And (.trigger <> eTrigger.POSINVALIDA Or IsPet)
+            LegalPosNPC = (.Blocked <> 1) And (.UserIndex = 0 Or IsDeadChar Or IsAdminInvisible) And (.NpcIndex = 0) And (.Trigger <> eTrigger.POSINVALIDA Or IsPet)
 
         End If
 
@@ -1122,11 +1189,12 @@ Sub LookatTile(ByVal UserIndex As Integer, _
                ByVal Y As Integer)
     '***************************************************
     'Autor: Unknown (orginal version)
-    'Last Modification: 26/03/2009
+    'Last Modification: 05/01/2020
     '13/02/2009: ZaMa - El nombre del gm que aparece por consola al clickearlo, tiene el color correspondiente a su rango
+    '05/01/2020: Recox - Ahora mostramos mucha mas informacion de los personajes, como clan, nivel, vida, etc al hacerles click
     '***************************************************
 
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
 
     'Responde al click del usuario sobre el mapa
     Dim FoundChar      As Byte
@@ -1141,13 +1209,13 @@ Sub LookatTile(ByVal UserIndex As Integer, _
 
     With UserList(UserIndex)
 
-        '¿Rango Visión? (ToxicWaste)
+        'Rango Vision? (ToxicWaste)
         If (Abs(.Pos.Y - Y) > RANGO_VISION_Y) Or (Abs(.Pos.X - X) > RANGO_VISION_X) Then
             Exit Sub
 
         End If
     
-        '¿Posicion valida?
+        'Posicion valida?
         If InMapBounds(Map, X, Y) Then
 
             With .flags
@@ -1155,7 +1223,7 @@ Sub LookatTile(ByVal UserIndex As Integer, _
                 .TargetX = X
                 .TargetY = Y
 
-                '¿Es un obj?
+                'Es un obj?
                 If MapData(Map, X, Y).ObjInfo.ObjIndex > 0 Then
                     'Informa el nombre
                     .TargetObjMap = Map
@@ -1209,7 +1277,7 @@ Sub LookatTile(ByVal UserIndex As Integer, _
             
                 End If
 
-                '¿Es un personaje?
+                'Es un personaje?
                 If Y + 1 <= YMaxMapSize Then
                     If MapData(Map, X, Y + 1).UserIndex > 0 Then
                         TempCharIndex = MapData(Map, X, Y + 1).UserIndex
@@ -1225,7 +1293,7 @@ Sub LookatTile(ByVal UserIndex As Integer, _
 
                 End If
 
-                '¿Es un personaje?
+                'Es un personaje?
                 If FoundChar = 0 Then
                     If MapData(Map, X, Y).UserIndex > 0 Then
                         TempCharIndex = MapData(Map, X, Y).UserIndex
@@ -1242,44 +1310,64 @@ Sub LookatTile(ByVal UserIndex As Integer, _
                 End If
 
             End With
+            
+            '##############################
+            'Usuarios
+            '##############################
     
             'Reaccion al personaje
-            If FoundChar = 1 Then '  ¿Encontro un Usuario?
+            If FoundChar = 1 Then '  Encontro un Usuario?
                 If UserList(TempCharIndex).flags.AdminInvisible = 0 Or .flags.Privilegios And PlayerType.Dios Then
 
                     With UserList(TempCharIndex)
 
                         If LenB(.DescRM) = 0 And .showName Then 'No tiene descRM y quiere que se vea su nombre.
-                            If EsNewbie(TempCharIndex) Then
-                                Stat = " <NEWBIE>"
 
-                            End If
-                        
-                            If .Faccion.ArmadaReal = 1 Then
-                                Stat = Stat & " <Ejército Real> " & "<" & TituloReal(TempCharIndex) & ">"
-                            ElseIf .Faccion.FuerzasCaos = 1 Then
-                                Stat = Stat & " <Legión Oscura> " & "<" & TituloCaos(TempCharIndex) & ">"
-
-                            End If
-                        
-                            If .GuildIndex > 0 Then
-                                Stat = Stat & " <" & modGuilds.GuildName(.GuildIndex) & ">"
-
-                            End If
-                        
-                            If Len(.desc) > 0 Then
-                                Stat = "Ves a " & .Name & Stat & " - " & .desc
+                            'Aqui ponemos o no la descripcion si tiene
+                            If Len(UserList(TempCharIndex).Desc) > 1 Then
+                                Stat = "Ves a " & UserList(TempCharIndex).Name & " - " & UserList(TempCharIndex).Desc
                             Else
-                                Stat = "Ves a " & .Name & Stat
-
+                                Stat = "Ves a " & UserList(TempCharIndex).Name
                             End If
+                            
+                            If UserList(TempCharIndex).flags.Paralizado = 1 Then
+                                Stat = Stat & " [Paralizado]"
+                                
+                            ElseIf UserList(TempCharIndex).flags.Inmovilizado = 1 Then
+                                Stat = Stat & " [Inmovilizado]"
+                                
+                            End If
+                            
+                             If UserList(TempCharIndex).flags.toyCasado = 1 Then
+    
+                                If UserList(TempCharIndex).Genero = eGenero.Mujer Then
+                                    Stat = "Ves a " & UserList(TempCharIndex).Name & " Esposa de " & UserList(TempCharIndex).flags.miPareja
+                                Else
+                                    UserList(TempCharIndex).Genero = eGenero.Hombre
+                                    Stat = "Ves a " & UserList(TempCharIndex).Name & " Marido de " & UserList(TempCharIndex).flags.miPareja
+                                End If
+                                
+                                If UserList(UserIndex).Genero = UserList(TempCharIndex).Genero Then
+                                    Stat = "Ves a " & UserList(TempCharIndex).Name & " Pareja de " & UserList(TempCharIndex).flags.miPareja
+                                End If
+                                
+                                
+                            End If
+                                 
+                            If UserList(TempCharIndex).flags.Incinerado = 1 Then _
+                                Stat = Stat & " [Incinerado]"
+                                
+                            If UserList(TempCharIndex).flags.Envenenado = 1 Then _
+                                Stat = Stat & " [Envenenado]"
                                         
                             If .flags.Privilegios And PlayerType.RoyalCouncil Then
                                 Stat = Stat & " [CONSEJO DE BANDERBILL]"
                                 ft = FontTypeNames.FONTTYPE_CONSEJOVesA
+                                
                             ElseIf .flags.Privilegios And PlayerType.ChaosCouncil Then
                                 Stat = Stat & " [CONCILIO DE LAS SOMBRAS]"
                                 ft = FontTypeNames.FONTTYPE_CONSEJOCAOSVesA
+                                
                             Else
 
                                 If Not .flags.Privilegios And PlayerType.User Then
@@ -1294,7 +1382,7 @@ Sub LookatTile(ByVal UserIndex As Integer, _
                                         ft = FontTypeNames.FONTTYPE_GM
                                         ' Conse
                                     ElseIf .flags.Privilegios = PlayerType.Consejero Then
-                                        ft = FontTypeNames.FONTTYPE_CONSE
+                                        ft = FontTypeNames.FONTTYPE_CONSEJO
                                         ' Rm o Dsrm
                                     ElseIf .flags.Privilegios = (PlayerType.RoleMaster Or PlayerType.Consejero) Or .flags.Privilegios = (PlayerType.RoleMaster Or PlayerType.Dios) Then
                                         ft = FontTypeNames.FONTTYPE_EJECUCION
@@ -1302,19 +1390,53 @@ Sub LookatTile(ByVal UserIndex As Integer, _
                                     End If
                                 
                                 ElseIf criminal(TempCharIndex) Then
-                                    Stat = Stat & " <CRIMINAL>"
-                                    ft = FontTypeNames.FONTTYPE_FIGHT
+                                    Stat = Stat & " Criminal de " & Trim(MapInfo(Ciudades(.Hogar).Map).Name)
+                                    ft = FontTypeNames.FONTTYPE_CRIMINAL
                                 Else
-                                    Stat = Stat & " <CIUDADANO>"
+                                    If .Genero = eGenero.Mujer Then
+                                        Stat = Stat & " Ciudadana de " & Trim(MapInfo(Ciudades(.Hogar).Map).Name)
+                                    Else
+                                        Stat = Stat & " Ciudadano de " & Trim(MapInfo(Ciudades(.Hogar).Map).Name)
+                                    End If
+                                    
                                     ft = FontTypeNames.FONTTYPE_CITIZEN
 
                                 End If
+                                
+                                If EsNewbie(TempCharIndex) Then
+                                    Stat = Stat & " <Newbie>"
+    
+                                End If
+                                
+                                If UserList(TempCharIndex).Stats.MinHp < (UserList(TempCharIndex).Stats.MaxHp * 0.05) Then
+                                    Stat = Stat & " <Muerto>"
+                                ElseIf UserList(TempCharIndex).Stats.MinHp < (UserList(TempCharIndex).Stats.MaxHp * 0.1) Then
+                                    Stat = Stat & " <Casi muerto>"
+                                ElseIf UserList(TempCharIndex).Stats.MinHp < (UserList(TempCharIndex).Stats.MaxHp * 0.25) Then
+                                    Stat = Stat & " <Muy Malherido>"
+                                ElseIf UserList(TempCharIndex).Stats.MinHp < (UserList(TempCharIndex).Stats.MaxHp * 0.5) Then
+                                    Stat = Stat & " <Malherido>"
+                                ElseIf UserList(TempCharIndex).Stats.MinHp < (UserList(TempCharIndex).Stats.MaxHp * 0.75) Then
+                                    Stat = Stat & " <Herido>"
+                                ElseIf UserList(TempCharIndex).Stats.MinHp < (UserList(TempCharIndex).Stats.MaxHp) Then
+                                    Stat = Stat & " <Levemente Herido>"
+                                Else
+                                    Stat = Stat & " <Intacto>"
+                                End If
+                            
+                                If .Faccion.ArmadaReal = 1 Then
+                                    Stat = Stat & " <Ejercito Real> " & "<" & TituloReal(TempCharIndex) & ">"
+                                ElseIf .Faccion.FuerzasCaos = 1 Then
+                                    Stat = Stat & " <Legion Oscura> " & "<" & TituloCaos(TempCharIndex) & ">"
+    
+                                End If
+                            
+                                If .GuildIndex > 0 Then
+                                    Stat = Stat & " Clan: '" & modGuilds.GuildName(.GuildIndex) & "'"
+    
+                                End If
 
                             End If
-
-                        Else  'Si tiene descRM la muestro siempre.
-                            Stat = .DescRM
-                            ft = FontTypeNames.FONTTYPE_INFOBOLD
 
                         End If
 
@@ -1330,106 +1452,79 @@ Sub LookatTile(ByVal UserIndex As Integer, _
                     .flags.TargetNPC = 0
                     .flags.TargetNpcTipo = eNPCType.Comun
 
+                Else  'Si tiene descRM la muestro siempre.
+                    Stat = .DescRM
+                    ft = FontTypeNames.FONTTYPE_INFOBOLD
                 End If
 
             End If
     
+            '##############################
+            'NPC's
+            '##############################
+    
             With .flags
 
-                If FoundChar = 2 Then '¿Encontro un NPC?
+                If FoundChar = 2 Then 'Encontro un NPC?
 
                     Dim estatus            As String
-
                     Dim MinHp              As Long
-
                     Dim MaxHp              As Long
-
-                    Dim SupervivenciaSkill As Byte
-
                     Dim sDesc              As String
+                    Dim Paralisis          As String
+                    Dim Incinerado         As String
+                    Dim Envenenado         As String
                 
                     MinHp = Npclist(TempCharIndex).Stats.MinHp
                     MaxHp = Npclist(TempCharIndex).Stats.MaxHp
-                    SupervivenciaSkill = UserList(UserIndex).Stats.UserSkills(eSkill.Supervivencia)
                 
                     If .Privilegios And (PlayerType.SemiDios Or PlayerType.Dios Or PlayerType.Admin) Then
-                        estatus = "(" & MinHp & "/" & MaxHp & ") "
+                        estatus = estatus + " (" & MinHp & "/" & MaxHp & ") "
                     Else
 
                         If .Muerto = 0 Then
                     
-                            If SupervivenciaSkill <= 10 Then
-                                estatus = "(Dudoso) "
-                            
-                            ElseIf SupervivenciaSkill <= 20 Then
-
-                                If MinHp < (MaxHp / 2) Then
-                                    estatus = "(Herido) "
-                                Else
-                                    estatus = "(Sano) "
-
-                                End If
-                            
-                            ElseIf SupervivenciaSkill <= 30 Then
-
-                                If MinHp < (MaxHp * 0.5) Then
-                                    estatus = "(Malherido) "
-                                ElseIf MinHp < (MaxHp * 0.75) Then
-                                    estatus = "(Herido) "
-                                Else
-                                    estatus = "(Sano) "
-
-                                End If
-                            
-                            ElseIf SupervivenciaSkill <= 40 Then
-
-                                If MinHp < (MaxHp * 0.25) Then
-                                    estatus = "(Muy malherido) "
-                                ElseIf MinHp < (MaxHp * 0.5) Then
-                                    estatus = "(Herido) "
-                                ElseIf MinHp < (MaxHp * 0.75) Then
-                                    estatus = "(Levemente herido) "
-                                Else
-                                    estatus = "(Sano) "
-
-                                End If
-                            
-                            ElseIf SupervivenciaSkill < 60 Then
-
-                                If MinHp < (MaxHp * 0.05) Then
-                                    estatus = "(Agonizando) "
-                                ElseIf MinHp < (MaxHp * 0.1) Then
-                                    estatus = "(Casi muerto) "
-                                ElseIf MinHp < (MaxHp * 0.25) Then
-                                    estatus = "(Muy Malherido) "
-                                ElseIf MinHp < (MaxHp * 0.5) Then
-                                    estatus = "(Herido) "
-                                ElseIf MinHp < (MaxHp * 0.75) Then
-                                    estatus = "(Levemente herido) "
-                                ElseIf MinHp < (MaxHp) Then
-                                    estatus = "(Sano) "
-                                Else
-                                    estatus = "(Intacto) "
-
-                                End If
-
+                            If MinHp < (MaxHp * 0.05) Then
+                                estatus = estatus + "<Casi muerto>"
+                            ElseIf MinHp < (MaxHp * 0.1) Then
+                                estatus = estatus + "<Muy Malherido>"
+                            ElseIf MinHp < (MaxHp * 0.25) Then
+                                estatus = estatus + "<Malherido>"
+                            ElseIf MinHp < (MaxHp * 0.5) Then
+                                estatus = estatus + "<Herido>"
+                            ElseIf MinHp < (MaxHp * 0.75) Then
+                                estatus = estatus + "<Levemente herido>"
                             Else
-                                estatus = "(" & MinHp & "/" & MaxHp & ") "
+                                estatus = estatus + "<Intacto>"
 
                             End If
 
                         End If
 
                     End If
-                
-                    If Len(Npclist(TempCharIndex).desc) > 1 Then
-                        Stat = Npclist(TempCharIndex).desc
                     
-                        '¿Es el rey o el demonio?
+                    If Npclist(TempCharIndex).flags.Paralizado = 1 Then
+                        Paralisis = " [Paralizado]"
+                        
+                    ElseIf Npclist(TempCharIndex).flags.Inmovilizado = 1 Then
+                        Paralisis = " [Inmovilizado]"
+                        
+                    End If
+                    
+                    If Npclist(TempCharIndex).flags.Incinerado = 1 Then _
+                        Incinerado = " [Incinerado]"
+                        
+                    If Npclist(TempCharIndex).flags.Envenenado = 1 Then _
+                        Envenenado = " [Envenenado]"
+                    
+                    If Len(Npclist(TempCharIndex).Desc) > 1 Then
+                        Stat = Npclist(TempCharIndex).Desc
+                    
+                        'Es el rey o el demonio?
                         If Npclist(TempCharIndex).NPCtype = eNPCType.Noble Then
                             If Npclist(TempCharIndex).flags.Faccion = 0 Then 'Es el Rey.
 
-                                'Si es de la Legión Oscura y usuario común mostramos el mensaje correspondiente y lo ejecutamos:
+                                'Si es de la Legion Oscura y usuario comun mostramos el mensaje correspondiente y lo ejecutamos:
                                 If UserList(UserIndex).Faccion.FuerzasCaos = 1 Then
                                     Stat = MENSAJE_REY_CAOS
 
@@ -1452,7 +1547,7 @@ Sub LookatTile(ByVal UserIndex As Integer, _
 
                             Else 'Es el demonio
 
-                                'Si es de la Armada Real y usuario común mostramos el mensaje correspondiente y lo ejecutamos:
+                                'Si es de la Armada Real y usuario comun mostramos el mensaje correspondiente y lo ejecutamos:
                                 If UserList(UserIndex).Faccion.ArmadaReal = 1 Then
                                     Stat = MENSAJE_DEMONIO_REAL
 
@@ -1477,28 +1572,36 @@ Sub LookatTile(ByVal UserIndex As Integer, _
                             End If
 
                         End If
+                        
+                       'Centinela
+                        If Npclist(TempCharIndex).Numero = NUM_CENTI Then
+                            If UserList(UserIndex).CentinelaUsuario.Revisando Then
+                                Stat = "Sigo esperando, ingresa el codigo que te he solicitado."
+                            Else
+                                Stat = "No estoy hablando contigo."
+                            End If
+                            
+                            'Enviamos el mensaje propiamente dicho:
+                            Call WriteChatOverHead(UserIndex, Stat, Npclist(TempCharIndex).Char.CharIndex, vbYellow)
+                            
+                        Else
+                            'Enviamos el mensaje propiamente dicho:
+                            Call WriteChatOverHead(UserIndex, Stat, Npclist(TempCharIndex).Char.CharIndex, vbWhite)
+                        End If
                     
-                        'Enviamos el mensaje propiamente dicho:
-                        Call WriteChatOverHead(UserIndex, Stat, Npclist(TempCharIndex).Char.CharIndex, vbWhite)
                     Else
 
                         If Npclist(TempCharIndex).MaestroUser > 0 Then
-                            Call WriteConsoleMsg(UserIndex, estatus & Npclist(TempCharIndex).Name & " es mascota de " & UserList(Npclist(TempCharIndex).MaestroUser).Name & ".", FontTypeNames.FONTTYPE_INFO)
+                            Call WriteConsoleMsg(UserIndex, Npclist(TempCharIndex).Name & " es mascota de " & UserList(Npclist(TempCharIndex).MaestroUser).Name & " " & estatus & Paralisis & Incinerado & Envenenado, FontTypeNames.FONTTYPE_INFO)
+                        
                         Else
-                            sDesc = estatus & Npclist(TempCharIndex).Name
-
-                            If Npclist(TempCharIndex).Owner > 0 Then sDesc = sDesc & " le pertenece a " & UserList(Npclist(TempCharIndex).Owner).Name
-                            sDesc = sDesc & "."
+                            Call WriteConsoleMsg(UserIndex, Npclist(TempCharIndex).Name & " " & estatus & Paralisis & Incinerado & Envenenado, FontTypeNames.FONTTYPE_INFO)
                             
-                            Call WriteConsoleMsg(UserIndex, sDesc, FontTypeNames.FONTTYPE_INFO)
-                            
-                            If .Privilegios And (PlayerType.Dios Or PlayerType.Admin) Then
-                                Call WriteConsoleMsg(UserIndex, "Le pegó primero: " & Npclist(TempCharIndex).flags.AttackedFirstBy & ".", FontTypeNames.FONTTYPE_INFO)
-
+                            If Len(Npclist(TempCharIndex).flags.AttackedFirstBy) > 0 And (UserList(UserIndex).flags.Privilegios And (PlayerType.Dios Or PlayerType.Admin)) Then
+                                Call WriteConsoleMsg(UserIndex, "Le pego primero: " & Npclist(TempCharIndex).flags.AttackedFirstBy & ".", FontTypeNames.FONTTYPE_INFO)
                             End If
-
                         End If
-
+                        
                     End If
                 
                     FoundSomething = 1
@@ -1553,21 +1656,20 @@ Sub LookatTile(ByVal UserIndex As Integer, _
 
     Exit Sub
 
-ErrHandler:
+errHandler:
     Call LogError("Error en LookAtTile. Error " & Err.Number & " : " & Err.description)
 
 End Sub
 
 Function FindDirection(Pos As WorldPos, Target As WorldPos) As eHeading
-    '***************************************************
-    'Author: Unknown
-    'Last Modification: -
-    'Devuelve la direccion en la cual el target se encuentra
-    'desde pos, 0 si la direc es igual
-    '*****************************************************************
-
+'***************************************************
+'Author: Unknown
+'Last Modification: - Kshamenk 23/2/11
+'Devuelve la direccion en la cual el target se encuentra
+'desde pos, 0 si la direc es igual o hay un bloqueo
+'*****************************************************************
+ 
     Dim X As Integer
-
     Dim Y As Integer
     
     X = Pos.X - Target.X
@@ -1576,70 +1678,68 @@ Function FindDirection(Pos As WorldPos, Target As WorldPos) As eHeading
     'NE
     If Sgn(X) = -1 And Sgn(Y) = 1 Then
         FindDirection = IIf(RandomNumber(0, 1), eHeading.NORTH, eHeading.EAST)
+        If Not LegalPos(Pos.Map, Pos.X - Sgn(X), Pos.Y - Sgn(Y)) Then FindDirection = 0
         Exit Function
-
     End If
     
     'NW
     If Sgn(X) = 1 And Sgn(Y) = 1 Then
         FindDirection = IIf(RandomNumber(0, 1), eHeading.WEST, eHeading.NORTH)
+        If Not LegalPos(Pos.Map, Pos.X - Sgn(X), Pos.Y - Sgn(Y)) Then FindDirection = 0
         Exit Function
-
     End If
     
     'SW
     If Sgn(X) = 1 And Sgn(Y) = -1 Then
         FindDirection = IIf(RandomNumber(0, 1), eHeading.WEST, eHeading.SOUTH)
+        If Not LegalPos(Pos.Map, Pos.X - Sgn(X), Pos.Y - Sgn(Y)) Then FindDirection = 0
         Exit Function
-
     End If
     
     'SE
     If Sgn(X) = -1 And Sgn(Y) = -1 Then
         FindDirection = IIf(RandomNumber(0, 1), eHeading.SOUTH, eHeading.EAST)
+        If Not LegalPos(Pos.Map, Pos.X - Sgn(X), Pos.Y - Sgn(Y)) Then FindDirection = 0
         Exit Function
-
     End If
     
     'Sur
     If Sgn(X) = 0 And Sgn(Y) = -1 Then
         FindDirection = eHeading.SOUTH
+        If Not LegalPos(Pos.Map, Pos.X - Sgn(X), Pos.Y - Sgn(Y)) Then FindDirection = 0
         Exit Function
-
     End If
     
     'norte
     If Sgn(X) = 0 And Sgn(Y) = 1 Then
         FindDirection = eHeading.NORTH
+        If Not LegalPos(Pos.Map, Pos.X - Sgn(X), Pos.Y - Sgn(Y)) Then FindDirection = 0
         Exit Function
-
     End If
     
     'oeste
     If Sgn(X) = 1 And Sgn(Y) = 0 Then
         FindDirection = eHeading.WEST
+        If Not LegalPos(Pos.Map, Pos.X - Sgn(X), Pos.Y - Sgn(Y)) Then FindDirection = 0
         Exit Function
-
     End If
     
     'este
     If Sgn(X) = -1 And Sgn(Y) = 0 Then
         FindDirection = eHeading.EAST
+        If Not LegalPos(Pos.Map, Pos.X - Sgn(X), Pos.Y - Sgn(Y)) Then FindDirection = 0
         Exit Function
-
     End If
     
     'misma
     If Sgn(X) = 0 And Sgn(Y) = 0 Then
         FindDirection = 0
         Exit Function
-
     End If
-
+ 
 End Function
 
-Public Function ItemNoEsDeMapa(ByVal index As Integer, _
-                               ByVal bIsExit As Boolean) As Boolean
+Public Function ItemNoEsDeMapa(ByVal index As Integer) As Boolean
     '***************************************************
     'Author: Unknown
     'Last Modification: -
@@ -1647,7 +1747,7 @@ Public Function ItemNoEsDeMapa(ByVal index As Integer, _
     '***************************************************
 
     With ObjData(index)
-        ItemNoEsDeMapa = .OBJType <> eOBJType.otPuertas And .OBJType <> eOBJType.otForos And .OBJType <> eOBJType.otCarteles And .OBJType <> eOBJType.otArboles And .OBJType <> eOBJType.otYacimiento And Not (.OBJType = eOBJType.otTeleport And bIsExit)
+        ItemNoEsDeMapa = .OBJType <> eOBJType.otPuertas And .OBJType <> eOBJType.otForos And .OBJType <> eOBJType.otCarteles And .OBJType <> eOBJType.otArboles And .OBJType <> eOBJType.otYacimiento And .OBJType <> eOBJType.otTeleport
     
     End With
 
@@ -1796,4 +1896,48 @@ Public Function TerrainByteToString(ByVal restrict As Byte) As String
 
     End Select
 
+End Function
+
+Public Function ObtenerSuerte(ByVal valor As Long) As Byte
+    '***************************************************
+    'Author: ??
+    'Last Modification: ??
+    '
+    '***************************************************
+
+    If valor <= 10 And valor >= -1 Then
+        ObtenerSuerte = 35
+        
+    ElseIf valor <= 20 And valor >= 11 Then
+        ObtenerSuerte = 30
+        
+    ElseIf valor <= 30 And valor >= 21 Then
+        ObtenerSuerte = 28
+        
+    ElseIf valor <= 40 And valor >= 31 Then
+        ObtenerSuerte = 24
+        
+    ElseIf valor <= 50 And valor >= 41 Then
+        ObtenerSuerte = 22
+        
+    ElseIf valor <= 60 And valor >= 51 Then
+        ObtenerSuerte = 20
+        
+    ElseIf valor <= 70 And valor >= 61 Then
+        ObtenerSuerte = 18
+        
+    ElseIf valor <= 80 And valor >= 71 Then
+        ObtenerSuerte = 15
+        
+    ElseIf valor <= 90 And valor >= 81 Then
+        ObtenerSuerte = 12
+        
+    ElseIf valor < 100 And valor >= 91 Then
+        ObtenerSuerte = 8
+        
+    ElseIf valor = 100 Then
+        ObtenerSuerte = 7
+        
+    End If
+    
 End Function
