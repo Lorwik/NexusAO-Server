@@ -674,6 +674,7 @@ Public Sub CheckUserLevel(ByVal UserIndex As Integer, Optional ByVal PrintInCons
                     AumentoHIT = 1
                     AumentoMANA = 2.8 * .Stats.UserAtributos(eAtributos.Inteligencia)
                     AumentoSTA = AumentoSTMago
+                    Call WriteOfrecerFamiliar(UserIndex)
                 
                 Case eClass.Nigromante
                     AumentoHIT = 1
@@ -782,6 +783,10 @@ Public Sub CheckUserLevel(ByVal UserIndex As Integer, Optional ByVal PrintInCons
             'If user is in a party, we modify the variable p_sumaniveleselevados
             Call mdParty.ActualizarSumaNivelesElevados(UserIndex)
             'If user reaches lvl 25 and he is in a guild, we check the guild's alignment and expulses the user if guild has factionary alignment
+        
+            If .clase = eClass.Mage Or .clase = eClass.Hunter Or .clase = eClass.Druid Then
+                If .Stats.ELV = 10 Then Call WriteOfrecerFamiliar(UserIndex)
+            End If
         
             If .Stats.ELV = 25 Then
                 GI = .GuildIndex

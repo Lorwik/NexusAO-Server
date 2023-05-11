@@ -329,9 +329,7 @@ Sub ConnectNewUser(ByVal UserIndex As Integer, _
                    ByVal UserClase As eClass, _
                    ByVal Hogar As eCiudad, _
                    ByVal Head As Integer, _
-                   ByRef skills() As Byte, _
-                   ByRef PetName As String, _
-                   ByRef PetTipo As Byte)
+                   ByRef skills() As Byte)
 
     '*************************************************
     'Author: Unknown
@@ -350,23 +348,6 @@ Sub ConnectNewUser(ByVal UserIndex As Integer, _
         Dim i As Byte
         Dim Count As Integer
         Dim Suma As Long
-        
-        '¿Intentaron hackear los atributos?
-        For i = 1 To NUMATRIBUTOS
-            If .Stats.UserAtributos(i) > 18 Then
-                Call WriteErrorMsg(UserIndex, "Error en la asignacion de atributos, vuelva a asignarlos.")
-                Exit Sub
-            End If
-            
-            'Vamos sumando todos los atributos para luego comprobarlos
-            Suma = Suma + .Stats.UserAtributos(i)
-            Debug.Print Suma
-        Next i
-        
-        If Suma <> 70 Then
-            Call WriteErrorMsg(UserIndex, "Error en la asignacion de atributos, vuelva a asignarlos.")
-            Exit Sub
-        End If
         
         If Not AsciiValidos(Name) Or LenB(Name) = 0 Then
             Call WriteErrorMsg(UserIndex, "Nombre invalido.")
@@ -405,13 +386,6 @@ Sub ConnectNewUser(ByVal UserIndex As Integer, _
             Exit Sub
 
         End If
-        
-        'Tiro los dados antes de llegar aca??
-        If .Stats.UserAtributos(eAtributos.Fuerza) = 0 Then
-            Call WriteErrorMsg(UserIndex, "Debe tirar los dados antes de poder crear un personaje.")
-            Exit Sub
-
-        End If
     
         If Not ValidarCabeza(UserRaza, UserSexo, Head) Then
             Call LogCheating("El usuario " & Name & " ha seleccionado la cabeza " & Head & " desde la IP " & .IP)
@@ -436,12 +410,6 @@ Sub ConnectNewUser(ByVal UserIndex As Integer, _
             Call CloseSocket(UserIndex)
             Exit Sub
         End If
-
-        'Mandamos a crear el familiar
-        If Not CreateFamiliarNewUser(UserIndex, UserClase, PetName, PetTipo) Then
-            Call CloseSocket(UserIndex)
-            Exit Sub
-        End If
     
         .flags.Muerto = 0
         .flags.Escondido = 0
@@ -460,6 +428,10 @@ Sub ConnectNewUser(ByVal UserIndex As Integer, _
         .Raza = UserRaza
         .Genero = UserSexo
         .Hogar = Hogar
+        
+        For i = 1 To NUMATRIBUTOS
+            .Stats.UserAtributos(i) = .Stats.UserAtributos(i) + 18
+        Next i
         
         For i = 0 To 1
             .Profesion(i).Profesion = 0
@@ -605,10 +577,6 @@ Private Sub SetAttributesToNewUser(ByVal UserIndex As Integer, ByVal UserClase A
             hSlot = hSlot + 1
         
         End If
-        
-        'Familiar
-        If UserClase = eClass.Druid Or UserClase = eClass.Mage Or UserClase = eClass.Hunter Then _
-            .Stats.UserHechizos(hSlot) = 59 'Llamado al familiar
     
         .Stats.MaxHit = 2
         .Stats.MinHIT = 1
@@ -1383,6 +1351,12 @@ Sub ConnectUser(ByVal UserIndex As Integer, _
         Call WriteUpdateStrenghtAndDexterity(UserIndex)
         
         Call SendMOTD(UserIndex)
+        
+        'Si cumple con el nivel y aun no tiene familiar se lo mandamos.
+        If .clase = eClass.Mage Or .clase = eClass.Druid Or .clase = eClass.Hunter Then
+            If .Familiar.Tipo = 0 And .Stats.ELV >= 10 Then _
+                Call WriteOfrecerFamiliar(UserIndex)
+        End If
     
         If haciendoBK Then
             Call WritePauseToggle(UserIndex)

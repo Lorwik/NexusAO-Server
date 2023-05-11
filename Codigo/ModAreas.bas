@@ -29,14 +29,14 @@ Option Explicit
 '************************************************
 
 ' Tamanio del mapa
-Public Const XMaxMapSize        As Byte = 130
+Public Const XMaxMapSize        As Byte = 100
 Public Const XMinMapSize        As Byte = 1
-Public Const YMaxMapSize        As Byte = 130
+Public Const YMaxMapSize        As Byte = 100
 Public Const YMinMapSize        As Byte = 1
 
 ' Tamanio en tiles de la pantalla.
 'ADVERTENCIA: TIENEN QUE SER IMPAR!
-Public Const XWindow            As Byte = 22
+Public Const XWindow            As Byte = 23
 Public Const YWindow            As Byte = 19
 
 ' Cantidad de tiles buffer

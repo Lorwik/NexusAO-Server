@@ -1,7 +1,7 @@
 Account/*
 Logs/*
 Charfile/*
-Logs/*
+Logs/*.log
 WorldBackup/*
 Guilds/*
 Codigo/*.log

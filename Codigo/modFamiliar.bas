@@ -121,6 +121,12 @@ Public Function CreateFamiliarNewUser(ByVal UserIndex As Integer, ByVal UserClas
         
     End With
     
+    'Familiar
+    If UserClase = eClass.Druid Or UserClase = eClass.Mage Or UserClase = eClass.Hunter Then _
+        Call AgregarHechizo(59, 0) 'Llamado al familiar
+    
+    Call WriteConsoleMsg(UserIndex, "¡Enhorabuena! Has adoptado a un nuevo familiar. Asegurate de cuidarlo bien para que se fortalezca!", FONTTYPE_INFO)
+    
     CreateFamiliarNewUser = True
     Exit Function
     

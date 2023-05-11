@@ -172,6 +172,7 @@ Private Enum ServerPacketID
     SetSpeed
     AbriMapa
     AbrirGoliath
+    OfrecerFamiliar
 End Enum
 
 Private Enum ClientPacketID
@@ -317,6 +318,7 @@ Private Enum ClientPacketID
     Acepto
     Divorcio
     TransferenciaOro
+    AdoptarFamiliar
 End Enum
 
 ''
@@ -883,6 +885,9 @@ Public Function HandleIncomingData(ByVal UserIndex As Integer) As Boolean
             
         Case ClientPacketID.TransferenciaOro
             Call HandleTransferenciaOro(UserIndex)
+            
+        Case ClientPacketID.AdoptarFamiliar
+            Call HandleAdoptarFamiliar(UserIndex)
             
         Case Else
             'ERROR : Abort!
@@ -1733,13 +1738,6 @@ Private Sub HandleLoginNewChar(ByVal UserIndex As Integer)
     Class = buffer.ReadByte()
     Head = buffer.ReadInteger
     homeland = buffer.ReadByte()
-
-    PetName = buffer.ReadASCIIString()
-    PetTipo = buffer.ReadByte
-
-    For i = 1 To NUMATRIBUTOS
-        UserList(UserIndex).Stats.UserAtributos(i) = buffer.ReadByte()
-    Next i
     
     Call buffer.ReadBlock(skills, NUMSKILLS)
     
@@ -1767,7 +1765,7 @@ Private Sub HandleLoginNewChar(ByVal UserIndex As Integer)
     If Not VersionOK(version) Then
         Call WriteErrorMsg(UserIndex, "Esta version del juego es obsoleta, la version correcta es la " & ULTIMAVERSION & ". La misma se encuentra disponible en www.nexusao.com.ar")
     Else
-        Call ConnectNewUser(UserIndex, UserName, race, gender, Class, homeland, Head, skills, PetName, PetTipo)
+        Call ConnectNewUser(UserIndex, UserName, race, gender, Class, homeland, Head, skills)
     End If
   
 errHandler:
@@ -20763,6 +20761,34 @@ errHandler:
 End Sub
 
 ''
+' Writes the "OfrecerFamiliar" message to the given user's outgoing data buffer.
+'
+' @param    UserIndex User to which the message is intended.
+' @remarks  The data is not actually sent until the buffer is properly flushed.
+
+Public Sub WriteOfrecerFamiliar(ByVal UserIndex As Integer)
+
+    '***************************************************
+    'Author: Juan Martin Sotuyo Dodero (Maraxus)
+    'Last Modification: 05/17/06
+    'Writes the "Pong" message to the given user's outgoing data buffer
+    '***************************************************
+    On Error GoTo errHandler
+
+    Call UserList(UserIndex).outgoingData.WriteByte(ServerPacketID.OfrecerFamiliar)
+    Exit Sub
+
+errHandler:
+
+    If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
+        Call FlushBuffer(UserIndex)
+        Resume
+
+    End If
+
+End Sub
+
+''
 ' Flushes the outgoing data buffer of the user.
 '
 ' @param    UserIndex User whose outgoing data buffer will be flushed.
@@ -23448,7 +23474,7 @@ On Error GoTo 0
         Err.Raise Error
 
 End Sub
-''
+
 Private Sub HandleTransferenciaOro(ByVal UserIndex As Integer)
 '***************************************************
 'Autor: Lorwik
@@ -23509,4 +23535,50 @@ On Error GoTo 0
         Err.Raise Error
 End Sub
 
+Private Sub HandleAdoptarFamiliar(ByVal UserIndex As Integer)
+'***************************************************
+'Autor: Lorwik
+'Fecha: 11/05/2023
+'***************************************************
+    If UserList(UserIndex).incomingData.Length < 3 Then
+        Err.Raise UserList(UserIndex).incomingData.NotEnoughDataErrCode
+        Exit Sub
+    End If
+   
+On Error GoTo errHandler
+
+    With UserList(UserIndex)
+        'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+        Dim buffer As New clsByteQueue
+        Call buffer.CopyBuffer(.incomingData)
+        
+        'Remove packet ID
+        Call buffer.ReadByte
+           
+        Dim PetName As String
+        Dim PetTipo As Byte
+        
+        PetTipo = buffer.ReadByte()
+        PetName = buffer.ReadASCIIString()
+             
+        'Mandamos a crear el familiar
+        If Not CreateFamiliarNewUser(UserIndex, .clase, PetName, PetTipo) Then
+            Call WriteConsoleMsg(UserIndex, "Ha ocurrido un error al adoptar el familiar, intentelo mas tarde. Si el problema persiste contacte con un admin.", FONTTYPE_WARNING)
+        End If
+           
+        'If we got here then packet is complete, copy data back to original queue
+        Call .incomingData.CopyBuffer(buffer)
+    End With
+ 
+errHandler:
+    Dim Error As Long
+    Error = Err.Number
+On Error GoTo 0
+   
+    'Destroy auxiliar buffer
+    Set buffer = Nothing
+   
+    If Error <> 0 Then _
+        Err.Raise Error
+End Sub
 
