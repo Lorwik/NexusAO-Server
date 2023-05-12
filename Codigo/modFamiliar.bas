@@ -59,30 +59,41 @@ Public Enum HabilidadesFamiliar
     HABILIDAD_DESCARGA = 93
 End Enum
 
-Public Function CreateFamiliarNewUser(ByVal UserIndex As Integer, ByVal UserClase As Byte, ByVal PetName As String, ByVal PetTipo As Byte) As Boolean
-'************************************
-'Autor: Lorwik
-'Fecha: 08/04/2021
-'Descripción: Crea el familiar para un nuevo usuario
-'************************************
+'Hechizo para invocar al familiar
+Private Const LLAMADO_AL_FAMILIAR As Byte = 78
 
-    Dim i       As Byte
-    Dim Count   As Integer
-    Dim nIndex  As Integer
+Public Function CreateFamiliarNewUser(ByVal UserIndex As Integer, _
+                                      ByVal UserClase As Byte, _
+                                      ByVal PetName As String, _
+                                      ByVal PetTipo As Byte) As Boolean
+    '************************************
+    'Autor: Lorwik
+    'Fecha: 08/04/2021
+    'Descripción: Crea el familiar para un nuevo usuario
+    '************************************
+
+    Dim i      As Byte
+    Dim j      As Integer
+    Dim Count  As Integer
+    Dim nIndex As Integer
 
     'Familiares
     If UserClase = eClass.Druid Or UserClase = eClass.Hunter Then
-       'Si no llego con alguno de esto familiares o es un error o es un intento de hack
+
+        'Si no llego con alguno de esto familiares o es un error o es un intento de hack
         If PetTipo <> eTipoFamily.Ent And PetTipo <> eTipoFamily.Oso And PetTipo <> eTipoFamily.Tigre And PetTipo <> eTipoFamily.Lobo Then
             CreateFamiliarNewUser = False
             Exit Function
+
         End If
        
     ElseIf UserClase = eClass.Mage Then
+
         'Si no llego con alguno de esto familiares o es un error o es un intento de hack
         If PetTipo <> eTipoFamily.Ely And PetTipo <> eTipoFamily.eFuego And PetTipo <> eTipoFamily.eTierra And PetTipo <> eTipoFamily.eAgua And PetTipo <> eTipoFamily.fFauto Then
             CreateFamiliarNewUser = False
             Exit Function
+
         End If
         
     Else 'Si no es ninguna clase de las anteriores no tiene familiar
@@ -101,6 +112,7 @@ Public Function CreateFamiliarNewUser(ByVal UserIndex As Integer, ByVal UserClas
         
     'Solo permitimos 1 espacio en los nombres
     For i = 1 To Len(PetName)
+
         If mid(PetName, i, 1) = Chr(32) Then Count = Count + 1
                 
     Next i
@@ -119,11 +131,21 @@ Public Function CreateFamiliarNewUser(ByVal UserIndex As Integer, ByVal UserClas
         .Familiar.MaxHit = val(LeerNPCs.GetValue("NPC" & nIndex, "MaxHIT"))
         .Familiar.MinHIT = val(LeerNPCs.GetValue("NPC" & nIndex, "MinHIT"))
         
-    End With
+        'Le damos el hechizo para poder invocar al familiar
+        For j = 1 To MAXUSERHECHIZOS
     
-    'Familiar
-    If UserClase = eClass.Druid Or UserClase = eClass.Mage Or UserClase = eClass.Hunter Then _
-        Call AgregarHechizo(59, 0) 'Llamado al familiar
+            If .Stats.UserHechizos(j) = 0 Then Exit For
+        Next j
+                
+        If .Stats.UserHechizos(j) <> 0 Then
+            Call WriteConsoleMsg(UserIndex, "No tienes espacio para mas hechizos.", FontTypeNames.FONTTYPE_INFO)
+        Else
+            .Stats.UserHechizos(j) = LLAMADO_AL_FAMILIAR
+            Call UpdateUserHechizos(False, UserIndex, CByte(j))
+    
+        End If
+    
+    End With
     
     Call WriteConsoleMsg(UserIndex, "¡Enhorabuena! Has adoptado a un nuevo familiar. Asegurate de cuidarlo bien para que se fortalezca!", FONTTYPE_INFO)
     
@@ -438,31 +460,31 @@ On Error GoTo IndexDeFamiliar_Err
     Select Case Tipo
 
         Case eTipoFamily.eFuego
-            IndexDeFamiliar = 128 'Elemental de Fuego
+            IndexDeFamiliar = 218 'Elemental de Fuego
 
         Case eTipoFamily.eAgua
-            IndexDeFamiliar = 127 'Elemental de Agua
+            IndexDeFamiliar = 217 'Elemental de Agua
 
         Case eTipoFamily.eTierra
-            IndexDeFamiliar = 129 'Elemental de Tierra
+            IndexDeFamiliar = 219 'Elemental de Tierra
 
         Case eTipoFamily.fFauto
-            IndexDeFamiliar = 126 'Fuego Fatuo
+            IndexDeFamiliar = 216 'Fuego Fatuo
 
         Case eTipoFamily.Ely
-            IndexDeFamiliar = 132 'Ely
+            IndexDeFamiliar = 222 'Ely
 
         Case eTipoFamily.Ent
-            IndexDeFamiliar = 145 'Ent
+            IndexDeFamiliar = 225 'Ent
 
         Case eTipoFamily.Tigre
-            IndexDeFamiliar = 130 'Tigre
+            IndexDeFamiliar = 220 'Tigre
 
         Case eTipoFamily.Lobo
-            IndexDeFamiliar = 133 'Lobo
+            IndexDeFamiliar = 223 'Lobo
 
         Case eTipoFamily.Oso
-            IndexDeFamiliar = 131 'Oso Pardo
+            IndexDeFamiliar = 221 'Oso Pardo
             
     End Select
  

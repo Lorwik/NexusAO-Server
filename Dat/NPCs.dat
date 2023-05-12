@@ -4161,6 +4161,158 @@ PoderEvasion=20
 SND2=33
 snd3=56
 
+[NPC216] 'FAMILIAR
+Name=Fuego fatuo
+Head=0
+Body=144
+Heading=3
+Movement=2
+Attackable=1
+Comercia=0
+Hostile=0
+Alineacion=0
+Domable=0
+MinHP=7
+MaxHP=7
+MaxHIT=10
+MinHIT=5
+PoderAtaque=15
+PoderEvasion=20
+Domable=0
+Attackable=1
+RangoSpell=3
+LocaleID=113
+
+[NPC217] 'FAMILIAR
+Name=Elemental de agua
+Body=154
+Heading=3
+Movement=2
+MinHP=10
+MaxHP=10
+MaxHIT=20
+MinHIT=7
+PoderAtaque=25
+PoderEvasion=10
+Attackable=1
+RangoSpell=3
+LocaleID=114
+
+[NPC218] 'FAMILIAR
+Name=Elemental de fuego
+Body=153
+Heading=3
+Movement=2
+MinHP=10
+MaxHP=10
+MaxHIT=15
+MinHIT=5
+PoderAtaque=20
+PoderEvasion=20
+attackable=1
+RangoSpell=4
+LocaleID=115
+
+[NPC219] 'FAMILIAR
+Name=Elemental de tierra
+Body=152
+Heading=3
+Movement=2
+MinHP=10
+MaxHP=10
+MaxHIT=15
+MinHIT=5
+PoderAtaque=30
+PoderEvasion=5
+attackable=1
+LanzaSpells=1
+Sp1=24
+RangoSpell=3
+LocaleID=116
+
+[NPC220] 'FAMILIAR
+Name=Tigre
+Head=0
+Body=147
+Heading=3
+Movement=2
+Attackable=1
+Hostile=0
+Alineacion=0
+MinHP=15
+MaxHP=15
+MaxHIT=20
+MinHIT=10
+PoderAtaque=35
+PoderEvasion=20
+LocaleID=117
+
+[NPC221] 'FAMILIAR
+Name=Oso pardo
+Head=0
+Body=73
+Heading=3
+Movement=2
+Attackable=1
+MinHP=20
+MaxHP=20
+MaxHIT=30
+MinHIT=5
+PoderAtaque=30
+PoderEvasion=5
+LocaleID=118
+
+[NPC222] 'FAMILIAR
+Name=Ely
+Head=0
+Body=143
+Heading=3
+Movement=2
+MinHP=15
+MaxHP=15
+MaxHIT=20
+MinHIT=5
+PoderAtaque=15
+PoderEvasion=30
+Attackable=1
+RangoSpell=3
+LocaleID=119
+
+[NPC223] 'FAMILIAR
+Name=Lobo
+Head=0
+Body=10
+Heading=3
+Movement=3
+Alineacion=2
+Attackable=1
+Comercia=0
+Hostile=1
+MinHP=20
+MaxHP=20
+MaxHIT=20
+MinHIT=10
+PoderAtaque=25
+PoderEvasion=15
+Snd1=35
+Snd2=9
+LocaleID=120
+
+[NPC224] 'FAMILIAR
+Name=Ent
+Head=0
+Body=273
+Heading=3
+Movement=2
+MinHP=15
+MaxHP=15
+MaxHIT=20
+MinHIT=5
+Attackable=1
+PoderAtaque=15
+PoderEvasion=30
+LocaleID=131
+
 '<----------------- NPC HOSTILES ----------------->
 
 [NPC500] 'Murcielago (ND) POTHOS 1.0

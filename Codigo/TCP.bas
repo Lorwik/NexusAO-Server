@@ -1351,12 +1351,6 @@ Sub ConnectUser(ByVal UserIndex As Integer, _
         Call WriteUpdateStrenghtAndDexterity(UserIndex)
         
         Call SendMOTD(UserIndex)
-        
-        'Si cumple con el nivel y aun no tiene familiar se lo mandamos.
-        If .clase = eClass.Mage Or .clase = eClass.Druid Or .clase = eClass.Hunter Then
-            If .Familiar.Tipo = 0 And .Stats.ELV >= 10 Then _
-                Call WriteOfrecerFamiliar(UserIndex)
-        End If
     
         If haciendoBK Then
             Call WritePauseToggle(UserIndex)
@@ -1438,6 +1432,12 @@ Sub ConnectUser(ByVal UserIndex As Integer, _
 
             End If
 
+        End If
+        
+        'Si cumple con el nivel y aun no tiene familiar se lo mandamos.
+        If .clase = eClass.Mage Or .clase = eClass.Druid Or .clase = eClass.Hunter Then
+            If .Familiar.Tipo = 0 And .Stats.ELV >= 5 Then _
+                Call WriteOfrecerFamiliar(UserIndex)
         End If
         
         '****Añadimos al user nuevo a la lista de PJ*****
