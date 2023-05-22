@@ -190,23 +190,11 @@ Sub QuitarNewbieObj(ByVal UserIndex As Integer)
         
             Select Case .Hogar
 
-                Case eCiudad.cLindos 'Vamos a tener que ir por todo el desierto... uff!
-                    DeDonde = Lindos
-
                 Case eCiudad.cUllathorpe
                     DeDonde = Ullathorpe
                     
                 Case eCiudad.cNix
                     DeDonde = Nix
-
-                Case eCiudad.cBanderbill
-                    DeDonde = Banderbill
-                    
-                Case eCiudad.cArghal
-                    DeDonde = Arghal
-                    
-                Case eCiudad.cRinkel
-                    DeDonde = Rinkel
 
                 Case Else
                     DeDonde = Nix

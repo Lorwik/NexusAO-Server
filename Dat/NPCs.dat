@@ -1,13 +1,22 @@
-' TIPOS NPC
-' 0====== NPCS COMUNES
-' 1====== PUEDE RESUCITAR
-' 2====== GUARDIA
-' 3====== PUEDE ENTRENAR
-' 4====== BANQUEROS
-' 5====== NOBLES
-' 6====== DRAGONES
-' 7====== APOSTADORES
-' 8====== TIENDAS
+'Tipo de NPC
+'NpcType:
+'  0 NPCs Comunes
+'  1 Resucitadores
+'  2 Guardias
+'  3 Entrenadores
+'  4 Banqueros
+'  5 Facciones
+'  6 (nada)
+'  7 Transportadores
+'  8 Carceleros
+'  9 (nada)
+' 10 Paga recompensas
+' 11 Veterinarias
+' 12 Apuestas
+' 13 Presentadores de Quest
+' 14 Objetivos de Quest
+' 15 Centinelas
+' 16 Subastadores
 
 [INIT]
 NumNPCs=638
@@ -4312,6 +4321,32 @@ Attackable=1
 PoderAtaque=15
 PoderEvasion=30
 LocaleID=131
+
+[NPC225]
+Name=Veterinaria
+NpcType=11
+Desc=Si tu familiar o mascota se encuentra en mal estado, acércamelo y veré lo que puedo hacer por él.
+Head=72
+Body=101
+Heading=3
+Movement=1
+Attackable=0
+Comercia=0
+Hostile=0
+
+[NPC226] ' Subastador
+Name=Subastador
+NpcType=16
+Desc=Deja el objeto que desas subastar bajo tuyo y hazme click derecho. 
+Head=9
+Body=270
+Heading=3
+Movement=1
+Attackable=0
+Comercia=0
+Hostile=0
+NROITEMS=0
+LocaleID=150
 
 '<----------------- NPC HOSTILES ----------------->
 

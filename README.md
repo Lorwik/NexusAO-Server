@@ -1,10 +1,17 @@
-# Server-ImperiumClasico
-Server de Clon de ImperiumAO ambientado en las versiones clásicas
+# Server-NexusAO
 
-Se paso el control de mucho de los sitemas que no debian de estar en el cliente al servidor.
-Utiliza puramente servidor MySQL. Utiliza 2 servidores SQL, uno para cuentas y otro para personajes.
-Se diseño y programo un nuevo sistema de cuentas que se controla totalmente desde el servidor, lo que mejora muchisimo la seguridad.
+Cambios más importantes.
 
-Este proyecto pretendria ser una combinacion de la versión 1.3 y 1.4.
-
-** Liberación por descontinuación del proyecto **
+- Motor Grafico optimizado.
+- Los Magos, Druidas y Cazadores reciben un familiar al alcanzar el nivel 5.
+- Nuevo mapa basado en el mundo de Argentum recortado.
+- Nuevos items mágicos.
+- Nuevo sistema de cuentas.
+- Todos los atributos estan establecidos a 18, aplicandose luego los modificadores de raza.
+- Inteligencia de los NPCs mejorada.
+- Soporte multilenguaje.
+- Nuevo motor de sonido.
+- Resolución de pantalla aumentada a 1024 x 768.
+- Remasterización de la mayoria de las texturas de los mapas.
+- Nuevo sistema de subastas.
+- Nuevo sistema de pasajes.

@@ -29,16 +29,16 @@ Attribute VB_Name = "Trabajo"
 
 Option Explicit
 
+Public Const EsfuerzoTalarTrabajador As Byte = 2
 Public Const EsfuerzoTalarGeneral As Byte = 4
-Public Const EsfuerzoTalarLenador As Byte = 2
 
-Public Const EsfuerzoPescarPescador As Byte = 1
+Public Const EsfuerzoPescarTrabajador As Byte = 1
 Public Const EsfuerzoPescarGeneral As Byte = 3
 
-Public Const EsfuerzoExcavarMinero As Byte = 2
+Public Const EsfuerzoExcavarTrabajador As Byte = 2
 Public Const EsfuerzoExcavarGeneral As Byte = 5
 
-Public Const EsfuerzoRaicesBotanico As Byte = 2
+Public Const EsfuerzoRaicesTrabajador As Byte = 2
 Public Const EsfuerzoRaicesGeneral As Byte = 4
 
 Private Const GASTO_ENERGIA As Byte = 6
@@ -1065,12 +1065,13 @@ End Function
 Function ModFundicion(ByVal clase As eClass) As Integer
 
     Select Case clase
-        Case eClass.Minero
+
+        Case eClass.Trabajador
             ModFundicion = 1
-        Case eClass.Herrero
-            ModFundicion = 1.2
+
         Case Else
             ModFundicion = 3
+
     End Select
 
 End Function
@@ -1078,10 +1079,13 @@ End Function
 Function ModCarpinteria(ByVal clase As eClass) As Integer
 
     Select Case clase
-        Case eClass.Carpintero
+
+        Case eClass.Trabajador
             ModCarpinteria = 1
+
         Case Else
             ModCarpinteria = 3
+
     End Select
 
 End Function
@@ -1089,12 +1093,13 @@ End Function
 Function ModHerreria(ByVal clase As eClass) As Integer
 
     Select Case clase
-        Case eClass.Herrero
+
+        Case eClass.Trabajador
             ModHerreria = 1
-        Case eClass.Minero
-            ModHerreria = 1.2
+
         Case Else
             ModHerreria = 4
+
     End Select
 
 End Function
@@ -1102,10 +1107,13 @@ End Function
 Function ModSastreria(ByVal clase As eClass) As Integer
 
     Select Case clase
-        Case eClass.Sastre
+
+        Case eClass.Trabajador
             ModSastreria = 1
+
         Case Else
             ModSastreria = 4
+
     End Select
 
 End Function
@@ -1113,10 +1121,13 @@ End Function
 Function ModAlquimia(ByVal clase As eClass) As Integer
 
     Select Case clase
-        Case eClass.Druid
+
+        Case eClass.Trabajador
             ModAlquimia = 1
+
         Case Else
             ModAlquimia = 4
+
     End Select
 
 End Function
@@ -1167,7 +1178,7 @@ Function FreeMascotaIndex(ByVal UserIndex As Integer) As Integer
 
 End Function
 
-Sub DoDomar(ByVal UserIndex As Integer, ByVal NPCIndex As Integer)
+Sub DoDomar(ByVal UserIndex As Integer, ByVal NpcIndex As Integer)
     '***************************************************
     'Author: Nacho (Integer)
     'Last Modification: 01/05/2010
@@ -1188,7 +1199,7 @@ Sub DoDomar(ByVal UserIndex As Integer, ByVal NPCIndex As Integer)
 
     Dim NroPets          As Integer
     
-    If Npclist(NPCIndex).MaestroUser = UserIndex Then
+    If Npclist(NpcIndex).MaestroUser = UserIndex Then
         Call WriteConsoleMsg(UserIndex, "Ya domaste a esa criatura.", FontTypeNames.FONTTYPE_INFO)
         Exit Sub
 
@@ -1198,20 +1209,20 @@ Sub DoDomar(ByVal UserIndex As Integer, ByVal NPCIndex As Integer)
 
         If .NroMascotas < MAXMASCOTAS Then
             
-            If Npclist(NPCIndex).MaestroNpc > 0 Or Npclist(NPCIndex).MaestroUser > 0 Then
+            If Npclist(NpcIndex).MaestroNpc > 0 Or Npclist(NpcIndex).MaestroUser > 0 Then
                 Call WriteConsoleMsg(UserIndex, "La criatura ya tiene amo.", FontTypeNames.FONTTYPE_INFO)
                 Exit Sub
 
             End If
             
-            If Not PuedeDomarMascota(UserIndex, NPCIndex) Then
+            If Not PuedeDomarMascota(UserIndex, NpcIndex) Then
                 Call WriteConsoleMsg(UserIndex, "No puedes domar mas de dos criaturas del mismo tipo.", FontTypeNames.FONTTYPE_INFO)
                 Exit Sub
 
             End If
             
             puntosDomar = CInt(.Stats.UserAtributos(eAtributos.Carisma)) * CInt(.Stats.UserSkills(eSkill.Domar))
-            puntosRequeridos = Npclist(NPCIndex).flags.Domable
+            puntosRequeridos = Npclist(NpcIndex).flags.Domable
             
             If puntosRequeridos <= puntosDomar And RandomNumber(1, 5) = 1 Then
 
@@ -1219,13 +1230,13 @@ Sub DoDomar(ByVal UserIndex As Integer, ByVal NPCIndex As Integer)
 
                 .NroMascotas = .NroMascotas + 1
                 index = FreeMascotaIndex(UserIndex)
-                .MascotasIndex(index) = NPCIndex
-                .MascotasType(index) = Npclist(NPCIndex).Numero
+                .MascotasIndex(index) = NpcIndex
+                .MascotasType(index) = Npclist(NpcIndex).Numero
                 
-                Npclist(NPCIndex).MaestroUser = UserIndex
+                Npclist(NpcIndex).MaestroUser = UserIndex
                 
-                Call FollowAmo(NPCIndex)
-                Call ReSpawnNpc(Npclist(NPCIndex))
+                Call FollowAmo(NpcIndex)
+                Call ReSpawnNpc(Npclist(NpcIndex))
                 
                 Call WriteConsoleMsg(UserIndex, "La criatura te ha aceptado como su amo.", FontTypeNames.FONTTYPE_INFO)
                 
@@ -1233,10 +1244,10 @@ Sub DoDomar(ByVal UserIndex As Integer, ByVal NPCIndex As Integer)
                 CanStay = (MapInfo(.Pos.Map).Pk = True)
                 
                 If Not CanStay Then
-                    petType = Npclist(NPCIndex).Numero
+                    petType = Npclist(NpcIndex).Numero
                     NroPets = .NroMascotas
                     
-                    Call QuitarNPC(NPCIndex)
+                    Call QuitarNPC(NpcIndex)
                     
                     .MascotasType(index) = petType
                     .NroMascotas = NroPets
@@ -1280,7 +1291,7 @@ End Sub
 ' @param integer NPCindex The index of the npc to tome.
 ' @return boolean True if can, false if not.
 Private Function PuedeDomarMascota(ByVal UserIndex As Integer, _
-                                   ByVal NPCIndex As Integer) As Boolean
+                                   ByVal NpcIndex As Integer) As Boolean
 
     '***************************************************
     'Author: ZaMa
@@ -1294,7 +1305,7 @@ Private Function PuedeDomarMascota(ByVal UserIndex As Integer, _
     
     For i = 1 To MAXMASCOTAS
 
-        If UserList(UserIndex).MascotasType(i) = Npclist(NPCIndex).Numero Then
+        If UserList(UserIndex).MascotasType(i) = Npclist(NpcIndex).Numero Then
             numMascotas = numMascotas + 1
 
         End If
@@ -1505,7 +1516,7 @@ Public Sub DoPescar(ByVal UserIndex As Integer, ByVal Red As Boolean)
                 
                 MAXITEMS = MaxItemsExtraibles(.Stats.ELV)
                    
-                If UserList(UserIndex).clase = eClass.Pescador Then
+                If UserList(UserIndex).clase = eClass.Trabajador Then
                     CantidadItems = RandomNumber(1, MAXITEMS)
                 Else
                     CantidadItems = 1
@@ -2295,7 +2306,7 @@ Public Sub DoMeditar(ByVal UserIndex As Integer)
 
 End Sub
 
-Public Sub DoDesequipar(ByVal UserIndex As Integer, ByVal victimIndex As Integer)
+Public Sub DoDesequipar(ByVal UserIndex As Integer, ByVal VictimIndex As Integer)
     '***************************************************
     'Author: ZaMa
     'Last Modif: 15/04/2010
@@ -2321,7 +2332,7 @@ Public Sub DoDesequipar(ByVal UserIndex As Integer, ByVal victimIndex As Integer
 
     End With
    
-    With UserList(victimIndex)
+    With UserList(VictimIndex)
 
         ' Si tiene escudo, intenta desequiparlo
         If .Invent.EscudoEqpObjIndex > 0 Then
@@ -2330,12 +2341,12 @@ Public Sub DoDesequipar(ByVal UserIndex As Integer, ByVal victimIndex As Integer
             
             If Resultado <= Probabilidad Then
                 ' Se lo desequipo
-                Call Desequipar(victimIndex, .Invent.EscudoEqpSlot)
+                Call Desequipar(VictimIndex, .Invent.EscudoEqpSlot)
                 
                 Call WriteConsoleMsg(UserIndex, "Has logrado desequipar el escudo de tu oponente!", FontTypeNames.FONTTYPE_FIGHT)
                 
                 If .Stats.ELV < 20 Then
-                    Call WriteConsoleMsg(victimIndex, "Tu oponente te ha desequipado el escudo!", FontTypeNames.FONTTYPE_FIGHT)
+                    Call WriteConsoleMsg(VictimIndex, "Tu oponente te ha desequipado el escudo!", FontTypeNames.FONTTYPE_FIGHT)
 
                 End If
                 
@@ -2354,12 +2365,12 @@ Public Sub DoDesequipar(ByVal UserIndex As Integer, ByVal victimIndex As Integer
             
             If Resultado <= Probabilidad Then
                 ' Se lo desequipo
-                Call Desequipar(victimIndex, .Invent.WeaponEqpSlot)
+                Call Desequipar(VictimIndex, .Invent.WeaponEqpSlot)
                 
                 Call WriteConsoleMsg(UserIndex, "Has logrado desarmar a tu oponente!", FontTypeNames.FONTTYPE_FIGHT)
                 
                 If .Stats.ELV < 20 Then
-                    Call WriteConsoleMsg(victimIndex, "Tu oponente te ha desarmado!", FontTypeNames.FONTTYPE_FIGHT)
+                    Call WriteConsoleMsg(VictimIndex, "Tu oponente te ha desarmado!", FontTypeNames.FONTTYPE_FIGHT)
 
                 End If
                 
@@ -2378,12 +2389,12 @@ Public Sub DoDesequipar(ByVal UserIndex As Integer, ByVal victimIndex As Integer
             
             If Resultado <= Probabilidad Then
                 ' Se lo desequipo
-                Call Desequipar(victimIndex, .Invent.CascoEqpSlot)
+                Call Desequipar(VictimIndex, .Invent.CascoEqpSlot)
                 
                 Call WriteConsoleMsg(UserIndex, "Has logrado desequipar el casco de tu oponente!", FontTypeNames.FONTTYPE_FIGHT)
                 
                 If .Stats.ELV < 20 Then
-                    Call WriteConsoleMsg(victimIndex, "Tu oponente te ha desequipado el casco!", FontTypeNames.FONTTYPE_FIGHT)
+                    Call WriteConsoleMsg(VictimIndex, "Tu oponente te ha desequipado el casco!", FontTypeNames.FONTTYPE_FIGHT)
 
                 End If
                 
@@ -2451,7 +2462,7 @@ Public Sub DoHurtar(ByVal UserIndex As Integer, ByVal VictimaIndex As Integer)
 
 End Sub
 
-Public Sub Desarmar(ByVal UserIndex As Integer, ByVal victimIndex As Integer)
+Public Sub Desarmar(ByVal UserIndex As Integer, ByVal VictimIndex As Integer)
     '***************************************************
     'Author: Unknown
     'Last Modification: 02/04/2010 (ZaMa)
@@ -2472,11 +2483,11 @@ Public Sub Desarmar(ByVal UserIndex As Integer, ByVal victimIndex As Integer)
         Resultado = RandomNumber(1, 100)
         
         If Resultado <= Probabilidad Then
-            Call Desequipar(victimIndex, UserList(victimIndex).Invent.WeaponEqpSlot)
+            Call Desequipar(VictimIndex, UserList(VictimIndex).Invent.WeaponEqpSlot)
             Call WriteConsoleMsg(UserIndex, "Has logrado desarmar a tu oponente!", FontTypeNames.FONTTYPE_FIGHT)
 
-            If UserList(victimIndex).Stats.ELV < 20 Then
-                Call WriteConsoleMsg(victimIndex, "Tu oponente te ha desarmado!", FontTypeNames.FONTTYPE_FIGHT)
+            If UserList(VictimIndex).Stats.ELV < 20 Then
+                Call WriteConsoleMsg(VictimIndex, "Tu oponente te ha desarmado!", FontTypeNames.FONTTYPE_FIGHT)
 
             End If
 
@@ -2511,7 +2522,7 @@ Public Function MaxItemsExtraibles(ByVal UserLevel As Integer) As Integer
 
 End Function
 
-Public Sub ImitateNpc(ByVal UserIndex As Integer, ByVal NPCIndex As Integer)
+Public Sub ImitateNpc(ByVal UserIndex As Integer, ByVal NpcIndex As Integer)
     '***************************************************
     'Author: ZaMa
     'Last Modification: 20/11/2010
@@ -2521,7 +2532,7 @@ Public Sub ImitateNpc(ByVal UserIndex As Integer, ByVal NPCIndex As Integer)
     With UserList(UserIndex)
         
         ' Copy desc
-        .DescRM = Npclist(NPCIndex).Name
+        .DescRM = Npclist(NpcIndex).Name
         
         ' Remove Anims (Npcs don't use equipment anims yet)
         .Char.CascoAnim = NingunCasco
@@ -2531,11 +2542,11 @@ Public Sub ImitateNpc(ByVal UserIndex As Integer, ByVal NPCIndex As Integer)
         ' If admin is invisible the store it in old char
         If .flags.AdminInvisible = 1 Or .flags.invisible = 1 Or .flags.Oculto = 1 Then
             
-            .flags.OldBody = Npclist(NPCIndex).Char.body
-            .flags.OldHead = Npclist(NPCIndex).Char.Head
+            .flags.OldBody = Npclist(NpcIndex).Char.body
+            .flags.OldHead = Npclist(NpcIndex).Char.Head
         Else
-            .Char.body = Npclist(NPCIndex).Char.body
-            .Char.Head = Npclist(NPCIndex).Char.Head
+            .Char.body = Npclist(NpcIndex).Char.body
+            .Char.Head = Npclist(NpcIndex).Char.Head
             
             Call ChangeUserChar(UserIndex, .Char.body, .Char.Head, .Char.Heading, .Char.WeaponAnim, .Char.ShieldAnim, .Char.CascoAnim, .Char.AuraAnim, .Char.AuraColor)
 
@@ -2720,7 +2731,7 @@ Public Sub DoExtraer(ByVal UserIndex As Integer, ByVal Profesion As Integer)
 
             Select Case Profesion
                 Case eSkill.talar
-                    If .clase = eClass.Lenador Then
+                    If .clase = eClass.Trabajador Then
                         MiObj.Amount = 5
                     Else
                         MiObj.Amount = 1
@@ -2729,7 +2740,7 @@ Public Sub DoExtraer(ByVal UserIndex As Integer, ByVal Profesion As Integer)
                     Call WriteConsoleMsg(UserIndex, "Has extraido algo de leña!", FontTypeNames.FONTTYPE_INFO)
                     
                 Case eSkill.Mineria
-                    If .clase = eClass.Minero Then
+                    If .clase = eClass.Trabajador Then
                         MiObj.Amount = 5
                     Else
                         MiObj.Amount = 1
@@ -2738,7 +2749,7 @@ Public Sub DoExtraer(ByVal UserIndex As Integer, ByVal Profesion As Integer)
                     Call WriteConsoleMsg(UserIndex, "Has extraido algunos minerales!", FontTypeNames.FONTTYPE_INFO)
                     
                 Case eSkill.Botanica
-                    If .clase = eClass.Druid Then
+                    If .clase = eClass.Druid Or .clase = eClass.Trabajador Then
                         MiObj.Amount = 5
                     Else
                         MiObj.Amount = 1
@@ -2800,29 +2811,29 @@ Private Sub QuitarStaExtraccion(ByVal UserIndex As Integer, ByVal Profesion As e
     
         Select Case Profesion
             Case eSkill.talar
-                If .clase = eClass.Lenador Then
-                    Esfuerzo = EsfuerzoTalarLenador
+                If .clase = eClass.Trabajador Then
+                    Esfuerzo = EsfuerzoTalarTrabajador
                 Else
                     Esfuerzo = EsfuerzoTalarGeneral
                 End If
                     
             Case eSkill.Mineria
-                If .clase = eClass.Minero Then
-                    Esfuerzo = EsfuerzoExcavarMinero
+                If .clase = eClass.Trabajador Then
+                    Esfuerzo = EsfuerzoExcavarTrabajador
                 Else
                     Esfuerzo = EsfuerzoExcavarGeneral
                 End If
                     
             Case eSkill.Botanica
-                If .clase = eClass.Druid Then
-                    Esfuerzo = EsfuerzoRaicesBotanico
+                If .clase = eClass.Druid Or .clase = eClass.Trabajador Then
+                    Esfuerzo = EsfuerzoRaicesTrabajador
                 Else
                     Esfuerzo = EsfuerzoRaicesGeneral
                 End If
                 
             Case eSkill.Pesca
-                If .clase = eClass.Pescador Then
-                    Esfuerzo = EsfuerzoPescarPescador
+                If .clase = eClass.Trabajador Then
+                    Esfuerzo = EsfuerzoPescarTrabajador
                 Else
                     Esfuerzo = EsfuerzoPescarGeneral
                 End If

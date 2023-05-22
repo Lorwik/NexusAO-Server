@@ -605,15 +605,15 @@ Private Sub AddItemsToNewUser(ByVal UserIndex As Integer, ByVal UserClase As eCl
         'Pociones Rojas (Newbie)
         Slot = 1
         .Invent.Object(Slot).ObjIndex = 461
-        .Invent.Object(Slot).Amount = 100
+        .Invent.Object(Slot).Amount = 500
 
         'Pociones azules (Newbie)
-'        If .Stats.MaxMAN > 0 Or IsPaladin Then
-'            Slot = Slot + 1
-'            .Invent.Object(Slot).ObjIndex = 1598
-'            .Invent.Object(Slot).Amount = 100
-'
-'        End If
+        If .Stats.MaxMAN > 0 Or IsPaladin Then
+            Slot = Slot + 1
+            .Invent.Object(Slot).ObjIndex = 703
+            .Invent.Object(Slot).Amount = 500
+
+        End If
 
         ' Ropa (Newbie)
         Slot = Slot + 1
@@ -664,48 +664,22 @@ Private Sub AddItemsToNewUser(ByVal UserIndex As Integer, ByVal UserClase As eCl
         ' Equipo ropa
         .Invent.Object(Slot).Amount = 1
         .Invent.Object(Slot).Equipped = 1
-'
+
         .Invent.ArmourEqpSlot = Slot
         .Invent.ArmourEqpObjIndex = .Invent.Object(Slot).ObjIndex
 
-        'Arma (Newbie)
         Slot = Slot + 1
-'        Select Case UserClase
-'            Case eClass.Paladin, eClass.Warrior, _
-'                 eClass.Herrero, eClass.Mercenario, _
-'                 eClass.Minero, eClass.Cleric, _
-'                 eClass.Lenador
-'
-'                'Martillo de Guerra (Newbie)
-'                .Invent.Object(Slot).ObjIndex = 574
-'
-'            Case eClass.Gladiador, eClass.Bard
-'                'Nudillos de Hierro (Newbie)
-'                .Invent.Object(Slot).ObjIndex = 1354
-'
-'            Case eClass.Assasin, eClass.Thief, _
-'                 eClass.Sastre, eClass.Pescador
-'                 'Daga (Newbie)
-'                .Invent.Object(Slot).ObjIndex = 460
-'
-'            Case eClass.Mage, eClass.Nigromante
-'                'Baculo (Newbie)
-'                .Invent.Object(Slot).ObjIndex = 1356
-'                .Invent.Object(Slot).Amount = 1
-'
-'            Case eClass.Hunter, eClass.Druid
-'                'Arco (Newbie)
-'                .Invent.Object(Slot).ObjIndex = 1355
-'                .Invent.Object(Slot).Amount = 1
-'                Slot = Slot + 1
-'                'Daga (Newbie)
-'                .Invent.Object(Slot).ObjIndex = 1356
-'
-'            Case Else
-                'Daga (Newbie)
-                .Invent.Object(Slot).ObjIndex = 460
-'        End Select
-
+        Select Case UserClase
+            Case eClass.Warrior, eClass.Mercenario, _
+                eClass.Gladiador, eClass.Bard
+                'Poción de Fuerza (Newbie)
+                .Invent.Object(Slot).ObjIndex = 462
+                .Invent.Object(Slot).Amount = 100
+        End Select
+        
+        'Daga (Newbie)
+        Slot = Slot + 1
+        .Invent.Object(Slot).ObjIndex = 460
         ' Equipo arma
         .Invent.Object(Slot).Amount = 1
         .Invent.Object(Slot).Equipped = 1
@@ -717,18 +691,18 @@ Private Sub AddItemsToNewUser(ByVal UserIndex As Integer, ByVal UserClase As eCl
 
         ' Manzanas (Newbie)
         Slot = Slot + 1
-        .Invent.Object(Slot).ObjIndex = 573
+        .Invent.Object(Slot).ObjIndex = 467
         .Invent.Object(Slot).Amount = 100
 
         ' Agua (Nwbie)
         Slot = Slot + 1
-        .Invent.Object(Slot).ObjIndex = 572
+        .Invent.Object(Slot).ObjIndex = 468
         .Invent.Object(Slot).Amount = 100
         
         'Runa
-        'Slot = Slot + 1
-        '.Invent.Object(7).ObjIndex = 1599
-        '.Invent.Object(7).Amount = 1
+        Slot = Slot + 1
+        .Invent.Object(7).ObjIndex = 779
+        .Invent.Object(7).Amount = 1
         
         'Dim tmpObj As obj
         'tmpObj.ObjIndex = 879

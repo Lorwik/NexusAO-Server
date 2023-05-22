@@ -143,12 +143,7 @@ Public Enum eClass
     Nigromante  'Nigromante
     Mercenario  'Mercenario
     Gladiador
-    Pescador
-    Herrero
-    Lenador
-    Minero
-    Carpintero
-    Sastre
+    Trabajador
     
 End Enum
 
@@ -156,10 +151,6 @@ Public Enum eCiudad
 
     cUllathorpe = 1
     cNix
-    cBanderbill
-    cLindos
-    cRinkel
-    cArghal
 
 End Enum
 
@@ -469,11 +460,11 @@ Public Const NUMATRIBUTOS   As Byte = 5
 
 ''
 ' Cantidad de Clases
-Public Const NUMCLASES      As Byte = 19
+Public Const NUMCLASES      As Byte = 14
 
 ''
 ' Cantidad de Razas
-Public Const NUMRAZAS       As Byte = 7
+Public Const NUMRAZAS       As Byte = 5
 
 ''
 ' Valor maximo de cada skill
@@ -481,7 +472,7 @@ Public Const MAXSKILLPOINTS As Byte = 100
 
 ''
 ' Cantidad de Ciudades
-Public Const NUMCIUDADES    As Byte = 6
+Public Const NUMCIUDADES    As Byte = 2
 
 ''
 'Direccion
@@ -659,7 +650,7 @@ Public Const MAX_INVENTORY_SLOTS As Byte = 30
 
 ''
 ' Cantidad de "slots" en el inventario por fila
-Public Const SLOTS_PER_ROW_INVENTORY As Byte = 5
+Public Const SLOTS_PER_ROW_INVENTORY As Byte = 6
 
 ''
 ' Constante para indicar que se esta usando ORO
@@ -2116,14 +2107,6 @@ End Type
 Public Ullathorpe           As WorldPos
 
 Public Nix                  As WorldPos
-
-Public Banderbill           As WorldPos
-
-Public Lindos               As WorldPos
-
-Public Rinkel               As WorldPos
-
-Public Arghal               As WorldPos
 
 Public Prision              As WorldPos
 

@@ -220,10 +220,10 @@ Function HaySacerdote(ByVal UserIndex As Integer) As Boolean
         For Y = .Pos.Y - MinYBorder + 1 To .Pos.Y + MinYBorder - 1
             For X = .Pos.X - MinXBorder + 1 To .Pos.X + MinXBorder - 1
        
-                If MapData(.Pos.Map, X, Y).NPCIndex > 0 Then
-                    If Npclist(MapData(.Pos.Map, X, Y).NPCIndex).NPCtype = eNPCType.Revividor Then
+                If MapData(.Pos.Map, X, Y).NpcIndex > 0 Then
+                    If Npclist(MapData(.Pos.Map, X, Y).NpcIndex).NPCtype = eNPCType.Revividor Then
                        
-                        If Distancia(.Pos, Npclist(MapData(.Pos.Map, X, Y).NPCIndex).Pos) < 5 Then
+                        If Distancia(.Pos, Npclist(MapData(.Pos.Map, X, Y).NpcIndex).Pos) < 5 Then
                             HaySacerdote = True
                             Exit Function
                         End If
@@ -456,12 +456,7 @@ Private Sub LoadConstants()
     ListaClases(eClass.Nigromante) = "Nigromante"
     ListaClases(eClass.Mercenario) = "Mercenario"
     ListaClases(eClass.Gladiador) = "Gladiador"
-    ListaClases(eClass.Pescador) = "Pescador"
-    ListaClases(eClass.Herrero) = "Herrero"
-    ListaClases(eClass.Lenador) = "Leñador"
-    ListaClases(eClass.Minero) = "Minero"
-    ListaClases(eClass.Carpintero) = "Carpintero"
-    ListaClases(eClass.Sastre) = "Sastre"
+    ListaClases(eClass.trabajador) = "Trabajador"
     
     ' Skills
     SkillsNames(eSkill.Magia) = "Magia"
@@ -1055,14 +1050,14 @@ Public Sub EfectoInvisibilidad(ByVal UserIndex As Integer)
 
 End Sub
 
-Public Sub EfectoParalisisNpc(ByVal NPCIndex As Integer)
+Public Sub EfectoParalisisNpc(ByVal NpcIndex As Integer)
     '***************************************************
     'Author: Unknown
     'Last Modification: -
     '
     '***************************************************
 
-    With Npclist(NPCIndex)
+    With Npclist(NpcIndex)
 
         If .Contadores.Paralisis > 0 Then
             .Contadores.Paralisis = .Contadores.Paralisis - 1

@@ -1,52 +1,91 @@
-'			TIPOS DE OBJETOS
-' 1: Comida
-' 2: Armas
-' 3: Armaduras
-' 4: Arboles
-' 5: Dinero
-' 6: Puertas
-' 7: Objetos contenedores (por ejemplo bolsas y cofres)
-' 8: Carteles
-' 9: Llaves
-' 10: Foros
-' 11: Pociones
-' 12: Libros
-' 13: Bebida
-' 14: Leña
-' 15: Fogata
-' 16: escudos
-' 17: cascos
-' 18: Herramientas
-' 19: telep
-' 20: Muebles
-' 21: joyas
-' 22: yacimiento
-' 23: metales
-' 24: pergaminos
-' 25: aura
-' 26: Instrumentos Musicales
-' 27: Yunque
-' 28: Fragua
-' 29: Gemas
-' 30: Pieles
-' 31: barcos
-' 32: flechas
-' 33: botellas vacias
-' 34: botellas llenas
-' 35: manchas
-' 36: flechas magicas
+'TIPOS DE OBJETOS
+'  1 Comidas
+'  2 Armas
+'  3 Armaduras
+'  4 Árboles
+'  5 Dinero
+'  6 Puertas
+'  7 Objetos Contenedores
+'  8 Carteles
+'  9 Llaves
+' 10 Foros
+' 11 Pociones
+' 12 Libros
+' 13 Bebidas
+' 14 Leña
+' 15 Fuego
+' 16 Escudos
+' 17 Cascos
+' 18 Herramientas
+' 19 Teleports
+' 20 Muebles y Decoraciones
+' 21 Ítems Mágicos
+' 22 Yacimientos
+' 23 Metales
+' 24 Pergaminos de Hechizos
+' 25 (Nada)
+' 26 Instrumentos Musicales
+' 27 Yunque
+' 28 Fragua
+' 29 Lingotes y Gemas
+' 30 Pieles
+' 31 Embarcaciones
+' 32 Flechas
+' 33 Botellas Vacías
+' 34 Botellas Llenas
+' 35 Manchas
+' 36 Pases
+' 37 (Nada)
+' 38 Mapas
+' 39 Bolsas de Oro (contienen más de 10k de oro)
+' 40 Pozos Mágicos
+' 41 Esposas
+' 42 Raíces
+' 43 Cadáveres
+' 44 Monturas
+' 45 Puestos de Entrenamiento
+' 46 Nudillos para Artes Marciales
+' 47 Anillos Habilitadores de Hechizos
+' 48 (Nada)
+' 49 Runa
 
-'<--------------------Tipo de posicones------------------->
-'1 Modifica la Agilidad
-'2 Modifica la Fuerza
-'3 Repone HP
-'4 Repone Mana
-'5 Cura Envenenamiento
-'<--------------------Tipo de posicones------------------->
+'TipoPocion:
+' 1 Modifica la Agilidad
+' 2 Modifica la Fuerza
+' 3 Repone HP
+' 4 Repone Maná
+' 5 Cura Envenenamiento
+' 6 Remueve Parálisis
+' 7 Metamorfosis
+' 8 Remueve Ceguera
+' 9 Remueve Estupidez
+'10 Invisibilidad
+
+'Objetos mágicos
+'EfectoMagico:
+'  1 Resistencia Mágica (Usa CuantoAumento)
+'  2 Modifica Atributos (Usa CuantoAumento y QueAtributo)
+'  3 Modifica Skills (Usa CuantoAumento y QueSkill)
+'  4 Acelera la recuperación de salud
+'  5 Acelera la meditación
+'  6 Aumenta el golpe hecho a criaturas (Usa CuantoAumento)
+'  7 Disminuye el golpe recibido de criaturas (Usa CuantoAumento)
+'  8 (Nada)
+'  9 No permite que las criaturas ataquen con magia al personaje
+' 10 Incinera
+' 11 Paraliza
+' 12 Si el usuario muere, mantiene un porcentaje de los minerales que cargue en su inventario (Usa CuantoAumento)
+' 13 El personaje puede caminar oculto
+' 14 El personaje hace un mayor daño mágico en un porcentaje. (Usa CuantoAumento)
+' 15 Si el usuario muere, evita que sus pertenencias caigan al piso. Sólo caerá este ítem mágico
+' 16 El personaje puede lanzar hechizos sin que nadie vea sus palabras mágicas
+' 17 El usuario que lo usa no puede ser detectado si está invisible
+' 18 Aumenta la probabilidad del aumento de skills en un porcentaje (Usa CuantoAumento)
+' 19 Los golpes del personaje tienen probabilidad de envenenar al enemigo
 
 
 [INIT]
-NumOBJs=776
+NumOBJs=823
 
 [OBJ398]'1.0 714
 Name=Garrote
@@ -1056,8 +1095,7 @@ Name=Casco de hierro
 Anim=12
 GrhIndex=908
 NumRopaje=2
-ObjType=3
-Subtipo=1
+ObjType=17
 MAXDEF=8
 MINDEF=3
 Valor=1000
@@ -1110,8 +1148,7 @@ Name=Casco de hierro completo
 Anim=11
 GrhIndex=907
 NumRopaje=2
-ObjType=3
-Subtipo=1
+ObjType=17
 MAXDEF=20
 MINDEF=10
 Valor=7000
@@ -1158,8 +1195,7 @@ Name=Casco de plata
 Anim=3
 GrhIndex=904
 NumRopaje=2
-ObjType=3
-Subtipo=1
+ObjType=17
 MAXDEF=25
 MINDEF=20
 Valor=20000
@@ -1207,8 +1243,7 @@ Name=Casco de caballero
 Anim=18
 GrhIndex=901
 NumRopaje=2
-ObjType=3
-Subtipo=1
+ObjType=17
 MAXDEF=30
 MINDEF=25
 Valor=25000
@@ -1257,8 +1292,7 @@ GrhIndex=712
 NumRopaje=2
 MinDef=0
 MaxDef=0
-ObjType=3
-Subtipo=2
+ObjType=16
 Valor=360
 CP1=38
 CP2=39
@@ -1274,8 +1308,7 @@ Name=Rodela
 Anim=10
 GrhIndex=925
 NumRopaje=2
-ObjType=3
-Subtipo=2
+ObjType=16
 Valor=2000
 LingH=30
 SkHerreria=20
@@ -1319,8 +1352,7 @@ Name=Escudo de hierro
 Anim=21
 GrhIndex=557
 NumRopaje=2
-ObjType=3
-Subtipo=2
+ObjType=16
 Valor=3000
 SkEscudos=50
 Mindef=0
@@ -1366,8 +1398,7 @@ Name=Escudo Imperial
 Anim=1
 GrhIndex=924
 NumRopaje=2
-ObjType=3
-Subtipo=2
+ObjType=16
 Valor=6000
 SkEscudos=63
 Mindef=1
@@ -1413,8 +1444,7 @@ Name=Escudo Imperial +1
 Anim=14
 GrhIndex=917
 NumRopaje=2
-ObjType=3
-Subtipo=2
+ObjType=16
 Valor=8000
 SkEscudos=87
 Mindef=2
@@ -4338,9 +4368,8 @@ CP31=56
 Name=Sombrero de principiante
 Anim=19
 GrhIndex=13732
-NumRopaje=2
-ObjType=3
-Subtipo=1
+NumRopaje=17
+ObjType=17
 MAXDEF=5
 MINDEF=5
 Valor=4000
@@ -4353,7 +4382,6 @@ LingP=60
 SkSastreria=33
 PielLobo=45
 SkResistencia=50
-Gorro=1
 CP4=4
 CP5=8
 CP6=13
@@ -4384,15 +4412,12 @@ CP30=53
 CP31=55
 CP32=56
 
-
-
 [OBJ572] '1.0
 Name=Sombrero de hechicero
 Anim=20
 GrhIndex=13737
 NumRopaje=2
-ObjType=3
-Subtipo=1
+ObjType=17
 MAXDEF=10
 MINDEF=10
 Valor=9000
@@ -4405,7 +4430,6 @@ LingP=30
 SkSastreria=85
 PielLobo=100
 SkResistencia=100
-Gorro=1
 CP4=4
 CP5=8
 CP6=13
@@ -4469,7 +4493,7 @@ Agarrable=1
 'Puerta para negocio porque no tiene clave
 [OBJ7]
 Name=Puerta de madera abierta
-GrhIndex =5592
+GrhIndex=5592
 ObjType=6
 abierta=0
 llave=0
@@ -4493,11 +4517,9 @@ IndexAbierta=7
 IndexCerrada=8
 IndexCerradaLlave=8
 
-
-
 [OBJ10]
 Name=Cofre abierto
-GrhIndex =502
+GrhIndex=502
 ObjType=7
 abierta=0
 llave=0
@@ -4507,7 +4529,7 @@ NroItems=0
 
 [OBJ11]
 Name=Cofre cerrado
-GrhIndex =503
+GrhIndex=503
 ObjType=7
 abierta=0
 llave=0
@@ -4517,12 +4539,12 @@ NroItems=0
 
 [OBJ12]
 Name=Monedas de oro
-GrhIndex =511
+GrhIndex=511
 ObjType=5
 
 [OBJ13]
 Name=Cartel Armas
-GrhIndex =500
+GrhIndex=500
 VGrande=501
 ObjType=8
 Texto=Tenemos los mejores precios de la zona.
@@ -4530,16 +4552,13 @@ Agarrable=1
 
 [OBJ14]
 Name=Llave
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=2
 
-
-
-
 [OBJ16] 'CASA RUINAS
 Name=Puerta de madera abierta 2
-GrhIndex =5599
+GrhIndex=5599
 ObjType=6
 abierta=0
 llave=0
@@ -4563,7 +4582,7 @@ IndexCerradaLlave=17
 
 [OBJ18]
 Name=Cartel Comida
-GrhIndex =512
+GrhIndex=512
 VGrande=501
 ObjType=8
 Texto=¡La mejor comida al mejor precio!.
@@ -4595,7 +4614,7 @@ NumClases=4
 
 [OBJ20]
 Name=Lapida
-GrhIndex =513
+GrhIndex=513
 VGrande=514
 ObjType=8
 Texto=Aquie yace Durmin Van Brick, otrora gran guerrero del imperio.
@@ -4668,7 +4687,7 @@ Valor=5
 
 [OBJ33]
 Name=Cartel Sastre
-GrhIndex =530
+GrhIndex=530
 VGrande=501
 ObjType=8
 Texto=Ropa Azrra, los mejores precios!
@@ -4718,7 +4737,7 @@ Raices=25
 
 [OBJ40]
 Name=Atlas Argentum
-GrhIndex =538
+GrhIndex=538
 VGrande=501
 ObjType=12
 Texto=Argentum
@@ -4726,7 +4745,7 @@ Agarrable=0
 
 [OBJ41]
 Name=Libro antiguo
-GrhIndex =539
+GrhIndex=539
 VGrande=501
 ObjType=12
 Texto=Argentum
@@ -4762,7 +4781,6 @@ Agarrable=1
 
 [OBJ46]
 Name=Arbol
-Info=Nieve 1
 GrhIndex=641
 Objtype=4
 Resistencia=500
@@ -4770,7 +4788,6 @@ Agarrable=1
 
 [OBJ47]
 Name=Arbol
-Info=Nieve 2
 GrhIndex=643
 Objtype=4
 Resistencia=500
@@ -4778,7 +4795,6 @@ Agarrable=1
 
 [OBJ48]
 Name=Arbol
-Info=Nieve 3
 GrhIndex=641
 Objtype=4
 Resistencia=500
@@ -4786,7 +4802,6 @@ Agarrable=1
 
 [OBJ49]
 Name=Arbol
-Info=Nieve 4
 GrhIndex=644
 Objtype=4
 Resistencia=500
@@ -4794,7 +4809,6 @@ Agarrable=1
 
 [OBJ50]
 Name=Arbol
-Info=Nieve 5
 GrhIndex=647
 Objtype=4
 Resistencia=500
@@ -4804,7 +4818,7 @@ Agarrable=1
 
 [OBJ51]
 Name=Puerta de madera abierta
-GrhIndex =5592
+GrhIndex=5592
 ObjType=6
 abierta=0
 llave=0
@@ -4844,14 +4858,14 @@ IndexCerradaLlave=53
 [OBJ54]
 Name=Llave Ullathorpe casa 1
 Info=Ullathorpe casa nro 1
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=2
 Valor=1350000
 
 [OBJ55]
 Name=Puerta de madera abierta
-GrhIndex =5599
+GrhIndex=5599
 ObjType=6
 abierta=0
 llave=0
@@ -4888,7 +4902,7 @@ Crucial=1
 
 [OBJ59]
 Name=Cartel Pociones
-GrhIndex =546
+GrhIndex=546
 VGrande=501
 ObjType=8
 Texto=Pociones, aumente su fuerza, agilidad o recupere salud!
@@ -4896,7 +4910,7 @@ Agarrable=1
 
 [OBJ60]
 Name=Casa numero 1
-GrhIndex =547
+GrhIndex=547
 VGrande=501
 ObjType=8
 Texto=Casa numero 1
@@ -4904,7 +4918,7 @@ Agarrable=1
 
 [OBJ61]
 Name=Cartel carpinteria
-GrhIndex =548
+GrhIndex=548
 VGrande=501
 ObjType=8
 Texto=Compra y venta de madera!
@@ -4912,7 +4926,7 @@ Agarrable=1
 
 [OBJ62]
 Name=Cartel propiedades
-GrhIndex =549
+GrhIndex=549
 VGrande=501
 ObjType=8
 Texto=Compra y venta de propiedades, stock limitado!
@@ -4920,7 +4934,7 @@ Agarrable=1
 
 [OBJ63]
 Name=Fogata
-GrhIndex =1521
+GrhIndex=1521
 ObjType=15
 Agarrable=1
 
@@ -4937,7 +4951,7 @@ Respawn=1 ' Hace ReSpawn
 [OBJ65]
 Name=Llave Ullathorpe casa 2
 Info=Ullathorpe casa nro 1
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=4
 Valor=1350000
@@ -4945,7 +4959,7 @@ Valor=1350000
 
 [OBJ66]
 Name=Puerta de madera abierta
-GrhIndex =5592
+GrhIndex=5592
 ObjType=6
 abierta=0
 llave=0
@@ -4987,14 +5001,14 @@ IndexCerradaLlave=68
 [OBJ69]
 Name=Llave Ullathorpe casa 3
 Info=Ullathorpe casa nro 1
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=5
 Valor=1350000
 
 [OBJ70]
 Name=Puerta de madera abierta
-GrhIndex =5592
+GrhIndex=5592
 ObjType=6
 abierta=0
 llave=0
@@ -5036,14 +5050,14 @@ IndexCerradaLlave=72
 [OBJ73]
 Name=Llave Ullathorpe casa 4
 Info=Ullathorpe casa nro 1
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=6
 Valor=1350000
 
 [OBJ74]
 Name=Puerta de madera abierta
-GrhIndex =5592
+GrhIndex=5592
 ObjType=6
 abierta=0
 llave=0
@@ -5082,7 +5096,7 @@ IndexCerradaLlave=76
 
 [OBJ77]
 Name=Casa numero 2
-GrhIndex =553
+GrhIndex=553
 VGrande=501
 ObjType=8
 Texto=Casa numero 2
@@ -5090,7 +5104,7 @@ Agarrable=1
 
 [OBJ78]
 Name=Casa numero 3
-GrhIndex =552
+GrhIndex=552
 VGrande=501
 ObjType=8
 Texto=Casa numero 3
@@ -5098,7 +5112,7 @@ Agarrable=1
 
 [OBJ79]
 Name=Casa numero 4
-GrhIndex =551
+GrhIndex=551
 VGrande=501
 ObjType=8
 Texto=Casa numero 4
@@ -5119,7 +5133,7 @@ Respawn=1 ' Hace ReSpawn
 
 [OBJ82]
 Name=Casa numero 5
-GrhIndex =555
+GrhIndex=555
 VGrande=501
 ObjType=8
 Texto=Casa numero 5
@@ -5127,7 +5141,7 @@ Agarrable=1
 
 [OBJ83]
 Name=Casa numero 6
-GrhIndex =556
+GrhIndex=556
 VGrande=501
 ObjType=8
 Texto=Casa numero 6
@@ -5135,7 +5149,7 @@ Agarrable=1
 
 [OBJ84]
 Name=Casa numero 7
-GrhIndex =568
+GrhIndex=568
 VGrande=501
 ObjType=8
 Texto=Casa numero 7
@@ -5143,7 +5157,7 @@ Agarrable=1
 
 [OBJ85]
 Name=Casa numero 8
-GrhIndex =567
+GrhIndex=567
 VGrande=501
 ObjType=8
 Texto=Casa numero 8
@@ -5151,7 +5165,7 @@ Agarrable=1
 
 [OBJ86]
 Name=Casa numero 9
-GrhIndex =569
+GrhIndex=569
 VGrande=501
 ObjType=8
 Texto=Casa numero 9
@@ -5163,14 +5177,14 @@ Agarrable=1
 [OBJ87]
 Name=Llave casa 1 de Nix
 Info=Llave casa 1 de Nix
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=7
 Valor=600000
 
 [OBJ88]
 Name=Puerta de madera abierta
-GrhIndex =5592
+GrhIndex=5592
 ObjType=6
 abierta=0
 llave=0
@@ -5214,14 +5228,14 @@ IndexCerradaLlave=90
 [OBJ91]
 Name=Llave casa 2 de Nix
 Info=Llave casa 2 de Nix
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=8
 Valor=600000
 
 [OBJ92]
 Name=Puerta de madera abierta
-GrhIndex =5592
+GrhIndex=5592
 ObjType=6
 abierta=0
 llave=0
@@ -5264,14 +5278,14 @@ IndexCerradaLlave=94
 [OBJ95]
 Name=Llave casa 3 de Nix
 Info=Llave casa 3 de Nix
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=9
 Valor=600000
 
 [OBJ96]
 Name=Puerta de madera abierta
-GrhIndex =5592
+GrhIndex=5592
 ObjType=6
 abierta=0
 llave=0
@@ -5315,14 +5329,14 @@ IndexCerradaLlave=98
 [OBJ99]
 Name=Llave casa 4 de Nix
 Info=Llave casa 4 de Nix
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=10
 Valor=600000
 
 [OBJ100]
 Name=Puerta de madera abierta
-GrhIndex =5592
+GrhIndex=5592
 ObjType=6
 abierta=0
 llave=0
@@ -5364,14 +5378,14 @@ IndexCerradaLlave=102
 [OBJ103]
 Name=Llave casa 5 de Nix
 Info=Llave casa 5 de Nix
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=11
 Valor=600000
 
 [OBJ104]
 Name=Puerta de madera abierta
-GrhIndex =5592
+GrhIndex=5592
 ObjType=6
 abierta=0
 llave=0
@@ -5414,14 +5428,14 @@ IndexCerradaLlave=106
 [OBJ107]
 Name=Llave casa 6 de Nix
 Info=Llave casa 6 de Nix
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=12
 Valor=600000
 
 [OBJ108]
 Name=Puerta de madera abierta
-GrhIndex =5592
+GrhIndex=5592
 ObjType=6
 abierta=0
 llave=0
@@ -5462,14 +5476,14 @@ IndexCerradaLlave=110
 [OBJ111]
 Name=Llave casa 7 de Nix
 Info=Llave casa 7 de Nix
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=13
 Valor=600000
 
 [OBJ112]
 Name=Puerta de madera abierta
-GrhIndex =5592
+GrhIndex=5592
 ObjType=6
 abierta=0
 llave=0
@@ -5511,14 +5525,14 @@ IndexCerradaLlave=114
 [OBJ115]
 Name=Llave casa 8 de Nix
 Info=Llave casa 8 de Nix
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=14
 Valor=600000
 
 [OBJ116]
 Name=Puerta de madera abierta
-GrhIndex =5592
+GrhIndex=5592
 ObjType=6
 abierta=0
 llave=0
@@ -5560,14 +5574,14 @@ IndexCerradaLlave=118
 [OBJ119]
 Name=Llave casa 9 de Nix
 Info=Llave casa 9 de Nix
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=15
 Valor=600000
 
 [OBJ120]
 Name=Puerta de madera abierta
-GrhIndex =5592
+GrhIndex=5592
 ObjType=6
 abierta=0
 llave=0
@@ -5604,9 +5618,6 @@ IndexAbierta=120
 IndexCerrada=121
 IndexCerradaLlave=122
 
-
-
-
 [OBJ127]
 Name=Hacha de leñador
 GrhIndex=565
@@ -5619,14 +5630,12 @@ Crucial=1
 LingH=10
 SkHerreria=12
 
-
 [OBJ133]
 Name=Escudo de plata
 Anim=1
 GrhIndex=560
 NumRopaje=2
 ObjType=3
-Subtipo=2
 Valor=22000
 CP1=1
 CP2=2
@@ -5672,13 +5681,11 @@ CP35=58
 
 [OBJ134]
 Name=Cartel armaduras
-GrhIndex =570
+GrhIndex=570
 VGrande=501
 ObjType=8
 Texto=Compra y venta de armaduras, cascos y escudos.
 Agarrable=1
-
-
 
 [OBJ136]
 Name=Ramitas
@@ -5713,14 +5720,14 @@ Valor=6
 [OBJ140]
 Name=Llave Mansion Nix
 Info=Llave Mansion Nix
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=16
 Valor=5000000
 
 [OBJ141]
 Name=Puerta de madera abierta
-GrhIndex =9199
+GrhIndex=9199
 ObjType=6
 abierta=0
 llave=0
@@ -5937,7 +5944,7 @@ Agarrable=1
 '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 [OBJ171] 'CASA RUINAS
 Name=Puerta
-GrhIndex =5599
+GrhIndex=5599
 ObjType=6
 abierta=0
 llave=0
@@ -5977,7 +5984,7 @@ IndexCerradaLlave=173
 [OBJ174]
 Name=Llave catacumbas de Ullathorpe
 Info=Puerta del inicio
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Valor=1000
 Clave=17
@@ -5985,7 +5992,7 @@ Clave=17
 
 [OBJ175] 'CASA RUINAS
 Name=Puerta
-GrhIndex =5599
+GrhIndex=5599
 ObjType=6
 abierta=0
 llave=0
@@ -6025,14 +6032,14 @@ IndexCerradaLlave=177
 [OBJ178]
 Name=Llave dungeon maleheing
 Info=Puerta del inicio
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=18
 
 
 [OBJ179] 'CASA RUINAS
 Name=Puerta
-GrhIndex =5599
+GrhIndex=5599
 ObjType=6
 abierta=0
 llave=0
@@ -6072,7 +6079,7 @@ IndexCerradaLlave=181
 [OBJ182]
 Name=Llave dungeon maleheing
 Info=Puerta del inicio
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=19
 
@@ -6081,7 +6088,7 @@ Clave=19
 [OBJ183]
 Name=Llave fuerte
 Info=Llave fuerte
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=20
 Valor=90000
@@ -6090,7 +6097,7 @@ Valor=90000
 [OBJ184]
 Name=Puerta
 Info=Fuerte suroeste ullathorpe
-GrhIndex =5592
+GrhIndex=5592
 ObjType=6
 abierta=0
 llave=0
@@ -6321,7 +6328,7 @@ Objtype=24
 [OBJ209]
 Name=Cartel
 Info=Cartel Mineros
-GrhIndex =610
+GrhIndex=610
 VGrande=501
 ObjType=8
 Texto=Bienvenidos al gremio de los mineros, contamos con fabulosas herramientas y los mejores metales de todo Argentum.
@@ -6329,7 +6336,7 @@ Agarrable=1
 
 [OBJ210]
 Name=Cartel casa 11
-GrhIndex =611
+GrhIndex=611
 VGrande=501
 ObjType=8
 Texto=Residencia privada.
@@ -6338,7 +6345,7 @@ Agarrable=1
 
 [OBJ211]
 Name=Cartel casa 12
-GrhIndex =612
+GrhIndex=612
 VGrande=501
 ObjType=8
 Texto=Residencia privada.
@@ -6347,7 +6354,7 @@ Agarrable=1
 
 [OBJ212]
 Name=Cartel casa 13
-GrhIndex =613
+GrhIndex=613
 VGrande=501
 ObjType=8
 Texto=Residencia privada.
@@ -6355,7 +6362,7 @@ Agarrable=1
 
 [OBJ213]
 Name=Cartel casa 14
-GrhIndex =614
+GrhIndex=614
 VGrande=501
 ObjType=8
 Texto=Residencia privada.
@@ -6363,7 +6370,7 @@ Agarrable=1
 
 [OBJ214]
 Name=Cartel casa 15
-GrhIndex =615
+GrhIndex=615
 VGrande=501
 ObjType=8
 Texto=Residencia privada.
@@ -6371,7 +6378,7 @@ Agarrable=1
 
 [OBJ215]
 Name=Cartel casa 16
-GrhIndex =616
+GrhIndex=616
 VGrande=501
 ObjType=8
 Texto=Residencia privada.
@@ -6379,7 +6386,7 @@ Agarrable=1
 
 [OBJ216]
 Name=Cartel casa 17
-GrhIndex =617
+GrhIndex=617
 VGrande=501
 ObjType=8
 Texto=Residencia privada.
@@ -6387,7 +6394,7 @@ Agarrable=1
 
 [OBJ217]
 Name=Cartel casa 18
-GrhIndex =618
+GrhIndex=618
 VGrande=501
 ObjType=8
 Texto=Residencia privada.
@@ -6396,7 +6403,7 @@ Agarrable=1
 
 [OBJ218]
 Name=Cartel casa 19
-GrhIndex =619
+GrhIndex=619
 VGrande=501
 ObjType=8
 Texto=Residencia privada.
@@ -6404,7 +6411,7 @@ Agarrable=1
 
 [OBJ219]
 Name=Cartel casa 10
-GrhIndex =620
+GrhIndex=620
 VGrande=501
 ObjType=8
 Texto=Residencia privada.
@@ -6412,7 +6419,7 @@ Agarrable=1
 
 [OBJ220]
 Name=Cartel casa 20
-GrhIndex =621
+GrhIndex=621
 VGrande=501
 ObjType=8
 Texto=Residencia privada.
@@ -6421,7 +6428,7 @@ Agarrable=1
 [OBJ221]
 Name=Cartel
 Info=Venta de hechizos
-GrhIndex =622
+GrhIndex=622
 VGrande=501
 ObjType=8
 Texto=¡Entrad noble mago!, puedo mostrarte mis mejores hechizos.
@@ -6431,7 +6438,7 @@ Agarrable=1
 [OBJ222]
 Name=Cartel
 Info=Pescadores
-GrhIndex =623
+GrhIndex=623
 VGrande=501
 ObjType=8
 Texto=GREMIO DE PESCADORES
@@ -6440,7 +6447,7 @@ Agarrable=1
 [OBJ223]
 Name=Cartel
 Info=Cruce NIX/ULLA
-GrhIndex =625
+GrhIndex=625
 VGrande=501
 ObjType=8
 Texto=Hola aventurero, unos cuantos kilomentros al norte se encuentra el pueblo de Ullathorpe y al oeste encontraras la ciudad de Nix. ¡Buena Suerte viajero!
@@ -6450,7 +6457,7 @@ Agarrable=1
 [OBJ224]
 Name=Advertencia
 Info=Advertencia a criminales
-GrhIndex =624
+GrhIndex=624
 VGrande=501
 ObjType=8
 Texto=Forasteros: este pueblo forma parte del gran imperio de Argentum, cualquier accion criminal sera reprimida por la guardia real. Todo criminal sera perseguido y ajusticiado.                                La gobernacion.
@@ -6460,7 +6467,7 @@ Agarrable=1
 [OBJ225]
 Name=Cartel
 Info=Cartel del newbie dungeon
-GrhIndex =626
+GrhIndex=626
 VGrande=501
 ObjType=8
 Texto=¡Hola osados aventureros, sed bienvenidos en el Newbie Dungeon!, aqui podran entrenar sus habilidades sin correr ninung riesgo ya que el dungeon esta fuertemente custodiado por la guardia imperial. Adentrandose encontraran criaturas perversas con las cuales podran luchar, tambien encontraran un sacerdote para ser resucitados, provisiones,etc. ¡Suerte y que lo disfruteis! El staff de Noland-Studios ;-)
@@ -6470,7 +6477,7 @@ Agarrable=1
 [OBJ226]
 Name=Cartel
 Info=Cartel cruce ulla/dorck
-GrhIndex =628
+GrhIndex=628
 VGrande=501
 ObjType=8
 Texto=Sigue el camino del sur para ir a Nix, hacia al oeste encontraras el peligroso bosque de Dorck.
@@ -6479,7 +6486,7 @@ Agarrable=1
 [OBJ227]
 Name=Cartel
 Info=bosque dorck
-GrhIndex =627
+GrhIndex=627
 VGrande=501
 ObjType=8
 Texto=Entrada al bosque de Dorck, mantengase se alejado.
@@ -6618,7 +6625,7 @@ NumClases=30
 'Puerta para negocio porque no tiene clave
 [OBJ241]
 Name=Puerta de madera abierta
-GrhIndex =8685
+GrhIndex=8685
 ObjType=6
 abierta=0
 llave=0
@@ -6649,7 +6656,7 @@ IndexCerradaLlave=241
 'Puerta para negocio porque no tiene clave
 [OBJ244]
 Name=Puerta de madera abierta
-GrhIndex =9199
+GrhIndex=9199
 ObjType=6
 abierta=0
 llave=0
@@ -6677,7 +6684,7 @@ IndexCerradaLlave=245
 'Puerta para negocio porque no tiene clave
 [OBJ246]
 Name=Puerta de madera abierta
-GrhIndex =9200
+GrhIndex=9200
 ObjType=6
 abierta=0
 llave=0
@@ -6705,7 +6712,7 @@ IndexCerradaLlave=247
 'Puerta para negocio porque no tiene clave
 [OBJ248]
 Name=Puerta de madera abierta
-GrhIndex =9201
+GrhIndex=9201
 ObjType=6
 abierta=0
 llave=0
@@ -6734,7 +6741,7 @@ IndexCerradaLlave=249
 'Puerta para negocio porque no tiene clave
 [OBJ250]
 Name=Puerta de madera abierta
-GrhIndex =9202
+GrhIndex=9202
 ObjType=6
 abierta=0
 llave=0
@@ -6763,7 +6770,7 @@ IndexCerradaLlave=251
 'Puerta para negocio porque no tiene clave
 [OBJ252]
 Name=Puerta de madera abierta
-GrhIndex =9203
+GrhIndex=9203
 ObjType=6
 abierta=0
 llave=0
@@ -6792,7 +6799,7 @@ IndexCerradaLlave=253
 'Puerta para negocio porque no tiene clave
 [OBJ254]
 Name=Puerta de madera abierta
-GrhIndex =9204
+GrhIndex=9204
 ObjType=6
 abierta=0
 llave=0
@@ -6836,7 +6843,7 @@ Agarrable=1
 [OBJ258]
 Name=Cartel
 Info=Banco
-GrhIndex =670
+GrhIndex=670
 VGrande=501
 ObjType=8
 Texto=Banco Goliath, la mayor seguridad.
@@ -6845,7 +6852,7 @@ Agarrable=1
 [OBJ259]
 Name=Cartel
 Info=Provisiones
-GrhIndex =672
+GrhIndex=672
 VGrande=501
 ObjType=8
 Texto=Provisiones.
@@ -6854,7 +6861,7 @@ Agarrable=1
 [OBJ260]
 Name=Cartel
 Info=Sacerdote
-GrhIndex =673
+GrhIndex=673
 VGrande=501
 ObjType=8
 Texto=Resurrecciones.
@@ -6863,7 +6870,7 @@ Agarrable=1
 [OBJ261]
 Name=Cartel
 Info=Meson Hostigado
-GrhIndex =671
+GrhIndex=671
 VGrande=501
 ObjType=8
 Texto=Meson Hostigado
@@ -6872,7 +6879,7 @@ Agarrable=1
 [OBJ262]
 Name=Cartel
 Info=El gran consejo
-GrhIndex =719
+GrhIndex=719
 VGrande=501
 ObjType=8
 Texto=El gran consejo
@@ -6883,7 +6890,7 @@ Agarrable=1
 '<<<<<<<<<<<<<<<Puerta casa 1 de Rázgul>>>>>>>>>>>>>>>>>
 [OBJ263]
 Name=Puerta abierta
-GrhIndex =9201
+GrhIndex=9201
 ObjType=6
 abierta=0
 llave=0
@@ -6924,7 +6931,7 @@ IndexCerradaLlave=265
 [OBJ266]
 Name=Banderbill Llave casa 1
 Info=Razgul casa nro 1
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=25
 Valor=2200000
@@ -6934,7 +6941,7 @@ Valor=2200000
 '<<<<<<<<<<<<<<<Puerta casa 2 de Rázgul>>>>>>>>>>>>>>>>>
 [OBJ267]
 Name=Puerta abierta
-GrhIndex =9201
+GrhIndex=9201
 ObjType=6
 abierta=0
 llave=0
@@ -6974,7 +6981,7 @@ IndexCerradaLlave=269
 [OBJ270]
 Name=Banderbill Llave casa 2
 Info=Razgul casa nro 1
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=26
 Valor=2200000
@@ -6984,7 +6991,7 @@ Valor=2200000
 '<<<<<<<<<<<<<<<Puerta casa 3 de Rázgul>>>>>>>>>>>>>>>>>
 [OBJ271]
 Name=Puerta abierta
-GrhIndex =9201
+GrhIndex=9201
 ObjType=6
 abierta=0
 llave=0
@@ -7024,7 +7031,7 @@ IndexCerradaLlave=273
 [OBJ274]
 Name=Banderbill Llave casa 3
 Info=Razgul casa nro 1
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=27
 Valor=2200000
@@ -7034,7 +7041,7 @@ Valor=2200000
 '<<<<<<<<<<<<<<<Puerta casa 4 de Rázgul>>>>>>>>>>>>>>>>>
 [OBJ275]
 Name=Puerta abierta
-GrhIndex =9201
+GrhIndex=9201
 ObjType=6
 abierta=0
 llave=0
@@ -7074,7 +7081,7 @@ IndexCerradaLlave=277
 [OBJ278]
 Name=Banderbill Llave casa 4
 Info=Razgul casa nro 4
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=28
 Valor=2200000
@@ -7084,7 +7091,7 @@ Valor=2200000
 '<<<<<<<<<<<<<<<Puerta casa 5 de Rázgul>>>>>>>>>>>>>>>>>
 [OBJ279]
 Name=Puerta abierta
-GrhIndex =9201
+GrhIndex=9201
 ObjType=6
 abierta=0
 llave=0
@@ -7124,7 +7131,7 @@ IndexCerradaLlave=281
 [OBJ282]
 Name=Banderbill Llave casa 5
 Info=Razgul casa nro 5
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=29
 Valor=2200000
@@ -7135,7 +7142,7 @@ Valor=2200000
 '<<<<<<<<<<<<<<<Puerta casa 6 de Rázgul>>>>>>>>>>>>>>>>>
 [OBJ283]
 Name=Puerta abierta
-GrhIndex =9201
+GrhIndex=9201
 ObjType=6
 abierta=0
 llave=0
@@ -7175,7 +7182,7 @@ IndexCerradaLlave=285
 [OBJ286]
 Name=Banderbill Llave casa 6
 Info=Razgul casa nro 6
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=30
 Valor=2200000
@@ -7186,7 +7193,7 @@ Valor=2200000
 '<<<<<<<<<<<<<<<Puerta casa 7 de Rázgul>>>>>>>>>>>>>>>>>
 [OBJ287]
 Name=Puerta abierta
-GrhIndex =9201
+GrhIndex=9201
 ObjType=6
 abierta=0
 llave=0
@@ -7226,7 +7233,7 @@ IndexCerradaLlave=289
 [OBJ290]
 Name=Banderbill Llave casa 7
 Info=Razgul casa nro 7
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=31
 Valor=2200000
@@ -7238,7 +7245,7 @@ Valor=2200000
 '<<<<<<<<<<<<<<<Puerta casa 8 de Rázgul>>>>>>>>>>>>>>>>>
 [OBJ291]
 Name=Puerta abierta
-GrhIndex =9201
+GrhIndex=9201
 ObjType=6
 abierta=0
 llave=0
@@ -7278,7 +7285,7 @@ IndexCerradaLlave=293
 [OBJ294]
 Name=Banderbill Llave casa 8
 Info=Razgul casa nro 8
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=32
 Valor=2200000
@@ -7289,7 +7296,7 @@ Valor=2200000
 '<<<<<<<<<<<<<<<Puerta casa 9 de Rázgul>>>>>>>>>>>>>>>>>
 [OBJ295]
 Name=Puerta abierta
-GrhIndex =9201
+GrhIndex=9201
 ObjType=6
 abierta=0
 llave=0
@@ -7329,7 +7336,7 @@ IndexCerradaLlave=297
 [OBJ298]
 Name=Banderbill Llave casa 9
 Info=Razgul casa nro 9
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=33
 Valor=2200000
@@ -7339,7 +7346,7 @@ Valor=2200000
 '<<<<<<<<<<<<<<<Puerta del gran consejo de Rázgul>>>>>>>>>>>>>>>>>
 [OBJ299]
 Name=Puerta abierta
-GrhIndex =9199
+GrhIndex=9199
 ObjType=6
 abierta=0
 llave=0
@@ -7380,7 +7387,7 @@ IndexCerradaLlave=301
 [OBJ302]
 Name=Llave del gran consejo
 Info=Llave del gran consejo
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=1
 Valor=0
@@ -7390,7 +7397,7 @@ Valor=0
 '<<<<<<<<<<<<<<<Puerta del vault 1 del gran consejo de Rázgul>>>>>>>>>>>>>>>>>
 [OBJ303]
 Name=Puerta abierta
-GrhIndex =9199
+GrhIndex=9199
 ObjType=6
 abierta=0
 llave=0
@@ -7430,7 +7437,7 @@ IndexCerradaLlave=305
 [OBJ306]
 Name=Llave boveda del gran consejo
 Info=Llave boveda del gran consejo
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=35
 Valor=0
@@ -7440,7 +7447,7 @@ Valor=0
 '<<<<<<<<<<<<<<<Puerta del vault 2 del gran consejo de Rázgul>>>>>>>>>>>>>>>>>
 [OBJ307]
 Name=Puerta abierta
-GrhIndex =9199
+GrhIndex=9199
 ObjType=6
 abierta=0
 llave=0
@@ -7480,7 +7487,7 @@ IndexCerradaLlave=309
 [OBJ310]
 Name=Llave boveda del gran consejo
 Info=Llave boveda del gran consejo
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=36
 Valor=1
@@ -7490,7 +7497,7 @@ Valor=1
 '<<<<<<<<<<<<<<<Puerta de la boveda goliath>>>>>>>>>>>>>>>>>
 [OBJ311]
 Name=Puerta abierta
-GrhIndex =9199
+GrhIndex=9199
 ObjType=6
 abierta=0
 llave=0
@@ -7530,7 +7537,7 @@ IndexCerradaLlave=313
 [OBJ314]
 Name=Llave del la boveda goliath
 Info=Llave del la boveda goliath
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=37
 Valor=0
@@ -7539,7 +7546,7 @@ Valor=0
 [OBJ315]
 Name=Cartel
 Info=Muelles
-GrhIndex =675
+GrhIndex=675
 VGrande=501
 ObjType=8
 Texto=Muelles, ¡prohibido arrojar basura al mar!. Todo aque que incurra en una infraccion sera multado.
@@ -7548,7 +7555,7 @@ Agarrable=1
 [OBJ316]
 Name=Cartel
 Info=Finanzas Goliath
-GrhIndex =676
+GrhIndex=676
 VGrande=501
 ObjType=8
 Texto=Casa Central
@@ -7557,7 +7564,7 @@ Agarrable=1
 [OBJ317]
 Name=Cartel
 Info=Palacio Real
-GrhIndex =677
+GrhIndex=677
 VGrande=501
 ObjType=8
 Texto=Palacio Real
@@ -7586,7 +7593,7 @@ NumClases=1
 '<<<<<<<<<<<<<<<Puerta casa 10 de Rázgul>>>>>>>>>>>>>>>>>
 [OBJ320]
 Name=Puerta abierta
-GrhIndex =9201
+GrhIndex=9201
 ObjType=6
 abierta=0
 llave=0
@@ -7626,7 +7633,7 @@ IndexCerradaLlave=322
 [OBJ323]
 Name=Banderbill Llave casa 10
 Info=Banderbill casa nro 10
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=37
 Valor=2200000
@@ -7636,7 +7643,7 @@ Valor=2200000
 '<<<<<<<<<<<<<<<Puerta casa 11 de Rázgul>>>>>>>>>>>>>>>>>
 [OBJ324]
 Name=Puerta abierta
-GrhIndex =9201
+GrhIndex=9201
 ObjType=6
 abierta=0
 llave=0
@@ -7676,7 +7683,7 @@ IndexCerradaLlave=326
 [OBJ327]
 Name=Banderbill Llave casa 11
 Info=Razgul casa nro 11
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=38
 Valor=2200000
@@ -7687,7 +7694,7 @@ Valor=2200000
 '<<<<<<<<<<<<<<<Puerta casa 12 de Rázgul>>>>>>>>>>>>>>>>>
 [OBJ328]
 Name=Puerta abierta
-GrhIndex =9201
+GrhIndex=9201
 ObjType=6
 abierta=0
 llave=0
@@ -7727,7 +7734,7 @@ IndexCerradaLlave=330
 [OBJ331]
 Name=Banderbill Llave casa 12
 Info=Razgul casa nro 12
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=39
 Valor=2200000
@@ -7737,7 +7744,7 @@ Valor=2200000
 '<<<<<<<<<<<<<<<Puerta casa 13 de Rázgul>>>>>>>>>>>>>>>>>
 [OBJ332]
 Name=Puerta abierta
-GrhIndex =9201
+GrhIndex=9201
 ObjType=6
 abierta=0
 llave=0
@@ -7777,7 +7784,7 @@ IndexCerradaLlave=334
 [OBJ335]
 Name=Banderbill Llave casa 13
 Info=Razgul casa nro 13
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=40
 Valor=2200000
@@ -7788,7 +7795,7 @@ Valor=2200000
 '<<<<<<<<<<<<<<<Puerta casa 14 de Rázgul>>>>>>>>>>>>>>>>>
 [OBJ336]
 Name=Puerta abierta
-GrhIndex =9201
+GrhIndex=9201
 ObjType=6
 abierta=0
 llave=0
@@ -7828,7 +7835,7 @@ IndexCerradaLlave=338
 [OBJ339]
 Name=Banderbill Llave casa 14
 Info=Razgul casa nro 14
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=41
 Valor=2200000
@@ -7839,7 +7846,7 @@ Valor=2200000
 '<<<<<<<<<<<<<<<Puerta casa 15 de Rázgul>>>>>>>>>>>>>>>>>
 [OBJ340]
 Name=Puerta abierta
-GrhIndex =9201
+GrhIndex=9201
 ObjType=6
 abierta=0
 llave=0
@@ -7879,7 +7886,7 @@ IndexCerradaLlave=342
 [OBJ343]
 Name=Banderbill Llave casa 15
 Info=Razgul casa nro 15
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=42
 Valor=2200000
@@ -7889,7 +7896,7 @@ Valor=2200000
 '<<<<<<<<<<<<<<<Puerta casa 16 de Rázgul>>>>>>>>>>>>>>>>>
 [OBJ344]
 Name=Puerta abierta
-GrhIndex =9201
+GrhIndex=9201
 ObjType=6
 abierta=0
 llave=0
@@ -7929,7 +7936,7 @@ IndexCerradaLlave=346
 [OBJ347]
 Name=Banderbill Llave casa 16
 Info=Razgul casa nro 16
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=43
 Valor=2200000
@@ -7940,7 +7947,7 @@ Valor=2200000
 '<<<<<<<<<<<<<<<Puerta casa 17 de Rázgul>>>>>>>>>>>>>>>>>
 [OBJ348]
 Name=Puerta abierta
-GrhIndex =9201
+GrhIndex=9201
 ObjType=6
 abierta=0
 llave=0
@@ -7980,7 +7987,7 @@ IndexCerradaLlave=350
 [OBJ351]
 Name=Banderbill Llave casa 17
 Info=Razgul casa nro 17
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=44
 Valor=2200000
@@ -7990,7 +7997,7 @@ Valor=2200000
 '<<<<<<<<<<<<<<<Puerta casa 18de Rázgul>>>>>>>>>>>>>>>>>
 [OBJ352]
 Name=Puerta abierta
-GrhIndex =9201
+GrhIndex=9201
 ObjType=6
 abierta=0
 llave=0
@@ -8030,7 +8037,7 @@ IndexCerradaLlave=354
 [OBJ355]
 Name=Banderbill Llave casa 18
 Info=Razgul casa nro 18
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=45
 Valor=2200000
@@ -8088,7 +8095,7 @@ Objtype=24
 
 [OBJ368]
 Name=Lapida
-GrhIndex =513
+GrhIndex=513
 VGrande=514
 ObjType=8
 Texto=Aqui yace Altair de Oteren, fue conocido y amado por todos, sobre todo en Nix donde siempre mostraba su generosidad y su paciencia con los newbies, ayudando con todo lo que tenia a todos, Pescando por horas para dar a los demas. Altair descansa en paz, el pueblo de Nix siempre honrara tu memoria.
@@ -8191,7 +8198,7 @@ NumRazas=2
 [OBJ373]
 Name=Puerta abierta
 Info=Isla Beleta
-GrhIndex =9201
+GrhIndex=9201
 ObjType=6
 abierta=0
 llave=0
@@ -8233,7 +8240,7 @@ IndexCerradaLlave=375
 [OBJ376]
 Name=Llave Isla Beleta
 Info=Isla Beleta
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=49
 Valor=0
@@ -8473,13 +8480,10 @@ CP29=55
 CP30=56
 NumClases=30
 
-
-
 [OBJ402]
 Name=Espada mata dragones
 GrhIndex=879
 Objtype=2
-Subtipo=1
 MinHIT=100
 MaxHIT=100
 Valor=0
@@ -8504,11 +8508,6 @@ LingH=500
 LingP=400
 LingO=300
 SkHerreria=100
-
-
-
-
-
 
 [OBJ406] 'GRAFICOOOOOOO
 Name=Brazalete
@@ -8579,7 +8578,7 @@ Crucial=1
 '<<<<< CASA 1 >>>>>>>>
 [OBJ417]
 Name=Puerta de madera abierta
-GrhIndex =5592
+GrhIndex=5592
 ObjType=6
 abierta=0
 llave=0
@@ -8619,7 +8618,7 @@ IndexCerradaLlave=419
 [OBJ420]
 Name=Llave casa 1 de Lindos
 Info=Llave casa 1 de Lindos
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=50
 Valor=650000
@@ -8627,7 +8626,7 @@ Valor=650000
 '<<<<< CASA 2 >>>>>>>>
 [OBJ421]
 Name=Puerta de madera abierta
-GrhIndex =5592
+GrhIndex=5592
 ObjType=6
 abierta=0
 llave=0
@@ -8667,7 +8666,7 @@ IndexCerradaLlave=423
 [OBJ424]
 Name=Llave casa 2 de Lindos
 Info=Llave casa 2 de Lindos
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=51
 Valor=650000
@@ -8675,7 +8674,7 @@ Valor=650000
 '<<<<< CASA 3 >>>>>>>>
 [OBJ425]
 Name=Puerta de madera abierta
-GrhIndex =5592
+GrhIndex=5592
 ObjType=6
 abierta=0
 llave=0
@@ -8715,7 +8714,7 @@ IndexCerradaLlave=427
 [OBJ428]
 Name=Llave casa 3 de Lindos
 Info=Llave casa 3 de Lindos
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=52
 Valor=650000
@@ -8724,7 +8723,7 @@ Valor=650000
 '<<<<< CASA 4 >>>>>>>>
 [OBJ429]
 Name=Puerta de madera abierta
-GrhIndex =5592
+GrhIndex=5592
 ObjType=6
 abierta=0
 llave=0
@@ -8764,7 +8763,7 @@ IndexCerradaLlave=431
 [OBJ432]
 Name=Llave casa 4 de Lindos
 Info=Llave casa 4 de Lindos
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=53
 Valor=650000
@@ -8772,7 +8771,7 @@ Valor=650000
 '<<<<< CASA 5 >>>>>>>>
 [OBJ433]
 Name=Puerta de madera abierta
-GrhIndex =5592
+GrhIndex=5592
 ObjType=6
 abierta=0
 llave=0
@@ -8812,7 +8811,7 @@ IndexCerradaLlave=435
 [OBJ436]
 Name=Llave casa 5 de Lindos
 Info=Llave casa 5 de Lindos
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=54
 Valor=650000
@@ -8820,7 +8819,7 @@ Valor=650000
 '<<<<< CASA 6 >>>>>>>>
 [OBJ437]
 Name=Puerta de madera abierta
-GrhIndex =5592
+GrhIndex=5592
 ObjType=6
 abierta=0
 llave=0
@@ -8860,7 +8859,7 @@ IndexCerradaLlave=439
 [OBJ440]
 Name=Llave casa 6 de Lindos
 Info=Llave casa 6 de Lindos
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=55
 Valor=650000
@@ -8868,7 +8867,7 @@ Valor=650000
 '<<<<< Abadia >>>>>>>>
 [OBJ441]
 Name=Puerta de madera abierta
-GrhIndex =9203
+GrhIndex=9203
 ObjType=6
 abierta=0
 llave=0
@@ -8908,7 +8907,7 @@ IndexCerradaLlave=443
 [OBJ444]
 Name=Llave Abadia de Lindos
 Info=Llave Abadia de Lindos
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=56
 Valor=7000000
@@ -8916,7 +8915,7 @@ Valor=7000000
 '<<<<< Vault Abadia >>>>>>>>
 [OBJ445]
 Name=Puerta de madera abierta
-GrhIndex =9203
+GrhIndex=9203
 ObjType=6
 abierta=0
 llave=0
@@ -8956,7 +8955,7 @@ IndexCerradaLlave=447
 [OBJ448]
 Name=Llave Vault de la Abadia de Lindos
 Info=Llave Vault de la Abadia de Lindos
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=57
 Valor=0
@@ -8965,7 +8964,7 @@ Valor=0
 '<<<<< PRISION BANDERBILL >>>>>>>>
 [OBJ449]
 Name=Puerta de madera abierta
-GrhIndex =9202
+GrhIndex=9202
 ObjType=6
 abierta=0
 llave=0
@@ -9005,7 +9004,7 @@ IndexCerradaLlave=451
 [OBJ452]
 Name=Llave prision de Banderbill
 Info=Llave prision de Banderbill
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=58
 Valor=0
@@ -9040,7 +9039,7 @@ Agarrable=1
 [OBJ457]
 Name=Cartel
 Info=Prision 1
-GrhIndex =718
+GrhIndex=718
 VGrande=501
 ObjType=8
 Texto=Prision
@@ -9049,7 +9048,7 @@ Agarrable=1
 [OBJ458]
 Name=Cartel
 Info=Prision 2
-GrhIndex =720
+GrhIndex=720
 VGrande=501
 ObjType=8
 Texto=Prision
@@ -9058,7 +9057,7 @@ Agarrable=1
 [OBJ459]
 Name=Cartel
 Info=Abadia
-GrhIndex =721
+GrhIndex=721
 VGrande=501
 ObjType=8
 Texto=Abadia de Lindos
@@ -9822,7 +9821,7 @@ Valor=100
 [OBJ547]
 Name=Cartel
 Info=Dungeon Veriil
-GrhIndex =863
+GrhIndex=863
 VGrande=501
 ObjType=8
 Texto=¡¡Cuidado!! El Dúngeon de Veriil es uno de los lugares más peligrosos de todo Argentum; pocos son los aventureros que logran salir con vida de el.
@@ -9831,7 +9830,7 @@ Agarrable=1
 [OBJ548]
 Name=Cartel
 Info=Arghâl
-GrhIndex =864
+GrhIndex=864
 VGrande=501
 ObjType=8
 Texto=¡¡¡Bienvenidos a Arghâl!!! 
@@ -9866,15 +9865,12 @@ GrhIndex=263
 Objtype=35
 Agarrable=1
 
-
-
 [OBJ569]
 Name=Casco de legionario
 Anim=13
 GrhIndex=909
 NumRopaje=2
-ObjType=3
-Subtipo=1
+ObjType=17
 MAXDEF=25
 MINDEF=20
 Valor=10000
@@ -9919,14 +9915,12 @@ CP33=56
 CP34=57
 CP35=58
 
-
 [OBJ571]
 Name=Corona
 Anim=15
 GrhIndex=911
 NumRopaje=2
-ObjType=3
-Subtipo=1
+ObjType=17
 MAXDEF=50
 MINDEF=45
 Valor=0
@@ -10185,7 +10179,7 @@ NumClases=33
 
 [OBJ602]
 Name=Cartel iglesia
-GrhIndex =932
+GrhIndex=932
 VGrande=501
 ObjType=8
 Texto=Iglesia
@@ -10194,36 +10188,35 @@ Agarrable=1
 [OBJ603]
 Name=Cartel Hilidian
 Info=Hiladian
-GrhIndex =933
+GrhIndex=933
 VGrande=501
 ObjType=8
 Texto=Bienvenido a Hilidian, una ciudad completamente nevada durante todo el año.
 Agarrable=1
 
 [OBJ604]
-Name=Arbol nieve
+Name=Arbol
 GrhIndex=6789
 Objtype=4
 Agarrable=1
 
 [OBJ605]
-Name=Arbol nieve
+Name=Arbol
 GrhIndex=6790
 Objtype=4
 Agarrable=1
 
 [OBJ606]
-Name=Arbol nieve
+Name=Arbol
 GrhIndex=6791
 Objtype=4
 Agarrable=1
 
 [OBJ607]
-Name=Arbol nieve
+Name=Arbol
 GrhIndex=6792
 Objtype=4
 Agarrable=1
-
 
 [OBJ624] 
 Name=Banco
@@ -11262,7 +11255,7 @@ Raices=12
 
 [OBJ712]
 Name=Puerta del Dragón
-GrhIndex =5592
+GrhIndex=5592
 ObjType=6
 abierta=0
 llave=0
@@ -11302,7 +11295,7 @@ IndexCerradaLlave=714
 [OBJ715]
 Name=Llave del Dragón
 Info=Llave del Dragón
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=60
 
@@ -11349,8 +11342,6 @@ Valor=12
 Crucial=1
 SkPociones=5
 Raices=5
-
-
 
 [OBJ729]
 Name=Espada de plata +1
@@ -11605,7 +11596,7 @@ Valor=5000
 [OBJ749]
 Name=Llave del gran consejo
 Info=Llave del gran consejo
-GrhIndex =509
+GrhIndex=509
 ObjType=9
 Clave=34
 Valor=0
@@ -11757,7 +11748,6 @@ HechizoIndex=45
 Objtype=24
 CP1=48
 NumClases=1
-
 
 [OBJ759]
 Name=Espada de Bárbaro
@@ -11965,3 +11955,623 @@ VGrande=514
 ObjType=8
 Texto=Aquí yacen los restos de Theoden. Su exceso de confianza fue su propio Némesis, y las fuerzas de Lord Thek se lo demostraron en Ullathrope.
 Agarrable=1
+
+[OBJ772]
+Name=Arbol
+GrhIndex=51849
+Objtype=4
+Agarrable=1
+
+[OBJ773]
+Name=Arbol
+GrhIndex=51851
+Objtype=4
+Agarrable=1
+
+[OBJ774]
+Name=Arbol
+GrhIndex=12432
+Objtype=4
+Agarrable=1
+
+[OBJ775]
+Name=Arbol
+GrhIndex=12431
+Objtype=4
+Agarrable=1
+
+[OBJ776]
+Name=Arbol
+GrhIndex=12339
+Objtype=4
+Agarrable=1
+
+[OBJ777]
+Name=Arbol
+GrhIndex=12337
+Objtype=4
+Agarrable=1
+
+[OBJ778]
+Name=Arbol
+GrhIndex=12338
+Objtype=4
+Agarrable=1
+
+[OBJ779]
+Name=Runa de Teletransportacion
+GrhIndex=24173
+ObjType=49
+Crucial=1
+
+'Puerta para negocio porque no tiene clave
+[OBJ780]
+Name=Puerta de madera doble abierta
+GrhIndex=18114
+ObjType=6
+abierta=0
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=780
+IndexCerrada=781
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ781]
+Name=Puerta de madera doble cerrada
+GrhIndex=18115
+ObjType=6
+abierta=1
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=780
+IndexCerrada=781
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ782]
+Name=Puerta de madera doble abierta
+GrhIndex=18116
+ObjType=6
+abierta=0
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=782
+IndexCerrada=783
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ783]
+Name=Puerta de madera doble cerrada
+GrhIndex=18117
+ObjType=6
+abierta=1
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=782
+IndexCerrada=783
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ784]
+Name=Puerta de madera doble abierta
+GrhIndex=18070
+ObjType=6
+abierta=0
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=784
+IndexCerrada=785
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ785]
+Name=Puerta de madera doble cerrada
+GrhIndex=18071
+ObjType=6
+abierta=1
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=784
+IndexCerrada=785
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ786]
+Name=Puerta de madera doble abierta
+GrhIndex=18072
+ObjType=6
+abierta=0
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=786
+IndexCerrada=787
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ787]
+Name=Puerta de madera doble cerrada
+GrhIndex=18073
+ObjType=6
+abierta=1
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=786
+IndexCerrada=787
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ788]
+Name=Puerta de madera doble abierta
+GrhIndex=18070
+ObjType=6
+abierta=0
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=788
+IndexCerrada=789
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ789]
+Name=Puerta de madera doble cerrada
+GrhIndex=18071
+ObjType=6
+abierta=1
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=788
+IndexCerrada=789
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ790]
+Name=Puerta de madera doble abierta
+GrhIndex=18072
+ObjType=6
+abierta=0
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=790
+IndexCerrada=791
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ791]
+Name=Puerta de madera doble cerrada
+GrhIndex=18073
+ObjType=6
+abierta=1
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=790
+IndexCerrada=791
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ792]
+Name=Puerta de madera doble abierta
+GrhIndex=18074
+ObjType=6
+abierta=0
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=792
+IndexCerrada=793
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ793]
+Name=Puerta de madera doble cerrada
+GrhIndex=18075
+ObjType=6
+abierta=1
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=792
+IndexCerrada=793
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ794]
+Name=Puerta de madera doble abierta
+GrhIndex=18076
+ObjType=6
+abierta=0
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=794
+IndexCerrada=795
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ795]
+Name=Puerta de madera doble cerrada
+GrhIndex=18077
+ObjType=6
+abierta=1
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=794
+IndexCerrada=795
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ796]
+Name=Puerta de madera doble abierta
+GrhIndex=18078
+ObjType=6
+abierta=0
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=796
+IndexCerrada=797
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ797]
+Name=Puerta de madera doble cerrada
+GrhIndex=18079
+ObjType=6
+abierta=1
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=796
+IndexCerrada=797
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ798]
+Name=Puerta de madera doble abierta
+GrhIndex=18080
+ObjType=6
+abierta=0
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=798
+IndexCerrada=799
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ799]
+Name=Puerta de madera doble cerrada
+GrhIndex=18081
+ObjType=6
+abierta=1
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=798
+IndexCerrada=799
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ800]
+Name=Puerta de madera doble abierta
+GrhIndex=18082
+ObjType=6
+abierta=0
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=800
+IndexCerrada=801
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ801]
+Name=Puerta de madera doble cerrada
+GrhIndex=18083
+ObjType=6
+abierta=1
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=800
+IndexCerrada=801
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ802]
+Name=Puerta de madera doble abierta
+GrhIndex=18084
+ObjType=6
+abierta=0
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=802
+IndexCerrada=803
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ803]
+Name=Puerta de madera doble cerrada
+GrhIndex=18085
+ObjType=6
+abierta=1
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=802
+IndexCerrada=803
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ804]
+Name=Puerta de madera doble abierta
+GrhIndex=18086
+ObjType=6
+abierta=0
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=804
+IndexCerrada=805
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ805]
+Name=Puerta de madera doble cerrada
+GrhIndex=18087
+ObjType=6
+abierta=1
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=804
+IndexCerrada=805
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ806]
+Name=Puerta de madera doble abierta
+GrhIndex=18088
+ObjType=6
+abierta=0
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=806
+IndexCerrada=807
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ807]
+Name=Puerta de madera doble cerrada
+GrhIndex=18089
+ObjType=6
+abierta=1
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=806
+IndexCerrada=807
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ808]
+Name=Puerta de madera doble abierta
+GrhIndex=18094
+ObjType=6
+abierta=0
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=808
+IndexCerrada=809
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ809]
+Name=Puerta de madera doble cerrada
+GrhIndex=18095
+ObjType=6
+abierta=1
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=808
+IndexCerrada=809
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ810]
+Name=Puerta de madera doble abierta
+GrhIndex=18096
+ObjType=6
+abierta=0
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=810
+IndexCerrada=811
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ811]
+Name=Puerta de madera doble cerrada
+GrhIndex=18097
+ObjType=6
+abierta=1
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=810
+IndexCerrada=811
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ812]
+Name=Puerta de madera doble abierta
+GrhIndex=18090
+ObjType=6
+abierta=0
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=812
+IndexCerrada=813
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ813]
+Name=Puerta de madera doble cerrada
+GrhIndex=18091
+ObjType=6
+abierta=1
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=812
+IndexCerrada=813
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ814]
+Name=Puerta de madera doble abierta
+GrhIndex=18092
+ObjType=6
+abierta=0
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=814
+IndexCerrada=815
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ815]
+Name=Puerta de madera doble cerrada
+GrhIndex=18093
+ObjType=6
+abierta=1
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=814
+IndexCerrada=815
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ816]
+Name=Puerta de madera doble abierta
+GrhIndex=18098
+ObjType=6
+abierta=0
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=816
+IndexCerrada=817
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ817]
+Name=Puerta de madera doble cerrada
+GrhIndex=18099
+ObjType=6
+abierta=1
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=816
+IndexCerrada=817
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ818]
+Name=Puerta de madera doble abierta
+GrhIndex=18100
+ObjType=6
+abierta=0
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=818
+IndexCerrada=819
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ819]
+Name=Puerta de madera doble cerrada
+GrhIndex=18101
+ObjType=6
+abierta=1
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=818
+IndexCerrada=819
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ820]
+Name=Puerta de madera doble abierta
+GrhIndex=18102
+ObjType=6
+abierta=0
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=820
+IndexCerrada=821
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ821]
+Name=Puerta de madera doble cerrada
+GrhIndex=18103
+ObjType=6
+abierta=1
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=820
+IndexCerrada=821
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ822]
+Name=Puerta de madera doble abierta
+GrhIndex=18104
+ObjType=6
+abierta=0
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=822
+IndexCerrada=823
+IndexCerradaLlave=8
+
+'Puerta para negocio porque no tiene clave
+[OBJ823]
+Name=Puerta de madera doble cerrada
+GrhIndex=18105
+ObjType=6
+abierta=1
+llave=0
+resistencia=200
+Agarrable=1
+IndexAbierta=822
+IndexCerrada=823
+IndexCerradaLlave=8

@@ -2694,7 +2694,7 @@ Sub CalcularDarExp(ByVal UserIndex As Integer, _
     'Ahora, da toda la experiencia del npc mientras este vivo.
     '***************************************************
     Dim ExpaDar As Long
-Debug.Print "ElDano: " & ElDano
+
     With UserList(UserIndex)
     
         '[Nacho] Chekeamos que las variables sean validas para las operaciones

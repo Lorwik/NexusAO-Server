@@ -1960,30 +1960,6 @@ Sub CargarCiudades()
             .Y = Lector.GetValue("Nix", "Y")
         End With
         
-        With Banderbill
-            .Map = Lector.GetValue("Banderbill", "Mapa")
-            .X = Lector.GetValue("Banderbill", "X")
-            .Y = Lector.GetValue("Banderbill", "Y")
-        End With
-        
-        With Rinkel
-            .Map = Lector.GetValue("Rinkel", "Mapa")
-            .X = Lector.GetValue("Rinkel", "X")
-            .Y = Lector.GetValue("Rinkel", "Y")
-        End With
-        
-        With Lindos
-            .Map = Lector.GetValue("Lindos", "Mapa")
-            .X = Lector.GetValue("Lindos", "X")
-            .Y = Lector.GetValue("Lindos", "Y")
-        End With
-        
-        With Arghal
-            .Map = Lector.GetValue("Arghal", "Mapa")
-            .X = Lector.GetValue("Arghal", "X")
-            .Y = Lector.GetValue("Arghal", "Y")
-        End With
-        
         With Prision
             .Map = Lector.GetValue("Prision", "Mapa")
             .X = Lector.GetValue("Prision", "X")
@@ -2006,10 +1982,6 @@ Sub CargarCiudades()
     
     Ciudades(eCiudad.cUllathorpe) = Ullathorpe
     Ciudades(eCiudad.cNix) = Nix
-    Ciudades(eCiudad.cBanderbill) = Banderbill
-    Ciudades(eCiudad.cRinkel) = Rinkel
-    Ciudades(eCiudad.cLindos) = Lindos
-    Ciudades(eCiudad.cArghal) = Arghal
 
     If frmMain.Visible Then frmMain.txtStatus.Text = Date & " " & time & " - Se cargaron las ciudades.dat"
 
