@@ -57,6 +57,8 @@ NROITEMS=0
 PoderAtaque=5
 PoderEvasion=5
 Domable=30
+SND1=118
+SND2=119
 
 [NPC3] 'Cerdo
 Name=Cerdo
@@ -2944,7 +2946,8 @@ NROITEMS=0
 PoderAtaque=5
 PoderEvasion=5
 Domable=0
-
+SND1=118
+SND2=119
 
 [NPC66] 'Cerdo
 Name=Cerdo
@@ -4461,7 +4464,9 @@ DEF=0
 NROITEMS=0
 PoderAtaque=10
 PoderEvasion=5
-snd3=68
+SND1=296
+SND2=297
+SND3=298
 
 [NPC505] 'Goblin POTHOS 1.0
 Name=Goblin
@@ -4509,7 +4514,8 @@ NROITEMS=1
 Obj1=26-1
 PoderAtaque=10
 PoderEvasion=5
-snd3=117
+SND1=118
+SND2=119
 
 [NPC507] 'Lord Zombie POTHOS 1.0
 Name=Lord Zombie
@@ -4595,7 +4601,8 @@ DEF=0
 Veneno=1
 PoderAtaque=150
 PoderEvasion=60
-snd3=64
+SND1=29
+SND2=34
 
 '<------------------ RESPAWN EN EL MISMO LUGAR ------------------->
 [NPC511] 'Murcielago 1.0
@@ -4709,7 +4716,9 @@ DEF=0
 NROITEMS=0
 PoderAtaque=10
 PoderEvasion=5
-snd3=68
+SND1=296
+SND2=297
+SND3=298
 
 [NPC516] 'Goblin 1.0
 Name=Goblin
@@ -4735,8 +4744,6 @@ PoderEvasion=45
 snd1=55
 snd3=54
 
-
-
 [NPC517] 'Gallo (NO ND) POTHOS 1.0
 Name=Gallo salvaje
 Desc=
@@ -4760,7 +4767,8 @@ NROITEMS=1
 Obj1=26-1
 PoderAtaque=10
 PoderEvasion=5
-snd3=117
+SND1=118
+SND2=119
 
 [NPC518] 'Zombie 1.0
 Name=Lord Zombie
@@ -4854,7 +4862,8 @@ DEF=0
 Veneno=1
 PoderAtaque=150
 PoderEvasion=60
-snd3=64
+SND1=29
+SND2=34
 
 [NPC522] 'Orco 1.0
 Name=Orco
@@ -4967,7 +4976,8 @@ DEF=0
 Veneno=1
 PoderAtaque=150
 PoderEvasion=60
-snd3=64
+SND1=29
+SND2=34
 
 [NPC527] 'dragon
 Name=Dragon rojo
@@ -5013,7 +5023,8 @@ DEF=0
 Veneno=1
 PoderAtaque=150
 PoderEvasion=70
-snd3=64
+SND1=29
+SND2=34
 
 [NPC529] 'Escorpión POTHOS (ND) 1.0
 Name=Escorpion
@@ -5793,7 +5804,9 @@ DEF=0
 NROITEMS=0
 PoderAtaque=10
 PoderEvasion=5
-snd3=68
+SND1=296
+SND2=297
+SND3=298
 
 [NPC566] 'Murcielago NO RESPAWN 1.0
 ReSpawn=0
@@ -6434,6 +6447,8 @@ PoderAtaque=220
 PoderEvasion=80
 NROITEMS=1
 Obj1=414-5
+Snd1=35
+Snd2=9
 
 [NPC592]'POTHOS NUEVA ESPERANZA 1.0 (IGUAL AL DE TIERRA)
 ReSpawn=0
@@ -6710,6 +6725,9 @@ PoderAtaque=150
 PoderEvasion=145
 DEF=0
 NROITEMS=0
+SND1=299
+SND2=300
+SND3=301
 
 [NPC604]'POTHOS
 ReSpawn=0
@@ -7622,7 +7640,9 @@ DEF=0
 NROITEMS=0
 PoderAtaque=10
 PoderEvasion=5
-snd3=68
+SND1=296
+SND2=297
+SND3=298
 
 [NPC643] 'Escorpión ENTRENADOR 1.0
 Name=Escorpion

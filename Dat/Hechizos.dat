@@ -250,7 +250,7 @@ TargetMsg=te ha removido la parálisis.
 PropioMsg=Te has removido la parálisis.
 
 Tipo=2
-WAV=16
+WAV=255
 FXgrh=0
 
 RemoverParalisis=1
@@ -459,7 +459,7 @@ HechizeroMsg=Has lanzado celeridad sobre
 TargetMsg=Ha lanzado celeridad sobre ti.
 PropioMsg=Has lanzado celeridad sobre ti.
 Tipo=1
-WAV=17
+WAV=230
 FXgrh=33 
 Loops=2
 SubeAG=1
@@ -511,8 +511,8 @@ HechizeroMsg=Has lanzado fuerza sobre
 TargetMsg=ha lanzado fuerza sobre ti.
 PropioMsg=Has lanzado fuerza sobre ti.
 Tipo=1
-WAV=17
-FXgrh=34
+WAV=230
+FXgrh=0
 Loops=2
 SubeFU=1
 MinFU=3
@@ -600,7 +600,7 @@ TargetMsg=te ha inmovilizado.
 PropioMsg=Te has inmovilizado.
 
 Tipo=2
-WAV=112
+WAV=253
 FXgrh=12
 loops=1
 Paraliza=2

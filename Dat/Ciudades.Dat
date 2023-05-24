@@ -9,16 +9,16 @@ Y=45
 MAPA=1
 
 [Prision]
-X=74
-Y=46
-MAPA=66
+X=31
+Y=48
+MAPA=57
 
 [Prision-Afuera]
-X=74
-Y=64
-MAPA=66
+X=51
+Y=51
+MAPA=1
 
 [DUNGEONNEW]
-X=56
-Y=33
-MAPA=114
+X=50
+Y=60
+MAPA=55
