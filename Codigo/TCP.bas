@@ -1555,6 +1555,8 @@ Sub ResetContadores(ByVal UserIndex As Integer)
         .MacroTrabajo = 0
         .Trabajando = 0
         .Veneno = 0
+        .SpeedHackCounter = 0
+        .LastStep = 0
 
     End With
     
@@ -1792,9 +1794,6 @@ Sub ResetUserFlags(ByVal UserIndex As Integer)
         .AdminInvisible = 0
         .ValCoDe = 0
         .Hechizo = 0
-        .TimesWalk = 0
-        .StartWalk = 0
-        .CountSH = 0
         .Silenciado = 0
         .AdminPerseguible = False
         .MacroTrabajo = 0

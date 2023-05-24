@@ -1468,12 +1468,6 @@ Public Type UserFlags
     
     ChatColor As Long
     
-    '[Barrin 30-11-03]
-    TimesWalk As Long
-    StartWalk As Long
-    CountSH As Long
-    '[/Barrin 30-11-03]
-    
     '[CDT 17-02-04]
     UltimoMensaje As Byte
     '[/CDT]
@@ -1528,6 +1522,10 @@ Public Type UserCounters
     TiempoOculto As Integer
     
     Mimetismo As Integer
+    
+    SpeedHackCounter As Single
+    LastStep As Long
+    
     PiqueteC As Long
     ContadorPiquete As Long
     Pena As Long
@@ -1555,6 +1553,7 @@ Public Type UserCounters
     TimerEstadoAtacable As Long
     TimerPuedeOcultar As Long
     TimerPuedeTocar As Long
+    TimerCaminar    As Long
     
     Trabajando As Long  ' Para el centinela
     Ocultando As Long   ' Unico trabajo no revisado por el centinela
@@ -2471,6 +2470,8 @@ Public ArtesaniaCosto       As Long
 Public ContadorAntiPiquete  As Integer
 
 Public MinutosCarcelPiquete As Integer
+
+Public MaximoSpeedHack      As Integer
 
 Public EstadisticasInicialesUsarConfiguracionPersonalizada As Boolean
 

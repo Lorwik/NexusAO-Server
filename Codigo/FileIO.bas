@@ -174,67 +174,67 @@ Public Sub CargarSpawnList()
     
 End Sub
 
-Function EsAdmin(ByRef Name As String) As Boolean
+Function EsAdmin(ByRef name As String) As Boolean
     '***************************************************
     'Author: Unknown
     'Last Modification: 27/03/2011
     '27/03/2011 - ZaMa: Utilizo la clase para saber los datos.
     '***************************************************
-    EsAdmin = (val(Administradores.GetValue("Admin", Name)) = 1)
+    EsAdmin = (val(Administradores.GetValue("Admin", name)) = 1)
 
 End Function
 
-Function EsDios(ByRef Name As String) As Boolean
+Function EsDios(ByRef name As String) As Boolean
     '***************************************************
     'Author: Unknown
     'Last Modification: 27/03/2011
     '27/03/2011 - ZaMa: Utilizo la clase para saber los datos.
     '***************************************************
-    EsDios = (val(Administradores.GetValue("Dios", Name)) = 1)
+    EsDios = (val(Administradores.GetValue("Dios", name)) = 1)
 
 End Function
 
-Function EsSemiDios(ByRef Name As String) As Boolean
+Function EsSemiDios(ByRef name As String) As Boolean
     '***************************************************
     'Author: Unknown
     'Last Modification: 27/03/2011
     '27/03/2011 - ZaMa: Utilizo la clase para saber los datos.
     '***************************************************
-    EsSemiDios = (val(Administradores.GetValue("SemiDios", Name)) = 1)
+    EsSemiDios = (val(Administradores.GetValue("SemiDios", name)) = 1)
 
 End Function
 
-Function EsGmEspecial(ByRef Name As String) As Boolean
+Function EsGmEspecial(ByRef name As String) As Boolean
     '***************************************************
     'Author: ZaMa
     'Last Modification: 27/03/2011
     '27/03/2011 - ZaMa: Utilizo la clase para saber los datos.
     '***************************************************
-    EsGmEspecial = (val(Administradores.GetValue("Especial", Name)) = 1)
+    EsGmEspecial = (val(Administradores.GetValue("Especial", name)) = 1)
 
 End Function
 
-Function EsConsejero(ByRef Name As String) As Boolean
+Function EsConsejero(ByRef name As String) As Boolean
     '***************************************************
     'Author: Unknown
     'Last Modification: 27/03/2011
     '27/03/2011 - ZaMa: Utilizo la clase para saber los datos.
     '***************************************************
-    EsConsejero = (val(Administradores.GetValue("Consejero", Name)) = 1)
+    EsConsejero = (val(Administradores.GetValue("Consejero", name)) = 1)
 
 End Function
 
-Function EsRolesMaster(ByRef Name As String) As Boolean
+Function EsRolesMaster(ByRef name As String) As Boolean
     '***************************************************
     'Author: Unknown
     'Last Modification: 27/03/2011
     '27/03/2011 - ZaMa: Utilizo la clase para saber los datos.
     '***************************************************
-    EsRolesMaster = (val(Administradores.GetValue("RM", Name)) = 1)
+    EsRolesMaster = (val(Administradores.GetValue("RM", name)) = 1)
 
 End Function
 
-Public Function EsGmChar(ByRef Name As String) As Boolean
+Public Function EsGmChar(ByRef name As String) As Boolean
     '***************************************************
     'Author: ZaMa
     'Last Modification: 27/03/2011
@@ -244,16 +244,16 @@ Public Function EsGmChar(ByRef Name As String) As Boolean
     Dim EsGm As Boolean
     
     ' Admin?
-    EsGm = EsAdmin(Name)
+    EsGm = EsAdmin(name)
 
     ' Dios?
-    If Not EsGm Then EsGm = EsDios(Name)
+    If Not EsGm Then EsGm = EsDios(name)
 
     ' Semidios?
-    If Not EsGm Then EsGm = EsSemiDios(Name)
+    If Not EsGm Then EsGm = EsSemiDios(name)
 
     ' Consejero?
-    If Not EsGm Then EsGm = EsConsejero(Name)
+    If Not EsGm Then EsGm = EsConsejero(name)
 
     EsGmChar = EsGm
 
@@ -273,7 +273,7 @@ Public Sub loadAdministrativeUsers()
 
     Dim i    As Long
 
-    Dim Name As String
+    Dim name As String
        
     ' Public container
     Set Administradores = New clsIniManager
@@ -289,12 +289,12 @@ Public Sub loadAdministrativeUsers()
     buf = val(ServerIni.GetValue("INIT", "Admines"))
     
     For i = 1 To buf
-        Name = UCase$(ServerIni.GetValue("Admines", "Admin" & i))
+        name = UCase$(ServerIni.GetValue("Admines", "Admin" & i))
         
-        If Left$(Name, 1) = "*" Or Left$(Name, 1) = "+" Then Name = Right$(Name, Len(Name) - 1)
+        If Left$(name, 1) = "*" Or Left$(name, 1) = "+" Then name = Right$(name, Len(name) - 1)
         
         ' Add key
-        Call Administradores.ChangeValue("Admin", Name, "1")
+        Call Administradores.ChangeValue("Admin", name, "1")
 
     Next i
     
@@ -302,12 +302,12 @@ Public Sub loadAdministrativeUsers()
     buf = val(ServerIni.GetValue("INIT", "Dioses"))
     
     For i = 1 To buf
-        Name = UCase$(ServerIni.GetValue("Dioses", "Dios" & i))
+        name = UCase$(ServerIni.GetValue("Dioses", "Dios" & i))
         
-        If Left$(Name, 1) = "*" Or Left$(Name, 1) = "+" Then Name = Right$(Name, Len(Name) - 1)
+        If Left$(name, 1) = "*" Or Left$(name, 1) = "+" Then name = Right$(name, Len(name) - 1)
         
         ' Add key
-        Call Administradores.ChangeValue("Dios", Name, "1")
+        Call Administradores.ChangeValue("Dios", name, "1")
         
     Next i
     
@@ -315,12 +315,12 @@ Public Sub loadAdministrativeUsers()
     buf = val(ServerIni.GetValue("INIT", "Especiales"))
     
     For i = 1 To buf
-        Name = UCase$(ServerIni.GetValue("Especiales", "Especial" & i))
+        name = UCase$(ServerIni.GetValue("Especiales", "Especial" & i))
         
-        If Left$(Name, 1) = "*" Or Left$(Name, 1) = "+" Then Name = Right$(Name, Len(Name) - 1)
+        If Left$(name, 1) = "*" Or Left$(name, 1) = "+" Then name = Right$(name, Len(name) - 1)
         
         ' Add key
-        Call Administradores.ChangeValue("Especial", Name, "1")
+        Call Administradores.ChangeValue("Especial", name, "1")
         
     Next i
     
@@ -328,12 +328,12 @@ Public Sub loadAdministrativeUsers()
     buf = val(ServerIni.GetValue("INIT", "SemiDioses"))
     
     For i = 1 To buf
-        Name = UCase$(ServerIni.GetValue("SemiDioses", "SemiDios" & i))
+        name = UCase$(ServerIni.GetValue("SemiDioses", "SemiDios" & i))
         
-        If Left$(Name, 1) = "*" Or Left$(Name, 1) = "+" Then Name = Right$(Name, Len(Name) - 1)
+        If Left$(name, 1) = "*" Or Left$(name, 1) = "+" Then name = Right$(name, Len(name) - 1)
         
         ' Add key
-        Call Administradores.ChangeValue("SemiDios", Name, "1")
+        Call Administradores.ChangeValue("SemiDios", name, "1")
         
     Next i
     
@@ -341,12 +341,12 @@ Public Sub loadAdministrativeUsers()
     buf = val(ServerIni.GetValue("INIT", "Consejeros"))
         
     For i = 1 To buf
-        Name = UCase$(ServerIni.GetValue("Consejeros", "Consejero" & i))
+        name = UCase$(ServerIni.GetValue("Consejeros", "Consejero" & i))
         
-        If Left$(Name, 1) = "*" Or Left$(Name, 1) = "+" Then Name = Right$(Name, Len(Name) - 1)
+        If Left$(name, 1) = "*" Or Left$(name, 1) = "+" Then name = Right$(name, Len(name) - 1)
         
         ' Add key
-        Call Administradores.ChangeValue("Consejero", Name, "1")
+        Call Administradores.ChangeValue("Consejero", name, "1")
         
     Next i
     
@@ -354,12 +354,12 @@ Public Sub loadAdministrativeUsers()
     buf = val(ServerIni.GetValue("INIT", "RolesMasters"))
         
     For i = 1 To buf
-        Name = UCase$(ServerIni.GetValue("RolesMasters", "RM" & i))
+        name = UCase$(ServerIni.GetValue("RolesMasters", "RM" & i))
         
-        If Left$(Name, 1) = "*" Or Left$(Name, 1) = "+" Then Name = Right$(Name, Len(Name) - 1)
+        If Left$(name, 1) = "*" Or Left$(name, 1) = "+" Then name = Right$(name, Len(name) - 1)
         
         ' Add key
-        Call Administradores.ChangeValue("RM", Name, "1")
+        Call Administradores.ChangeValue("RM", name, "1")
     Next i
     
     Set ServerIni = Nothing
@@ -368,7 +368,7 @@ Public Sub loadAdministrativeUsers()
 
 End Sub
 
-Public Function GetCharPrivs(ByRef UserName As String) As PlayerType
+Public Function GetCharPrivs(ByRef username As String) As PlayerType
     '****************************************************
     'Author: ZaMa
     'Last Modification: 18/11/2010
@@ -377,16 +377,16 @@ Public Function GetCharPrivs(ByRef UserName As String) As PlayerType
 
     Dim Privs As PlayerType
 
-    If EsAdmin(UserName) Then
+    If EsAdmin(username) Then
         Privs = PlayerType.Admin
         
-    ElseIf EsDios(UserName) Then
+    ElseIf EsDios(username) Then
         Privs = PlayerType.Dios
 
-    ElseIf EsSemiDios(UserName) Then
+    ElseIf EsSemiDios(username) Then
         Privs = PlayerType.SemiDios
         
-    ElseIf EsConsejero(UserName) Then
+    ElseIf EsConsejero(username) Then
         Privs = PlayerType.Consejero
     
     Else
@@ -398,7 +398,7 @@ Public Function GetCharPrivs(ByRef UserName As String) As PlayerType
 
 End Function
 
-Public Function TxtDimension(ByVal Name As String) As Long
+Public Function TxtDimension(ByVal name As String) As Long
     '***************************************************
     'Author: Unknown
     'Last Modification: -
@@ -408,7 +408,7 @@ Public Function TxtDimension(ByVal Name As String) As Long
     Dim n As Integer, cad As String, Tam As Long
 
     n = FreeFile(1)
-    Open Name For Input As #n
+    Open name For Input As #n
     Tam = 0
 
     Do While Not EOF(n)
@@ -466,12 +466,12 @@ Public Sub CargarHechizos()
     '
     '###################################################
 
-    On Error GoTo errHandler
+    On Error GoTo ErrHandler
 
     If frmMain.Visible Then frmMain.txtStatus.Text = "Cargando Hechizos."
     
     Dim Hechizo As Integer
-    Dim Str     As String
+    Dim str     As String
     
     Dim Leer    As clsIniManager
 
@@ -584,11 +584,11 @@ Public Sub CargarHechizos()
             
             'Portales
             .Portal = val(Leer.GetValue("Hechizo" & Hechizo, "Portal"))
-            Str = Leer.GetValue("Hechizo" & Hechizo, "PortalMap")
+            str = Leer.GetValue("Hechizo" & Hechizo, "PortalMap")
             
-            .PortalPos.Map = val(ReadField(1, Str, 45))
-            .PortalPos.X = val(ReadField(2, Str, 45))
-            .PortalPos.Y = val(ReadField(3, Str, 45))
+            .PortalPos.Map = val(ReadField(1, str, 45))
+            .PortalPos.X = val(ReadField(2, str, 45))
+            .PortalPos.Y = val(ReadField(3, str, 45))
             
             .Casteo = val(Leer.GetValue("Hechizo" & Hechizo, "Casteo"))
             .CastFX = val(Leer.GetValue("Hechizo" & Hechizo, "CastFX"))
@@ -605,7 +605,7 @@ Public Sub CargarHechizos()
     
     Exit Sub
 
-errHandler:
+ErrHandler:
     MsgBox "Error cargando hechizos.dat " & Err.Number & ": " & Err.description
  
 End Sub
@@ -825,7 +825,7 @@ Public Sub GrabarMapa(ByVal Map As Long, ByRef MAPFILE As String)
 
     With MapInfo(Map)
         'write .dat file
-        Call IniManager.ChangeValue("Mapa" & Map, "Name", .Name)
+        Call IniManager.ChangeValue("Mapa" & Map, "Name", .name)
         Call IniManager.ChangeValue("Mapa" & Map, "MusicNum", .music)
         Call IniManager.ChangeValue("Mapa" & Map, "MagiaSinefecto", .MagiaSinEfecto)
         Call IniManager.ChangeValue("Mapa" & Map, "InviSinEfecto", .InviSinEfecto)
@@ -836,7 +836,7 @@ Public Sub GrabarMapa(ByVal Map As Long, ByRef MAPFILE As String)
         Call IniManager.ChangeValue("Mapa" & Map, "Terreno", TerrainByteToString(.Terreno))
         Call IniManager.ChangeValue("Mapa" & Map, "Zona", .Zona)
         Call IniManager.ChangeValue("Mapa" & Map, "Restringir", RestrictByteToString(.Restringir))
-        Call IniManager.ChangeValue("Mapa" & Map, "BackUp", Str(.BackUp))
+        Call IniManager.ChangeValue("Mapa" & Map, "BackUp", str(.BackUp))
     
         If .Pk Then
             Call IniManager.ChangeValue("Mapa" & Map, "Pk", "0")
@@ -1023,7 +1023,7 @@ Sub LoadOBJData()
 
     'Call LogTarea("Sub LoadOBJData")
 
-    On Error GoTo errHandler
+    On Error GoTo ErrHandler
 
     If frmMain.Visible Then frmMain.txtStatus.Text = "Cargando base de datos de los objetos."
     
@@ -1034,7 +1034,7 @@ Sub LoadOBJData()
     Dim Leer        As clsIniManager
     Dim i           As Integer
     Dim n           As Integer
-    Dim S           As String
+    Dim s           As String
     Dim Aura        As String
     
     Set Leer = New clsIniManager
@@ -1054,7 +1054,7 @@ Sub LoadOBJData()
     For Object = 1 To NumObjDatas
 
         With ObjData(Object)
-            .Name = Leer.GetValue("OBJ" & Object, "Name")
+            .name = Leer.GetValue("OBJ" & Object, "Name")
             
             'Pablo (ToxicWaste) Log de Objetos.
             .Log = val(Leer.GetValue("OBJ" & Object, "Log"))
@@ -1071,10 +1071,10 @@ Sub LoadOBJData()
             
             .Subtipo = val(Leer.GetValue("OBJ" & Object, "Subtipo"))
             
-            S = Leer.GetValue("OBJ" & Object, "CreaLuz")
+            s = Leer.GetValue("OBJ" & Object, "CreaLuz")
             
-            .CreaLuz.Rango = val(ReadField(1, S, Asc(":")))
-            .CreaLuz.Color = HexToColor(Right(ReadField(2, S, Asc(":")), 6)) 'Hacemos la conversion de colores Hexadecimales a Long
+            .CreaLuz.Rango = val(ReadField(1, s, Asc(":")))
+            .CreaLuz.Color = HexToColor(Right(ReadField(2, s, Asc(":")), 6)) 'Hacemos la conversion de colores Hexadecimales a Long
             
             Select Case .OBJType
 
@@ -1282,14 +1282,14 @@ Sub LoadOBJData()
             
             'CHECK: !!! Esto es provisorio hasta que los de Dateo cambien los valores de string a numerico
             i = 1: n = 1
-            S = Leer.GetValue("OBJ" & Object, "CP" & i)
-            Do While Len(S) > 0
-                If ClaseToEnum(S) > 0 Then .ClaseProhibida(n) = ClaseToEnum(S)
+            s = Leer.GetValue("OBJ" & Object, "CP" & i)
+            Do While Len(s) > 0
+                If ClaseToEnum(s) > 0 Then .ClaseProhibida(n) = ClaseToEnum(s)
                         
                 If n = NUMCLASES Then Exit Do
                         
                 n = n + 1: i = i + 1
-                S = Leer.GetValue("OBJ" & Object, "CP" & i)
+                s = Leer.GetValue("OBJ" & Object, "CP" & i)
             Loop
             
             .DefensaMagicaMax = val(Leer.GetValue("OBJ" & Object, "DefensaMagicaMax"))
@@ -1303,13 +1303,13 @@ Sub LoadOBJData()
                 .Madera = val(Leer.GetValue("OBJ" & Object, "Madera"))
 
            ' Skill minimo
-            S = Leer.GetValue("OBJ" & Object, "SkillRequerido")
-            If Len(S) > 0 Then
-                .SkillCantidad = val(ReadField(2, S, Asc("-")))
+            s = Leer.GetValue("OBJ" & Object, "SkillRequerido")
+            If Len(s) > 0 Then
+                .SkillCantidad = val(ReadField(2, s, Asc("-")))
     
-                S = Replace(UCase$(ReadField(1, S, Asc("-"))), "+", " ")
+                s = Replace(UCase$(ReadField(1, s, Asc("-"))), "+", " ")
                 For i = 1 To NUMSKILLS
-                    If S = UCase$(SkillsNames(i)) Then
+                    If s = UCase$(SkillsNames(i)) Then
                         .SkillRequerido = i
                         Exit For
                     End If
@@ -1338,7 +1338,7 @@ Sub LoadOBJData()
     If frmMain.Visible Then frmMain.txtStatus.Text = Date & " " & time & " - Se cargo base de datos de los objetos. Operacion Realizada con exito."
     
     Exit Sub
-errHandler:
+ErrHandler:
     MsgBox "error cargando objetos " & Err.Number & ": " & Err.description
 
 End Sub
@@ -1350,7 +1350,7 @@ Sub LoadGlobalDrop()
 'Descripcion: Carga la lista de drops globales de NPCs
 '**********************************************
 
-    On Error GoTo errHandler
+    On Error GoTo ErrHandler
 
     If frmMain.Visible Then frmMain.txtStatus.Text = "Cargando base de datos de drop globales."
     
@@ -1389,7 +1389,7 @@ Sub LoadGlobalDrop()
     If frmMain.Visible Then frmMain.txtStatus.Text = Date & " " & time & " - Se cargo base de datos de los drop globales. Operacion Realizada con exito."
     
     Exit Sub
-errHandler:
+ErrHandler:
     MsgBox "error cargando drop globales " & Err.Number & ": " & Err.description
 
 End Sub
@@ -1680,7 +1680,7 @@ Public Sub CargarMapa(ByVal Map As Long, ByVal MAPFl As String)
     
     'Cargamos los extras
     With MapInfo(Map)
-        .Name = Trim$(MapDat.map_name)
+        .name = Trim$(MapDat.map_name)
         .music = Trim$(MapDat.music_number)
         .NoTirarItems = MapDat.NoTirarItems
 
@@ -1803,7 +1803,7 @@ Sub LoadSini()
     IntervaloUserPuedeCastear = val(Lector.GetValue("INTERVALOS", "IntervaloLanzaHechizo"))
     IntervaloUserPuedeTrabajar = val(Lector.GetValue("INTERVALOS", "IntervaloTrabajo"))
     IntervaloUserPuedeAtacar = val(Lector.GetValue("INTERVALOS", "IntervaloUserPuedeAtacar"))
-    INTERVALO_GLOBAL = val(Lector.GetValue("INTERVALOS", "IntervaloGlobal"))
+    Intervalo_Global = val(Lector.GetValue("INTERVALOS", "IntervaloGlobal"))
     IntervaloPuedeMakrear = val(Lector.GetValue("INTERVALOS", "IntervaloMakreo"))
     
     'TODO : Agregar estos intervalos al form!!!
@@ -1830,6 +1830,7 @@ Sub LoadSini()
     IntervaloFlechasCazadores = val(Lector.GetValue("INTERVALOS", "IntervaloFlechasCazadores"))
     
     IntervaloOculto = val(Lector.GetValue("INTERVALOS", "IntervaloOculto"))
+    IntervaloCaminar = val(Lector.GetValue("INTERVALOS", "IntervaloCaminar"))
     
     '&&&&&&&&&&&&&&&&&&&&& FIN TIMERS &&&&&&&&&&&&&&&&&&&&&&&
       
@@ -1868,6 +1869,8 @@ Sub LoadSini()
         ReDim UserList(1 To MaxUsers) As User
 
     End If
+    
+    MaximoSpeedHack = val(Lector.GetValue("ANTICHEAT", "MaximoSpeedHack"))
     
     '&&&&&&&&&&&&&&&&&&&&& BALANCE &&&&&&&&&&&&&&&&&&&&&&&
     'Se agrego en LoadBalance y en el Balance.dat
@@ -2032,7 +2035,7 @@ Sub BackUPnPc(ByVal NpcIndex As Integer, ByVal hFile As Integer)
     
     With Npclist(NpcIndex)
         'General
-        Print #hFile, "Name=" & .Name
+        Print #hFile, "Name=" & .name
         Print #hFile, "Desc=" & .Desc
         Print #hFile, "Head=" & val(.Char.Head)
         Print #hFile, "Body=" & val(.Char.body)
@@ -2103,7 +2106,7 @@ Sub CargarNpcBackUp(ByVal NpcIndex As Integer, ByVal NpcNumber As Integer)
     With Npclist(NpcIndex)
     
         .Numero = NpcNumber
-        .Name = GetVar(npcfile, "NPC" & NpcNumber, "Name")
+        .name = GetVar(npcfile, "NPC" & NpcNumber, "Name")
         .Desc = GetVar(npcfile, "NPC" & NpcNumber, "Desc")
         .Movement = val(GetVar(npcfile, "NPC" & NpcNumber, "Movement"))
         .NPCtype = val(GetVar(npcfile, "NPC" & NpcNumber, "NpcType"))

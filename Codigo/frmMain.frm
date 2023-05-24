@@ -165,7 +165,7 @@ Begin VB.Form frmMain
          AutoSize        =   -1  'True
          BackColor       =   &H00000000&
          BackStyle       =   0  'Transparent
-         Caption         =   "Estado del mundo: Cargando..."
+         Caption         =   "Clima del mundo: Cargando..."
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -180,7 +180,7 @@ Begin VB.Form frmMain
          Left            =   120
          TabIndex        =   26
          Top             =   2280
-         Width           =   2265
+         Width           =   2145
       End
       Begin VB.Label CantUsuarios 
          Appearance      =   0  'Flat
@@ -714,7 +714,7 @@ Sub CheckIdleUser()
 
                 End If
 
-                Call LogError("Se deconecto el usuario " & UserList(iUserIndex).Name & " por que se quedo colgado.")
+                Call LogError("Se deconecto el usuario " & UserList(iUserIndex).name & " por que se quedo colgado.")
 
                 Call CloseUser(iUserIndex)
             End If
@@ -833,7 +833,7 @@ End Sub
 
 Private Sub AutoSave_Timer()
 
-    On Error GoTo errHandler
+    On Error GoTo ErrHandler
 
     'fired every minute
     Static Minutos          As Long
@@ -921,7 +921,7 @@ Private Sub AutoSave_Timer()
     '<<<<<-------- Log the number of users online ------>>>
 
     Exit Sub
-errHandler:
+ErrHandler:
     Call LogError("Error en TimerAutoSave " & Err.Number & ": " & Err.description)
 
     Resume Next
@@ -1029,7 +1029,7 @@ Private Sub CMDDUMP_Click()
     Dim i As Integer
 
     For i = 1 To MaxUsers
-        Call LogCriticEvent(i & ") ConnID: " & UserList(i).ConnID & ". ConnidValida: " & UserList(i).ConnIDValida & " Name: " & UserList(i).Name & " UserLogged: " & UserList(i).flags.UserLogged)
+        Call LogCriticEvent(i & ") ConnID: " & UserList(i).ConnID & ". ConnidValida: " & UserList(i).ConnIDValida & " Name: " & UserList(i).name & " UserLogged: " & UserList(i).flags.UserLogged)
     Next i
     
     Call LogCriticEvent("Lastuser: " & LastUser & " NextOpenUser: " & NextOpenUser)
@@ -1195,12 +1195,12 @@ Private Sub SetSystray()
 
     Dim i   As Integer
 
-    Dim S   As String
+    Dim s   As String
 
     Dim nid As NOTIFYICONDATA
     
-    S = "Nexus AO - http://nexusao.com.ar"
-    nid = setNOTIFYICONDATA(frmMain.hWnd, vbNull, NIF_MESSAGE Or NIF_ICON Or NIF_TIP, WM_MOUSEMOVE, frmMain.Icon, S)
+    s = "Nexus AO - http://nexusao.com.ar"
+    nid = setNOTIFYICONDATA(frmMain.hWnd, vbNull, NIF_MESSAGE Or NIF_ICON Or NIF_TIP, WM_MOUSEMOVE, frmMain.Icon, s)
     i = Shell_NotifyIconA(NIM_ADD, nid)
         
     If WindowState <> vbMinimized Then WindowState = vbMinimized

@@ -54,9 +54,14 @@ Public Sub SortearHorario(Optional ByVal Clima As eColorEstado)
         ElseIf (Hour(Now) >= 19 And Hour(Now) < 4) Then 'Noche
             Call ColorClima(eColorEstado.Noche)
             frmMain.lblLloviendoInfo.Caption = "Hora: Noche - [" & Hour(Now) & ":" & Minute(Now) & "]"
+            
+        Else  'MedioDia
+            Call ColorClima(eColorEstado.MedioDia)
+            frmMain.lblLloviendoInfo.Caption = "Hora: MedioDia (Temporal) - [" & Hour(Now) & ":" & Minute(Now) & "]"
         End If
         
     End If
+
     
 End Sub
 

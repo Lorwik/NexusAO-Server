@@ -95,7 +95,7 @@ Public Sub ActStats(ByVal VictimIndex As Integer, ByVal AttackerIndex As Integer
         Call WriteMultiMessage(VictimIndex, eMessages.UserKill, AttackerIndex)
         
         'Log
-        Call LogAsesinato(.Name & " asesino a " & UserList(VictimIndex).Name)
+        Call LogAsesinato(.name & " asesino a " & UserList(VictimIndex).name)
 
     End With
 
@@ -311,17 +311,17 @@ Public Sub EraseUserChar(ByVal UserIndex As Integer, ByVal IsAdminInvisible As B
     
 ErrorHandler:
     
-    Dim UserName  As String
+    Dim username  As String
 
     Dim CharIndex As Integer
     
     If UserIndex > 0 Then
-        UserName = UserList(UserIndex).Name
+        username = UserList(UserIndex).name
         CharIndex = UserList(UserIndex).Char.CharIndex
 
     End If
 
-    Call LogError("Error en EraseUserchar " & Err.Number & ": " & Err.description & ". User: " & UserName & "(UI: " & UserIndex & " - CI: " & CharIndex & ")")
+    Call LogError("Error en EraseUserchar " & Err.Number & ": " & Err.description & ". User: " & username & "(UI: " & UserIndex & " - CI: " & CharIndex & ")")
 
 End Sub
 
@@ -354,7 +354,7 @@ Public Sub RefreshCharStatus(ByVal UserIndex As Integer)
         NickColor = GetNickColor(UserIndex)
         
         If .showName Then
-            Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageUpdateTagAndStatus(UserIndex, NickColor, .Name & ClanTag))
+            Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageUpdateTagAndStatus(UserIndex, NickColor, .name & ClanTag))
         Else
             Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageUpdateTagAndStatus(UserIndex, NickColor, vbNullString))
 
@@ -434,7 +434,7 @@ Public Sub MakeUserChar(ByVal toMap As Boolean, _
     '15/01/2010: ZaMa - Ahora se envia el color del nick.
     '*************************************************
 
-    On Error GoTo errHandler
+    On Error GoTo ErrHandler
 
     Dim CharIndex  As Integer
 
@@ -442,7 +442,7 @@ Public Sub MakeUserChar(ByVal toMap As Boolean, _
 
     Dim NickColor  As Byte
 
-    Dim UserName   As String
+    Dim username   As String
 
     Dim Privileges As Byte
     
@@ -473,22 +473,22 @@ Public Sub MakeUserChar(ByVal toMap As Boolean, _
                 
                 'Preparo el nick
                 If .showName Then
-                    UserName = .Name
+                    username = .name
                     
                     If .flags.EnConsulta Then
-                        UserName = UserName & " " & TAG_CONSULT_MODE
+                        username = username & " " & TAG_CONSULT_MODE
                     Else
 
                         If UserList(sndIndex).flags.Privilegios And PlayerType.User Then
-                            If LenB(ClanTag) <> 0 Then UserName = UserName & " <" & ClanTag & ">"
+                            If LenB(ClanTag) <> 0 Then username = username & " <" & ClanTag & ">"
                             
                         Else
 
                             If (.flags.invisible Or .flags.Oculto) And (Not .flags.AdminInvisible = 1) And .flags.Navegando = 0 Then
-                                UserName = UserName & " " & TAG_USER_INVISIBLE
+                                username = username & " " & TAG_USER_INVISIBLE
                             Else
                                     
-                                If LenB(ClanTag) <> 0 Then UserName = UserName & " <" & ClanTag & ">"
+                                If LenB(ClanTag) <> 0 Then username = username & " <" & ClanTag & ">"
 
                             End If
 
@@ -498,7 +498,7 @@ Public Sub MakeUserChar(ByVal toMap As Boolean, _
 
                 End If
             
-                Call WriteCharacterCreate(sndIndex, .Char.body, .Char.Head, .Char.Heading, .Char.CharIndex, X, Y, .Char.WeaponAnim, .Char.ShieldAnim, .Char.FX, 999, .Char.CascoAnim, UserName, NickColor, Privileges, .Char.AuraAnim, .Char.AuraColor)
+                Call WriteCharacterCreate(sndIndex, .Char.body, .Char.Head, .Char.Heading, .Char.CharIndex, X, Y, .Char.WeaponAnim, .Char.ShieldAnim, .Char.FX, 999, .Char.CascoAnim, username, NickColor, Privileges, .Char.AuraAnim, .Char.AuraColor)
             Else
                 'Hide the name and clan - set privs as normal user
                 Call AgregarUser(UserIndex, .Pos.Map, ButIndex)
@@ -511,7 +511,7 @@ Public Sub MakeUserChar(ByVal toMap As Boolean, _
 
     Exit Sub
 
-errHandler:
+ErrHandler:
     LogError ("MakeUserChar: num: " & Err.Number & " desc: " & Err.description)
     'Resume Next
     Call CloseSocket(UserIndex)
@@ -555,7 +555,7 @@ Public Sub CheckUserLevel(ByVal UserIndex As Integer, Optional ByVal PrintInCons
     Dim GI               As Integer 'Guild Index
     Dim SubiodeLvL       As Boolean
     
-    On Error GoTo errHandler
+    On Error GoTo ErrHandler
     
     WasNewbie = EsNewbie(UserIndex)
     SubiodeLvL = False
@@ -775,7 +775,7 @@ Public Sub CheckUserLevel(ByVal UserIndex As Integer, Optional ByVal PrintInCons
             'Marcamos que subio del lvl
             SubiodeLvL = True
             
-            Call LogDesarrollo(.Name & " paso a nivel " & .Stats.ELV & " gano HP: " & AumentoHP)
+            Call LogDesarrollo(.name & " paso a nivel " & .Stats.ELV & " gano HP: " & AumentoHP)
             
             .Stats.MinHp = .Stats.MaxHp
 
@@ -794,10 +794,10 @@ Public Sub CheckUserLevel(ByVal UserIndex As Integer, Optional ByVal PrintInCons
                 If GI > 0 Then
                     If modGuilds.GuildAlignment(GI) = "Del Mal" Or modGuilds.GuildAlignment(GI) = "Real" Then
                         'We get here, so guild has factionary alignment, we have to expulse the user
-                        Call modGuilds.m_EcharMiembroDeClan(-1, .Name)
+                        Call modGuilds.m_EcharMiembroDeClan(-1, .name)
                         
                         If PrintInConsole Then
-                            Call SendData(SendTarget.ToGuildMembers, GI, PrepareMessageConsoleMsg(.Name & " deja el clan.", FontTypeNames.FONTTYPE_GUILD))
+                            Call SendData(SendTarget.ToGuildMembers, GI, PrepareMessageConsoleMsg(.name & " deja el clan.", FontTypeNames.FONTTYPE_GUILD))
                             Call WriteConsoleMsg(UserIndex, "Ya tienes la madurez suficiente como para decidir bajo que estandarte pelearas! Por esta razon, hasta tanto no te enlistes en la faccion bajo la cual tu clan esta alineado, estaras excluido del mismo.", FontTypeNames.FONTTYPE_GUILD)
                         End If
 
@@ -845,7 +845,7 @@ Public Sub CheckUserLevel(ByVal UserIndex As Integer, Optional ByVal PrintInCons
     
     Exit Sub
 
-errHandler:
+ErrHandler:
     Call LogError("Error en la subrutina CheckUserLevel - Error : " & Err.Number & " - Description : " & Err.description)
 
 End Sub
@@ -861,7 +861,7 @@ Public Function PuedeAtravesarAgua(ByVal UserIndex As Integer) As Boolean
 
 End Function
 
-Sub MoveUserChar(ByVal UserIndex As Integer, ByVal nHeading As eHeading)
+Public Function MoveUserChar(ByVal UserIndex As Integer, ByVal nHeading As eHeading) As Boolean
 
     '*************************************************
     'Author: Unknown
@@ -873,6 +873,9 @@ Sub MoveUserChar(ByVal UserIndex As Integer, ByVal nHeading As eHeading)
     '13/07/2009: ZaMa - Invisible admins aren't allowed to force dead characater to move
     '06/04/2020: FrankoH298 - Ahora no se puede entrar a las casas montado.
     '*************************************************
+    
+    On Error GoTo MoveUserChar_Err
+    
     Dim nPos          As WorldPos
 
     Dim sailing       As Boolean
@@ -896,7 +899,7 @@ Sub MoveUserChar(ByVal UserIndex As Integer, ByVal nHeading As eHeading)
             UserList(UserIndex).flags.Equitando And MapData(UserList(UserIndex).Pos.Map, nPos.X, nPos.Y).Trigger = eTrigger.BAJOTECHO) Then
             
             Call WritePosUpdate(UserIndex)
-            Exit Sub
+            Exit Function
         End If
             
         'si no estoy solo en el mapa...
@@ -985,8 +988,15 @@ Sub MoveUserChar(ByVal UserIndex As Integer, ByVal nHeading As eHeading)
     If UserList(UserIndex).Counters.Trabajando Then UserList(UserIndex).Counters.Trabajando = UserList(UserIndex).Counters.Trabajando - 1
 
     If UserList(UserIndex).Counters.Ocultando Then UserList(UserIndex).Counters.Ocultando = UserList(UserIndex).Counters.Ocultando - 1
-
-End Sub
+    
+    MoveUserChar = True
+    
+    Exit Function
+    
+MoveUserChar_Err:
+     Call TraceError(Err.Number, Err.description + " UI:" + UserIndex, "UsUaRiOs.MoveUserChar", Erl)
+    
+End Function
 
 Public Function InvertHeading(ByVal nHeading As eHeading) As eHeading
 
@@ -1103,7 +1113,7 @@ Public Sub SendUserStatsTxt(ByVal sendIndex As Integer, ByVal UserIndex As Integ
     Dim GuildI As Integer
     
     With UserList(UserIndex)
-        Call WriteConsoleMsg(sendIndex, "Estadisticas de: " & .Name, FontTypeNames.FONTTYPE_INFO)
+        Call WriteConsoleMsg(sendIndex, "Estadisticas de: " & .name, FontTypeNames.FONTTYPE_INFO)
         Call WriteConsoleMsg(sendIndex, "Nivel: " & .Stats.ELV & "  EXP: " & .Stats.Exp & "/" & .Stats.ELU, FontTypeNames.FONTTYPE_INFO)
         Call WriteConsoleMsg(sendIndex, "Salud: " & .Stats.MinHp & "/" & .Stats.MaxHp & "  Mana: " & .Stats.MinMAN & "/" & .Stats.MaxMAN & "  Energia: " & .Stats.MinSta & "/" & .Stats.MaxSta, FontTypeNames.FONTTYPE_INFO)
         
@@ -1139,7 +1149,7 @@ Public Sub SendUserStatsTxt(ByVal sendIndex As Integer, ByVal UserIndex As Integ
         If GuildI > 0 Then
             Call WriteConsoleMsg(sendIndex, "Clan: " & modGuilds.GuildName(GuildI), FontTypeNames.FONTTYPE_INFO)
 
-            If UCase$(modGuilds.GuildLeader(GuildI)) = UCase$(.Name) Then
+            If UCase$(modGuilds.GuildLeader(GuildI)) = UCase$(.name) Then
                 Call WriteConsoleMsg(sendIndex, "Status: Lider", FontTypeNames.FONTTYPE_INFO)
 
             End If
@@ -1178,7 +1188,7 @@ Sub SendUserMiniStatsTxt(ByVal sendIndex As Integer, ByVal UserIndex As Integer)
     '23/01/2007 Pablo (ToxicWaste) - Agrego de funciones y mejora de distribucion de parametros.
     '*************************************************
     With UserList(UserIndex)
-        Call WriteConsoleMsg(sendIndex, "Pj: " & .Name, FontTypeNames.FONTTYPE_INFO)
+        Call WriteConsoleMsg(sendIndex, "Pj: " & .name, FontTypeNames.FONTTYPE_INFO)
         Call WriteConsoleMsg(sendIndex, "Ciudadanos matados: " & .Faccion.CiudadanosMatados & " Criminales matados: " & .Faccion.CriminalesMatados, FontTypeNames.FONTTYPE_INFO)
         Call WriteConsoleMsg(sendIndex, "NPCs muertos: " & .Stats.NPCsMuertos, FontTypeNames.FONTTYPE_INFO)
         Call WriteConsoleMsg(sendIndex, "Clase: " & ListaClases(.clase), FontTypeNames.FONTTYPE_INFO)
@@ -1228,13 +1238,13 @@ Sub SendUserInvTxt(ByVal sendIndex As Integer, ByVal UserIndex As Integer)
     Dim j As Long
     
     With UserList(UserIndex)
-        Call WriteConsoleMsg(sendIndex, .Name, FontTypeNames.FONTTYPE_INFO)
+        Call WriteConsoleMsg(sendIndex, .name, FontTypeNames.FONTTYPE_INFO)
         Call WriteConsoleMsg(sendIndex, "Tiene " & .Invent.NroItems & " objetos.", FontTypeNames.FONTTYPE_INFO)
         
         For j = 1 To .CurrentInventorySlots
 
             If .Invent.Object(j).ObjIndex > 0 Then
-                Call WriteConsoleMsg(sendIndex, "Objeto " & j & " " & ObjData(.Invent.Object(j).ObjIndex).Name & " Cantidad:" & .Invent.Object(j).Amount, FontTypeNames.FONTTYPE_INFO)
+                Call WriteConsoleMsg(sendIndex, "Objeto " & j & " " & ObjData(.Invent.Object(j).ObjIndex).name & " Cantidad:" & .Invent.Object(j).Amount, FontTypeNames.FONTTYPE_INFO)
 
             End If
 
@@ -1255,7 +1265,7 @@ Sub SendUserSkillsTxt(ByVal sendIndex As Integer, ByVal UserIndex As Integer)
 
     Dim j As Integer
     
-    Call WriteConsoleMsg(sendIndex, UserList(UserIndex).Name, FontTypeNames.FONTTYPE_INFO)
+    Call WriteConsoleMsg(sendIndex, UserList(UserIndex).name, FontTypeNames.FONTTYPE_INFO)
     
     For j = 1 To NUMSKILLS
         Call WriteConsoleMsg(sendIndex, SkillsNames(j) & " = " & UserList(UserIndex).Stats.UserSkills(j), FontTypeNames.FONTTYPE_INFO)
@@ -1275,7 +1285,7 @@ Private Function EsMascotaCiudadano(ByVal NpcIndex As Integer, _
         EsMascotaCiudadano = Not criminal(Npclist(NpcIndex).MaestroUser)
 
         If EsMascotaCiudadano Then
-            Call WriteConsoleMsg(Npclist(NpcIndex).MaestroUser, "" & UserList(UserIndex).Name & " esta atacando tu mascota!!", FontTypeNames.FONTTYPE_INFO)
+            Call WriteConsoleMsg(Npclist(NpcIndex).MaestroUser, "" & UserList(UserIndex).name & " esta atacando tu mascota!!", FontTypeNames.FONTTYPE_INFO)
 
         End If
 
@@ -1298,7 +1308,7 @@ Sub NPCAtacado(ByVal NpcIndex As Integer, ByVal UserIndex As Integer)
     With Npclist(NpcIndex)
     
         'Guardamos el usuario que ataco el npc.
-        .flags.AttackedBy = UserList(UserIndex).Name
+        .flags.AttackedBy = UserList(UserIndex).name
         
         'Npc que estabas atacando.
         Dim LastNpcHit As Integer
@@ -1313,20 +1323,20 @@ Sub NPCAtacado(ByVal NpcIndex As Integer, ByVal UserIndex As Integer)
     
             'El que le pegabas antes ya no es tuyo
             If LastNpcHit <> 0 Then
-                If Npclist(LastNpcHit).flags.AttackedFirstBy = UserList(UserIndex).Name Then
+                If Npclist(LastNpcHit).flags.AttackedFirstBy = UserList(UserIndex).name Then
                     Npclist(LastNpcHit).flags.AttackedFirstBy = vbNullString
     
                 End If
     
             End If
     
-            .flags.AttackedFirstBy = UserList(UserIndex).Name
-        ElseIf .flags.AttackedFirstBy <> UserList(UserIndex).Name Then
+            .flags.AttackedFirstBy = UserList(UserIndex).name
+        ElseIf .flags.AttackedFirstBy <> UserList(UserIndex).name Then
     
             'Estas robando NPC
             'El que le pegabas antes ya no es tuyo
             If LastNpcHit <> 0 Then
-                If Npclist(LastNpcHit).flags.AttackedFirstBy = UserList(UserIndex).Name Then
+                If Npclist(LastNpcHit).flags.AttackedFirstBy = UserList(UserIndex).name Then
                     Npclist(LastNpcHit).flags.AttackedFirstBy = vbNullString
     
                 End If
@@ -1576,7 +1586,7 @@ Public Sub UserDie(ByVal UserIndex As Integer, Optional ByVal AttackerIndex As I
         aN = .flags.NPCAtacado
 
         If aN > 0 Then
-            If Npclist(aN).flags.AttackedFirstBy = .Name Then
+            If Npclist(aN).flags.AttackedFirstBy = .name Then
                 Npclist(aN).flags.AttackedFirstBy = vbNullString
 
             End If
@@ -1841,8 +1851,8 @@ Public Sub ContarMuerte(ByVal Muerto As Integer, ByVal Atacante As Integer)
         If TriggerZonaPelea(Muerto, Atacante) = TRIGGER6_PERMITE Then Exit Sub
         
         If criminal(Muerto) Then
-            If .flags.LastCrimMatado <> UserList(Muerto).Name Then
-                .flags.LastCrimMatado = UserList(Muerto).Name
+            If .flags.LastCrimMatado <> UserList(Muerto).name Then
+                .flags.LastCrimMatado = UserList(Muerto).name
 
                 If .Faccion.CriminalesMatados < MAXUSERMATADOS Then .Faccion.CriminalesMatados = .Faccion.CriminalesMatados + 1
 
@@ -1856,8 +1866,8 @@ Public Sub ContarMuerte(ByVal Muerto As Integer, ByVal Atacante As Integer)
 
         Else
 
-            If .flags.LastCiudMatado <> UserList(Muerto).Name Then
-                .flags.LastCiudMatado = UserList(Muerto).Name
+            If .flags.LastCiudMatado <> UserList(Muerto).name Then
+                .flags.LastCiudMatado = UserList(Muerto).name
 
                 If .Faccion.CiudadanosMatados < MAXUSERMATADOS Then .Faccion.CiudadanosMatados = .Faccion.CiudadanosMatados + 1
 
@@ -1881,7 +1891,7 @@ Sub Tilelibre(ByRef Pos As WorldPos, _
     '23/01/2007 -> Pablo (ToxicWaste): El agua es ahora un TileLibre agregando las condiciones necesarias.
     '18/09/2010: ZaMa - Aplico optimizacion de busqueda de tile libre en forma de rombo.
     '**************************************************************
-    On Error GoTo errHandler
+    On Error GoTo ErrHandler
 
     Dim Found As Boolean
 
@@ -1932,7 +1942,7 @@ Sub Tilelibre(ByRef Pos As WorldPos, _
     
     Exit Sub
     
-errHandler:
+ErrHandler:
     Call LogError("Error en Tilelibre. Error: " & Err.Number & " - " & Err.description)
 
 End Sub
@@ -2432,7 +2442,7 @@ Public Sub SetInvisible(ByVal UserIndex As Integer, _
     With UserList(UserIndex)
         Call SendData(SendTarget.ToUsersAndRmsAndCounselorsAreaButGMs, UserIndex, PrepareMessageSetInvisible(userCharIndex, invisible))
     
-        sndNick = .Name
+        sndNick = .name
     
         If invisible Then
             sndNick = sndNick & " " & TAG_USER_INVISIBLE
@@ -2461,7 +2471,7 @@ Public Sub SetConsulatMode(ByVal UserIndex As Integer)
     Dim sndNick As String
 
     With UserList(UserIndex)
-        sndNick = .Name
+        sndNick = .name
     
         If .flags.EnConsulta Then
             sndNick = sndNick & " " & TAG_CONSULT_MODE
@@ -2644,7 +2654,7 @@ Public Function FarthestPet(ByVal UserIndex As Integer) As Integer
     'Last Modify Date: 18/11/2009
     'Devuelve el indice de la mascota mas lejana.
     '**************************************************************
-    On Error GoTo errHandler
+    On Error GoTo ErrHandler
     
     Dim PetIndex      As Integer
 
@@ -2690,7 +2700,7 @@ Public Function FarthestPet(ByVal UserIndex As Integer) As Integer
 
     Exit Function
     
-errHandler:
+ErrHandler:
     Call LogError("Error en FarthestPet")
 
 End Function
@@ -2859,14 +2869,14 @@ Public Sub setHome(ByVal UserIndex As Integer, _
         '¿La ciudad que tiene el NPC es invalida?
         If newHome <= 0 Then
             Call WriteChatOverHead(UserIndex, "Lo siento, en estos momentos no puedo aceptarte en mi ciudad.", Npclist(NpcIndex).Char.CharIndex, vbWhite)
-            Call LogError("Error en SetHome: La ciudad a la que " & .Name & " quiere establecer como hogar, es invalida. NewHome: " & newHome)
+            Call LogError("Error en SetHome: La ciudad a la que " & .name & " quiere establecer como hogar, es invalida. NewHome: " & newHome)
             
         Else
             If .Hogar <> newHome Then
                 .Hogar = newHome
             
                 Call WriteChatOverHead(UserIndex, "Bienvenido a nuestra humilde comunidad, este es ahora tu nuevo hogar!!!", Npclist(NpcIndex).Char.CharIndex, vbWhite)
-                Call WriteConsoleMsg(UserIndex, "Ahora eres ciudadano de " & MapInfo(Ciudades(.Hogar).Map).Name, FontTypeNames.FONTTYPE_INFO)
+                Call WriteConsoleMsg(UserIndex, "Ahora eres ciudadano de " & MapInfo(Ciudades(.Hogar).Map).name, FontTypeNames.FONTTYPE_INFO)
             Else
                 Call WriteChatOverHead(UserIndex, "Ya eres miembro de nuestra humilde comunidad!!!", Npclist(NpcIndex).Char.CharIndex, vbWhite)
         

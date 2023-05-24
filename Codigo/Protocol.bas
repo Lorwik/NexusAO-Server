@@ -2182,19 +2182,17 @@ Private Sub HandleWalk(ByVal UserIndex As Integer)
         Exit Sub
 
     End If
-    
-    Dim dummy    As Long
 
-    Dim TempTick As Long
-
-    Dim Heading  As eHeading
+    Dim Heading As eHeading
     
     With UserList(UserIndex)
         'Remove packet ID
         Call .incomingData.ReadByte
         
         Heading = .incomingData.ReadByte()
+
         Dim PacketCount As Long
+
         PacketCount = .incomingData.ReadInteger
             
         If .flags.Muerto = 0 Then
@@ -2213,42 +2211,39 @@ Private Sub HandleWalk(ByVal UserIndex As Integer)
 
         End If
 
-        Dim TiempoDeWalk As Byte
-        
-        'Prevent SpeedHack
-        If .flags.TimesWalk >= 31 + (.flags.Velocidad * 2) Then
-            TempTick = GetTickCount And &H7FFFFFFF
-            dummy = getInterval(TempTick, .flags.StartWalk) ' 0.13.5
+        Dim CurrentTick As Long
+
+        CurrentTick = GetTickCount
             
-            ' 5800 is actually less than what would be needed in perfect conditions to take 30 steps
-            '(it's about 193 ms per step against the over 200 needed in perfect conditions)
-            If dummy < 5800 Then
-                If getInterval(TempTick, .flags.CountSH) > 30000 Then ' 0.13.5
-                    .flags.CountSH = 0
+        'Prevent SpeedHack (refactored by WyroX)
+        If Not EsGm(UserIndex) And .flags.Velocidad > 0 Then
 
-                End If
-        
-                If Not .flags.CountSH = 0 Then
-                    If dummy <> 0 Then dummy = 126000 \ dummy
-         
-                    Call LogHackAttemp("SpeedHack: " & .name & " , " & dummy)
-                    Call SendData(SendTarget.ToAdmins, 0, PrepareMessageConsoleMsg("Servidor> " & .name & " ha sido echado por el servidor por posible uso de SpeedHack.", FontTypeNames.FONTTYPE_SERVER))
-                    Call CloseSocket(UserIndex)
-         
+            Dim ElapsedTimeStep As Long, MinTimeStep As Long, DeltaStep As Single
+
+            ElapsedTimeStep = CurrentTick - .Counters.LastStep
+            MinTimeStep = IntervaloCaminar / .flags.Velocidad
+            DeltaStep = (MinTimeStep - ElapsedTimeStep) / MinTimeStep
+
+            If DeltaStep > 0 Then
+                
+                .Counters.SpeedHackCounter = .Counters.SpeedHackCounter + DeltaStep
+                
+                If .Counters.SpeedHackCounter > MaximoSpeedHack Then
+                    'Call SendData(SendTarget.ToAdmins, 0, PrepareMessageConsoleMsg("Administración » Posible uso de SpeedHack del usuario " & .name & ".", FontTypeNames.FONTTYPE_SERVER))
+                    Call WritePosUpdate(UserIndex)
                     Exit Sub
-                Else
-                    .flags.CountSH = TempTick
 
                 End If
+
+            Else
+                
+                .Counters.SpeedHackCounter = .Counters.SpeedHackCounter + DeltaStep * 5
+
+                If .Counters.SpeedHackCounter < 0 Then .Counters.SpeedHackCounter = 0
 
             End If
 
-            .flags.StartWalk = TempTick
-            .flags.TimesWalk = 0
-
         End If
-        
-        .flags.TimesWalk = .flags.TimesWalk + 1
         
         'If exiting, cancel
         Call CancelExit(UserIndex)
@@ -2268,15 +2263,24 @@ Private Sub HandleWalk(ByVal UserIndex As Integer)
                 Call MoveUserChar(UserIndex, Heading)
             Else
                 'Move user
-                Call MoveUserChar(UserIndex, Heading)
+                If MoveUserChar(UserIndex, Heading) Then
                 
-                'Stop resting if needed
-                If .flags.Descansar Then
-                    .flags.Descansar = False
+                    ' Save current step for anti-sh
+                    .Counters.LastStep = CurrentTick
+                
+                    'Stop resting if needed
+                    If .flags.Descansar Then
+                        .flags.Descansar = False
+                        
+                        Call WriteRestOK(UserIndex)
+                        Call WriteConsoleMsg(UserIndex, "Has dejado de descansar.", FontTypeNames.FONTTYPE_INFO)
+    
+                    End If
                     
-                    Call WriteRestOK(UserIndex)
-                    Call WriteConsoleMsg(UserIndex, "Has dejado de descansar.", FontTypeNames.FONTTYPE_INFO)
-
+                Else
+                    .Counters.LastStep = 0
+                    Call WritePosUpdate(UserIndex)
+                    
                 End If
 
             End If
@@ -2285,12 +2289,10 @@ Private Sub HandleWalk(ByVal UserIndex As Integer)
 
             If Not .flags.UltimoMensaje = 1 Then
                 .flags.UltimoMensaje = 1
-                
                 Call WriteConsoleMsg(UserIndex, "No puedes moverte porque estas paralizado.", FontTypeNames.FONTTYPE_INFO)
-
             End If
             
-            .flags.CountSH = 0
+            Call WritePosUpdate(UserIndex)
 
         End If
 
@@ -22895,7 +22897,7 @@ On Error GoTo ErrHandler
                     Call LogGlobal(.name & "> " & Message)
     
                 Else
-                    Call WriteConsoleMsg(UserIndex, "Debes esperar al menos " & INTERVALO_GLOBAL / 1000 & " segundos entre cada mensaje.", FontTypeNames.FONTTYPE_INFO)
+                    Call WriteConsoleMsg(UserIndex, "Debes esperar al menos " & Intervalo_Global / 1000 & " segundos entre cada mensaje.", FontTypeNames.FONTTYPE_INFO)
                     
                 End If
             End If

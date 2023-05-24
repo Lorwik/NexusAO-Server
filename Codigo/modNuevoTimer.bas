@@ -49,7 +49,7 @@ Public Function IntervaloPermiteChatGlobal(ByVal UserIndex As Integer, _
 
     With UserList(UserIndex)
 
-        If TActual - .Counters.LastGlobalMsg >= INTERVALO_GLOBAL Then
+        If TActual - .Counters.LastGlobalMsg >= Intervalo_Global Then
             If Actualizar Then
                 .Counters.LastGlobalMsg = TActual
 
@@ -65,7 +65,7 @@ Public Function IntervaloPermiteChatGlobal(ByVal UserIndex As Integer, _
 
 End Function
 
-Public Function IntervaloNpcVelocidadVariable(ByVal NPCIndex As Integer, _
+Public Function IntervaloNpcVelocidadVariable(ByVal NpcIndex As Integer, _
                                           Optional ByVal Actualizar As Boolean = True) As Boolean
     '***************************************************
     'Author: Lorwik
@@ -77,7 +77,7 @@ Public Function IntervaloNpcVelocidadVariable(ByVal NPCIndex As Integer, _
 
     TActual = GetTickCount() And &H7FFFFFFF
 
-    With Npclist(NPCIndex)
+    With Npclist(NpcIndex)
 
         If TActual - .Contadores.VelocidadVariable >= .SpeedVar Then
             If Actualizar Then
@@ -95,7 +95,7 @@ Public Function IntervaloNpcVelocidadVariable(ByVal NPCIndex As Integer, _
 
 End Function
 
-Public Function IntervaloPermiteAtacarNpc(ByVal NPCIndex As Integer, _
+Public Function IntervaloPermiteAtacarNpc(ByVal NpcIndex As Integer, _
                                           Optional ByVal Actualizar As Boolean = True) As Boolean
     '***************************************************
     'Author: Shak
@@ -107,7 +107,7 @@ Public Function IntervaloPermiteAtacarNpc(ByVal NPCIndex As Integer, _
 
     TActual = GetTickCount() And &H7FFFFFFF
 
-    With Npclist(NPCIndex)
+    With Npclist(NpcIndex)
 
         If TActual - .Contadores.Ataque >= IntervaloNPCPuedeAtacar Then
             If Actualizar Then
@@ -542,6 +542,31 @@ Public Function IntervaloPuedeTocar(ByVal UserIndex As Integer, _
         Call modAntiCheat.AddCount(UserIndex, 0, 0, 0, 1)
     End If
 
+End Function
+
+Public Function IntervaloPermiteCaminar(ByVal UserIndex As Integer) As Boolean
+        
+    On Error GoTo IntervaloPermiteCaminar_Err
+
+    Dim TActual As Long
+    
+    TActual = GetTickCount()
+    
+    If TActual - UserList(UserIndex).Counters.TimerCaminar >= IntervaloCaminar Then
+        
+        '  Call AddtoRichTextBox(frmMain.RecTxt, "Usar OK.", 255, 0, 0, True, False, False)
+        UserList(UserIndex).Counters.TimerCaminar = TActual
+        IntervaloPermiteCaminar = True
+    Else
+        IntervaloPermiteCaminar = False
+
+    End If
+        
+    Exit Function
+
+IntervaloPermiteCaminar_Err:
+    Call TraceError(Err.Number, Err.description, "modNuevoTimer.IntervaloPermiteCaminar", Erl)
+        
 End Function
 
 Public Function checkInterval(ByRef startTime As Long, _
