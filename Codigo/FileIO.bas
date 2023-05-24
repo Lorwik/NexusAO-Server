@@ -2348,3 +2348,35 @@ Public Sub LoadArmadurasFaccion()
     If frmMain.Visible Then frmMain.txtStatus.Text = Date & " " & time & " - Se cargo el archivo ArmadurasFaccionarias.dat"
 
 End Sub
+
+Sub LoadPacketRatePolicy()
+
+    On Error GoTo LoadPacketRatePolicy_Err
+
+    Dim Lector As clsIniManager
+
+    Dim i      As Long
+
+    If frmMain.Visible Then frmMain.txtStatus.Text = "Cargando PacketRatePolicy."
+    
+    Set Lector = New clsIniManager
+    Call Lector.Initialize(ConfigPath & "PacketRatePolicy.ini")
+
+    For i = 1 To MAX_PACKET_COUNTERS
+
+        Dim PacketName As String
+
+        PacketName = PacketIdToString(i)
+        MacroIterations(i) = val(Lector.GetValue(PacketName, "Iterations"))
+        PacketTimerThreshold(i) = val(Lector.GetValue(PacketName, "Limit"))
+    Next i
+
+    Set Lector = Nothing
+
+    Exit Sub
+
+LoadPacketRatePolicy_Err:
+    Set Lector = Nothing
+    Call TraceError(Err.Number, Err.description, "ES.LoadPacketRatePolicy", Erl)
+        
+End Sub

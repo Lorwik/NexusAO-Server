@@ -29,7 +29,7 @@ Attribute VB_Name = "TCP"
 
 #If False Then
 
-    Dim errHandler, Length, index As Variant
+    Dim ErrHandler, Length, index As Variant
 
 #End If
 
@@ -323,7 +323,7 @@ Function ValidateSkills(ByVal UserIndex As Integer) As Boolean
 End Function
 
 Sub ConnectNewUser(ByVal UserIndex As Integer, _
-                   ByRef Name As String, _
+                   ByRef name As String, _
                    ByVal UserRaza As eRaza, _
                    ByVal UserSexo As eGenero, _
                    ByVal UserClase As eClass, _
@@ -349,15 +349,15 @@ Sub ConnectNewUser(ByVal UserIndex As Integer, _
         Dim Count As Integer
         Dim Suma As Long
         
-        If Not AsciiValidos(Name) Or LenB(Name) = 0 Then
+        If Not AsciiValidos(name) Or LenB(name) = 0 Then
             Call WriteErrorMsg(UserIndex, "Nombre invalido.")
             Exit Sub
 
         End If
         
         'Solo permitimos 1 espacio en los nombres
-        For i = 1 To Len(Name)
-            If mid(Name, i, 1) = Chr(32) Then Count = Count + 1
+        For i = 1 To Len(name)
+            If mid(name, i, 1) = Chr(32) Then Count = Count + 1
             
         Next i
         
@@ -367,10 +367,10 @@ Sub ConnectNewUser(ByVal UserIndex As Integer, _
         End If
         
         'Capitalizamos el nombre
-        Name = StrConv(Name, vbProperCase)
+        name = StrConv(name, vbProperCase)
         
         If UserList(UserIndex).flags.UserLogged Then
-            Call LogCheating("El usuario " & UserList(UserIndex).Name & " ha intentado crear a " & Name & " desde la IP " & UserList(UserIndex).IP)
+            Call LogCheating("El usuario " & UserList(UserIndex).name & " ha intentado crear a " & name & " desde la IP " & UserList(UserIndex).IP)
         
             'Kick player ( and leave character inside :D )!
             Call CloseSocketSL(UserIndex)
@@ -381,14 +381,14 @@ Sub ConnectNewUser(ByVal UserIndex As Integer, _
         End If
     
         'Existe el personaje?
-        If PersonajeExiste(Name) Then
+        If PersonajeExiste(name) Then
             Call WriteErrorMsg(UserIndex, "Ya existe el personaje.")
             Exit Sub
 
         End If
     
         If Not ValidarCabeza(UserRaza, UserSexo, Head) Then
-            Call LogCheating("El usuario " & Name & " ha seleccionado la cabeza " & Head & " desde la IP " & .IP)
+            Call LogCheating("El usuario " & name & " ha seleccionado la cabeza " & Head & " desde la IP " & .IP)
         
             Call WriteErrorMsg(UserIndex, "Cabeza invalida, elija una cabeza seleccionable.")
             Exit Sub
@@ -406,7 +406,7 @@ Sub ConnectNewUser(ByVal UserIndex As Integer, _
         .Counters.AsignedSkills = 10
         
         If Suma > 10 Then
-            Call LogHackAttemp(UserList(UserIndex).Name & " intento hackear los skills.")
+            Call LogHackAttemp(UserList(UserIndex).name & " intento hackear los skills.")
             Call CloseSocket(UserIndex)
             Exit Sub
         End If
@@ -423,7 +423,7 @@ Sub ConnectNewUser(ByVal UserIndex As Integer, _
     
         .Reputacion.Promedio = 30 / 6
     
-        .Name = Name
+        .name = name
         .clase = UserClase
         .Raza = UserRaza
         .Genero = UserSexo
@@ -475,7 +475,7 @@ Sub ConnectNewUser(ByVal UserIndex As Integer, _
     Call SaveUser(UserIndex)
   
     'Open User
-    Call ConnectUser(UserIndex, Name, True)
+    Call ConnectUser(UserIndex, name, True)
 
 End Sub
 
@@ -746,7 +746,7 @@ Private Sub CargarObjetosIniciales()
 End Sub
 
 Sub ConnectAccount(ByVal UserIndex As Integer, _
-                   ByRef UserName As String, _
+                   ByRef username As String, _
                    ByRef Password As String)
 
 '*************************************************
@@ -761,7 +761,7 @@ Sub ConnectAccount(ByVal UserIndex As Integer, _
 
     Set oSHA256 = New CSHA256
 
-    If LenB(UserName) > 24 Or LenB(UserName) = 0 Then
+    If LenB(username) > 24 Or LenB(username) = 0 Then
         Call WriteErrorMsg(UserIndex, "Nombre invalido.")
         Exit Sub
 
@@ -776,7 +776,7 @@ Sub ConnectAccount(ByVal UserIndex As Integer, _
     End If
 
     '¿Existe la cuenta?
-    If Not CuentaExiste(UserName) Then
+    If Not CuentaExiste(username) Then
         Call WriteErrorMsg(UserIndex, "La cuenta no existe.")
         Call CloseSocket(UserIndex)
         Exit Sub
@@ -784,7 +784,7 @@ Sub ConnectAccount(ByVal UserIndex As Integer, _
     End If
     
     'Ya esta conectado el personaje?
-    If CheckForSameNameAccount(UserName) Then
+    If CheckForSameNameAccount(username) Then
         Call WriteErrorMsg(UserIndex, "La cuenta ya esta conectada.")
         Call CloseSocket(UserIndex)
         Exit Sub
@@ -792,16 +792,16 @@ Sub ConnectAccount(ByVal UserIndex As Integer, _
         
     'Aca Guardamos y Hasheamos el password + Salt
     'Es el passwd valido?
-    Salt = GetAccountSalt(UserName) ' Obtenemos la Salt
+    Salt = GetAccountSalt(username) ' Obtenemos la Salt
 
-    If oSHA256.SHA256(Password & Salt) <> GetAccountPassword(UserName) Then
+    If oSHA256.SHA256(Password & Salt) <> GetAccountPassword(username) Then
         Call WriteErrorMsg(UserIndex, "Password incorrecto.")
         Call CloseSocket(UserIndex)
         Exit Sub
     End If
 
     '¿La cuenta esta verificada?
-    If Not CuentaVerificada(UserName) Then
+    If Not CuentaVerificada(username) Then
         Call WriteErrorMsg(UserIndex, "La cuenta aun no ha sido verificada, por favor revise su email.")
         Call CloseSocket(UserIndex)
         Exit Sub
@@ -812,11 +812,11 @@ Sub ConnectAccount(ByVal UserIndex As Integer, _
     'Si no tienen interes en usarlo pueden desactivarlo en el Server.ini
     If ConexionAPI Then
         'Pasamos UserName tambien como email, ya que son lo mismo.... :(
-        Call ApiEndpointSendLoginAccountEmail(UserName)
+        Call ApiEndpointSendLoginAccountEmail(username)
     End If
 
-    Call SaveAccountLastLoginDatabase(UserName, UserList(UserIndex).IP)
-    Call LoginAccountDatabase(UserIndex, UserName)
+    Call SaveAccountLastLoginDatabase(username, UserList(UserIndex).IP)
+    Call LoginAccountDatabase(UserIndex, username)
 
 End Sub
 
@@ -828,7 +828,7 @@ Sub CloseSocket(ByVal UserIndex As Integer)
     '4/4/2020: FrankoH298 - Flusheamos el buffer antes de cerrar el socket.
     '
     '***************************************************
-    On Error GoTo errHandler
+    On Error GoTo ErrHandler
     
     Call FlushBuffer(UserIndex)
     
@@ -862,7 +862,7 @@ Sub CloseSocket(ByVal UserIndex As Integer)
 
     Exit Sub
 
-errHandler:
+ErrHandler:
 
     Call ResetUserSlot(UserIndex)
         
@@ -981,7 +981,7 @@ Function ValidateChr(ByVal UserIndex As Integer) As Boolean
 End Function
 
 Sub ConnectUser(ByVal UserIndex As Integer, _
-                ByRef Name As String, Optional ByVal NewUser As Boolean = False)
+                ByRef name As String, Optional ByVal NewUser As Boolean = False)
 
     '***************************************************
     'Autor: Unknown (orginal version)
@@ -1001,7 +1001,7 @@ Sub ConnectUser(ByVal UserIndex As Integer, _
     With UserList(UserIndex)
 
         If .flags.UserLogged Then
-            Call LogCheating("El usuario " & .Name & " ha intentado loguear a " & Name & " desde la IP " & .IP)
+            Call LogCheating("El usuario " & .name & " ha intentado loguear a " & name & " desde la IP " & .IP)
             'Kick player ( and leave character inside :D )!
             Call CloseSocketSL(UserIndex)
             Call Cerrar_Usuario(UserIndex)
@@ -1038,7 +1038,7 @@ Sub ConnectUser(ByVal UserIndex As Integer, _
         End If
     
         'Existe el personaje? (Se comprueba aqui de nuevo por el CrearPJ)
-        If Not PersonajeExiste(Name) Then
+        If Not PersonajeExiste(name) Then
             Call WriteErrorMsg(UserIndex, "El personaje no existe.")
             Call CloseUser(UserIndex)
             Exit Sub
@@ -1046,7 +1046,7 @@ Sub ConnectUser(ByVal UserIndex As Integer, _
         End If
     
         'El personaje pertenece a la cuenta
-        If Not PersonajePerteneceCuenta(UserIndex, Name) Then
+        If Not PersonajePerteneceCuenta(UserIndex, name) Then
             Call WriteErrorMsg(UserIndex, "El personaje al que intentas acceder no pertenece a tu cuenta.")
             Call CloseUser(UserIndex)
             Exit Sub
@@ -1054,12 +1054,12 @@ Sub ConnectUser(ByVal UserIndex As Integer, _
         End If
     
         'Ya esta conectado el personaje?
-        If CheckForSameName(Name) Then
-            If UserList(NameIndex(Name)).Counters.Saliendo Then
+        If CheckForSameName(name) Then
+            If UserList(NameIndex(name)).Counters.Saliendo Then
                 Call WriteErrorMsg(UserIndex, "El usuario esta saliendo.")
             Else
                 Call WriteErrorMsg(UserIndex, "Un usuario con el mismo nombre esta conectado.")
-                Call Cerrar_Usuario(NameIndex(Name))
+                Call Cerrar_Usuario(NameIndex(name))
             End If
             Exit Sub
         End If
@@ -1068,21 +1068,21 @@ Sub ConnectUser(ByVal UserIndex As Integer, _
         .flags.Privilegios = 0
     
         'Vemos que clase de user es (se lo usa para setear los privilegios al loguear el PJ)
-        If EsAdmin(Name) Then
+        If EsAdmin(name) Then
             .flags.Privilegios = .flags.Privilegios Or PlayerType.Admin
-            Call LogGM(Name, "Se conecto con ip:" & .IP)
-        ElseIf EsDios(Name) Then
+            Call LogGM(name, "Se conecto con ip:" & .IP)
+        ElseIf EsDios(name) Then
             .flags.Privilegios = .flags.Privilegios Or PlayerType.Dios
-            Call LogGM(Name, "Se conecto con ip:" & .IP)
-        ElseIf EsSemiDios(Name) Then
+            Call LogGM(name, "Se conecto con ip:" & .IP)
+        ElseIf EsSemiDios(name) Then
             .flags.Privilegios = .flags.Privilegios Or PlayerType.SemiDios
         
-            .flags.PrivEspecial = EsGmEspecial(Name)
+            .flags.PrivEspecial = EsGmEspecial(name)
         
-            Call LogGM(Name, "Se conecto con ip:" & .IP)
-        ElseIf EsConsejero(Name) Then
+            Call LogGM(name, "Se conecto con ip:" & .IP)
+        ElseIf EsConsejero(name) Then
             .flags.Privilegios = .flags.Privilegios Or PlayerType.Consejero
-            Call LogGM(Name, "Se conecto con ip:" & .IP)
+            Call LogGM(name, "Se conecto con ip:" & .IP)
         Else
             .flags.Privilegios = .flags.Privilegios Or PlayerType.User
             .flags.AdminPerseguible = True
@@ -1090,16 +1090,16 @@ Sub ConnectUser(ByVal UserIndex As Integer, _
         End If
     
         'Add RM flag if needed
-        If EsRolesMaster(Name) Then
+        If EsRolesMaster(name) Then
             .flags.Privilegios = .flags.Privilegios Or PlayerType.RoleMaster
 
         End If
     
         'Nombre de sistema
-        .Name = Name
+        .name = name
         
         'Seteamos el nombre de su cuenta en su char
-        .AccountName = .AccountInfo.UserName
+        .AccountName = .AccountInfo.username
     
         'Load the user here
         Call LoadUser(UserIndex)
@@ -1351,7 +1351,7 @@ Sub ConnectUser(ByVal UserIndex As Integer, _
         .flags.UserLogged = True
     
         'usado para borrar Pjs
-        Call UpdateUserLogged(.Name, 1)
+        Call UpdateUserLogged(.name, 1)
     
         If .Stats.SkillPts > 0 Then
             Call WriteSendSkills(UserIndex)
@@ -1364,7 +1364,7 @@ Sub ConnectUser(ByVal UserIndex As Integer, _
         If NumUsers > RecordUsuariosOnline Then
             Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg("Record de usuarios conectados simultaneamente. Hay " & NumUsers & " usuarios.", FontTypeNames.FONTTYPE_INFOBOLD))
             RecordUsuariosOnline = NumUsers
-            Call WriteVar(ConfigPath & "Server.ini", "INIT", "RECORD", Str(RecordUsuariosOnline))
+            Call WriteVar(ConfigPath & "Server.ini", "INIT", "RECORD", str(RecordUsuariosOnline))
 
             'Este ultimo es para saber siempre los records en el frmMain
             frmMain.txtRecordOnline.Text = RecordUsuariosOnline
@@ -1429,7 +1429,7 @@ Sub ConnectUser(ByVal UserIndex As Integer, _
         'Estado del dia y del clima
         Call WriteActualizarClima(UserIndex)
     
-        tStr = modGuilds.a_ObtenerRechazoDeChar(.Name)
+        tStr = modGuilds.a_ObtenerRechazoDeChar(.name)
     
         If LenB(tStr) <> 0 Then
             Call WriteShowMessageBox(UserIndex, "Tu solicitud de ingreso al clan ha sido rechazada. El clan te explica que: " & tStr)
@@ -1451,7 +1451,7 @@ Sub ConnectUser(ByVal UserIndex As Integer, _
         n = FreeFile
         'Log
         Open App.Path & "\logs\Connect.log" For Append Shared As #n
-        Print #n, .Name & " ha entrado al juego. UserIndex:" & UserIndex & " " & time & " " & Date
+        Print #n, .name & " ha entrado al juego. UserIndex:" & UserIndex & " " & time & " " & Date
         Close #n
 
     End With
@@ -1600,7 +1600,7 @@ Sub ResetUserAccount(ByVal UserIndex As Integer)
     
         'Borro la información de la cuenta
         .AccountInfo.Id = 0
-        .AccountInfo.UserName = vbNullString
+        .AccountInfo.username = vbNullString
         .AccountInfo.Password = vbNullString
         .AccountInfo.Salt = vbNullString
         .AccountInfo.creditos = 0
@@ -1622,7 +1622,7 @@ Sub ResetBasicUserInfo(ByVal UserIndex As Integer)
     '03/15/2006 Maraxus - Uso de With para mayor performance y claridad.
     '*************************************************
     With UserList(UserIndex)
-        .Name = vbNullString
+        .name = vbNullString
         .Id = 0
         .AccountName = vbNullString
         .Desc = vbNullString
@@ -1714,6 +1714,29 @@ Sub ResetGuildInfo(ByVal UserIndex As Integer)
     End If
 
     UserList(UserIndex).GuildIndex = 0
+
+End Sub
+
+Sub ResetPacketRateData(ByVal UserIndex As Integer)
+
+        On Error GoTo ResetPacketRateData_Err
+
+        Dim i As Long
+        
+        With UserList(UserIndex)
+        
+            For i = 1 To MAX_PACKET_COUNTERS
+                .MacroIterations(i) = 0
+                .PacketTimers(i) = 0
+                .PacketCounters(i) = 0
+            Next i
+            
+        End With
+        
+        Exit Sub
+        
+ResetPacketRateData_Err:
+    Call TraceError(Err.Number, Err.description, "TCP.ResetPacketRateData", Erl)
 
 End Sub
 
@@ -1918,6 +1941,7 @@ Sub ResetUserSlot(ByVal UserIndex As Integer)
     Call ResetUserProfesion(UserIndex)
     Call ResetUserPets(UserIndex)
     Call ResetUserBanco(UserIndex)
+    Call ResetPacketRateData(UserIndex)
     
     With UserList(UserIndex).ComUsu
         .Acepto = False
@@ -1942,13 +1966,13 @@ Sub CloseUser(ByVal UserIndex As Integer)
     '
     '***************************************************
 
-    On Error GoTo errHandler
+    On Error GoTo ErrHandler
 
     Dim n    As Integer
 
     Dim Map  As Integer
 
-    Dim Name As String
+    Dim name As String
 
     Dim i    As Integer
 
@@ -2001,7 +2025,7 @@ Sub CloseUser(ByVal UserIndex As Integer)
         aN = .flags.NPCAtacado
 
         If aN > 0 Then
-            If Npclist(aN).flags.AttackedFirstBy = .Name Then
+            If Npclist(aN).flags.AttackedFirstBy = .name Then
                 Npclist(aN).flags.AttackedFirstBy = vbNullString
 
             End If
@@ -2012,7 +2036,7 @@ Sub CloseUser(ByVal UserIndex As Integer)
         .flags.NPCAtacado = 0
     
         Map = .Pos.Map
-        Name = UCase$(.Name)
+        name = UCase$(.name)
     
         .Char.FX = 0
         .Char.loops = 0
@@ -2046,7 +2070,7 @@ Sub CloseUser(ByVal UserIndex As Integer)
         Call SaveUser(UserIndex)
     
         'usado para borrar Pjs
-        Call UpdateUserLogged(.Name, 0)
+        Call UpdateUserLogged(.name, 0)
         
         'Quitar el dialogo
         'If MapInfo(Map).NumUsers > 0 Then
@@ -2089,7 +2113,7 @@ Sub CloseUser(ByVal UserIndex As Integer)
         End If
     
         ' Si el usuario habia dejado un msg en la gm's queue lo borramos
-        If Ayuda.Existe(.Name) Then Call Ayuda.Quitar(.Name)
+        If Ayuda.Existe(.name) Then Call Ayuda.Quitar(.name)
     
         Call ActualizarPJCuentas(UserIndex)
     
@@ -2099,14 +2123,14 @@ Sub CloseUser(ByVal UserIndex As Integer)
 
         n = FreeFile(1)
         Open App.Path & "\logs\Connect.log" For Append Shared As #n
-        Print #n, Name & " ha dejado el juego. " & "User Index:" & UserIndex & " " & time & " " & Date
+        Print #n, name & " ha dejado el juego. " & "User Index:" & UserIndex & " " & time & " " & Date
         Close #n
 
     End With
 
     Exit Sub
 
-errHandler:
+ErrHandler:
     Call LogError("Error en CloseUser. Numero " & Err.Number & " Descripcion: " & Err.description)
 
 End Sub
@@ -2118,7 +2142,7 @@ Sub ReloadSokcet()
     '
     '***************************************************
 
-    On Error GoTo errHandler
+    On Error GoTo ErrHandler
 
     Call LogApiSock("ReloadSokcet() " & NumUsers & " " & LastUser & " " & MaxUsers)
     
@@ -2131,7 +2155,7 @@ Sub ReloadSokcet()
 
     Exit Sub
     
-errHandler:
+ErrHandler:
     Call LogError("Error en CheckSocketState " & Err.Number & ": " & Err.description)
 
 End Sub

@@ -418,15 +418,15 @@ Public Const MARTILLO_HERRERO               As Integer = 389
 
 Public Const SERRUCHO_CARPINTERO            As Integer = 198
 
-Public Const KIT_DE_COSTURA                 As Integer = 886
+Public Const KIT_DE_COSTURA                 As Integer = 697
 
 Public Const OLLA_ALQUIMISTA                As Integer = 887
 
 Public Const ObjArboles                     As Integer = 4
 
-Public Const RED_PESCA                      As Integer = 138
+Public Const RED_PESCA                      As Integer = 543
 
-Public Const CANA_PESCA                     As Integer = 881
+Public Const CANA_PESCA                     As Integer = 138
 
 Public Enum eNPCType
 
@@ -877,6 +877,24 @@ Public Type LevelSkill
 
 End Type
 
+Public Const MAX_PACKET_COUNTERS As Long = 15
+
+Public Enum PacketNames
+    CastSpell = 1
+    WorkLeftClick
+    LeftClick
+    UseItem
+    Walk
+    sailing
+    Talk
+    Attack
+    Drop
+    Work
+    EquipItem
+    GuildMessage
+    ChangeHeading
+End Enum
+
 Public Type UserObj
 
     ObjIndex As Integer
@@ -985,7 +1003,7 @@ End Type
 'Tipos de objetos
 Public Type ObjData
 
-    Name As String 'Nombre del obj
+    name As String 'Nombre del obj
     
     OBJType As eOBJType 'Tipo enum que determina cuales son las caract del obj
     
@@ -1574,7 +1592,7 @@ End Type
 
 Public Type AccountCharacters
     Id As String
-    Name As String
+    name As String
     body As Integer
     Head As Integer
     weapon As Integer
@@ -1593,7 +1611,7 @@ Public Const MAXPJACCOUNTS As Byte = 10
 
 Public Type AccountUser
     Id As Long
-    UserName As String
+    username As String
     Password As String
     Email As String
     Salt As String
@@ -1623,7 +1641,7 @@ Public Type User
     PosAnt As WorldPos
     RetoTemp As tUserRetoTemp
     
-    Name As String
+    name As String
     Id As Long 'Id del PJ logeado actualmente
     
     AccountInfo As AccountUser
@@ -1705,8 +1723,15 @@ Public Type User
     PortalTiempo As Integer
     
     Profesion(0 To 1) As tUserProfesion
+    
+    MacroIterations(1 To MAX_PACKET_COUNTERS) As Long
+    PacketTimers(1 To MAX_PACKET_COUNTERS) As Long
+    PacketCounters(1 To MAX_PACKET_COUNTERS) As Long
 
 End Type
+
+Public MacroIterations(1 To MAX_PACKET_COUNTERS) As Long
+Public PacketTimerThreshold(1 To MAX_PACKET_COUNTERS) As Long
 
 '*********************************************************
 '*********************************************************
@@ -1812,7 +1837,7 @@ End Type
 
 Public Type NPC
 
-    Name As String
+    name As String
     Char As Char 'Define como se vera
     Desc As String
 
@@ -1908,7 +1933,7 @@ Type MapInfo
 
     NumUsers As Integer
     music As String
-    Name As String
+    name As String
     StartPos As WorldPos
     OnDeathGoTo As WorldPos
     

@@ -82,6 +82,7 @@ Module=ModMacroTrabajo; Codigo\ModMacroTrabajo.bas
 Form=Codigo\frmCrearCuenta.frm
 Class=clsDataBase; Codigo\clsDataBase.cls
 Module=modFamiliar; Codigo\modFamiliar.bas
+Module=modLoggin; Codigo\modLoggin.bas
 IconForm="frmMain"
 Startup="Sub Main"
 HelpFile=""

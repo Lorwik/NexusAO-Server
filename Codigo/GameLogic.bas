@@ -1941,3 +1941,46 @@ Public Function ObtenerSuerte(ByVal valor As Long) As Byte
     End If
     
 End Function
+
+Public Function PacketIdToString(ByVal PacketId As Long) As String
+
+    Select Case PacketId
+        Case 1
+            PacketIdToString = "CastSpell"
+            Exit Function
+        Case 2
+            PacketIdToString = "WorkLeftClick"
+            Exit Function
+        Case 3
+            PacketIdToString = "LeftClick"
+            Exit Function
+        Case 4
+            PacketIdToString = "UseItem"
+            Exit Function
+        Case 5
+            PacketIdToString = "Walk"
+            Exit Function
+        Case 6
+            PacketIdToString = "Sailing"
+            Exit Function
+        Case 7
+            PacketIdToString = "Talk"
+            Exit Function
+        Case 8
+            PacketIdToString = "Attack"
+            Exit Function
+        Case 9
+            PacketIdToString = "Drop"
+            Exit Function
+        Case 10
+            PacketIdToString = "Work"
+            Exit Function
+        Case 11
+            PacketIdToString = "EquipItem"
+            Exit Function
+        Case 12
+            PacketIdToString = "GuildMessage"
+            Exit Function
+    End Select
+    
+End Function

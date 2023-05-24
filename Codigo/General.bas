@@ -31,7 +31,7 @@ Option Explicit
 
 #If False Then
 
-    Dim X, Y, Map, K, errHandler, obj, index, n, Email As Variant
+    Dim X, Y, Map, K, ErrHandler, obj, index, n, Email As Variant
 
 #End If
 
@@ -277,6 +277,9 @@ Sub Main()
     ChDir App.Path
     ChDrive App.Path
     
+    Call InitializeCircularLogBuffer
+    Call LogThis(0, "Starting the server " & Now, vbLogEventTypeInformation)
+    
     'Inicializamos la cabecera
     Call IniciarCabecera
     
@@ -306,6 +309,7 @@ Sub Main()
     ' Server.ini & Apuestas.dat & Ciudades.dat
     frmCargando.Label1(2).Caption = "Cargando Server.ini"
     Call LoadSini 'Configuración general (Server.ini)
+    Call LoadPacketRatePolicy
     Call Load_Rates 'Rates (Rates.ini)
     Call loadAdministrativeUsers 'Gms (GameMasters.ini)
     Call CargarCiudades
@@ -440,7 +444,6 @@ Private Sub LoadConstants()
     ListaRazas(eRaza.Drow) = "Drow"
     ListaRazas(eRaza.Gnomo) = "Gnomo"
     ListaRazas(eRaza.Enano) = "Enano"
-    ListaRazas(eRaza.Orco) = "Orco"
     
     ' Classes
     ListaClases(eClass.Mage) = "Mago"
@@ -456,7 +459,7 @@ Private Sub LoadConstants()
     ListaClases(eClass.Nigromante) = "Nigromante"
     ListaClases(eClass.Mercenario) = "Mercenario"
     ListaClases(eClass.Gladiador) = "Gladiador"
-    ListaClases(eClass.trabajador) = "Trabajador"
+    ListaClases(eClass.Trabajador) = "Trabajador"
     
     ' Skills
     SkillsNames(eSkill.Magia) = "Magia"
@@ -1124,7 +1127,7 @@ Public Sub EfectoParalisisUser(ByVal UserIndex As Integer)
                 If CasterIndex <> 0 Then
                 
                     ' Close? => Remove Paralisis
-                    If UserList(CasterIndex).Name <> .flags.ParalizedBy Then
+                    If UserList(CasterIndex).name <> .flags.ParalizedBy Then
                         Call RemoveParalisis(UserIndex)
                         Exit Sub
                         
@@ -1544,7 +1547,7 @@ Sub SaveUser(ByVal UserIndex As Integer, Optional ByVal SaveTimeOnline As Boolea
     With UserList(UserIndex)
 
         If .clase = 0 Or .Stats.ELV = 0 Then
-            Call LogCriticEvent("Estoy intentantdo guardar un usuario nulo de nombre: " & .Name)
+            Call LogCriticEvent("Estoy intentantdo guardar un usuario nulo de nombre: " & .name)
             Exit Sub
 
         End If
@@ -1672,7 +1675,7 @@ Sub LoadUser(ByVal UserIndex As Integer)
     Exit Sub
 
 ErrorHandler:
-    Call LogError("Error en LoadUser: " & UserList(UserIndex).Name & " - " & Err.Number & " - " & Err.description)
+    Call LogError("Error en LoadUser: " & UserList(UserIndex).name & " - " & Err.Number & " - " & Err.description)
 
 End Sub
 
@@ -1781,7 +1784,7 @@ Private Sub InicializarSonidos()
     
 End Sub
 
-Public Sub LogGlobal(ByVal Str As String)
+Public Sub LogGlobal(ByVal str As String)
 '***************************************************
 'Autor: Lorwik
 'Fecha: 09/06/2020
@@ -1793,7 +1796,7 @@ Public Sub LogGlobal(ByVal Str As String)
     nfile = FreeFile ' obtenemos un canal
     Open App.Path & "\logs\GlobalChat(" & Month(Date) & "-" & Year(Date) & ").log" For Append Shared As #nfile
     
-        Print #nfile, Date & " " & time & " " & Str
+        Print #nfile, Date & " " & time & " " & str
         
     Close #nfile
 
@@ -1824,19 +1827,19 @@ Public Sub BanGlobalChatCargar()
     Close #ArchN
 End Sub
 
-Public Sub BanGlobalChatAgregar(ByVal UserName As String)
+Public Sub BanGlobalChatAgregar(ByVal username As String)
 '***************************************************
 'Autor: Lorwik
 'Fecha: 09/06/2020
 'Descripcion: Agrega un nuevo baneado del chat global
 '***************************************************
 
-    BanUsersChatGlobal.Add UserName
+    BanUsersChatGlobal.Add username
 
     Call BanGlobalChatGuardar
 End Sub
 
-Public Function BanGlobalChatBuscar(ByVal UserName As String) As Long
+Public Function BanGlobalChatBuscar(ByVal username As String) As Long
 '***************************************************
 'Autor: Lorwik
 'Fecha: 09/06/2020
@@ -1849,7 +1852,7 @@ Public Function BanGlobalChatBuscar(ByVal UserName As String) As Long
     Dale = True
     LoopC = 1
     Do While LoopC <= BanUsersChatGlobal.Count And Dale
-        Dale = (BanUsersChatGlobal.Item(LoopC) <> UserName)
+        Dale = (BanUsersChatGlobal.Item(LoopC) <> username)
         LoopC = LoopC + 1
     Loop
 
@@ -1860,7 +1863,7 @@ Public Function BanGlobalChatBuscar(ByVal UserName As String) As Long
     End If
 End Function
 
-Public Function BanGlobalChatQuitar(ByVal UserName As String) As Boolean
+Public Function BanGlobalChatQuitar(ByVal username As String) As Boolean
 '***************************************************
 'Autor: Lorwik
 'Fecha: 09/06/2020
@@ -1870,7 +1873,7 @@ On Error Resume Next
 
     Dim n As Long
 
-    n = BanGlobalChatBuscar(UserName)
+    n = BanGlobalChatBuscar(username)
     If n > 0 Then
         BanUsersChatGlobal.Remove n
         BanGlobalChatGuardar
