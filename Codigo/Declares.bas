@@ -161,7 +161,6 @@ Public Enum eRaza
     Drow
     Gnomo
     Enano
-    Orco
 
 End Enum
 
@@ -2410,10 +2409,6 @@ Public Const GNOMO_H_PRIMER_CABEZA                  As Integer = 401
 
 Public Const GNOMO_H_ULTIMA_CABEZA                  As Integer = 410
 
-Public Const ORCO_H_PRIMER_CABEZA                   As Integer = 501
-
-Public Const ORCO_H_ULTIMA_CABEZA                   As Integer = 514
-
 '**************************************************
 Public Const HUMANO_M_PRIMER_CABEZA                 As Integer = 70
 
@@ -2434,10 +2429,6 @@ Public Const ENANO_M_ULTIMA_CABEZA                  As Integer = 373
 Public Const GNOMO_M_PRIMER_CABEZA                  As Integer = 470
 
 Public Const GNOMO_M_ULTIMA_CABEZA                  As Integer = 473
-
-Public Const ORCO_M_PRIMER_CABEZA                   As Integer = 570
-
-Public Const ORCO_M_ULTIMA_CABEZA                   As Integer = 573
 
 ' Por ahora la dejo constante.. SI se quisiera extender la propiedad de paralziar, se podria hacer
 ' una nueva variable en el dat.

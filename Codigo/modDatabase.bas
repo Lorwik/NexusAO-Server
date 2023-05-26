@@ -57,7 +57,7 @@ Sub InsertUserToDatabase(ByVal UserIndex As Integer, _
 
     'Basic user data
     query = "INSERT INTO personaje SET "
-    query = query & "name = (?), cuenta_id = (?), level = (?), exp = (?), elu = (?), elo = (?) genre_id = (?), race_id = (?), class_id = (?), "
+    query = query & "name = (?), cuenta_id = (?), level = (?), exp = (?), elu = (?), elo = (?), genre_id = (?), race_id = (?), class_id = (?), "
     query = query & "home_id = (?), description = (?), gold = (?), free_skillpoints = (?), assigned_skillpoints = (?), pos_map = (?), pos_x = (?), pos_y = (?), "
     query = query & "body_id = (?), head_id = (?), weapon_id = (?), helmet_id = (?), shield_id = (?), items_amount = (?), slot_armour = (?), slot_weapon = (?), "
     query = query & "slot_nudillos = (?), min_hp = (?), max_hp = (?), min_man = (?), max_man = (?), min_sta = (?), max_sta = (?), min_ham = (?), "

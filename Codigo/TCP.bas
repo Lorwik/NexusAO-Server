@@ -80,9 +80,6 @@ Sub DarCuerpo(ByVal UserIndex As Integer)
 
                 Case eRaza.Gnomo
                     NewBody = 52
-                    
-                Case eRaza.Orco
-                    NewBody = 251
 
             End Select
 
@@ -104,9 +101,6 @@ Sub DarCuerpo(ByVal UserIndex As Integer)
 
                 Case eRaza.Enano
                     NewBody = 138
-                    
-                Case eRaza.Orco
-                    NewBody = 252
 
             End Select
 
@@ -140,9 +134,6 @@ Private Function ValidarCabeza(ByVal UserRaza As Byte, _
 
                 Case eRaza.Gnomo
                     ValidarCabeza = (Head >= GNOMO_H_PRIMER_CABEZA And Head <= GNOMO_H_ULTIMA_CABEZA)
-                    
-                Case eRaza.Orco
-                    ValidarCabeza = (Head >= ORCO_H_PRIMER_CABEZA And Head <= ORCO_H_ULTIMA_CABEZA)
 
             End Select
     
@@ -164,9 +155,6 @@ Private Function ValidarCabeza(ByVal UserRaza As Byte, _
 
                 Case eRaza.Gnomo
                     ValidarCabeza = (Head >= GNOMO_M_PRIMER_CABEZA And Head <= GNOMO_M_ULTIMA_CABEZA)
-                    
-                Case eRaza.Orco
-                    ValidarCabeza = (Head >= ORCO_M_PRIMER_CABEZA And Head <= ORCO_M_ULTIMA_CABEZA)
 
             End Select
 
@@ -655,12 +643,6 @@ Private Sub AddItemsToNewUser(ByVal UserIndex As Integer, ByVal UserClase As eCl
                     .Invent.Object(Slot).ObjIndex = 466
                 End If
                 
-            Case eRaza.Orco
-                If .Genero = eGenero.Hombre Then
-                    .Invent.Object(Slot).ObjIndex = 988
-                Else
-                    .Invent.Object(Slot).ObjIndex = 1087
-                End If
         End Select
 
         ' Equipo ropa

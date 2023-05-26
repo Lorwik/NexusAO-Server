@@ -1,5 +1,6 @@
 Account/*
 Logs/*
+Dat/Ranking.dat
 Charfile/*
 Logs/*.log
 WorldBackup/*

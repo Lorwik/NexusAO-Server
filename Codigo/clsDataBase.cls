@@ -26,14 +26,14 @@ Public Database_Command     As ADODB.Command
 'CONSTRUCTOR
 Public Sub Inicialiar(ByVal Source As String, _
                       ByVal Host As String, _
-                      ByVal Name As String, _
+                      ByVal name As String, _
                       ByVal User As String, _
                       ByVal Pass As String)
                       
     
     Database_DataSource = Source
     Database_Host = Host
-    Database_Name = Name
+    Database_Name = name
     Database_Username = User
     Database_Password = Pass
 
@@ -149,7 +149,7 @@ Public Function MakeQuery(query As String, ByVal NoResult As Boolean, ParamArray
     ' Guarda el resultado en QueryData
     
     On Error GoTo ErrorHandler
-    
+    Debug.Print query
     Dim query_Params As Variant
     Dim RecordsAffected As Long
     

@@ -65,7 +65,7 @@ Public Sub UserConnected(ByVal UserIndex As Integer)
     '***************************************************
 
     'A new user connected, load it's training time count
-    trainingInfo(UserIndex).trainingTime = GetUserTrainingTime(UserList(UserIndex).Name)
+    trainingInfo(UserIndex).trainingTime = GetUserTrainingTime(UserList(UserIndex).name)
     
     trainingInfo(UserIndex).startTick = (GetTickCount() And &H7FFFFFFF)
 
@@ -85,7 +85,7 @@ Public Sub UserDisconnected(ByVal UserIndex As Integer)
         .startTick = (GetTickCount() And &H7FFFFFFF)
         
         'Store info in char file
-        Call SaveUserTrainingTime(UserList(UserIndex).Name, .trainingTime)
+        Call SaveUserTrainingTime(UserList(UserIndex).name, .trainingTime)
 
     End With
 
@@ -106,7 +106,7 @@ Public Sub UserLevelUp(ByVal UserIndex As Integer)
         'Log the data
         Open App.Path & "\logs\statistics.log" For Append Shared As handle
         
-        Print #handle, UCase$(UserList(UserIndex).Name) & " completo el nivel " & CStr(UserList(UserIndex).Stats.ELV) & " en " & CStr(.trainingTime + ((GetTickCount() And &H7FFFFFFF) - .startTick) / 1000) & " segundos."
+        Print #handle, UCase$(UserList(UserIndex).name) & " completo el nivel " & CStr(UserList(UserIndex).Stats.ELV) & " en " & CStr(.trainingTime + ((GetTickCount() And &H7FFFFFFF) - .startTick) / 1000) & " segundos."
         
         Close handle
         
@@ -133,7 +133,7 @@ Public Sub FamilyLevelUp(ByVal UserIndex As Integer)
         'Log the data
         Open App.Path & "\logs\statistics.log" For Append Shared As handle
         
-        Print #handle, "El familiar de " & UCase$(UserList(UserIndex).Name) & " completo el nivel " & CStr(UserList(UserIndex).Familiar.Nivel) & " en " & CStr(.trainingTime + ((GetTickCount() And &H7FFFFFFF) - .startTick) / 1000) & " segundos."
+        Print #handle, "El familiar de " & UCase$(UserList(UserIndex).name) & " completo el nivel " & CStr(UserList(UserIndex).Familiar.Nivel) & " en " & CStr(.trainingTime + ((GetTickCount() And &H7FFFFFFF) - .startTick) / 1000) & " segundos."
         
         Close handle
         
@@ -157,7 +157,7 @@ Public Sub StoreFrag(ByVal killer As Integer, ByVal victim As Integer)
 
     Dim alignment As Integer
     
-    If UserList(victim).Stats.ELV > 50 Or UserList(killer).Stats.ELV > 50 Then Exit Sub
+    If UserList(victim).Stats.ELV >= STAT_MAXELV Or UserList(killer).Stats.ELV >= STAT_MAXELV Then Exit Sub
     
     Select Case UserList(killer).clase
 
@@ -206,9 +206,6 @@ Public Sub StoreFrag(ByVal killer As Integer, ByVal victim As Integer)
         
         Case eRaza.Humano
             Raza = 5
-            
-        Case eRaza.Orco
-            Raza = 6
             
         Case Else
             Exit Sub
@@ -577,7 +574,7 @@ Public Sub DumpStatistics()
 
 End Sub
 
-Public Sub ParseChat(ByRef S As String)
+Public Sub ParseChat(ByRef s As String)
     '***************************************************
     'Author: Unknown
     'Last Modification: -
@@ -588,8 +585,8 @@ Public Sub ParseChat(ByRef S As String)
 
     Dim key As Integer
     
-    For i = 1 To Len(S)
-        key = Asc(mid$(S, i, 1))
+    For i = 1 To Len(s)
+        key = Asc(mid$(s, i, 1))
         
         keyOcurrencies(key) = keyOcurrencies(key) + 1
     Next i

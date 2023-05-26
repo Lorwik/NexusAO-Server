@@ -23,8 +23,7 @@ End Type
 
 Public Ranked(5) As Rank
     
-Public Sub DesconectarDueloSet(ByVal Ganador As Integer, ByVal Perdedor As Integer)
-    Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg("Duelos por Set: El duelo ha sido cancelado por la desconexión de " & UserList(Perdedor).name, FontTypeNames.FONTTYPE_CITIZEN))
+Public Sub resetDueloSet(ByVal Ganador As Integer, ByVal Perdedor As Integer)
 
     'Reseteamos los flags del Ganador
     With UserList(Ganador)
@@ -123,7 +122,7 @@ Public Sub ComenzarDuelo(ByVal UserIndex As Integer, ByVal tIndex As Integer)
 
 End Sub
    
-Public Sub TerminarDueloSet(ByVal Ganador As Integer, ByVal Perdedor As Integer)
+Public Sub TerminarDuelo(ByVal Ganador As Integer, ByVal Perdedor As Integer)
 
     Dim ELOGANADOR  As Long
 
@@ -162,12 +161,10 @@ Public Sub TerminarDueloSet(ByVal Ganador As Integer, ByVal Perdedor As Integer)
             UserList(Perdedor).Stats.ELO = ELOPERDEDOR + UserList(Perdedor).Stats.ELO
             Call WriteConsoleMsg(Perdedor, "Ranked: ¡Has perdido " & ELOPERDEDOR & " puntos! Tu ELO actual es de " & UserList(Perdedor).Stats.ELO & ".", FontTypeNames.FONTTYPE_INFOBOLD)
             
-            Call WarpUserChar(Perdedor, 1, 41, 88, True)
-            .flags.EsperandoDuelo = False
-            .flags.Oponente = 0
-            .flags.EstaDueleando = False
+            Call resetDueloSet(Ganador, Perdedor)
         
             Call SaveUser(Perdedor)
+            Call SaveUser(Ganador)
             Call ActualizarRank(Ganador)
             Call ActualizarRank(Perdedor)
 

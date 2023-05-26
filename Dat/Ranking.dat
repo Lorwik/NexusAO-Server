@@ -1,19 +1,18 @@
 [Posicion1]
-Nombre=Nadie
-ELO=0
+Nombre=Lorwik
+ELO=1024
 
 [Posicion2]
-Nombre=Nadie
-ELO=0
+ELO=1024
+Nombre=Lorwik
 
 [Posicion3]
-Nombre=Nadie
-ELO=0
+ELO=1024
+Nombre=Lorwik
 
 [Posicion4]
-Nombre=Nadie
-ELO=0
+ELO=976
+Nombre=Pepito
 
 [Posicion5]
-Nombre=Nadie
 ELO=0

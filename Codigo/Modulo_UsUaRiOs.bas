@@ -1565,6 +1565,12 @@ Public Sub UserDie(ByVal UserIndex As Integer, Optional ByVal AttackerIndex As I
         'Quitar el dialogo del user muerto
         Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageRemoveCharDialog(.Char.CharIndex))
         
+        If UserList(UserIndex).flags.EstaDueleando = True Then
+            UserList(UserIndex).flags.PerdioRonda = UserList(UserIndex).flags.PerdioRonda + 1
+            Call TerminarDuelo(UserList(UserIndex).flags.Oponente, UserIndex)
+            Exit Sub
+        End If
+        
         .Stats.MinHp = 0
         .Stats.MinSta = 0
         .flags.AtacadoPorUser = 0
@@ -2325,8 +2331,10 @@ Sub Cerrar_Usuario(ByVal UserIndex As Integer)
 
         End If
         
-        If UserList(UserIndex).flags.EstaDueleando Then _
-        Call DesconectarDueloSet(UserList(UserIndex).flags.Oponente, UserIndex)
+        If UserList(UserIndex).flags.EstaDueleando Then
+            Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg("Duelos por Set: El duelo ha sido cancelado por la desconexión de " & UserList(UserIndex).name, FontTypeNames.FONTTYPE_CITIZEN))
+            Call resetDueloSet(UserList(UserIndex).flags.Oponente, UserIndex)
+        End If
 
     End With
 
@@ -2918,6 +2926,17 @@ Public Sub MandaraCasa(ByVal UserIndex As Integer)
 '        End If
 '
         If .flags.ArenaRinkel = True Then Call modArenaRinkel.SalirArenaRinkel(UserIndex)
+        
+        'Si esta en la arena de duelo y quiere salir...
+        If .flags.EsperandoDuelo Then
+            'Reseteamos los flags del Ganador
+            With UserList(UserIndex)
+                .flags.EsperandoDuelo = False
+                .flags.Oponente = 0
+                .flags.EstaDueleando = False
+                .flags.PerdioRonda = 0
+            End With
+        End If
 
         'Antes de que el pj llegue a la ciudad, lo hacemos dejar de navegar para que no se buguee.
         If .flags.Navegando = 1 Then

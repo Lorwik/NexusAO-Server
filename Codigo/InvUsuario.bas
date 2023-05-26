@@ -1435,7 +1435,7 @@ Private Function CheckRazaUsaRopa(ByVal UserIndex As Integer, _
     With UserList(UserIndex)
 
         'Verifica si la raza puede usar la ropa
-        If .Raza = eRaza.Humano Or .Raza = eRaza.Elfo Or .Raza = eRaza.Drow Or .Raza = eRaza.Orco Then
+        If .Raza = eRaza.Humano Or .Raza = eRaza.Elfo Or .Raza = eRaza.Drow Then
             CheckRazaUsaRopa = (ObjData(ItemIndex).RazaEnana = 0)
         Else
             CheckRazaUsaRopa = (ObjData(ItemIndex).RazaEnana = 1)
@@ -2202,7 +2202,7 @@ Sub UseInvItem(ByVal UserIndex As Integer, ByVal Slot As Byte)
                     Call LogGM(.name, " fue encarcelado por las esposas.")
                 
             Case eOBJType.otRuna
-               ' If .flags.Muerto = 1 Then
+                If .flags.EstaDueleando Then
     
                     'Si es un mapa comun y no esta en cana
                     If (MapInfo(.Pos.Map).Restringir = eRestrict.restrict_no) And (.Counters.Pena = 0) Then
@@ -2221,10 +2221,10 @@ Sub UseInvItem(ByVal UserIndex As Integer, ByVal Slot As Byte)
     
                     End If
     
-               ' Else
-               '     Call WriteConsoleMsg(UserIndex, "La runa no funciona si estas vivo.", FontTypeNames.FONTTYPE_INFO)
+                Else
+                    Call WriteConsoleMsg(UserIndex, "No puedes usar la runa en este momento.", FontTypeNames.FONTTYPE_INFO)
     
-               ' End If
+                End If
                   
             End Select
     

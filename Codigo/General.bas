@@ -31,7 +31,7 @@ Option Explicit
 
 #If False Then
 
-    Dim X, Y, Map, K, ErrHandler, obj, index, n, Email As Variant
+    Dim X, Y, Map, K, errHandler, obj, index, n, Email As Variant
 
 #End If
 
@@ -92,9 +92,6 @@ Public Function CuerpoDesnudo(ByVal Genero As eGenero, ByVal Raza As eRaza)
 
                     Case eRaza.Enano
                         CuerpoDesnudo = 53
-                        
-                    Case eRaza.Orco
-                        CuerpoDesnudo = 248
 
                 End Select
 
@@ -116,9 +113,6 @@ Public Function CuerpoDesnudo(ByVal Genero As eGenero, ByVal Raza As eRaza)
 
                     Case eRaza.Enano
                         CuerpoDesnudo = 60
-                        
-                    Case eRaza.Orco
-                        CuerpoDesnudo = 249
 
                 End Select
 
