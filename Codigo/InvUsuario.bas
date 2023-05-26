@@ -298,7 +298,7 @@ Sub TirarOro(ByVal Cantidad As Long, ByVal UserIndex As Integer)
 
                         If InMapBounds(M, j, K) Then
                             If MapData(M, j, K).UserIndex > 0 Then
-                                Cercanos = Cercanos & UserList(MapData(M, j, K).UserIndex).Name & ","
+                                Cercanos = Cercanos & UserList(MapData(M, j, K).UserIndex).name & ","
 
                             End If
 
@@ -307,7 +307,7 @@ Sub TirarOro(ByVal Cantidad As Long, ByVal UserIndex As Integer)
                     Next K
                 Next j
 
-                Call LogDesarrollo(.Name & " tira oro. Cercanos: " & Cercanos)
+                Call LogDesarrollo(.name & " tira oro. Cercanos: " & Cercanos)
 
             End If
 
@@ -337,7 +337,7 @@ Sub TirarOro(ByVal Cantidad As Long, ByVal UserIndex As Integer)
     
                 MiObj.ObjIndex = iORO
                 
-                If EsGm(UserIndex) Then Call LogGM(.Name, "Tiro cantidad:" & MiObj.Amount & " Objeto:" & ObjData(MiObj.ObjIndex).Name)
+                If EsGm(UserIndex) Then Call LogGM(.name, "Tiro cantidad:" & MiObj.Amount & " Objeto:" & ObjData(MiObj.ObjIndex).name)
 
                 Dim AuxPos As WorldPos
                 
@@ -542,17 +542,17 @@ Sub DropObj(ByVal UserIndex As Integer, _
                 Call QuitarUserInvItem(UserIndex, Slot, DropObj.Amount)
                 Call UpdateUserInv(False, UserIndex, Slot)
             
-                If Not .flags.Privilegios And PlayerType.User Then Call LogGM(.Name, "Tiro cantidad:" & Num & " Objeto:" & ObjData(DropObj.ObjIndex).Name)
+                If Not .flags.Privilegios And PlayerType.User Then Call LogGM(.name, "Tiro cantidad:" & Num & " Objeto:" & ObjData(DropObj.ObjIndex).name)
             
                 'Log de Objetos que se tiran al piso. Pablo (ToxicWaste) 07/09/07
                 'Es un Objeto que tenemos que loguear?
                 If ObjData(DropObj.ObjIndex).Log = 1 Then
-                    Call LogDesarrollo(.Name & " tiro al piso " & DropObj.Amount & " " & ObjData(DropObj.ObjIndex).Name & " Mapa: " & Map & " X: " & X & " Y: " & Y)
+                    Call LogDesarrollo(.name & " tiro al piso " & DropObj.Amount & " " & ObjData(DropObj.ObjIndex).name & " Mapa: " & Map & " X: " & X & " Y: " & Y)
                 ElseIf DropObj.Amount > 5000 Then 'Es mucha cantidad? > Subi a 5000 el minimo porque si no se llenaba el log de cosas al pedo. (NicoNZ)
 
                     'Si no es de los prohibidos de loguear, lo logueamos.
                     If ObjData(DropObj.ObjIndex).NoLog <> 1 Then
-                        Call LogDesarrollo(.Name & " tiro al piso " & DropObj.Amount & " " & ObjData(DropObj.ObjIndex).Name & " Mapa: " & Map & " X: " & X & " Y: " & Y)
+                        Call LogDesarrollo(.name & " tiro al piso " & DropObj.Amount & " " & ObjData(DropObj.ObjIndex).name & " Mapa: " & Map & " X: " & X & " Y: " & Y)
 
                     End If
 
@@ -764,20 +764,20 @@ Sub GetObj(ByVal UserIndex As Integer)
                         'Quitamos el objeto
                         Call EraseObj(MapData(.Pos.Map, X, Y).ObjInfo.Amount, .Pos.Map, .Pos.X, .Pos.Y)
 
-                        If Not .flags.Privilegios And PlayerType.User Then Call LogGM(.Name, "Agarro:" & MiObj.Amount & " Objeto:" & ObjData(MiObj.ObjIndex).Name)
+                        If Not .flags.Privilegios And PlayerType.User Then Call LogGM(.name, "Agarro:" & MiObj.Amount & " Objeto:" & ObjData(MiObj.ObjIndex).name)
         
                         'Log de Objetos que se agarran del piso. Pablo (ToxicWaste) 07/09/07
                         'Es un Objeto que tenemos que loguear?
                         If ObjData(MiObj.ObjIndex).Log = 1 Then
                             ObjPos = " Mapa: " & .Pos.Map & " X: " & .Pos.X & " Y: " & .Pos.Y
-                            Call LogDesarrollo(.Name & " junto del piso " & MiObj.Amount & " " & ObjData(MiObj.ObjIndex).Name & ObjPos)
+                            Call LogDesarrollo(.name & " junto del piso " & MiObj.Amount & " " & ObjData(MiObj.ObjIndex).name & ObjPos)
                         
                         ElseIf MiObj.Amount > 5000 Then 'Es mucha cantidad?
 
                             'Si no es de los prohibidos de loguear, lo logueamos.
                             If ObjData(MiObj.ObjIndex).NoLog <> 1 Then
                                 ObjPos = " Mapa: " & .Pos.Map & " X: " & .Pos.X & " Y: " & .Pos.Y
-                                Call LogDesarrollo(.Name & " junto del piso " & MiObj.Amount & " " & ObjData(MiObj.ObjIndex).Name & ObjPos)
+                                Call LogDesarrollo(.name & " junto del piso " & MiObj.Amount & " " & ObjData(MiObj.ObjIndex).name & ObjPos)
 
                             End If
 
@@ -2199,15 +2199,18 @@ Sub UseInvItem(ByVal UserIndex As Integer, ByVal Slot As Byte)
                 
             Case eOBJType.otEsposas
                     Call Encarcelar(UserIndex, 10)
-                    Call LogGM(.Name, " fue encarcelado por las esposas.")
+                    Call LogGM(.name, " fue encarcelado por las esposas.")
                 
             Case eOBJType.otRuna
-                If .flags.Muerto = 1 Then
+               ' If .flags.Muerto = 1 Then
     
                     'Si es un mapa comun y no esta en cana
                     If (MapInfo(.Pos.Map).Restringir = eRestrict.restrict_no) And (.Counters.Pena = 0) Then
                         If Ciudades(.Hogar).Map <> .Pos.Map Then
-                            Call MandaraCasa(UserIndex)
+                            'Call MandaraCasa(UserIndex)
+                            .flags.CasteoSpell.Casteando = eCasteo.Runa
+                            .flags.CasteoSpell.TimeCast = TIEMPO_CASTEO_RUNA
+                            Call WriteConsoleMsg(UserIndex, "Sujetas la runa y comienzas a concentrarte.", FontTypeNames.FONTTYPE_INFO)
                         Else
                             Call WriteConsoleMsg(UserIndex, "Ya te encuentras en tu hogar.", FontTypeNames.FONTTYPE_INFO)
     
@@ -2218,10 +2221,10 @@ Sub UseInvItem(ByVal UserIndex As Integer, ByVal Slot As Byte)
     
                     End If
     
-                Else
-                    Call WriteConsoleMsg(UserIndex, "La runa no funciona si estas vivo.", FontTypeNames.FONTTYPE_INFO)
+               ' Else
+               '     Call WriteConsoleMsg(UserIndex, "La runa no funciona si estas vivo.", FontTypeNames.FONTTYPE_INFO)
     
-                End If
+               ' End If
                   
             End Select
     
@@ -2250,9 +2253,9 @@ Private Sub usarBolsadeOro(ByVal UserIndex As Integer, ByVal Slot As Byte)
         Call QuitarUserInvItem(UserIndex, Slot, 1)
         Call UpdateUserInv(False, UserIndex, Slot)
         
-        Call LogDesarrollo(.Name & " ha obtenido " & obj.CuantoAgrega & " monedas de oro de " & obj.Name & ". Tenia " & .Invent.Object(Slot).Amount + 1 & " bolsas.")
+        Call LogDesarrollo(.name & " ha obtenido " & obj.CuantoAgrega & " monedas de oro de " & obj.name & ". Tenia " & .Invent.Object(Slot).Amount + 1 & " bolsas.")
         
-        Call WriteConsoleMsg(UserIndex, "¡Has obtenido " & obj.CuantoAgrega & " monedas de oro de " & obj.Name, FontTypeNames.FONTTYPE_INFO)
+        Call WriteConsoleMsg(UserIndex, "¡Has obtenido " & obj.CuantoAgrega & " monedas de oro de " & obj.name, FontTypeNames.FONTTYPE_INFO)
 
     End With
     

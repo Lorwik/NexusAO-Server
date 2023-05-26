@@ -113,7 +113,7 @@ Public Sub MuereNpc(ByVal NpcIndex As Integer, ByVal UserIndex As Integer)
       
     If MiNPC.EsFamiliar = 1 Then
         Call Familiar_Muerte(MiNPC.EsFamiliar, True)
-        Call WriteConsoleMsg(UserIndex, "¡Has matado el familiar de " & UserList(MiNPC.MaestroUser).Name & "!", FontTypeNames.FONTTYPE_FIGHT)
+        Call WriteConsoleMsg(UserIndex, "¡Has matado el familiar de " & UserList(MiNPC.MaestroUser).name & "!", FontTypeNames.FONTTYPE_FIGHT)
         
     End If
       
@@ -123,6 +123,15 @@ Public Sub MuereNpc(ByVal NpcIndex As Integer, ByVal UserIndex As Integer)
     If UserIndex > 0 Then ' Lo mato un usuario?
 
         With UserList(UserIndex)
+        
+            '¿El NPC explota al matarlo?
+            If Npclist(NpcIndex).flags.Explota = 1 Then
+              Call UserDie(UserIndex)
+                           
+              Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessagePlayWave(27, UserList(UserIndex).Pos.X, UserList(UserIndex).Pos.Y))
+              Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageCreateFX(UserList(UserIndex).Char.CharIndex, 27, 0))
+              Call WriteConsoleMsg(UserIndex, "¡La explosion del Bomber te ha matado!", FontTypeNames.FONTTYPE_FIGHT)
+            End If
         
             If MiNPC.flags.Snd3 > 0 Then
                 Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessagePlayWave(MiNPC.flags.Snd3, MiNPC.Pos.X, MiNPC.Pos.Y))
@@ -247,6 +256,9 @@ Public Sub MuereNpc(ByVal NpcIndex As Integer, ByVal UserIndex As Integer)
         If UserIndex = 0 Then Exit Sub
 
     End If
+    
+    'Si esta en arenas y las arenas esta en curso, comprobamos cuandos bichos quedan.
+    If UserList(UserIndex).flags.ArenaRinkel = True Then Call BichosVivos(False)
 
     Exit Sub
 
@@ -405,7 +417,7 @@ Private Sub ResetNpcMainInfo(ByVal NpcIndex As Integer)
         
         .Mascotas = 0
         .Movement = 0
-        .Name = vbNullString
+        .name = vbNullString
         .NPCtype = 0
         .Numero = 0
         .Orig.Map = 0
@@ -1064,7 +1076,8 @@ End Sub
 Function SpawnNpc(ByVal NpcIndex As Integer, _
                   Pos As WorldPos, _
                   ByVal FX As Boolean, _
-                  ByVal Respawn As Boolean, Optional ByVal OrigPos As Boolean = False) As Integer
+                  ByVal Respawn As Boolean, Optional ByVal OrigPos As Boolean = False, _
+                  Optional ByVal IncrementoVida As Integer = 0) As Integer
 
     '***************************************************
     'Autor: Unknown (orginal version)
@@ -1142,6 +1155,11 @@ Function SpawnNpc(ByVal NpcIndex As Integer, _
         Npclist(nIndex).Orig.Map = Map
         Npclist(nIndex).Orig.X = X
         Npclist(nIndex).Orig.Y = Y
+    End If
+    
+    If IncrementoVida > 0 Then
+        Npclist(nIndex).Stats.MaxHp = Npclist(nIndex).Stats.MaxHp * IncrementoVida
+        Npclist(nIndex).Stats.MinHp = Npclist(nIndex).Stats.MinHp * IncrementoVida
     End If
 
     'Crea el NPC
@@ -1298,7 +1316,7 @@ Public Function OpenNPC(ByVal NpcNumber As Integer, _
     
     With Npclist(NpcIndex)
         .Numero = NpcNumber
-        .Name = Leer.GetValue("NPC" & NpcNumber, "Name")
+        .name = Leer.GetValue("NPC" & NpcNumber, "Name")
         .Desc = Leer.GetValue("NPC" & NpcNumber, "Desc")
         
         .Movement = val(Leer.GetValue("NPC" & NpcNumber, "Movement"))
@@ -1403,6 +1421,11 @@ Public Function OpenNPC(ByVal NpcNumber As Integer, _
             
             .TiempoRetardoMax = val(Leer.GetValue("NPC" & NpcNumber, "TiempoRetardoMax"))
             .TiempoRetardoMin = val(Leer.GetValue("NPC" & NpcNumber, "TiempoRetardoMin"))
+            
+            .Explota = val(Leer.GetValue("NPC" & NpcNumber, "Explota"))
+            .VerInvi = val(Leer.GetValue("NPC" & NpcNumber, "VerInvi"))
+            
+            .ArenasRinkel = val(Leer.GetValue("NPC" & NpcNumber, "ArenasRinkel"))
   
         End With
         
@@ -1442,7 +1465,7 @@ errHandler:
 
 End Function
 
-Public Sub DoFollow(ByVal NpcIndex As Integer, ByVal UserName As String)
+Public Sub DoFollow(ByVal NpcIndex As Integer, ByVal username As String)
     '***************************************************
     'Author: Unknown
     'Last Modification: -
@@ -1458,7 +1481,7 @@ Public Sub DoFollow(ByVal NpcIndex As Integer, ByVal UserName As String)
             .Movement = .flags.OldMovement
             .Hostile = .flags.OldHostil
         Else
-            .flags.AttackedBy = UserName
+            .flags.AttackedBy = username
             .flags.Follow = True
             .flags.SiguiendoGm = True
             .Movement = TipoAI.NPCDEFENSA

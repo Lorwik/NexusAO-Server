@@ -29,7 +29,7 @@ Attribute VB_Name = "TCP"
 
 #If False Then
 
-    Dim ErrHandler, Length, index As Variant
+    Dim errHandler, Length, index As Variant
 
 #End If
 
@@ -275,7 +275,7 @@ Function Numeric(ByVal cad As String) As Boolean
 
 End Function
 
-Function NombrePermitido(ByVal Nombre As String) As Boolean
+Function NombrePermitido(ByVal nombre As String) As Boolean
     '***************************************************
     'Author: Unknown
     'Last Modification: -
@@ -286,7 +286,7 @@ Function NombrePermitido(ByVal Nombre As String) As Boolean
 
     For i = 1 To UBound(ForbidenNames)
 
-        If InStr(Nombre, ForbidenNames(i)) Then
+        If InStr(nombre, ForbidenNames(i)) Then
             NombrePermitido = False
             Exit Function
 
@@ -460,7 +460,7 @@ Sub ConnectNewUser(ByVal UserIndex As Integer, _
             
         'De primeras podra hablar por global
         .flags.Global = 1
-        .Counters.LastGlobalMsg = INTERVALO_GLOBAL
+        .Counters.LastGlobalMsg = Intervalo_Global
 
         #If ConUpTime Then
             .LogOnTime = Now
@@ -543,6 +543,8 @@ Private Sub SetAttributesToNewUser(ByVal UserIndex As Integer, ByVal UserClase A
     
         .Stats.MaxHam = 100
         .Stats.MinHam = 100
+        
+        .Stats.ELO = 1000
     
         '<-----------------MANA----------------------->
         If UserClase = eClass.Mage Then 'Cambio en mana inicial (ToxicWaste)
@@ -828,7 +830,7 @@ Sub CloseSocket(ByVal UserIndex As Integer)
     '4/4/2020: FrankoH298 - Flusheamos el buffer antes de cerrar el socket.
     '
     '***************************************************
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
     
     Call FlushBuffer(UserIndex)
     
@@ -862,7 +864,7 @@ Sub CloseSocket(ByVal UserIndex As Integer)
 
     Exit Sub
 
-ErrHandler:
+errHandler:
 
     Call ResetUserSlot(UserIndex)
         
@@ -1815,6 +1817,7 @@ Sub ResetUserFlags(ByVal UserIndex As Integer)
         .Instruyendo = 0
         .Trabajando = 0
         .Velocidad = 0
+        .ArenaRinkel = False
 
         Call ResetCasteo(UserIndex)
         
@@ -1965,7 +1968,7 @@ Sub CloseUser(ByVal UserIndex As Integer)
     '
     '***************************************************
 
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
 
     Dim n    As Integer
 
@@ -2129,7 +2132,7 @@ Sub CloseUser(ByVal UserIndex As Integer)
 
     Exit Sub
 
-ErrHandler:
+errHandler:
     Call LogError("Error en CloseUser. Numero " & Err.Number & " Descripcion: " & Err.description)
 
 End Sub
@@ -2141,7 +2144,7 @@ Sub ReloadSokcet()
     '
     '***************************************************
 
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
 
     Call LogApiSock("ReloadSokcet() " & NumUsers & " " & LastUser & " " & MaxUsers)
     
@@ -2154,7 +2157,7 @@ Sub ReloadSokcet()
 
     Exit Sub
     
-ErrHandler:
+errHandler:
     Call LogError("Error en CheckSocketState " & Err.Number & ": " & Err.description)
 
 End Sub

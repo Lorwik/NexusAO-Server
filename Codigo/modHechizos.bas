@@ -84,7 +84,7 @@ Sub NpcLanzaSpellSobreUser(ByVal NpcIndex As Integer, _
 
             If .Stats.MinHp > .Stats.MaxHp Then .Stats.MinHp = .Stats.MaxHp
             
-            Call WriteConsoleMsg(UserIndex, Npclist(NpcIndex).Name & " te ha quitado " & dano & " puntos de vida.", FontTypeNames.FONTTYPE_FIGHT)
+            Call WriteConsoleMsg(UserIndex, Npclist(NpcIndex).name & " te ha quitado " & dano & " puntos de vida.", FontTypeNames.FONTTYPE_FIGHT)
             
             Call WriteUpdateUserStats(UserIndex)
         
@@ -124,7 +124,7 @@ Sub NpcLanzaSpellSobreUser(ByVal NpcIndex As Integer, _
             
                 .Stats.MinHp = .Stats.MinHp - dano
                 
-                Call WriteConsoleMsg(UserIndex, Npclist(NpcIndex).Name & " te ha quitado " & dano & " puntos de vida.", FontTypeNames.FONTTYPE_FIGHT)
+                Call WriteConsoleMsg(UserIndex, Npclist(NpcIndex).name & " te ha quitado " & dano & " puntos de vida.", FontTypeNames.FONTTYPE_FIGHT)
                 
                 Call WriteUpdateUserStats(UserIndex)
                 
@@ -421,7 +421,7 @@ Function TieneHechizo(ByVal i As Integer, ByVal UserIndex As Integer) As Boolean
     '
     '***************************************************
 
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
     
     Dim j As Integer
 
@@ -436,7 +436,7 @@ Function TieneHechizo(ByVal i As Integer, ByVal UserIndex As Integer) As Boolean
     Next
 
     Exit Function
-ErrHandler:
+errHandler:
 
 End Function
 
@@ -486,7 +486,7 @@ Sub DecirPalabrasMagicas(ByVal SpellWords As String, ByVal UserIndex As Integer)
 'Author: Unknownn
 'Last Modification: 27/07/2012 - ^[GS]^
 '***************************************************
-On Error GoTo ErrHandler
+On Error GoTo errHandler
 
     With UserList(UserIndex)
         If .flags.AdminInvisible <> 1 Then
@@ -513,7 +513,7 @@ On Error GoTo ErrHandler
     
     Exit Sub
     
-ErrHandler:
+errHandler:
     Call LogError("Error en DecirPalabrasMagicas. Error: " & Err.Number & " - " & Err.description)
     
 End Sub
@@ -833,7 +833,7 @@ Sub HechizoInvocacion(ByVal UserIndex As Integer, ByRef HechizoCasteado As Boole
 Error:
 
     With UserList(UserIndex)
-        LogError ("[" & Err.Number & "] " & Err.description & " por el usuario " & .Name & "(" & UserIndex & ") en (" & .Pos.Map & ", " & .Pos.X & ", " & .Pos.Y & "). Tratando de tirar el hechizo " & SpellIndex & "(" & SpellIndex & ") en la posicion ( " & .flags.TargetX & ", " & .flags.TargetY & ")")
+        LogError ("[" & Err.Number & "] " & Err.description & " por el usuario " & .name & "(" & UserIndex & ") en (" & .Pos.Map & ", " & .Pos.X & ", " & .Pos.Y & "). Tratando de tirar el hechizo " & SpellIndex & "(" & SpellIndex & ") en la posicion ( " & .flags.TargetX & ", " & .flags.TargetY & ")")
 
     End With
 
@@ -1033,7 +1033,7 @@ Sub LanzarHechizo(ByVal SpellIndex As Integer, ByVal UserIndex As Integer)
     '02/16/2010: Marco - Now .flags.hechizo makes reference to global spell index instead of user's spell index
     '15/03/2020: WyroX - Remuevo los chequeos de distancia, porque ya se comprueba si lanzo a un tile que ve
     '***************************************************
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
 
     With UserList(UserIndex)
     
@@ -1051,8 +1051,8 @@ Sub LanzarHechizo(ByVal SpellIndex As Integer, ByVal UserIndex As Integer)
     
         If PuedeLanzar(UserIndex, SpellIndex) Then
         
-            If Hechizos(SpellIndex).Casteo > 0 And .flags.CasteoSpell.Casteando = False Then
-                .flags.CasteoSpell.Casteando = True
+            If Hechizos(SpellIndex).Casteo > 0 And .flags.CasteoSpell.Casteando = 0 Then
+                .flags.CasteoSpell.Casteando = eCasteo.Hechizo
                 .flags.CasteoSpell.SpellID = SpellIndex
                 .flags.CasteoSpell.TimeCast = Hechizos(SpellIndex).Casteo
                 Call WriteConsoleMsg(UserIndex, "Te concentras para lanzar el hechizo...", FontTypeNames.FONTTYPE_INFO)
@@ -1109,8 +1109,8 @@ Sub LanzarHechizo(ByVal SpellIndex As Integer, ByVal UserIndex As Integer)
 
     Exit Sub
 
-ErrHandler:
-    Call LogError("Error en LanzarHechizo. Error " & Err.Number & " : " & Err.description & " Hechizo: " & SpellIndex & "(" & SpellIndex & "). Casteado por: " & UserList(UserIndex).Name & "(" & UserIndex & ").")
+errHandler:
+    Call LogError("Error en LanzarHechizo. Error " & Err.Number & " : " & Err.description & " Hechizo: " & SpellIndex & "(" & SpellIndex & "). Casteado por: " & UserList(UserIndex).name & "(" & UserIndex & ").")
     
 End Sub
 
@@ -1431,7 +1431,7 @@ Sub HechizoEstadoUsuario(ByVal UserIndex As Integer, ByRef HechizoCasteado As Bo
                 UserList(targetIndex).Counters.Paralisis = IntervaloParalizado
             
                 UserList(targetIndex).flags.ParalizedByIndex = UserIndex
-                UserList(targetIndex).flags.ParalizedBy = UserList(UserIndex).Name
+                UserList(targetIndex).flags.ParalizedBy = UserList(UserIndex).name
             
                 Call WriteParalizeOK(targetIndex)
 
@@ -2051,11 +2051,11 @@ Sub InfoHechizo(ByVal UserIndex As Integer, Optional ByVal NoFX As Boolean = Fal
         If tUser > 0 Then
             If UserIndex <> tUser Then
                 If .showName Then
-                    Call WriteConsoleMsg(UserIndex, Hechizos(SpellIndex).HechizeroMsg & " " & UserList(tUser).Name, FontTypeNames.FONTTYPE_FIGHT)
+                    Call WriteConsoleMsg(UserIndex, Hechizos(SpellIndex).HechizeroMsg & " " & UserList(tUser).name, FontTypeNames.FONTTYPE_FIGHT)
                 Else
                     Call WriteConsoleMsg(UserIndex, Hechizos(SpellIndex).HechizeroMsg & " alguien.", FontTypeNames.FONTTYPE_FIGHT)
                 End If
-                Call WriteConsoleMsg(tUser, .Name & " " & Hechizos(SpellIndex).TargetMsg, FontTypeNames.FONTTYPE_FIGHT)
+                Call WriteConsoleMsg(tUser, .name & " " & Hechizos(SpellIndex).TargetMsg, FontTypeNames.FONTTYPE_FIGHT)
             Else
                 Call WriteConsoleMsg(UserIndex, Hechizos(SpellIndex).PropioMsg, FontTypeNames.FONTTYPE_FIGHT)
             End If
@@ -2113,8 +2113,8 @@ Public Function HechizoPropUsuario(ByVal UserIndex As Integer) As Boolean
             If .Stats.MinHam > .Stats.MaxHam Then .Stats.MinHam = .Stats.MaxHam
         
             If UserIndex <> targetIndex Then
-                Call WriteConsoleMsg(UserIndex, "Le has restaurado " & dano & " puntos de hambre a " & .Name & ".", FontTypeNames.FONTTYPE_FIGHT)
-                Call WriteConsoleMsg(targetIndex, UserList(UserIndex).Name & " te ha restaurado " & dano & " puntos de hambre.", FontTypeNames.FONTTYPE_FIGHT)
+                Call WriteConsoleMsg(UserIndex, "Le has restaurado " & dano & " puntos de hambre a " & .name & ".", FontTypeNames.FONTTYPE_FIGHT)
+                Call WriteConsoleMsg(targetIndex, UserList(UserIndex).name & " te ha restaurado " & dano & " puntos de hambre.", FontTypeNames.FONTTYPE_FIGHT)
             Else
                 Call WriteConsoleMsg(UserIndex, "Te has restaurado " & dano & " puntos de hambre.", FontTypeNames.FONTTYPE_FIGHT)
 
@@ -2141,8 +2141,8 @@ Public Function HechizoPropUsuario(ByVal UserIndex As Integer) As Boolean
             .Stats.MinHam = .Stats.MinHam - dano
         
             If UserIndex <> targetIndex Then
-                Call WriteConsoleMsg(UserIndex, "Le has quitado " & dano & " puntos de hambre a " & .Name & ".", FontTypeNames.FONTTYPE_FIGHT)
-                Call WriteConsoleMsg(targetIndex, UserList(UserIndex).Name & " te ha quitado " & dano & " puntos de hambre.", FontTypeNames.FONTTYPE_FIGHT)
+                Call WriteConsoleMsg(UserIndex, "Le has quitado " & dano & " puntos de hambre a " & .name & ".", FontTypeNames.FONTTYPE_FIGHT)
+                Call WriteConsoleMsg(targetIndex, UserList(UserIndex).name & " te ha quitado " & dano & " puntos de hambre.", FontTypeNames.FONTTYPE_FIGHT)
             Else
                 Call WriteConsoleMsg(UserIndex, "Te has quitado " & dano & " puntos de hambre.", FontTypeNames.FONTTYPE_FIGHT)
 
@@ -2172,8 +2172,8 @@ Public Function HechizoPropUsuario(ByVal UserIndex As Integer) As Boolean
             Call WriteUpdateHungerAndThirst(targetIndex)
              
             If UserIndex <> targetIndex Then
-                Call WriteConsoleMsg(UserIndex, "Le has restaurado " & dano & " puntos de sed a " & .Name & ".", FontTypeNames.FONTTYPE_FIGHT)
-                Call WriteConsoleMsg(targetIndex, UserList(UserIndex).Name & " te ha restaurado " & dano & " puntos de sed.", FontTypeNames.FONTTYPE_FIGHT)
+                Call WriteConsoleMsg(UserIndex, "Le has restaurado " & dano & " puntos de sed a " & .name & ".", FontTypeNames.FONTTYPE_FIGHT)
+                Call WriteConsoleMsg(targetIndex, UserList(UserIndex).name & " te ha restaurado " & dano & " puntos de sed.", FontTypeNames.FONTTYPE_FIGHT)
             Else
                 Call WriteConsoleMsg(UserIndex, "Te has restaurado " & dano & " puntos de sed.", FontTypeNames.FONTTYPE_FIGHT)
 
@@ -2196,8 +2196,8 @@ Public Function HechizoPropUsuario(ByVal UserIndex As Integer) As Boolean
             .Stats.MinAGU = .Stats.MinAGU - dano
         
             If UserIndex <> targetIndex Then
-                Call WriteConsoleMsg(UserIndex, "Le has quitado " & dano & " puntos de sed a " & .Name & ".", FontTypeNames.FONTTYPE_FIGHT)
-                Call WriteConsoleMsg(targetIndex, UserList(UserIndex).Name & " te ha quitado " & dano & " puntos de sed.", FontTypeNames.FONTTYPE_FIGHT)
+                Call WriteConsoleMsg(UserIndex, "Le has quitado " & dano & " puntos de sed a " & .name & ".", FontTypeNames.FONTTYPE_FIGHT)
+                Call WriteConsoleMsg(targetIndex, UserList(UserIndex).name & " te ha quitado " & dano & " puntos de sed.", FontTypeNames.FONTTYPE_FIGHT)
             Else
                 Call WriteConsoleMsg(UserIndex, "Te has quitado " & dano & " puntos de sed.", FontTypeNames.FONTTYPE_FIGHT)
 
@@ -2318,8 +2318,8 @@ Public Function HechizoPropUsuario(ByVal UserIndex As Integer) As Boolean
             Call WriteUpdateMana(targetIndex)
         
             If UserIndex <> targetIndex Then
-                Call WriteConsoleMsg(UserIndex, "Le has restaurado " & dano & " puntos de mana a " & .Name & ".", FontTypeNames.FONTTYPE_FIGHT)
-                Call WriteConsoleMsg(targetIndex, UserList(UserIndex).Name & " te ha restaurado " & dano & " puntos de mana.", FontTypeNames.FONTTYPE_FIGHT)
+                Call WriteConsoleMsg(UserIndex, "Le has restaurado " & dano & " puntos de mana a " & .name & ".", FontTypeNames.FONTTYPE_FIGHT)
+                Call WriteConsoleMsg(targetIndex, UserList(UserIndex).name & " te ha restaurado " & dano & " puntos de mana.", FontTypeNames.FONTTYPE_FIGHT)
             Else
                 Call WriteConsoleMsg(UserIndex, "Te has restaurado " & dano & " puntos de mana.", FontTypeNames.FONTTYPE_FIGHT)
 
@@ -2338,8 +2338,8 @@ Public Function HechizoPropUsuario(ByVal UserIndex As Integer) As Boolean
             Call InfoHechizo(UserIndex)
         
             If UserIndex <> targetIndex Then
-                Call WriteConsoleMsg(UserIndex, "Le has quitado " & dano & " puntos de mana a " & .Name & ".", FontTypeNames.FONTTYPE_FIGHT)
-                Call WriteConsoleMsg(targetIndex, UserList(UserIndex).Name & " te ha quitado " & dano & " puntos de mana.", FontTypeNames.FONTTYPE_FIGHT)
+                Call WriteConsoleMsg(UserIndex, "Le has quitado " & dano & " puntos de mana a " & .name & ".", FontTypeNames.FONTTYPE_FIGHT)
+                Call WriteConsoleMsg(targetIndex, UserList(UserIndex).name & " te ha quitado " & dano & " puntos de mana.", FontTypeNames.FONTTYPE_FIGHT)
             Else
                 Call WriteConsoleMsg(UserIndex, "Te has quitado " & dano & " puntos de mana.", FontTypeNames.FONTTYPE_FIGHT)
 
@@ -2363,8 +2363,8 @@ Public Function HechizoPropUsuario(ByVal UserIndex As Integer) As Boolean
             Call WriteUpdateSta(targetIndex)
         
             If UserIndex <> targetIndex Then
-                Call WriteConsoleMsg(UserIndex, "Le has restaurado " & dano & " puntos de energia a " & .Name & ".", FontTypeNames.FONTTYPE_FIGHT)
-                Call WriteConsoleMsg(targetIndex, UserList(UserIndex).Name & " te ha restaurado " & dano & " puntos de energia.", FontTypeNames.FONTTYPE_FIGHT)
+                Call WriteConsoleMsg(UserIndex, "Le has restaurado " & dano & " puntos de energia a " & .name & ".", FontTypeNames.FONTTYPE_FIGHT)
+                Call WriteConsoleMsg(targetIndex, UserList(UserIndex).name & " te ha restaurado " & dano & " puntos de energia.", FontTypeNames.FONTTYPE_FIGHT)
             Else
                 Call WriteConsoleMsg(UserIndex, "Te has restaurado " & dano & " puntos de energia.", FontTypeNames.FONTTYPE_FIGHT)
 
@@ -2383,8 +2383,8 @@ Public Function HechizoPropUsuario(ByVal UserIndex As Integer) As Boolean
             Call InfoHechizo(UserIndex)
         
             If UserIndex <> targetIndex Then
-                Call WriteConsoleMsg(UserIndex, "Le has quitado " & dano & " puntos de energia a " & .Name & ".", FontTypeNames.FONTTYPE_FIGHT)
-                Call WriteConsoleMsg(targetIndex, UserList(UserIndex).Name & " te ha quitado " & dano & " puntos de energia.", FontTypeNames.FONTTYPE_FIGHT)
+                Call WriteConsoleMsg(UserIndex, "Le has quitado " & dano & " puntos de energia a " & .name & ".", FontTypeNames.FONTTYPE_FIGHT)
+                Call WriteConsoleMsg(targetIndex, UserList(UserIndex).name & " te ha quitado " & dano & " puntos de energia.", FontTypeNames.FONTTYPE_FIGHT)
             Else
                 Call WriteConsoleMsg(UserIndex, "Te has quitado " & dano & " puntos de energia.", FontTypeNames.FONTTYPE_FIGHT)
 
@@ -2413,7 +2413,7 @@ Public Function CanSupportUser(ByVal CasterIndex As Integer, _
     'Checks if caster can cast support magic on target user.
     '***************************************************
      
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
  
     With UserList(CasterIndex)
         
@@ -2516,7 +2516,7 @@ Public Function CanSupportUser(ByVal CasterIndex As Integer, _
 
     Exit Function
     
-ErrHandler:
+errHandler:
     Call LogError("Error en CanSupportUser, Error: " & Err.Number & " - " & Err.description & " CasterIndex: " & CasterIndex & ", TargetIndex: " & targetIndex)
 
 End Function
@@ -2574,7 +2574,7 @@ Public Function CanSupportNpc(ByVal CasterIndex As Integer, _
     'Checks if caster can cast support magic on target Npc.
     '***************************************************
      
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
  
     Dim OwnerIndex As Integer
  
@@ -2676,7 +2676,7 @@ Public Function CanSupportNpc(ByVal CasterIndex As Integer, _
 
     Exit Function
     
-ErrHandler:
+errHandler:
     Call LogError("Error en CanSupportNpc, Error: " & Err.Number & " - " & Err.description & " CasterIndex: " & CasterIndex & ", OwnerIndex: " & OwnerIndex)
 
 End Function
@@ -2977,7 +2977,7 @@ Public Sub ResetCasteo(ByVal UserIndex As Integer)
         If .flags.CasteoSpell.SpellID > 0 Then _
             Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageCreateParticleChar(.Char.CharIndex, Hechizos(.flags.CasteoSpell.SpellID).CastFX, False, 0))
         
-        .flags.CasteoSpell.Casteando = False
+        .flags.CasteoSpell.Casteando = 0
         .flags.CasteoSpell.SpellID = 0
         .flags.CasteoSpell.TimeCast = 0
     End With
@@ -2993,7 +2993,7 @@ Public Sub CancelCast(ByVal UserIndex As Integer)
 
     With UserList(UserIndex)
     
-        If .flags.CasteoSpell.Casteando Then
+        If .flags.CasteoSpell.Casteando > 0 Then
             Call WriteConsoleMsg(UserIndex, "No logras concentrarte y cancelas el casteo.", FontTypeNames.FONTTYPE_INFO)
             Call ResetCasteo(UserIndex)
             .flags.Hechizo = 0
@@ -3072,8 +3072,8 @@ Private Function UserHechizoDanoUser(ByVal UserIndex As Integer, ByVal targetInd
             
         Call WriteUpdateHP(targetIndex)
         
-        Call WriteConsoleMsg(UserIndex, "Le has quitado " & dano & " puntos de vida a " & .Name & ".", FontTypeNames.FONTTYPE_FIGHT)
-        Call WriteConsoleMsg(targetIndex, UserList(UserIndex).Name & " te ha quitado " & dano & " puntos de vida.", FontTypeNames.FONTTYPE_FIGHT)
+        Call WriteConsoleMsg(UserIndex, "Le has quitado " & dano & " puntos de vida a " & .name & ".", FontTypeNames.FONTTYPE_FIGHT)
+        Call WriteConsoleMsg(targetIndex, UserList(UserIndex).name & " te ha quitado " & dano & " puntos de vida.", FontTypeNames.FONTTYPE_FIGHT)
         
         Call SubirSkill(targetIndex, eSkill.Resistencia, True)
         
@@ -3137,8 +3137,8 @@ Private Function UserHechizoCuraUser(ByVal UserIndex As Integer, ByVal targetInd
         Call WriteUpdateHP(targetIndex)
         
         If UserIndex <> targetIndex Then
-            Call WriteConsoleMsg(UserIndex, "Le has restaurado " & cura & " puntos de vida a " & .Name & ".", FontTypeNames.FONTTYPE_FIGHT)
-            Call WriteConsoleMsg(targetIndex, UserList(UserIndex).Name & " te ha restaurado " & cura & " puntos de vida.", FontTypeNames.FONTTYPE_FIGHT)
+            Call WriteConsoleMsg(UserIndex, "Le has restaurado " & cura & " puntos de vida a " & .name & ".", FontTypeNames.FONTTYPE_FIGHT)
+            Call WriteConsoleMsg(targetIndex, UserList(UserIndex).name & " te ha restaurado " & cura & " puntos de vida.", FontTypeNames.FONTTYPE_FIGHT)
                 
         Else
             Call WriteConsoleMsg(UserIndex, "Te has restaurado " & cura & " puntos de vida.", FontTypeNames.FONTTYPE_FIGHT)

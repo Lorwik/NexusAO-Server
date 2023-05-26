@@ -434,7 +434,7 @@ Public Sub MakeUserChar(ByVal toMap As Boolean, _
     '15/01/2010: ZaMa - Ahora se envia el color del nick.
     '*************************************************
 
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
 
     Dim CharIndex  As Integer
 
@@ -511,7 +511,7 @@ Public Sub MakeUserChar(ByVal toMap As Boolean, _
 
     Exit Sub
 
-ErrHandler:
+errHandler:
     LogError ("MakeUserChar: num: " & Err.Number & " desc: " & Err.description)
     'Resume Next
     Call CloseSocket(UserIndex)
@@ -555,7 +555,7 @@ Public Sub CheckUserLevel(ByVal UserIndex As Integer, Optional ByVal PrintInCons
     Dim GI               As Integer 'Guild Index
     Dim SubiodeLvL       As Boolean
     
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
     
     WasNewbie = EsNewbie(UserIndex)
     SubiodeLvL = False
@@ -845,7 +845,7 @@ Public Sub CheckUserLevel(ByVal UserIndex As Integer, Optional ByVal PrintInCons
     
     Exit Sub
 
-ErrHandler:
+errHandler:
     Call LogError("Error en la subrutina CheckUserLevel - Error : " & Err.Number & " - Description : " & Err.description)
 
 End Sub
@@ -1891,7 +1891,7 @@ Sub Tilelibre(ByRef Pos As WorldPos, _
     '23/01/2007 -> Pablo (ToxicWaste): El agua es ahora un TileLibre agregando las condiciones necesarias.
     '18/09/2010: ZaMa - Aplico optimizacion de busqueda de tile libre en forma de rombo.
     '**************************************************************
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
 
     Dim Found As Boolean
 
@@ -1942,7 +1942,7 @@ Sub Tilelibre(ByRef Pos As WorldPos, _
     
     Exit Sub
     
-ErrHandler:
+errHandler:
     Call LogError("Error en Tilelibre. Error: " & Err.Number & " - " & Err.description)
 
 End Sub
@@ -2277,6 +2277,12 @@ Sub Cerrar_Usuario(ByVal UserIndex As Integer)
     With UserList(UserIndex)
 
         If .flags.UserLogged And Not .Counters.Saliendo Then
+            'Si esta en arenas no puede salir
+            If .flags.ArenaRinkel = True Then
+                Call WriteConsoleMsg(UserIndex, "No puedes salir mientras estas en arenas..", FontTypeNames.FONTTYPE_INFO)
+                Exit Sub
+            End If
+        
             .Counters.Saliendo = True
             .Counters.Salir = IIf((.flags.Privilegios And PlayerType.User) And MapInfo(.Pos.Map).Pk, IntervaloCerrarConexion, 0)
             'Si esta muerto, no tiene que esperar.
@@ -2318,6 +2324,9 @@ Sub Cerrar_Usuario(ByVal UserIndex As Integer)
             Call WriteConsoleMsg(UserIndex, "Cerrando...Se cerrara el juego en " & .Counters.Salir & " segundos...", FontTypeNames.FONTTYPE_INFO)
 
         End If
+        
+        If UserList(UserIndex).flags.EstaDueleando Then _
+        Call DesconectarDueloSet(UserList(UserIndex).flags.Oponente, UserIndex)
 
     End With
 
@@ -2654,7 +2663,7 @@ Public Function FarthestPet(ByVal UserIndex As Integer) As Integer
     'Last Modify Date: 18/11/2009
     'Devuelve el indice de la mascota mas lejana.
     '**************************************************************
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
     
     Dim PetIndex      As Integer
 
@@ -2700,7 +2709,7 @@ Public Function FarthestPet(ByVal UserIndex As Integer) As Integer
 
     Exit Function
     
-ErrHandler:
+errHandler:
     Call LogError("Error en FarthestPet")
 
 End Function
@@ -2903,10 +2912,12 @@ Public Sub MandaraCasa(ByVal UserIndex As Integer)
 
     With UserList(UserIndex)
     
-        If .flags.Muerto = 0 Then
-            Call WriteConsoleMsg(UserIndex, "Debes estar muerto para teletransportarte a tu hogar.", FontTypeNames.FONTTYPE_FIGHT)
-            Exit Sub
-        End If
+'        If .flags.Muerto = 0 Then
+'            Call WriteConsoleMsg(UserIndex, "Debes estar muerto para teletransportarte a tu hogar.", FontTypeNames.FONTTYPE_FIGHT)
+'            Exit Sub
+'        End If
+'
+        If .flags.ArenaRinkel = True Then Call modArenaRinkel.SalirArenaRinkel(UserIndex)
 
         'Antes de que el pj llegue a la ciudad, lo hacemos dejar de navegar para que no se buguee.
         If .flags.Navegando = 1 Then

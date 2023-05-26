@@ -773,7 +773,7 @@ End Type
 
 Public Type tHechizo
 
-    Nombre As String
+    nombre As String
     Desc As String
     PalabrasMagicas As String
     
@@ -944,7 +944,7 @@ End Type
 
 Public Type FXdata
 
-    Nombre As String
+    nombre As String
     GrhIndex As Long
     Delay As Integer
 
@@ -1283,7 +1283,7 @@ End Type
 
 Public Type tQuest
 
-    Nombre As String
+    nombre As String
     Desc As String
     RequiredLevel As Byte
     
@@ -1311,8 +1311,15 @@ End Type
 '*********************************************************
 '*********************************************************
 
+Public Const TIEMPO_CASTEO_RUNA As Byte = 7
+
+Enum eCasteo
+    Hechizo = 1
+    Runa
+End Enum
+
 Private Type tCasteoSpell
-    Casteando As Boolean 'Indica si esta casteando
+    Casteando As Byte 'Indica si esta casteando
     SpellID As Integer  'Hechizo que esta casteando
     TimeCast As Long 'Tiempo de casteo
 End Type
@@ -1356,6 +1363,7 @@ Public Type UserStats
     Exp As Double
     ELV As Byte
     ELU As Long
+    ELO As Double
     UserSkills(1 To NUMSKILLS) As Byte
     UserAtributos(1 To NUMATRIBUTOS) As Byte
     UserAtributosBackUP(1 To NUMATRIBUTOS) As Byte
@@ -1376,11 +1384,9 @@ Public Type UserFlags
     SlotReto As Byte
     SlotRetoUser As Byte
 
-   'Cr3p Casamientos
     toyCasado As Byte
     yaOfreci As Byte
     miPareja As String
-   'Car3p Casamientos
    
     SlotCarcel As Integer
     Muerto As Byte 'Esta muerto?
@@ -1499,6 +1505,14 @@ Public Type UserFlags
     
     Velocidad As Double
     
+    EsperandoDuelo As Boolean
+    EstaDueleando As Boolean
+    Oponente As Integer
+    PerdioRonda As Byte
+    TimeDuelo As Byte
+    GanoDuelo As Boolean
+    
+    ArenaRinkel As Boolean
 End Type
 
 Public Type UserCounters
@@ -1803,6 +1817,11 @@ Public Type NPCFlags
     
     TiempoRetardoMin As Long
     TiempoRetardoMax As Long
+    
+    Explota As Byte
+    VerInvi As Byte
+    
+    ArenasRinkel As Byte
     
 End Type
 

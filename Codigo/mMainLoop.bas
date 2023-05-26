@@ -115,7 +115,7 @@ Public Sub TIMER_AI()
     Exit Sub
 
 ErrorHandler:
-    Call LogError("Error en TIMER_AI_Timer " & Npclist(NpcIndex).Name & " mapa:" & Npclist(NpcIndex).Pos.Map)
+    Call LogError("Error en TIMER_AI_Timer " & Npclist(NpcIndex).name & " mapa:" & Npclist(NpcIndex).Pos.Map)
     Call MuereNpc(NpcIndex, 0)
 
 End Sub
@@ -389,13 +389,22 @@ Public Sub PasarSegundo()
                     .PortalTiempo = .PortalTiempo - 1
                     If .PortalTiempo < 1 Then Call Borrar_Portal_User(i)
                 End If
-                
+
                 '¿Esta casteando un hechizo?
-                If .flags.CasteoSpell.Casteando = True Then
+                If .flags.CasteoSpell.Casteando = eCasteo.Hechizo Then
                     .flags.CasteoSpell.TimeCast = .flags.CasteoSpell.TimeCast - 1
                     
                     If .flags.CasteoSpell.TimeCast <= 0 Then
                         Call LanzarHechizo(.flags.CasteoSpell.SpellID, i)
+                        Call ResetCasteo(i)
+                    End If
+                    
+                ElseIf .flags.CasteoSpell.Casteando = eCasteo.Runa Then
+                    Call WriteConsoleMsg(i, "Viajando en... " & .flags.CasteoSpell.TimeCast, FontTypeNames.FONTTYPE_INFO)
+                    .flags.CasteoSpell.TimeCast = .flags.CasteoSpell.TimeCast - 1
+                    
+                    If .flags.CasteoSpell.TimeCast <= 0 Then
+                        Call MandaraCasa(i)
                         Call ResetCasteo(i)
                     End If
                 End If

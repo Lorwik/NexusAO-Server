@@ -466,7 +466,7 @@ Public Sub CargarHechizos()
     '
     '###################################################
 
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
 
     If frmMain.Visible Then frmMain.txtStatus.Text = "Cargando Hechizos."
     
@@ -492,7 +492,7 @@ Public Sub CargarHechizos()
     For Hechizo = 1 To NumeroHechizos
 
         With Hechizos(Hechizo)
-            .Nombre = Leer.GetValue("Hechizo" & Hechizo, "Nombre")
+            .nombre = Leer.GetValue("Hechizo" & Hechizo, "Nombre")
             .Desc = Leer.GetValue("Hechizo" & Hechizo, "Desc")
             .PalabrasMagicas = Leer.GetValue("Hechizo" & Hechizo, "PalabrasMagicas")
             
@@ -605,7 +605,7 @@ Public Sub CargarHechizos()
     
     Exit Sub
 
-ErrHandler:
+errHandler:
     MsgBox "Error cargando hechizos.dat " & Err.Number & ": " & Err.description
  
 End Sub
@@ -1023,7 +1023,7 @@ Sub LoadOBJData()
 
     'Call LogTarea("Sub LoadOBJData")
 
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
 
     If frmMain.Visible Then frmMain.txtStatus.Text = "Cargando base de datos de los objetos."
     
@@ -1338,7 +1338,7 @@ Sub LoadOBJData()
     If frmMain.Visible Then frmMain.txtStatus.Text = Date & " " & time & " - Se cargo base de datos de los objetos. Operacion Realizada con exito."
     
     Exit Sub
-ErrHandler:
+errHandler:
     MsgBox "error cargando objetos " & Err.Number & ": " & Err.description
 
 End Sub
@@ -1350,7 +1350,7 @@ Sub LoadGlobalDrop()
 'Descripcion: Carga la lista de drops globales de NPCs
 '**********************************************
 
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
 
     If frmMain.Visible Then frmMain.txtStatus.Text = "Cargando base de datos de drop globales."
     
@@ -1389,7 +1389,7 @@ Sub LoadGlobalDrop()
     If frmMain.Visible Then frmMain.txtStatus.Text = Date & " " & time & " - Se cargo base de datos de los drop globales. Operacion Realizada con exito."
     
     Exit Sub
-ErrHandler:
+errHandler:
     MsgBox "error cargando drop globales " & Err.Number & ": " & Err.description
 
 End Sub
@@ -2067,6 +2067,8 @@ Sub BackUPnPc(ByVal NpcIndex As Integer, ByVal hFile As Integer)
         Print #hFile, "Domable=" & val(.flags.Domable)
         Print #hFile, "TiempoRetardoMin= " & val(.flags.TiempoRetardoMin)
         Print #hFile, "TiempoRetardoMax= " & val(.flags.TiempoRetardoMax)
+        Print #hFile, "Explota=" & val(.flags.Explota)
+        Print #hFile, "VerInvi=" & val(.flags.VerInvi)
         
         'Inventario
         Print #hFile, "NroItems=" & val(.Invent.NroItems)
@@ -2168,6 +2170,9 @@ Sub CargarNpcBackUp(ByVal NpcIndex As Integer, ByVal NpcNumber As Integer)
         
         .flags.TiempoRetardoMax = val(GetVar(npcfile, "NPC" & NpcNumber, "TiempoRetardoMax"))
         .flags.TiempoRetardoMin = val(GetVar(npcfile, "NPC" & NpcNumber, "TiempoRetardoMin"))
+        
+        .flags.Explota = val(GetVar(npcfile, "NPC" & NpcNumber, "Explota"))
+        .flags.VerInvi = val(GetVar(npcfile, "NPC" & NpcNumber, "VerInvi"))
         
         'Tipo de items con los que comercia
         .TipoItems = val(GetVar(npcfile, "NPC" & NpcNumber, "TipoItems"))

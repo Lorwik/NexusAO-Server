@@ -85,7 +85,7 @@
 
 
 [INIT]
-NumOBJs=823
+NumOBJs=824
 
 [OBJ398]'1.0 714
 Name=Garrote
@@ -12575,3 +12575,18 @@ Agarrable=1
 IndexAbierta=822
 IndexCerrada=823
 IndexCerradaLlave=8
+
+[OBJ824]
+Name=Montura Negra
+GrhIndex=21932
+NumRopaje=156
+ObjType=44
+valor=580000
+MinSkill=25
+MinHIT=15
+MaxHIT=15
+MINDEF=15
+MAXDEF=15
+Crucial=1
+RazaTipo=1
+Nosecae=1

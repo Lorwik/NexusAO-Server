@@ -110,7 +110,7 @@ Private Sub GuardiasAI(ByVal NpcIndex As Integer, ByVal DelCaos As Boolean)
                                     End If
 
                                     Exit Sub
-                                ElseIf .flags.AttackedBy = UserList(UI).Name And Not .flags.Follow Then
+                                ElseIf .flags.AttackedBy = UserList(UI).name And Not .flags.Follow Then
                                     
                                     If NpcAtacaUser(NpcIndex, UI) Then
                                         Call ChangeNPCChar(NpcIndex, .Char.body, .Char.Head, headingloop)
@@ -130,7 +130,7 @@ Private Sub GuardiasAI(ByVal NpcIndex As Integer, ByVal DelCaos As Boolean)
                                     End If
 
                                     Exit Sub
-                                ElseIf .flags.AttackedBy = UserList(UI).Name And Not .flags.Follow Then
+                                ElseIf .flags.AttackedBy = UserList(UI).name And Not .flags.Follow Then
                                       
                                     If NpcAtacaUser(NpcIndex, UI) Then
                                         Call ChangeNPCChar(NpcIndex, .Char.body, .Char.Head, headingloop)
@@ -293,7 +293,7 @@ Private Sub HostilBuenoAI(ByVal NpcIndex As Integer)
                     UI = MapData(nPos.Map, nPos.X, nPos.Y).UserIndex
 
                     If UI > 0 Then
-                        If UserList(UI).Name = .flags.AttackedBy Then
+                        If UserList(UI).name = .flags.AttackedBy Then
                         
                             UserProtected = Not IntervaloPermiteSerAtacado(UI) And UserList(UI).flags.NoPuedeSerAtacado
                             UserProtected = UserProtected Or UserList(UI).flags.Ignorado Or UserList(UI).flags.EnConsulta
@@ -457,7 +457,7 @@ Private Sub IrUsuarioCercano(ByVal NpcIndex As Integer)
                 
                     ' Esto significa que esta bugueado.. Lo logueo, y "reparo" el error a mano (Todo temporal)
                 Else
-                    Call LogError("El npc: " & .Name & "(" & NpcIndex & "), intenta atacar a " & UserList(OwnerIndex).Name & "(Index: " & OwnerIndex & ", Mapa: " & UserList(OwnerIndex).Pos.Map & ") desde el mapa " & .Pos.Map)
+                    Call LogError("El npc: " & .name & "(" & NpcIndex & "), intenta atacar a " & UserList(OwnerIndex).name & "(Index: " & OwnerIndex & ", Mapa: " & UserList(OwnerIndex).Pos.Map & ") desde el mapa " & .Pos.Map)
                     .Owner = 0
 
                 End If
@@ -478,7 +478,7 @@ Private Sub IrUsuarioCercano(ByVal NpcIndex As Integer)
                             UserProtected = UserProtected Or .flags.Ignorado Or .flags.EnConsulta
                             
                             'Si el user no esta muerto, invisible, protegido, etc...
-                            If .flags.Muerto = 0 And .flags.invisible = 0 And .flags.Oculto = 0 And .flags.AdminPerseguible And Not UserProtected Then
+                            If .flags.Muerto = 0 And .flags.invisible = 0 And .flags.Oculto = 0 And .flags.AdminPerseguible Or (Npclist(NpcIndex).flags.VerInvi = 1) And Not UserProtected Then
                                 
                                 If Npclist(NpcIndex).flags.LanzaSpells <> 0 Then Call NpcLanzaUnSpell(NpcIndex, UserIndex)
                                 
@@ -577,7 +577,7 @@ Private Sub SeguirAgresor(ByVal NpcIndex As Integer)
                 If Abs(UserList(UI).Pos.X - .Pos.X) <= RANGO_VISION_NPC_X And Sgn(UserList(UI).Pos.X - .Pos.X) = SignoEO Then
                     If Abs(UserList(UI).Pos.Y - .Pos.Y) <= RANGO_VISION_NPC_Y And Sgn(UserList(UI).Pos.Y - .Pos.Y) = SignoNS Then
 
-                        If UserList(UI).Name = .flags.AttackedBy Then
+                        If UserList(UI).name = .flags.AttackedBy Then
                             If .MaestroUser > 0 Then
                                 If Not criminal(.MaestroUser) And Not criminal(UI) And (UserList(.MaestroUser).flags.Seguro Or UserList(.MaestroUser).Faccion.ArmadaReal = 1) Then
                                     Call WriteConsoleMsg(.MaestroUser, "La mascota no atacara a ciudadanos si eres miembro del ejercito real o tienes el seguro activado.", FontTypeNames.FONTTYPE_INFO)
@@ -588,7 +588,7 @@ Private Sub SeguirAgresor(ByVal NpcIndex As Integer)
 
                             End If
 
-                             If (UserList(UI).flags.Muerto = 0 And UserList(UI).flags.invisible = 0 And UserList(UI).flags.Oculto = 0) Or (.flags.SiguiendoGm = True) Then
+                             If (UserList(UI).flags.Muerto = 0 And (Npclist(NpcIndex).flags.VerInvi = 1) Or UserList(UI).flags.invisible = 0 And UserList(UI).flags.Oculto = 0) Or (.flags.SiguiendoGm = True) Then
                                 If .flags.LanzaSpells > 0 Then
                                     Call NpcLanzaUnSpell(NpcIndex, UI)
                                 Else
@@ -626,7 +626,7 @@ Private Sub SeguirAgresor(ByVal NpcIndex As Integer)
                 If Abs(UserList(UI).Pos.X - .Pos.X) <= RANGO_VISION_NPC_X Then
                     If Abs(UserList(UI).Pos.Y - .Pos.Y) <= RANGO_VISION_NPC_Y Then
                         
-                        If UserList(UI).Name = .flags.AttackedBy Then
+                        If UserList(UI).name = .flags.AttackedBy Then
                             If .MaestroUser > 0 Then
                                 If Not criminal(.MaestroUser) And Not criminal(UI) And (UserList(.MaestroUser).flags.Seguro Or UserList(.MaestroUser).Faccion.ArmadaReal = 1) Then
                                     Call WriteConsoleMsg(.MaestroUser, "La mascota no atacara a ciudadanos si eres miembro del ejercito real o tienes el seguro activado.", FontTypeNames.FONTTYPE_INFO)
@@ -638,7 +638,7 @@ Private Sub SeguirAgresor(ByVal NpcIndex As Integer)
 
                             End If
                             
-                            If UserList(UI).flags.Muerto = 0 And UserList(UI).flags.invisible = 0 And UserList(UI).flags.Oculto = 0 Then
+                            If UserList(UI).flags.Muerto = 0 And (Npclist(NpcIndex).flags.VerInvi = 1) Or UserList(UI).flags.invisible = 0 And UserList(UI).flags.Oculto = 0 Then
                                 If .flags.LanzaSpells > 0 Then
                                     Call NpcLanzaUnSpell(NpcIndex, UI)
                                 Else
@@ -723,7 +723,7 @@ Private Sub PersigueCiudadano(ByVal NpcIndex As Integer)
                         UserProtected = Not IntervaloPermiteSerAtacado(UserIndex) And UserList(UserIndex).flags.NoPuedeSerAtacado
                         UserProtected = UserProtected Or UserList(UserIndex).flags.Ignorado Or UserList(UserIndex).flags.EnConsulta
                         
-                        If UserList(UserIndex).flags.Muerto = 0 And UserList(UserIndex).flags.invisible = 0 And UserList(UserIndex).flags.Oculto = 0 And UserList(UserIndex).flags.AdminPerseguible And Not UserProtected Then
+                        If UserList(UserIndex).flags.Muerto = 0 And UserList(UserIndex).flags.invisible = 0 And UserList(UserIndex).flags.Oculto = 0 Or Not (.flags.VerInvi = 1) And UserList(UserIndex).flags.AdminPerseguible And Not UserProtected Then
                             
                             If .flags.LanzaSpells > 0 Then
                                 Call NpcLanzaUnSpell(NpcIndex, UserIndex)
@@ -808,12 +808,10 @@ Private Sub PersigueCriminal(ByVal NpcIndex As Integer)
                                 UserProtected = Not IntervaloPermiteSerAtacado(UserIndex) And .flags.NoPuedeSerAtacado
                                 UserProtected = UserProtected Or UserList(UserIndex).flags.Ignorado Or UserList(UserIndex).flags.EnConsulta
                                  
-                                If .flags.Muerto = 0 And .flags.invisible = 0 And .flags.Oculto = 0 And .flags.AdminPerseguible And Not UserProtected Then
+                                If .flags.Muerto = 0 And .flags.invisible = 0 And .flags.Oculto = 0 Or Not (Npclist(NpcIndex).flags.VerInvi = 1) And .flags.AdminPerseguible And Not UserProtected Then
                                      
-                                    If Npclist(NpcIndex).flags.LanzaSpells > 0 Then
+                                    If Npclist(NpcIndex).flags.LanzaSpells > 0 Then _
                                         Call NpcLanzaUnSpell(NpcIndex, UserIndex)
-
-                                    End If
 
                                     Exit Sub
 
@@ -843,7 +841,7 @@ Private Sub PersigueCriminal(ByVal NpcIndex As Integer)
                             UserProtected = Not IntervaloPermiteSerAtacado(UserIndex) And UserList(UserIndex).flags.NoPuedeSerAtacado
                             UserProtected = UserProtected Or UserList(UserIndex).flags.Ignorado
                             
-                            If UserList(UserIndex).flags.Muerto = 0 And UserList(UserIndex).flags.invisible = 0 And UserList(UserIndex).flags.Oculto = 0 And UserList(UserIndex).flags.AdminPerseguible And Not UserProtected Then
+                            If UserList(UserIndex).flags.Muerto = 0 And UserList(UserIndex).flags.invisible = 0 And UserList(UserIndex).flags.Oculto = 0 And UserList(UserIndex).flags.AdminPerseguible Or Not (.flags.VerInvi = 1) And Not UserProtected Then
 
                                 If .flags.LanzaSpells > 0 Then
                                     Call NpcLanzaUnSpell(NpcIndex, UserIndex)
@@ -1296,7 +1294,7 @@ Sub NPCAI(ByVal NpcIndex As Integer)
 ErrorHandler:
 
     With Npclist(NpcIndex)
-        Call LogError("Error en NPCAI. Error: " & Err.Number & " - " & Err.description & ". " & "Npc: " & .Name & ", Index: " & NpcIndex & ", MaestroUser: " & .MaestroUser & ", MaestroNpc: " & .MaestroNpc & ", Mapa: " & .Pos.Map & " x:" & .Pos.X & " y:" & .Pos.Y & " Mov:" & .Movement & " TargU:" & .Target & " TargN:" & .TargetNPC)
+        Call LogError("Error en NPCAI. Error: " & Err.Number & " - " & Err.description & ". " & "Npc: " & .name & ", Index: " & NpcIndex & ", MaestroUser: " & .MaestroUser & ", MaestroNpc: " & .MaestroNpc & ", Mapa: " & .Pos.Map & " x:" & .Pos.X & " y:" & .Pos.Y & " Mov:" & .Movement & " TargU:" & .Target & " TargN:" & .TargetNPC)
 
     End With
     
@@ -1405,7 +1403,7 @@ Function PathFindingAI(ByVal NpcIndex As Integer) As Boolean
 
                         With UserList(tmpUserIndex)
 
-                            If .flags.Muerto = 0 And .flags.invisible = 0 And .flags.Oculto = 0 And .flags.AdminPerseguible Then
+                            If (Npclist(NpcIndex).flags.VerInvi = 1) Or .flags.Muerto = 0 And .flags.invisible = 0 And .flags.Oculto = 0 And .flags.AdminPerseguible Then
                             
                                 'We have to invert the coordinates, this is because
                                 'ORE refers to maps in converse way of my pathfinding
@@ -1445,7 +1443,7 @@ Sub NpcLanzaUnSpell(ByVal NpcIndex As Integer, ByVal UserIndex As Integer, Optio
     
     With UserList(UserIndex)
 
-        If .flags.invisible = 1 Or .flags.Oculto = 1 Then Exit Sub
+        If .flags.invisible = 1 Or .flags.Oculto = 1 And (Npclist(NpcIndex).flags.VerInvi = 0) Then Exit Sub
 
     End With
 

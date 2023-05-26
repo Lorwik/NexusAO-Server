@@ -127,6 +127,38 @@ Obj26=510-100-510
 Obj27=513-100-513
 Obj28=697-100-697
 
+[NPC80]
+Name=Mercader
+Desc=　Hola buen amigo, compro y vendo todo tipo de mercancias!!
+Head=2
+Body=3
+ShieldAnim=0
+WeaponAnim=0
+CascoAnim=0
+Heading=3
+Movement=1
+Attackable=0
+Comercia=1
+TipoItems=1000
+Hostil=0
+GiveEXP=0
+GiveGLD=0
+InvReSpawn=0
+NpcType=0
+Alineacion=0
+DEF=0
+MaxHit=0
+MaxHp=0
+MinHit=0
+MinHp=0
+ReSpawn=0
+BackUp=1
+Domable=0
+TiempoRetardoMin= 0
+TiempoRetardoMax= 0
+NroItems=1
+Obj1=534-100-534
+
 [NPC8]
 Name=Thorkis
 Desc=Muchos aldeanos han estado comprando comida en grandes cantidades para guardar en sus refugios, es por eso que los precios han aumentado.
@@ -313,6 +345,38 @@ Obj1=54-1-54
 Obj2=65-1-65
 Obj3=69-1-69
 Obj4=73-1-73
+
+[NPC80]
+Name=Mercader
+Desc=　Hola buen amigo, compro y vendo todo tipo de mercancias!!
+Head=2
+Body=3
+ShieldAnim=0
+WeaponAnim=0
+CascoAnim=0
+Heading=3
+Movement=1
+Attackable=0
+Comercia=1
+TipoItems=1000
+Hostil=0
+GiveEXP=0
+GiveGLD=0
+InvReSpawn=0
+NpcType=0
+Alineacion=0
+DEF=0
+MaxHit=0
+MaxHp=0
+MinHit=0
+MinHp=0
+ReSpawn=0
+BackUp=1
+Domable=0
+TiempoRetardoMin= 0
+TiempoRetardoMax= 0
+NroItems=1
+Obj1=534-100-534
 
 [NPC8]
 Name=Thorkis
@@ -661,6 +725,38 @@ Obj9=123-100-123
 Obj10=125-100-125
 Obj11=159-100-159
 Obj12=759-100-759
+
+[NPC80]
+Name=Mercader
+Desc=　Hola buen amigo, compro y vendo todo tipo de mercancias!!
+Head=2
+Body=3
+ShieldAnim=0
+WeaponAnim=0
+CascoAnim=0
+Heading=3
+Movement=1
+Attackable=0
+Comercia=1
+TipoItems=1000
+Hostil=0
+GiveEXP=0
+GiveGLD=0
+InvReSpawn=0
+NpcType=0
+Alineacion=0
+DEF=0
+MaxHit=0
+MaxHp=0
+MinHit=0
+MinHp=0
+ReSpawn=0
+BackUp=1
+Domable=0
+TiempoRetardoMin= 0
+TiempoRetardoMax= 0
+NroItems=1
+Obj1=534-100-534
 
 [NPC35]
 Name=Moraday.
@@ -1135,6 +1231,38 @@ Obj2=198-100-198
 Obj3=478-100-478
 Obj4=596-100-596
 Obj5=479-100-479
+
+[NPC80]
+Name=Mercader
+Desc=　Hola buen amigo, compro y vendo todo tipo de mercancias!!
+Head=2
+Body=3
+ShieldAnim=0
+WeaponAnim=0
+CascoAnim=0
+Heading=3
+Movement=1
+Attackable=0
+Comercia=1
+TipoItems=1000
+Hostil=0
+GiveEXP=0
+GiveGLD=0
+InvReSpawn=0
+NpcType=0
+Alineacion=0
+DEF=0
+MaxHit=0
+MaxHp=0
+MinHit=0
+MinHp=0
+ReSpawn=0
+BackUp=1
+Domable=0
+TiempoRetardoMin= 0
+TiempoRetardoMax= 0
+NroItems=1
+Obj1=534-100-534
 
 [NPC41]
 Name=Inigo
