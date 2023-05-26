@@ -45,7 +45,7 @@ PalabrasMagicas=OHL VOR PEK
 HechizeroMsg=Has lanzado un dardo mágico sobre
 TargetMsg=lanzó un dardo mágico sobre ti.
 Tipo=1
-WAV=16
+WAV=164
 FXgrh=15
 Loops=3
 Resis=1
@@ -76,7 +76,7 @@ TargetMsg=e ha curado algunas heridas.
 PropioMsg=Te has curado algunas heridas.
 
 Tipo=1
-WAV=17
+WAV=238
 FXgrh=9
 
 SubeHP=1
@@ -95,7 +95,6 @@ StaRequerido=1
 '&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
 [HECHIZO4]
-
 Nombre=Maldición Fúriosa
 Desc=Provoca la muerte si no se come y bebe.
 PalabrasMagicas=Extrudere Factum
@@ -103,7 +102,7 @@ PalabrasMagicas=Extrudere Factum
 HechizeroMsg=Has lanzado Maldición Fúriosa a
 TargetMsg=Te ha Maldecido.
 Tipo=2
-WAV=113
+WAV=102
 FXgrh=45
 Loops=1
 Resis=1
@@ -130,7 +129,7 @@ TargetMsg=te ha curado algunas heridas.
 PropioMsg=Te has curado algunas heridas.
 
 Tipo=1
-WAV=18
+WAV=237
 FXgrh=35
 loops=1
 
@@ -156,7 +155,7 @@ HechizeroMsg=Has lanzado flecha mágica sobre
 TargetMsg=lanzó flecha magica sobre ti.
 PropioMsg=Has lanzado flecha magica sobre ti.
 Tipo=1
-WAV=19
+WAV=166
 FXgrh=10
 Resis=1
 SubeHP=2
@@ -181,7 +180,7 @@ TargetMsg=lanzó flecha electrica sobre ti.
 PropioMsg=Has lanzado flecha electrica sobre ti.
 Tipo=1
 WAV=16
-FXgrh=46
+FXgrh=163
 Resis=1
 
 SubeHP=2
@@ -206,7 +205,7 @@ HechizeroMsg=Has lanzado misil mágico sobre
 TargetMsg=lanzó misil mágico sobre ti.
 PropioMsg=Has lanzado misil mágico sobre ti.
 Tipo=1
-WAV=16
+WAV=241
 FXgrh=44
 loops=1
 Resis=1
@@ -274,7 +273,7 @@ HechizeroMsg=Has resucitado a
 TargetMsg=te ha resucitado.
 PropioMsg=Te has resucitado.
 Tipo=2
-WAV=108
+WAV=204
 FXgrh=36	
 Revivir=1
 Invoca=0
@@ -332,7 +331,7 @@ TargetMsg=te ha lanzado el hechizo gran hambre.
 PropioMsg=Te has lanzado el hechizo gran hambre.
 
 Tipo=1
-WAV=16
+WAV=95
 Resis=1
 
 SubeHam=2
@@ -359,11 +358,9 @@ HechizeroMsg=Has lanzado invisibilidad sobre
 TargetMsg=lanzó invisibilidad sobre ti.
 PropioMsg=Te has vuelto invisible.
 Tipo=2
-WAV=110
+WAV=123
 FXgrh=
-
 Invisibilidad=1
-
 MinSkill=87
 ManaRequerido=500
 StaRequerido=67
@@ -570,7 +567,7 @@ HechizeroMsg=Has lanzado Descarga eléctrica sobre
 TargetMsg=lanzó Descarga eléctrica ti.
 PropioMsg=Has lanzado Descarga eléctrica sobre ti.
 Tipo=1
-WAV=104
+WAV=234
 FXgrh=11
 Loops=1
 Resis=1
@@ -625,7 +622,7 @@ HechizeroMsg=Has lanzado Apocalipsis sobre
 TargetMsg=lanzó Apocalipsis sobre ti.
 PropioMsg=Has lanzado Apocalipsis sobre ti.
 Tipo=1
-WAV=116
+WAV=138
 FXgrh=13
 Loops=1
 Resis=1
@@ -815,7 +812,7 @@ PropioMsg=Has lanzado Aura Divina sobre ti.
 Tipo=1
 
 WAV=17
-FXgrh=24
+FXgrh=229
 SubeFU=3
 MinFU=12
 MaxFU=12
@@ -939,7 +936,7 @@ HechizeroMsg=Has lanzado Sombra de poder sobre
 TargetMsg=ha lanzado Sombra de podera sobre ti.
 PropioMsg=Has lanzado Sombra de poder sobre ti.
 Tipo=1
-WAV=17
+WAV=236
 FXgrh=42
 SubeFU=3
 MinFU=12
@@ -975,7 +972,7 @@ HechizeroMsg=Has lanzado Fúrius sobre
 TargetMsg=lanzó Fúrius sobre ti.
 PropioMsg=Haslanzado Fúrius sobre ti.
 Tipo=1
-WAV=115
+WAV=250
 FXgrh=18
 Loops=1
 Resis=1

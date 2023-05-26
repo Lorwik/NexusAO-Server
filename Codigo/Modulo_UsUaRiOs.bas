@@ -1814,17 +1814,17 @@ Public Sub UserDie(ByVal UserIndex As Integer, Optional ByVal AttackerIndex As I
         Call LimpiarComercioSeguro(UserIndex)
         
         ' Hay que teletransportar?
-        Dim MAPA As Integer
+        Dim Mapa As Integer
 
-        MAPA = .Pos.Map
+        Mapa = .Pos.Map
 
         Dim MapaTelep As Integer
 
-        MapaTelep = MapInfo(MAPA).OnDeathGoTo.Map
+        MapaTelep = MapInfo(Mapa).OnDeathGoTo.Map
         
         If MapaTelep <> 0 Then
             Call WriteConsoleMsg(UserIndex, "Tu estado no te permite permanecer en el mapa!!!", FontTypeNames.FONTTYPE_INFOBOLD)
-            Call WarpUserChar(UserIndex, MapaTelep, MapInfo(MAPA).OnDeathGoTo.X, MapInfo(MAPA).OnDeathGoTo.Y, True, True)
+            Call WarpUserChar(UserIndex, MapaTelep, MapInfo(Mapa).OnDeathGoTo.X, MapInfo(Mapa).OnDeathGoTo.Y, True, True)
 
         End If
         
@@ -2597,18 +2597,18 @@ Public Sub ApropioNpc(ByVal UserIndex As Integer, ByVal NpcIndex As Integer)
         ' Los admins no se pueden apropiar de npcs
         If EsGm(UserIndex) Then Exit Sub
         
-        Dim MAPA As Integer
+        Dim Mapa As Integer
 
-        MAPA = .Pos.Map
+        Mapa = .Pos.Map
         
         ' No aplica a triggers seguras
-        If MapData(MAPA, .Pos.X, .Pos.Y).Trigger = eTrigger.ZONASEGURA Then Exit Sub
+        If MapData(Mapa, .Pos.X, .Pos.Y).Trigger = eTrigger.ZONASEGURA Then Exit Sub
         
         ' No se aplica a mapas seguros
-        If MapInfo(MAPA).Pk = False Then Exit Sub
+        If MapInfo(Mapa).Pk = False Then Exit Sub
         
         ' No aplica a algunos mapas que permiten el robo de npcs
-        If MapInfo(MAPA).RoboNpcsPermitido = 1 Then Exit Sub
+        If MapInfo(Mapa).RoboNpcsPermitido = 1 Then Exit Sub
         
         ' Pierde el npc anterior
         If .flags.OwnedNpc > 0 Then Npclist(.flags.OwnedNpc).Owner = 0
@@ -2932,7 +2932,7 @@ Public Sub MandaraCasa(ByVal UserIndex As Integer)
 '            Exit Sub
 '        End If
 '
-        If .flags.ArenaRinkel = True Then Call modArenaRinkel.SalirArenaRinkel(UserIndex)
+        If .flags.ArenaRinkel Then Call modArenaRinkel.SalirArenaRinkel(UserIndex)
         
         'Si esta en la arena de duelo y quiere salir...
         'If .flags.EsperandoDuelo Then

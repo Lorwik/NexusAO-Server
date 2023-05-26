@@ -378,6 +378,9 @@ Public Sub PasarSegundo()
         
     End If
     
+    If TimerEventoRinkel > 0 Then Call modArenaRinkel.RestarTimerEvento
+    If TimerRondaEventoRinkel > 0 Then Call modArenaRinkel.RestarTimerRonda
+    
     For i = 1 To LastUser
 
         With UserList(i)

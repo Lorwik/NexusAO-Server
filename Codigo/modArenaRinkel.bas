@@ -10,6 +10,14 @@ Private RondaActual As Byte
 Public TimerEventoRinkel As Long
 Public TimerRondaEventoRinkel As Long
 
+Private Const SPAWN_X1 As Byte = 28
+Private Const SPAWN_Y1 As Byte = 44
+Private Const SPAWN_X2 As Byte = 67
+Private Const SPAWN_Y2 As Byte = 63
+
+Private Const CENTRO_X As Byte = 49
+Private Const CENTRO_Y As Byte = 55
+
 Private Type tParticipantes
     UserIndex As Integer
     Map As Byte
@@ -106,7 +114,7 @@ Public Sub EntrarArenaRinkel(ByVal UserIndex As Integer)
         Participantes(Cupo).Y = .Pos.Y
             
         'Le hacemos TP al usuario
-        Call WarpUserChar(UserIndex, MapaEvento, 49, 55, True)
+        Call WarpUserChar(UserIndex, MapaEvento, CENTRO_X, CENTRO_Y, True)
         
     End With
 End Sub
@@ -134,6 +142,8 @@ Dim Slot As Byte
         'Le hacemos TP al usuario a su antigua pos
         Call WarpUserChar(UserIndex, Participantes(Slot).Map, Participantes(Slot).X, Participantes(Slot).Y, True)
         
+        Call WriteConsoleMsg(UserIndex, "Huyes de las Arenas de la Muerte.", FontTypeNames.FONTTYPE_INFO)
+        
         'Reseteo la información de ese slot
         Participantes(Slot).UserIndex = 0
         Participantes(Slot).Map = 0
@@ -157,7 +167,7 @@ Public Sub Preparar(ByVal UserIndex As Integer)
 'Descripción: Los usuarios estan preparados, esperamos 1 minuto por si acaso.
 '*****************************************************************************
     If UserList(UserIndex).flags.ArenaRinkel = False Then
-        Call WriteConsoleMsg(UserIndex, "¡No estas participando en las Arenas de Rinkel!", FontTypeNames.FONTTYPE_INFO)
+        Call WriteConsoleMsg(UserIndex, "¡No estas participando en las Arenas de la Muerte!", FontTypeNames.FONTTYPE_INFO)
         Exit Sub
     End If
     
@@ -166,9 +176,9 @@ Public Sub Preparar(ByVal UserIndex As Integer)
         Exit Sub
     End If
         
-    Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg("Arenas de Rinkel: " & UserList(UserIndex).name & " va a comenzar el reto de la Arena de Rinkel ¿Quieres acompañarle y luchar junto a el? ¡Tienes 1 minuto para entrar al evento!", FontTypeNames.FONTTYPE_TALK))
+    Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg("Arenas de la Muerte: " & UserList(UserIndex).name & " va a comenzar el reto de la Arena de la Muerte ¿Quieres acompañarle y luchar junto a el? ¡Tienes 1 minuto para entrar al evento!", FontTypeNames.FONTTYPE_TALK))
         
-    TimerEventoRinkel = 1000
+    TimerEventoRinkel = 60 '60 segundos
 
 End Sub
 
@@ -181,7 +191,7 @@ Public Sub RestarTimerEvento()
     TimerEventoRinkel = TimerEventoRinkel - 1
 
     If TimerEventoRinkel = 0 Then
-        Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg("Arena de Rinkel: ¡El evento ha dado comienzo!", FontTypeNames.FONTTYPE_TALK))
+        Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg("Arena de la Muerte: ¡El evento ha dado comienzo!", FontTypeNames.FONTTYPE_TALK))
         Call SiguienteRonda
     
         Encurso = True
@@ -215,8 +225,10 @@ Private Sub SiguienteRonda()
     
     'Avisamos a los usuarios de la ronda en la que se encuentran.
     For i = 1 To 5
-        If Participantes(i).UserIndex > 0 Then _
-            Call WriteConsoleMsg(Participantes(i).UserIndex, "Arena de Rinkel: Ronda nº." & RondaActual, FontTypeNames.FONTTYPE_FIGHT)
+        If Participantes(i).UserIndex > 0 Then
+            Call WriteConsoleMsg(Participantes(i).UserIndex, "Arena de la Muerte: Ronda nº." & RondaActual, FontTypeNames.FONTTYPE_FIGHT)
+            Call SendData(SendTarget.ToPCArea, Participantes(i).UserIndex, PrepareMessagePlayWave(139, UserList(Participantes(i).UserIndex).Pos.X, UserList(Participantes(i).UserIndex).Pos.Y))
+        End If
     Next i
     
     'El mapa del evento siempre sera el mismo.
@@ -229,10 +241,11 @@ Private Sub SiguienteRonda()
             CantBichos = 5 * Cupo
             
             Do While Not LoopC = CantBichos
-                BichoPos.X = RandomNumber(53, 65)
-                BichoPos.Y = RandomNumber(59, 66)
+                BichoPos.X = RandomNumber(SPAWN_X1, SPAWN_X2)
+                BichoPos.Y = RandomNumber(SPAWN_Y1, SPAWN_Y2)
                 
-                Call SpawnNpc(638, BichoPos, True, False, True, 0.2 * Cupo)
+                'Zombie Gigante
+                Call SpawnNpc(654, BichoPos, True, False, True, 0.2 * Cupo)
                 LoopC = LoopC + 1
             Loop
             '****************************************************************
@@ -240,14 +253,14 @@ Private Sub SiguienteRonda()
             LoopC = 0
             
         Case 2
-            'Segunda ronda, 5 bichos basicos+ por usuario.
             CantBichos = 5 * Cupo
             
             Do While Not LoopC = CantBichos
-                BichoPos.X = RandomNumber(53, 65)
-                BichoPos.Y = RandomNumber(59, 66)
+                BichoPos.X = RandomNumber(SPAWN_X1, SPAWN_X2)
+                BichoPos.Y = RandomNumber(SPAWN_Y1, SPAWN_Y2)
                 
-                Call SpawnNpc(639, BichoPos, True, False, True, 0.2 * Cupo)
+                'Aracnomorfo
+                Call SpawnNpc(650, BichoPos, True, False, True, 0.2 * Cupo)
                 LoopC = LoopC + 1
             Loop
             
@@ -259,10 +272,11 @@ Private Sub SiguienteRonda()
             CantBichos = 5 * Cupo
             
             Do While Not LoopC = CantBichos
-                BichoPos.X = RandomNumber(53, 65)
-                BichoPos.Y = RandomNumber(59, 66)
+                BichoPos.X = RandomNumber(SPAWN_X1, SPAWN_X2)
+                BichoPos.Y = RandomNumber(SPAWN_Y1, SPAWN_Y2)
                 
-                Call SpawnNpc(639, BichoPos, True, False, True, 0.2 * Cupo)
+                'Zombie Gigante
+                Call SpawnNpc(654, BichoPos, True, False, True, 0.2 * Cupo)
                 LoopC = LoopC + 1
             Loop
             
@@ -271,10 +285,11 @@ Private Sub SiguienteRonda()
             CantBichos = 3 * Cupo
             
             Do While Not LoopC = CantBichos
-                BichoPos.X = RandomNumber(53, 65)
-                BichoPos.Y = RandomNumber(59, 66)
+                BichoPos.X = RandomNumber(SPAWN_X1, SPAWN_X2)
+                BichoPos.Y = RandomNumber(SPAWN_Y1, SPAWN_Y2)
                 
-                Call SpawnNpc(640, BichoPos, True, False, True, 0.2 * Cupo)
+                'Aracnomorfo
+                Call SpawnNpc(650, BichoPos, True, False, True, 0.2 * Cupo)
                 LoopC = LoopC + 1
             Loop
             
@@ -286,10 +301,11 @@ Private Sub SiguienteRonda()
             CantBichos = 5 * Cupo
             
             Do While Not LoopC = CantBichos
-                BichoPos.X = RandomNumber(53, 65)
-                BichoPos.Y = RandomNumber(59, 66)
+                BichoPos.X = RandomNumber(SPAWN_X1, SPAWN_X2)
+                BichoPos.Y = RandomNumber(SPAWN_Y1, SPAWN_Y2)
                 
-                Call SpawnNpc(638, BichoPos, True, False, True, 0.2 * Cupo)
+                'Escorpinox
+                Call SpawnNpc(651, BichoPos, True, False, True, 0.2 * Cupo)
                 LoopC = LoopC + 1
             Loop
                 
@@ -298,10 +314,11 @@ Private Sub SiguienteRonda()
             CantBichos = 3 * Cupo
             
             Do While Not LoopC = CantBichos
-                BichoPos.X = RandomNumber(53, 65)
-                BichoPos.Y = RandomNumber(59, 66)
+                BichoPos.X = RandomNumber(SPAWN_X1, SPAWN_X2)
+                BichoPos.Y = RandomNumber(SPAWN_Y1, SPAWN_Y2)
                 
-                Call SpawnNpc(641, BichoPos, True, False, True, 0.2 * Cupo)
+                'Aracnomorfo
+                Call SpawnNpc(650, BichoPos, True, False, True, 0.2 * Cupo)
                 LoopC = LoopC + 1
             Loop
             
@@ -313,10 +330,11 @@ Private Sub SiguienteRonda()
             CantBichos = 5 * Cupo
             
             Do While Not LoopC = CantBichos
-                BichoPos.X = RandomNumber(53, 65)
-                BichoPos.Y = RandomNumber(59, 66)
+                BichoPos.X = RandomNumber(SPAWN_X1, SPAWN_X2)
+                BichoPos.Y = RandomNumber(SPAWN_Y1, SPAWN_Y2)
                 
-                Call SpawnNpc(638, BichoPos, True, False, True, 0.2 * Cupo)
+                'Escorpinox
+                Call SpawnNpc(651, BichoPos, True, False, True, 0.2 * Cupo)
                 LoopC = LoopC + 1
             Loop
                
@@ -325,10 +343,11 @@ Private Sub SiguienteRonda()
             CantBichos = 3 * Cupo
             
             Do While Not LoopC = CantBichos
-                BichoPos.X = RandomNumber(53, 65)
-                BichoPos.Y = RandomNumber(59, 66)
+                BichoPos.X = RandomNumber(SPAWN_X1, SPAWN_X2)
+                BichoPos.Y = RandomNumber(SPAWN_Y1, SPAWN_Y2)
                 
-                Call SpawnNpc(641, BichoPos, True, False, True, 0.2 * Cupo)
+                'Espectralmada
+                Call SpawnNpc(652, BichoPos, True, False, True, 0.2 * Cupo)
                 LoopC = LoopC + 1
             Loop
             
@@ -337,10 +356,11 @@ Private Sub SiguienteRonda()
             CantBichos = 2 * Cupo
             
             Do While Not LoopC = CantBichos
-                BichoPos.X = RandomNumber(53, 65)
-                BichoPos.Y = RandomNumber(59, 66)
+                BichoPos.X = RandomNumber(SPAWN_X1, SPAWN_X2)
+                BichoPos.Y = RandomNumber(SPAWN_Y1, SPAWN_Y2)
                 
-                Call SpawnNpc(642, BichoPos, True, False, True, 0.2 * Cupo)
+                'Rocabruto Rojo
+                Call SpawnNpc(653, BichoPos, True, False, True, 0.2 * Cupo)
                 LoopC = LoopC + 1
             Loop
             
@@ -352,10 +372,11 @@ Private Sub SiguienteRonda()
             CantBichos = 5 * Cupo
             
             Do While Not LoopC = CantBichos
-                BichoPos.X = RandomNumber(53, 65)
-                BichoPos.Y = RandomNumber(59, 66)
+                BichoPos.X = RandomNumber(SPAWN_X1, SPAWN_X2)
+                BichoPos.Y = RandomNumber(SPAWN_Y1, SPAWN_Y2)
                 
-                Call SpawnNpc(638, BichoPos, True, False, True, 0.2 * Cupo)
+                'Escorpinox
+                Call SpawnNpc(651, BichoPos, True, False, True, 0.2 * Cupo)
                 LoopC = LoopC + 1
             Loop
                 
@@ -364,10 +385,11 @@ Private Sub SiguienteRonda()
             CantBichos = 3 * Cupo
             
             Do While Not LoopC = CantBichos
-                BichoPos.X = RandomNumber(53, 65)
-                BichoPos.Y = RandomNumber(59, 66)
+                BichoPos.X = RandomNumber(SPAWN_X1, SPAWN_X2)
+                BichoPos.Y = RandomNumber(SPAWN_Y1, SPAWN_Y2)
                 
-                Call SpawnNpc(640, BichoPos, True, False, True, 0.2 * Cupo)
+                'Espectralmada
+                Call SpawnNpc(652, BichoPos, True, False, True, 0.2 * Cupo)
                 LoopC = LoopC + 1
             Loop
             
@@ -376,9 +398,10 @@ Private Sub SiguienteRonda()
             CantBichos = 2 * Cupo
             
             Do While Not LoopC = CantBichos
-                BichoPos.X = RandomNumber(53, 65)
-                BichoPos.Y = RandomNumber(59, 66)
+                BichoPos.X = RandomNumber(SPAWN_X1, SPAWN_X2)
+                BichoPos.Y = RandomNumber(SPAWN_Y1, SPAWN_Y2)
                 
+                'Rocabruto
                 Call SpawnNpc(644, BichoPos, True, False, True, 0.2 * Cupo)
                 LoopC = LoopC + 1
             Loop
@@ -391,9 +414,10 @@ Private Sub SiguienteRonda()
             CantBichos = 3 * Cupo
             
             Do While Not LoopC = CantBichos
-                BichoPos.X = RandomNumber(53, 65)
-                BichoPos.Y = RandomNumber(59, 66)
+                BichoPos.X = RandomNumber(SPAWN_X1, SPAWN_X2)
+                BichoPos.Y = RandomNumber(SPAWN_Y1, SPAWN_Y2)
                 
+                ' Rocabruto
                 Call SpawnNpc(644, BichoPos, True, False, True, 0.2 * Cupo)
                 LoopC = LoopC + 1
             Loop
@@ -403,10 +427,11 @@ Private Sub SiguienteRonda()
             CantBichos = 2 * Cupo
             
             Do While Not LoopC = CantBichos
-                BichoPos.X = RandomNumber(53, 65)
-                BichoPos.Y = RandomNumber(59, 66)
+                BichoPos.X = RandomNumber(SPAWN_X1, SPAWN_X2)
+                BichoPos.Y = RandomNumber(SPAWN_Y1, SPAWN_Y2)
                 
-                Call SpawnNpc(646, BichoPos, True, False, True, 0.2 * Cupo)
+                'Rocabruto Azul
+                Call SpawnNpc(649, BichoPos, True, False, True, 0.2 * Cupo)
                 LoopC = LoopC + 1
             Loop
             
@@ -418,10 +443,11 @@ Private Sub SiguienteRonda()
             CantBichos = 3 * Cupo
             
             Do While Not LoopC = CantBichos
-                BichoPos.X = RandomNumber(53, 65)
-                BichoPos.Y = RandomNumber(59, 66)
+                BichoPos.X = RandomNumber(SPAWN_X1, SPAWN_X2)
+                BichoPos.Y = RandomNumber(SPAWN_Y1, SPAWN_Y2)
                 
-                Call SpawnNpc(647, BichoPos, True, False, True, 0.2 * Cupo)
+                'Quimérico
+                Call SpawnNpc(645, BichoPos, True, False, True, 0.2 * Cupo)
                 LoopC = LoopC + 1
             Loop
             
@@ -430,10 +456,11 @@ Private Sub SiguienteRonda()
             CantBichos = 2 * Cupo
             
             Do While Not LoopC = CantBichos
-                BichoPos.X = RandomNumber(53, 65)
-                BichoPos.Y = RandomNumber(59, 66)
+                BichoPos.X = RandomNumber(SPAWN_X1, SPAWN_X2)
+                BichoPos.Y = RandomNumber(SPAWN_Y1, SPAWN_Y2)
                 
-                Call SpawnNpc(642, BichoPos, True, False, True, 0.2 * Cupo)
+                'Titanotrol
+                Call SpawnNpc(646, BichoPos, True, False, True, 0.2 * Cupo)
                 LoopC = LoopC + 1
             Loop
             
@@ -445,10 +472,11 @@ Private Sub SiguienteRonda()
             CantBichos = 3 * Cupo
             
             Do While Not LoopC = CantBichos
-                BichoPos.X = RandomNumber(53, 65)
-                BichoPos.Y = RandomNumber(59, 66)
+                BichoPos.X = RandomNumber(SPAWN_X1, SPAWN_X2)
+                BichoPos.Y = RandomNumber(SPAWN_Y1, SPAWN_Y2)
                 
-                Call SpawnNpc(645, BichoPos, True, False, True, 0.2 * Cupo)
+                'Titanotrol
+                Call SpawnNpc(646, BichoPos, True, False, True, 0.2 * Cupo)
                 LoopC = LoopC + 1
             Loop
             
@@ -457,10 +485,11 @@ Private Sub SiguienteRonda()
             CantBichos = 2 * Cupo
             
             Do While Not LoopC = CantBichos
-                BichoPos.X = RandomNumber(53, 65)
-                BichoPos.Y = RandomNumber(59, 66)
+                BichoPos.X = RandomNumber(SPAWN_X1, SPAWN_X2)
+                BichoPos.Y = RandomNumber(SPAWN_Y1, SPAWN_Y2)
                 
-                Call SpawnNpc(646, BichoPos, True, False, True, 0.2 * Cupo)
+                'Colosstrol
+                Call SpawnNpc(647, BichoPos, True, False, True, 0.2 * Cupo)
                 LoopC = LoopC + 1
             Loop
             
@@ -472,10 +501,11 @@ Private Sub SiguienteRonda()
             CantBichos = 3 * Cupo
             
             Do While Not LoopC = CantBichos
-                BichoPos.X = RandomNumber(53, 65)
-                BichoPos.Y = RandomNumber(59, 66)
+                BichoPos.X = RandomNumber(SPAWN_X1, SPAWN_X2)
+                BichoPos.Y = RandomNumber(SPAWN_Y1, SPAWN_Y2)
                 
-                Call SpawnNpc(647, BichoPos, True, False, True, 0.2 * Cupo)
+                'Rocabruto Azul
+                Call SpawnNpc(649, BichoPos, True, False, True, 0.2 * Cupo)
                 LoopC = LoopC + 1
             Loop
             
@@ -485,10 +515,11 @@ Private Sub SiguienteRonda()
             
         Case 11 'Ultima ronda : BOSS
             'El BOSS aparecera en el centro.
-            BichoPos.X = 58
-            BichoPos.Y = 62
+            BichoPos.X = CENTRO_X
+            BichoPos.Y = CENTRO_Y
                                             
-            Call SpawnNpc(638, BichoPos, True, False, True, 0.2 * Cupo)
+            'Escamadragón
+            Call SpawnNpc(649, BichoPos, True, False, True, 0.2 * Cupo)
             '****************************************************************
     End Select
     
@@ -558,10 +589,10 @@ Public Function BichosVivos(ByVal Matar As Boolean)
     
     'Si no encontro ningún bicho pasamos a la siguiente ronda
     If NPCCount = 0 Then
-        TimerRondaEventoRinkel = 200
+        TimerRondaEventoRinkel = 10
         For i = 1 To 5
             If Participantes(i).UserIndex > 0 Then _
-                Call WriteConsoleMsg(Participantes(i).UserIndex, "Arena de Rinkel: Ronda superada. 10 segundos para la siguiente ronda.", FontTypeNames.FONTTYPE_INFO)
+                Call WriteConsoleMsg(Participantes(i).UserIndex, "Arena de la Muerte: Ronda superada. 10 segundos para la siguiente ronda.", FontTypeNames.FONTTYPE_INFO)
         Next i
     End If
 End Function
