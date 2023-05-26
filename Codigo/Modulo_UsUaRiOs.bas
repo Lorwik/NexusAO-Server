@@ -1565,9 +1565,16 @@ Public Sub UserDie(ByVal UserIndex As Integer, Optional ByVal AttackerIndex As I
         'Quitar el dialogo del user muerto
         Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageRemoveCharDialog(.Char.CharIndex))
         
-        If UserList(UserIndex).flags.EstaDueleando = True Then
-            UserList(UserIndex).flags.PerdioRonda = UserList(UserIndex).flags.PerdioRonda + 1
-            Call TerminarDuelo(UserList(UserIndex).flags.Oponente, UserIndex)
+        'Duelos
+        If .flags.EstaDueleando = True Then
+            .flags.PerdioRonda = .flags.PerdioRonda + 1
+            Call TerminarDuelo(.flags.Oponente, UserIndex)
+            Exit Sub
+        End If
+        
+        'Plantes
+        If .flags.EstaPlantando Then
+            Call TerminarPlantes(.flags.Oponente, UserIndex)
             Exit Sub
         End If
         
@@ -1807,17 +1814,17 @@ Public Sub UserDie(ByVal UserIndex As Integer, Optional ByVal AttackerIndex As I
         Call LimpiarComercioSeguro(UserIndex)
         
         ' Hay que teletransportar?
-        Dim Mapa As Integer
+        Dim MAPA As Integer
 
-        Mapa = .Pos.Map
+        MAPA = .Pos.Map
 
         Dim MapaTelep As Integer
 
-        MapaTelep = MapInfo(Mapa).OnDeathGoTo.Map
+        MapaTelep = MapInfo(MAPA).OnDeathGoTo.Map
         
         If MapaTelep <> 0 Then
             Call WriteConsoleMsg(UserIndex, "Tu estado no te permite permanecer en el mapa!!!", FontTypeNames.FONTTYPE_INFOBOLD)
-            Call WarpUserChar(UserIndex, MapaTelep, MapInfo(Mapa).OnDeathGoTo.X, MapInfo(Mapa).OnDeathGoTo.Y, True, True)
+            Call WarpUserChar(UserIndex, MapaTelep, MapInfo(MAPA).OnDeathGoTo.X, MapInfo(MAPA).OnDeathGoTo.Y, True, True)
 
         End If
         
@@ -2590,18 +2597,18 @@ Public Sub ApropioNpc(ByVal UserIndex As Integer, ByVal NpcIndex As Integer)
         ' Los admins no se pueden apropiar de npcs
         If EsGm(UserIndex) Then Exit Sub
         
-        Dim Mapa As Integer
+        Dim MAPA As Integer
 
-        Mapa = .Pos.Map
+        MAPA = .Pos.Map
         
         ' No aplica a triggers seguras
-        If MapData(Mapa, .Pos.X, .Pos.Y).Trigger = eTrigger.ZONASEGURA Then Exit Sub
+        If MapData(MAPA, .Pos.X, .Pos.Y).Trigger = eTrigger.ZONASEGURA Then Exit Sub
         
         ' No se aplica a mapas seguros
-        If MapInfo(Mapa).Pk = False Then Exit Sub
+        If MapInfo(MAPA).Pk = False Then Exit Sub
         
         ' No aplica a algunos mapas que permiten el robo de npcs
-        If MapInfo(Mapa).RoboNpcsPermitido = 1 Then Exit Sub
+        If MapInfo(MAPA).RoboNpcsPermitido = 1 Then Exit Sub
         
         ' Pierde el npc anterior
         If .flags.OwnedNpc > 0 Then Npclist(.flags.OwnedNpc).Owner = 0
@@ -2928,15 +2935,33 @@ Public Sub MandaraCasa(ByVal UserIndex As Integer)
         If .flags.ArenaRinkel = True Then Call modArenaRinkel.SalirArenaRinkel(UserIndex)
         
         'Si esta en la arena de duelo y quiere salir...
-        If .flags.EsperandoDuelo Then
-            'Reseteamos los flags del Ganador
-            With UserList(UserIndex)
-                .flags.EsperandoDuelo = False
-                .flags.Oponente = 0
-                .flags.EstaDueleando = False
-                .flags.PerdioRonda = 0
-            End With
-        End If
+        'If .flags.EsperandoDuelo Then
+            If .flags.EstaDueleando Then
+                If .flags.Oponente > 0 Then 'Si se sale del duelo en curso, pierde automaticamente
+                    .flags.PerdioRonda = 2
+                    Call TerminarDuelo(.flags.Oponente, UserIndex)
+                Else
+                    .flags.EsperandoDuelo = False
+                    .flags.Oponente = 0
+                    .flags.EstaDueleando = False
+                    .flags.PerdioRonda = 0
+                End If
+            End If
+                
+            If .flags.EstaPlantando Then
+                If .flags.Oponente > 0 Then 'Si se sale del duelo en curso, pierde automaticamente
+                    Call TerminarPlantes(.flags.Oponente, UserIndex)
+                Else
+                    .flags.EsperandoDuelo = False
+                    .flags.Oponente = 0
+                    .flags.EstaPlantando = False
+                    .flags.PerdioRonda = 0
+                End If
+            End If
+        'End If
+        
+        'Si por alguna razón ya esta en su hogar, salimos.
+        If Ciudades(.Hogar).Map = .Pos.Map Then Exit Sub
 
         'Antes de que el pj llegue a la ciudad, lo hacemos dejar de navegar para que no se buguee.
         If .flags.Navegando = 1 Then

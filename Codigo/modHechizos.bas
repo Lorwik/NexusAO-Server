@@ -544,6 +544,12 @@ Function PuedeLanzar(ByVal UserIndex As Integer, ByVal HechizoIndex As Integer) 
             Exit Function
 
         End If
+        
+        If .flags.EstaPlantando Then
+            Call WriteConsoleMsg(UserIndex, "No puedes usar hechizos en un duelo de plantes.", FontTypeNames.FONTTYPE_INFO)
+            Exit Function
+
+        End If
             
         If .Stats.UserSkills(eSkill.Magia) < Hechizos(HechizoIndex).MinSkill Then
             Call WriteConsoleMsg(UserIndex, "No tienes suficientes puntos de magia para lanzar este hechizo.", FontTypeNames.FONTTYPE_INFO)
@@ -745,19 +751,19 @@ Sub HechizoInvocacion(ByVal UserIndex As Integer, ByRef HechizoCasteado As Boole
 
     With UserList(UserIndex)
 
-        Dim Mapa As Integer
+        Dim MAPA As Integer
 
-        Mapa = .Pos.Map
+        MAPA = .Pos.Map
     
         'No permitimos se invoquen criaturas en zonas seguras
-        If MapInfo(Mapa).Pk = False Or MapData(Mapa, .Pos.X, .Pos.Y).Trigger = eTrigger.ZONASEGURA Then
+        If MapInfo(MAPA).Pk = False Or MapData(MAPA, .Pos.X, .Pos.Y).Trigger = eTrigger.ZONASEGURA Then
             Call WriteConsoleMsg(UserIndex, "No puedes invocar criaturas en zona segura.", FontTypeNames.FONTTYPE_INFO)
             Exit Sub
 
         End If
     
         'No permitimos se invoquen criaturas en mapas donde esta prohibido hacerlo
-        If MapInfo(Mapa).InvocarSinEfecto = 1 Then
+        If MapInfo(MAPA).InvocarSinEfecto = 1 Then
             Call WriteConsoleMsg(UserIndex, "Invocar no esta permitido aqui! Retirate de la Zona si deseas utilizar el Hechizo.", FontTypeNames.FONTTYPE_INFO)
             Exit Sub
 

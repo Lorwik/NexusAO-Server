@@ -1511,6 +1511,8 @@ Public Type UserFlags
     TimeDuelo As Byte
     GanoDuelo As Boolean
     
+    EstaPlantando As Boolean
+    
     ArenaRinkel As Boolean
 End Type
 
@@ -1603,7 +1605,7 @@ Public Type tFacciones
 End Type
 
 Public Type AccountCharacters
-    Id As String
+    ID As String
     name As String
     body As Integer
     Head As Integer
@@ -1622,7 +1624,7 @@ End Type
 Public Const MAXPJACCOUNTS As Byte = 10
 
 Public Type AccountUser
-    Id As Long
+    ID As Long
     username As String
     Password As String
     Email As String
@@ -1654,7 +1656,7 @@ Public Type User
     RetoTemp As tUserRetoTemp
     
     name As String
-    Id As Long 'Id del PJ logeado actualmente
+    ID As Long 'Id del PJ logeado actualmente
     
     AccountInfo As AccountUser
     AccountName As String 'Utilizado para identificar PJ colgados
@@ -2504,7 +2506,7 @@ Public Account_Database As New clsDataBase
 'Lorwik> Sistema de retardo de Spawn de NPC
 Type tRetarded
     Tiempo As Long
-    Mapa As Byte
+    MAPA As Byte
     X As Byte
     Y As Byte
     NPCNUM As Integer

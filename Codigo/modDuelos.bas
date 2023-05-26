@@ -2,26 +2,16 @@ Attribute VB_Name = "modDuelos"
 Option Explicit
 
 Private Const MapaDuelos     As Byte = 61
-
-Private Const XEsquinaAbajo  As Byte = 60
-
+Private Const XEsquinaAbajo  As Byte = 52
 Private Const YEsquinaAbajo  As Byte = 68
-
 Private Const XEsquinaArriba As Byte = 30
+Private Const YEsquinaArriba As Byte = 47
 
-Private Const YEsquinaArriba As Byte = 43
+Private Const MIN_LEVEL As Byte = 25
+
+Private DuelosenCurso As Boolean
 
 Public Oponente(0 To 1)      As Byte
-
-Type Rank
-
-    nombre As String
-    ELO As Double
-    Posicion As Byte
-
-End Type
-
-Public Ranked(5) As Rank
     
 Public Sub resetDueloSet(ByVal Ganador As Integer, ByVal Perdedor As Integer)
 
@@ -32,11 +22,7 @@ Public Sub resetDueloSet(ByVal Ganador As Integer, ByVal Perdedor As Integer)
         .flags.EstaDueleando = False
         .flags.PerdioRonda = 0
     End With
-    
-    'Teletransportamso a su casa
-    Call MandaraCasa(Ganador)
-    Call MandaraCasa(Perdedor)
-    
+
     'Reseteamos los Flags Perdedor
     With UserList(Perdedor)
         .flags.EsperandoDuelo = False
@@ -44,6 +30,10 @@ Public Sub resetDueloSet(ByVal Ganador As Integer, ByVal Perdedor As Integer)
         .flags.EstaDueleando = False
         .flags.PerdioRonda = 0
     End With
+    
+    'Teletransportamso a su casa
+    Call MandaraCasa(Ganador)
+    Call MandaraCasa(Perdedor)
 
 End Sub
 
@@ -51,8 +41,8 @@ Public Sub EsperarOponenteDuelo(ByVal UserIndex As Integer)
     
     With UserList(UserIndex)
 
-        If .Stats.ELV < 25 Then
-            Call WriteConsoleMsg(UserIndex, "Tu nivel debe de ser 25 o superior.", FontTypeNames.FONTTYPE_INFO)
+        If .Stats.ELV < MIN_LEVEL Then
+            Call WriteConsoleMsg(UserIndex, "Tu nivel debe de ser " & MIN_LEVEL & " o superior.", FontTypeNames.FONTTYPE_INFO)
             Exit Sub
 
         End If
@@ -76,13 +66,24 @@ Public Sub EsperarOponenteDuelo(ByVal UserIndex As Integer)
 
         End If
         
-        If MapInfo(MapaDuelos).NumUsers >= 1 Then '¿Hay gente duelando?
+        If DuelosenCurso Then '¿Hay gente duelando?
             Call WriteConsoleMsg(UserIndex, "Hay un duelo en curso, espera a que termine.", FontTypeNames.FONTTYPE_INFO)
             Exit Sub
 
         End If
+        
+        If .flags.EstaPlantando Then
+            Call WriteConsoleMsg(UserIndex, "Ya estas en duelos de plantes.", FontTypeNames.FONTTYPE_INFO)
+            Exit Sub
 
-        If Oponente(0) = UserIndex Then
+        End If
+        
+        If .flags.ArenaRinkel = True Then
+            Call WriteConsoleMsg(UserIndex, "Ya estas en la arena de rinkel", FontTypeNames.FONTTYPE_INFO)
+            Exit Sub
+        End If
+
+        If .flags.EstaDueleando Then
             Call WriteConsoleMsg(UserIndex, "Ya estas en la cola de duelos.", FontTypeNames.FONTTYPE_INFO)
             Exit Sub
 
@@ -94,6 +95,14 @@ Public Sub EsperarOponenteDuelo(ByVal UserIndex As Integer)
             Oponente(0) = UserIndex
             Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg("Ranked: " & UserList(UserIndex).name & " está buscando contrincante.", FontTypeNames.FONTTYPE_DIOS))
         Else
+        
+            '¿El contrincante esta en otro evento?
+            If UserList(Oponente(0)).flags.EstaPlantando Or UserList(Oponente(0)).flags.ArenaRinkel Then
+                Call WriteConsoleMsg(Oponente(1), "El contrincante esta en otro evento. El duelo se ha cancelado.", FontTypeNames.FONTTYPE_INFO)
+                Oponente(0) = 0
+                Oponente(1) = 0
+            End If
+        
             'Si lo hay, le asignamos el puesto 1 y para dentro.
             Oponente(1) = UserIndex
             Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg("Ranked: ¡" & UserList(Oponente(1)).name & " aceptó el desafío!", FontTypeNames.FONTTYPE_DIOS))
@@ -119,6 +128,8 @@ Public Sub ComenzarDuelo(ByVal UserIndex As Integer, ByVal tIndex As Integer)
     UserList(tIndex).flags.PerdioRonda = 0
     
     Call WarpUserChar(tIndex, MapaDuelos, XEsquinaArriba, YEsquinaArriba, True) 'esqina de duelos
+    
+    DuelosenCurso = True
 
 End Sub
    
@@ -167,140 +178,11 @@ Public Sub TerminarDuelo(ByVal Ganador As Integer, ByVal Perdedor As Integer)
             Call SaveUser(Ganador)
             Call ActualizarRank(Ganador)
             Call ActualizarRank(Perdedor)
+            
+            DuelosenCurso = False
 
         End If
 
     End With
-
-End Sub
-
-Public Function CalcularELO(ByVal UserA As Integer, _
-                            ByVal UserB As Integer, _
-                            ByVal Gana As Boolean) As Double
-
-    Dim ELOUserA      As Double
-
-    Dim ELOUserB      As Double
-
-    Dim ELODiferencia As Double
-
-    Dim FactorK       As Byte
-
-    Dim Elevado       As Double
-
-    Dim Porcentaje    As Double
-    
-    ELOUserA = UserList(UserA).Stats.ELO
-    ELOUserB = UserList(UserB).Stats.ELO
-    
-    FactorK = 32
-    
-    ELODiferencia = ELOUserB - ELOUserA
-    
-    Elevado = ELODiferencia / 400
-    Porcentaje = 1 / (1 + 10 ^ Elevado)
-
-    If Gana = True Then
-        'Gana
-        CalcularELO = (FactorK * (1 - Porcentaje))
-    ElseIf Gana = False Then
-        'Pierde
-        CalcularELO = (FactorK * (0 - Porcentaje))
-
-    End If
-    
-End Function
-
-Public Sub CargarRank()
-
-    On Error GoTo errHandler
-
-    Dim Leer As clsIniManager
-
-    Set Leer = New clsIniManager
-
-    Dim i As Byte
-        
-    Call Leer.Initialize(DatPath & "\Ranking.dat")
-        
-    For i = 1 To 5
-        Ranked(i).nombre = Leer.GetValue("Posicion" & i, "Nombre")
-        Ranked(i).ELO = Leer.GetValue("Posicion" & i, "ELO")
-        Ranked(i).Posicion = i
-    Next i
-        
-    Set Leer = Nothing
-    Exit Sub
-
-errHandler:
-    MsgBox "Error cargando Ranking.dat " & Err.Number & ": " & Err.description
-
-End Sub
-
-Public Sub GuardarRank()
-
-    Dim i    As Byte
-
-    Dim File As String
-    
-    File = DatPath & "\Ranking.dat"
-        
-    For i = 1 To 5
-        Call WriteVar(File, "Posicion" & i, "Nombre", Ranked(i).nombre)
-        Call WriteVar(File, "Posicion" & i, "ELO", Ranked(i).ELO)
-    Next i
-
-End Sub
-
-Public Sub ActualizarRank(ByVal UserIndex As Integer)
-
-    Dim i            As Byte
-
-    Dim ELOIndex     As Double
-
-    Dim NameIndex    As String
-
-    Dim ViejoELO     As Double
-
-    Dim ViejoNombre  As String
-
-    Dim ViejaPos     As Byte
-
-    Dim UserAgregado As Boolean
-    
-    ELOIndex = UserList(UserIndex).Stats.ELO
-    NameIndex = UserList(UserIndex).name
-    
-    For i = 1 To 5
-
-        If (i = 5) And (UserAgregado = True) Then Exit Sub
-        If UserAgregado Then
-            If i + 1 < 5 Then
-                Ranked(i + 1).nombre = NameIndex
-                Ranked(i + 1).ELO = ELOIndex
-                Ranked(i + 1).Posicion = i
-
-            End If
-
-        End If
-
-        If Ranked(i).ELO <= ELOIndex Then
-            If i + 1 < 5 Then
-                Ranked(i + 1).nombre = Ranked(i).nombre
-                Ranked(i + 1).ELO = Ranked(i).ELO
-                Ranked(i + 1).Posicion = i + 1
-                
-                'Insertamos al usuario en su nueva posicion
-                Ranked(i).nombre = NameIndex
-                Ranked(i).ELO = ELOIndex
-                Ranked(i).Posicion = i
-                UserAgregado = True
-                Call GuardarRank
-
-            End If
-
-        End If
-
-    Next i
 
 End Sub

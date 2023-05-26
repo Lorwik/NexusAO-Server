@@ -50,6 +50,20 @@ Private Function PuedeParticipar(ByVal UserIndex As Integer) As Boolean
             Exit Function
         End If
         
+        If .flags.EstaPlantando Then
+            Call WriteConsoleMsg(UserIndex, "Ya estas en duelos de plantes.", FontTypeNames.FONTTYPE_INFO)
+            PuedeParticipar = False
+            Exit Function
+
+        End If
+        
+        If .flags.EstaDueleando Then
+            Call WriteConsoleMsg(UserIndex, "Ya estas en la cola de duelos.", FontTypeNames.FONTTYPE_INFO)
+            PuedeParticipar = False
+            Exit Function
+
+        End If
+        
         '¿Tiene el nivel minimo requerido?
         If .Stats.ELV < MinLevel Then
             Call WriteConsoleMsg(UserIndex, "Tu nivel es: " & .Stats.ELV & ".El requerido es: " & MinLevel, FontTypeNames.FONTTYPE_INFO)

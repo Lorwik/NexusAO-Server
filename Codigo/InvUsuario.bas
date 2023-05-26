@@ -1362,6 +1362,10 @@ Sub EquiparInvItem(ByVal UserIndex As Integer, ByVal Slot As Byte)
             
             Case eOBJType.otEscudo
 
+                If .flags.EstaPlantando Then
+                    Call WriteConsoleMsg(UserIndex, "Aquí no puedes usar escudos.", FontTypeNames.FONTTYPE_INFO)
+                    Exit Sub
+                End If
 
                 If ClasePuedeUsarItem(UserIndex, ObjIndex, sMotivo) And FaccionPuedeUsarItem(UserIndex, ObjIndex, sMotivo) Then
 
@@ -1482,7 +1486,7 @@ Sub UseInvItem(ByVal UserIndex As Integer, ByVal Slot As Byte)
 
     Dim MiObj    As obj
 
-    Dim sMotivo As String
+    Dim sMotivo  As String
 
     With UserList(UserIndex)
     
@@ -1503,6 +1507,7 @@ Sub UseInvItem(ByVal UserIndex As Integer, ByVal Slot As Byte)
         If .flags.MacroTrabajo <> 0 Then
             Call WriteConsoleMsg(UserIndex, "¡No puedes usar objetos mientras estas trabajando!", FontTypeNames.FONTTYPE_INFO)
             Exit Sub
+
         End If
         
         If obj.OBJType = eOBJType.otWeapon Then
@@ -1534,6 +1539,7 @@ Sub UseInvItem(ByVal UserIndex As Integer, ByVal Slot As Byte)
         If .Stats.ELV < obj.MinLevel Then
             Call WriteConsoleMsg(UserIndex, "Necesitas ser nivel " & obj.MinLevel & " para poder usar este objeto.", FontTypeNames.FONTTYPE_INFO)
             Exit Sub
+
         End If
 
         Select Case obj.OBJType
@@ -1589,6 +1595,7 @@ Sub UseInvItem(ByVal UserIndex As Integer, ByVal Slot As Byte)
                 If .flags.Equitando = 1 Then
                     Call WriteConsoleMsg(UserIndex, "No puedes usar una herramienta mientras estas en tu montura!!", FontTypeNames.FONTTYPE_INFO)
                     Exit Sub
+
                 End If
 
                 If .flags.Muerto = 1 Then
@@ -1624,106 +1631,108 @@ Sub UseInvItem(ByVal UserIndex As Integer, ByVal Slot As Byte)
                         Call TratarDeHacerFogata(.flags.TargetObjMap, .flags.TargetObjX, .flags.TargetObjY, UserIndex)
 
                     End If
+
                 End If
 
-                Case eOBJType.otHerramientas
+            Case eOBJType.otHerramientas
                     
-                    Select Case ObjIndex
+                Select Case ObjIndex
                     
-                        Case CANA_PESCA, RED_PESCA
+                    Case CANA_PESCA, RED_PESCA
                             
-                            ' Lo tiene equipado?
-                            If .Invent.WeaponEqpObjIndex = ObjIndex Then
-                                Call WriteMultiMessage(UserIndex, eMessages.WorkRequestTarget, eSkill.Pesca)  'Call WriteWorkRequestTarget(UserIndex, eSkill.Pesca)
-                            Else
-                                Call WriteConsoleMsg(UserIndex, "Debes tener equipada la herramienta para trabajar.", FontTypeNames.FONTTYPE_INFO)
+                        ' Lo tiene equipado?
+                        If .Invent.WeaponEqpObjIndex = ObjIndex Then
+                            Call WriteMultiMessage(UserIndex, eMessages.WorkRequestTarget, eSkill.Pesca)  'Call WriteWorkRequestTarget(UserIndex, eSkill.Pesca)
+                        Else
+                            Call WriteConsoleMsg(UserIndex, "Debes tener equipada la herramienta para trabajar.", FontTypeNames.FONTTYPE_INFO)
 
-                            End If
+                        End If
                             
-                        Case HACHA_LENADOR
+                    Case HACHA_LENADOR
                             
-                            ' Lo tiene equipado?
-                            If .Invent.WeaponEqpObjIndex = ObjIndex Then
-                                Call WriteMultiMessage(UserIndex, eMessages.WorkRequestTarget, eSkill.talar)
-                            Else
-                                Call WriteConsoleMsg(UserIndex, "Debes tener equipada la herramienta para trabajar.", FontTypeNames.FONTTYPE_INFO)
+                        ' Lo tiene equipado?
+                        If .Invent.WeaponEqpObjIndex = ObjIndex Then
+                            Call WriteMultiMessage(UserIndex, eMessages.WorkRequestTarget, eSkill.talar)
+                        Else
+                            Call WriteConsoleMsg(UserIndex, "Debes tener equipada la herramienta para trabajar.", FontTypeNames.FONTTYPE_INFO)
 
-                            End If
+                        End If
                             
-                        Case PIQUETE_MINERO
+                    Case PIQUETE_MINERO
                         
-                            ' Lo tiene equipado?
-                            If .Invent.WeaponEqpObjIndex = ObjIndex Then
-                                Call WriteMultiMessage(UserIndex, eMessages.WorkRequestTarget, eSkill.Mineria)
-                            Else
-                                Call WriteConsoleMsg(UserIndex, "Debes tener equipada la herramienta para trabajar.", FontTypeNames.FONTTYPE_INFO)
+                        ' Lo tiene equipado?
+                        If .Invent.WeaponEqpObjIndex = ObjIndex Then
+                            Call WriteMultiMessage(UserIndex, eMessages.WorkRequestTarget, eSkill.Mineria)
+                        Else
+                            Call WriteConsoleMsg(UserIndex, "Debes tener equipada la herramienta para trabajar.", FontTypeNames.FONTTYPE_INFO)
 
-                            End If
+                        End If
                             
-                        Case TIJERAS_BOTANICA
-                            ' Lo tiene equipado?
-                            If .Invent.WeaponEqpObjIndex = ObjIndex Then
-                                Call WriteMultiMessage(UserIndex, eMessages.WorkRequestTarget, eSkill.Botanica)
-                            Else
-                                Call WriteConsoleMsg(UserIndex, "Debes tener equipada la herramienta para trabajar.", FontTypeNames.FONTTYPE_INFO)
+                    Case TIJERAS_BOTANICA
 
-                            End If
+                        ' Lo tiene equipado?
+                        If .Invent.WeaponEqpObjIndex = ObjIndex Then
+                            Call WriteMultiMessage(UserIndex, eMessages.WorkRequestTarget, eSkill.Botanica)
+                        Else
+                            Call WriteConsoleMsg(UserIndex, "Debes tener equipada la herramienta para trabajar.", FontTypeNames.FONTTYPE_INFO)
+
+                        End If
                             
-                        Case MARTILLO_HERRERO
+                    Case MARTILLO_HERRERO
 
-                            ' Lo tiene equipado?
-                            If .Invent.WeaponEqpObjIndex = ObjIndex Then
-                                Call WriteMultiMessage(UserIndex, eMessages.WorkRequestTarget, eSkill.Herreria)
-                            Else
-                                Call WriteConsoleMsg(UserIndex, "Debes tener equipada la herramienta para trabajar.", FontTypeNames.FONTTYPE_INFO)
+                        ' Lo tiene equipado?
+                        If .Invent.WeaponEqpObjIndex = ObjIndex Then
+                            Call WriteMultiMessage(UserIndex, eMessages.WorkRequestTarget, eSkill.Herreria)
+                        Else
+                            Call WriteConsoleMsg(UserIndex, "Debes tener equipada la herramienta para trabajar.", FontTypeNames.FONTTYPE_INFO)
 
-                            End If
+                        End If
                             
-                        Case SERRUCHO_CARPINTERO
+                    Case SERRUCHO_CARPINTERO
                             
-                            ' Lo tiene equipado?
-                            If .Invent.WeaponEqpObjIndex = ObjIndex Then
-                                Call EnviarObjConstruibles(UserIndex)
-                                Call WriteShowTrabajoForm(UserIndex, eSkill.Carpinteria)
-                            Else
-                                Call WriteConsoleMsg(UserIndex, "Debes tener equipada la herramienta para trabajar.", FontTypeNames.FONTTYPE_INFO)
+                        ' Lo tiene equipado?
+                        If .Invent.WeaponEqpObjIndex = ObjIndex Then
+                            Call EnviarObjConstruibles(UserIndex)
+                            Call WriteShowTrabajoForm(UserIndex, eSkill.Carpinteria)
+                        Else
+                            Call WriteConsoleMsg(UserIndex, "Debes tener equipada la herramienta para trabajar.", FontTypeNames.FONTTYPE_INFO)
 
-                            End If
+                        End If
                             
-                        Case KIT_DE_COSTURA
+                    Case KIT_DE_COSTURA
 
-                            ' Lo tiene equipado?
-                            If .Invent.WeaponEqpObjIndex = ObjIndex Then
-                                Call EnviarRopasConstruibles(UserIndex)
-                                Call WriteShowTrabajoForm(UserIndex, eSkill.Sastreria)
+                        ' Lo tiene equipado?
+                        If .Invent.WeaponEqpObjIndex = ObjIndex Then
+                            Call EnviarRopasConstruibles(UserIndex)
+                            Call WriteShowTrabajoForm(UserIndex, eSkill.Sastreria)
                                 
-                            Else
-                                Call WriteConsoleMsg(UserIndex, "Debes tener equipada la herramienta para trabajar.", FontTypeNames.FONTTYPE_INFO)
+                        Else
+                            Call WriteConsoleMsg(UserIndex, "Debes tener equipada la herramienta para trabajar.", FontTypeNames.FONTTYPE_INFO)
 
-                            End If
+                        End If
                             
-                        Case OLLA_ALQUIMISTA
+                    Case OLLA_ALQUIMISTA
 
-                            ' Lo tiene equipado?
-                            If .Invent.WeaponEqpObjIndex = ObjIndex Then
-                                Call EnviarPocionesConstruibles(UserIndex)
-                                Call WriteShowTrabajoForm(UserIndex, eSkill.Alquimia)
+                        ' Lo tiene equipado?
+                        If .Invent.WeaponEqpObjIndex = ObjIndex Then
+                            Call EnviarPocionesConstruibles(UserIndex)
+                            Call WriteShowTrabajoForm(UserIndex, eSkill.Alquimia)
                                 
-                            Else
-                                Call WriteConsoleMsg(UserIndex, "Debes tener equipada la herramienta para trabajar.", FontTypeNames.FONTTYPE_INFO)
+                        Else
+                            Call WriteConsoleMsg(UserIndex, "Debes tener equipada la herramienta para trabajar.", FontTypeNames.FONTTYPE_INFO)
 
-                            End If
+                        End If
                             
-                        Case Else ' Las herramientas no se pueden fundir
+                    Case Else ' Las herramientas no se pueden fundir
 
-                            If ObjData(ObjIndex).SkHerreria > 0 Then
-                                ' Solo objetos que pueda hacer el herrero
-                                Call WriteMultiMessage(UserIndex, eMessages.WorkRequestTarget, FundirMetal) 'Call WriteWorkRequestTarget(UserIndex, FundirMetal)
-                                Exit Sub
-                            End If
+                        If ObjData(ObjIndex).SkHerreria > 0 Then
+                            ' Solo objetos que pueda hacer el herrero
+                            Call WriteMultiMessage(UserIndex, eMessages.WorkRequestTarget, FundirMetal) 'Call WriteWorkRequestTarget(UserIndex, FundirMetal)
+                            Exit Sub
 
-                    End Select
+                        End If
 
+                End Select
             
             Case eOBJType.otPociones
 
@@ -1842,6 +1851,7 @@ Sub UseInvItem(ByVal UserIndex As Integer, ByVal Slot As Byte)
                         End If
                         
                     Case 6  ' Pocion Negra
+
                         If .flags.SlotReto > 0 Then Exit Sub
                         
                         If .flags.Privilegios And PlayerType.User Then
@@ -2024,6 +2034,7 @@ Sub UseInvItem(ByVal UserIndex As Integer, ByVal Slot As Byte)
                         If Not ClasePuedeUsarItem(UserIndex, ObjIndex, sMotivo) Then
                             Call WriteConsoleMsg(UserIndex, sMotivo, FontTypeNames.FONTTYPE_INFO)
                             Exit Sub
+
                         End If
 
                         Call AgregarHechizo(UserIndex, Slot)
@@ -2065,6 +2076,7 @@ Sub UseInvItem(ByVal UserIndex As Integer, ByVal Slot As Byte)
                 If Not ClasePuedeUsarItem(UserIndex, ObjIndex, sMotivo) Or Not FaccionPuedeUsarItem(UserIndex, ObjIndex, sMotivo) Then
                     Call WriteConsoleMsg(UserIndex, sMotivo, FontTypeNames.FONTTYPE_INFO)
                     Exit Sub
+
                 End If
 
                 'Verifica si esta aproximado al agua antes de permitirle navegar
@@ -2105,23 +2117,27 @@ Sub UseInvItem(ByVal UserIndex As Integer, ByVal Slot As Byte)
 
                 End If
 
-            '<-------------> MONTURAS <----------->
+                '<-------------> MONTURAS <----------->
             Case eOBJType.otMonturas
+
                 If ClasePuedeUsarItem(UserIndex, ObjIndex) Then
 
                     If .flags.Muerto = 1 Then
                         Call WriteConsoleMsg(UserIndex, "Estas muerto, no puedes montarte ni desmontarte en este estado!!", FontTypeNames.FONTTYPE_INFO)
                         Exit Sub
+
                     End If
                     
                     If .flags.Navegando = 1 Then
                         Call WriteConsoleMsg(UserIndex, "Estas navegando, no puedes montarte ni desmontarte en este estado!!", FontTypeNames.FONTTYPE_INFO)
                         Exit Sub
+
                     End If
                     
                     Call DoEquita(UserIndex, obj, Slot)
                 Else
                     Call WriteConsoleMsg(UserIndex, "Tu clase no puede usar este objeto.", FontTypeNames.FONTTYPE_INFO)
+
                 End If
                     
             Case eOBJType.otPasajes
@@ -2136,31 +2152,37 @@ Sub UseInvItem(ByVal UserIndex As Integer, ByVal Slot As Byte)
                 If .flags.TargetNpcTipo <> Marinero Then
                     Call WriteConsoleMsg(UserIndex, "Primero debes hacer click sobre el marinero.", FontTypeNames.FONTTYPE_INFO)
                     Exit Sub
+
                 End If
                     
                 If Distancia(Npclist(.flags.TargetNPC).Pos, .Pos) > 3 Then
                     Call WriteConsoleMsg(UserIndex, "¡Estas demasiado lejos!", FontTypeNames.FONTTYPE_INFO)
                     Exit Sub
+
                 End If
                     
                 If .Pos.Map <> obj.DesdeMap Then
                     Call WriteConsoleMsg(UserIndex, "El pasaje no lo compraste aquí! Largate!", FontTypeNames.FONTTYPE_INFO)
                     Exit Sub
+
                 End If
                     
                 If Not MapaValido(obj.HastaMap) Then
                     Call WriteConsoleMsg(UserIndex, "El pasaje lleva hacia un mapa que ya no esta disponible! Disculpa las molestias.", FontTypeNames.FONTTYPE_INFO)
                     Exit Sub
+
                 End If
                     
                 If obj.NecesitaNave = 1 And .Stats.UserSkills(eSkill.Navegacion) < 40 Then
                     Call WriteConsoleMsg(UserIndex, "Debido a la peligrosidad del viaje no puedo llevarte. Necesitas 40 skills para utilizar este pasaje. Consulta el manual del juego en http://nexusao.com.ar/wiki/ para saber cómo conseguirlos.", FontTypeNames.FONTTYPE_INFO)
                     Exit Sub
+
                 End If
                     
                 If .Stats.ELV < 10 Then
                     Call WriteConsoleMsg(UserIndex, "Debido a la peligrosidad del viaje, no puedo llevarte, necesitas ser nivel 10 como minimo.", FontTypeNames.FONTTYPE_INFO)
                     Exit Sub
+
                 End If
                     
                 Call WarpUserChar(UserIndex, obj.HastaMap, obj.HastaX, obj.HastaY, True)
@@ -2177,6 +2199,7 @@ Sub UseInvItem(ByVal UserIndex As Integer, ByVal Slot As Byte)
                 Call UpdateUserInv(False, UserIndex, Slot)
                 
             Case eOBJType.otMapas
+
                 If .flags.Muerto = 1 Then
                     'Call WriteConsoleMsg(UserIndex, "Estas muerto!! Solo podes usar items cuando estas vivo. ", FontTypeNames.FONTTYPE_INFO)
                     Call WriteMultiMessage(UserIndex, eMessages.UserMuerto)
@@ -2198,35 +2221,33 @@ Sub UseInvItem(ByVal UserIndex As Integer, ByVal Slot As Byte)
                 Call usarBolsadeOro(UserIndex, Slot)
                 
             Case eOBJType.otEsposas
-                    Call Encarcelar(UserIndex, 10)
-                    Call LogGM(.name, " fue encarcelado por las esposas.")
+                Call Encarcelar(UserIndex, 10)
+                Call LogGM(.name, " fue encarcelado por las esposas.")
                 
             Case eOBJType.otRuna
-                If .flags.EstaDueleando Then
     
-                    'Si es un mapa comun y no esta en cana
-                    If (MapInfo(.Pos.Map).Restringir = eRestrict.restrict_no) And (.Counters.Pena = 0) Then
-                        If Ciudades(.Hogar).Map <> .Pos.Map Then
-                            'Call MandaraCasa(UserIndex)
-                            .flags.CasteoSpell.Casteando = eCasteo.Runa
-                            .flags.CasteoSpell.TimeCast = TIEMPO_CASTEO_RUNA
-                            Call WriteConsoleMsg(UserIndex, "Sujetas la runa y comienzas a concentrarte.", FontTypeNames.FONTTYPE_INFO)
-                        Else
-                            Call WriteConsoleMsg(UserIndex, "Ya te encuentras en tu hogar.", FontTypeNames.FONTTYPE_INFO)
-    
+                'Si es un mapa comun...
+                If (MapInfo(.Pos.Map).Restringir = eRestrict.restrict_no) And (.Counters.Pena = 0) Then
+                    If Ciudades(.Hogar).Map <> .Pos.Map Then
+                        If .flags.invisible = 0 Then
+                            Call Usuarios.SetInvisible(UserIndex, UserList(UserIndex).Char.CharIndex, False)
+                            Call WriteConsoleMsg(UserIndex, "Has vuelto a ser visible!", FontTypeNames.FONTTYPE_INFO)
+        
                         End If
-    
+                        .flags.CasteoSpell.Casteando = eCasteo.Runa
+                        .flags.CasteoSpell.TimeCast = TIEMPO_CASTEO_RUNA
+                        Call WriteConsoleMsg(UserIndex, "Sujetas la runa y comienzas a concentrarte.", FontTypeNames.FONTTYPE_INFO)
                     Else
-                        Call WriteConsoleMsg(UserIndex, "Una fuerza misteriosa interfiere con la runa, no puedes utilizarla aquí.", FontTypeNames.FONTTYPE_FIGHT)
+                        Call WriteConsoleMsg(UserIndex, "Ya te encuentras en tu hogar.", FontTypeNames.FONTTYPE_INFO)
     
                     End If
     
                 Else
-                    Call WriteConsoleMsg(UserIndex, "No puedes usar la runa en este momento.", FontTypeNames.FONTTYPE_INFO)
+                    Call WriteConsoleMsg(UserIndex, "Una fuerza misteriosa interfiere con la runa, no puedes utilizarla aquí.", FontTypeNames.FONTTYPE_FIGHT)
     
                 End If
                   
-            End Select
+        End Select
     
     End With
 
