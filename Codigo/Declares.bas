@@ -223,18 +223,12 @@ Public Const MAXMASCOTASENTRENADOR   As Byte = 7
 Public Enum FXIDs
 
     FXWARP = 1
+    FXMEDITARCHICO = 4
+    FXMEDITARMEDIANO = 5
+    FXMEDITARGRANDE = 6
+    FXMEDITARXGRANDE = 16
+    FXMEDITARXXGRANDE = 34
 
-End Enum
-
-Public Enum PARTICLEIDs
-    MEDITARMAX = 36
-    MEDITARCAOS = 37
-    MEDITARARMADA = 38
-    MEDITARNEUTROCRIMI = 39
-    MEDITARNEUTROCIUDA = 40
-    MEDITARNORMAL = 41
-    MEDITARNW = 42
-    MEDITARNOVATO = 81
 End Enum
 
 ''
@@ -1605,7 +1599,7 @@ Public Type tFacciones
 End Type
 
 Public Type AccountCharacters
-    ID As String
+    Id As String
     name As String
     body As Integer
     Head As Integer
@@ -1624,7 +1618,7 @@ End Type
 Public Const MAXPJACCOUNTS As Byte = 10
 
 Public Type AccountUser
-    ID As Long
+    Id As Long
     username As String
     Password As String
     Email As String
@@ -1656,7 +1650,7 @@ Public Type User
     RetoTemp As tUserRetoTemp
     
     name As String
-    ID As Long 'Id del PJ logeado actualmente
+    Id As Long 'Id del PJ logeado actualmente
     
     AccountInfo As AccountUser
     AccountName As String 'Utilizado para identificar PJ colgados
@@ -2506,7 +2500,7 @@ Public Account_Database As New clsDataBase
 'Lorwik> Sistema de retardo de Spawn de NPC
 Type tRetarded
     Tiempo As Long
-    MAPA As Byte
+    Mapa As Byte
     X As Byte
     Y As Byte
     NPCNUM As Integer
