@@ -2266,7 +2266,9 @@ Private Sub HandleWalk(ByVal UserIndex As Integer)
 
                 Call WriteConsoleMsg(UserIndex, "Dejas de meditar.", FontTypeNames.FONTTYPE_INFO)
                 
-                Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageCreateParticleChar(.Char.CharIndex, .Char.Particle, False, 0))
+                .Char.FX = 0
+                .Char.loops = 0
+                Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageCreateFX(.Char.CharIndex, 0, 0))
                 Call MoveUserChar(UserIndex, Heading)
             Else
                 'Move user

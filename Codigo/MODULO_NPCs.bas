@@ -96,7 +96,8 @@ Public Sub MuereNpc(ByVal NpcIndex As Integer, ByVal UserIndex As Integer)
     On Error GoTo errHandler
 
     Dim MiNPC As NPC
-
+    Dim i As Byte
+    
     MiNPC = Npclist(NpcIndex)
 
     Dim EraCriminal     As Boolean
@@ -114,6 +115,18 @@ Public Sub MuereNpc(ByVal NpcIndex As Integer, ByVal UserIndex As Integer)
     If MiNPC.EsFamiliar = 1 Then
         Call Familiar_Muerte(MiNPC.EsFamiliar, True)
         Call WriteConsoleMsg(UserIndex, "¡Has matado el familiar de " & UserList(MiNPC.MaestroUser).name & "!", FontTypeNames.FONTTYPE_FIGHT)
+        
+    End If
+    
+    'Ha matado al rey del castillo?
+    If MiNPC.NPCtype = eNPCType.ReyCastillo Then
+        'Identificamos el castillo al que pertenece
+        For i = 1 To CastleCount
+            If MiNPC.Pos.Map = Castillo(i).getMapa Then
+                Call Castillo(i).MuereRey(UserIndex)
+                Exit For
+            End If
+        Next i
         
     End If
       

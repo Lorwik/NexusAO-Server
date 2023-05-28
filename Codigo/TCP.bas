@@ -37,7 +37,7 @@ Option Explicit
 
 #If False Then
 
-    Dim X, Y, n, MAPA, Email, Length As Variant
+    Dim X, Y, n, Mapa, Email, Length As Variant
     
 #End If
 
@@ -263,7 +263,7 @@ Function Numeric(ByVal cad As String) As Boolean
 
 End Function
 
-Function NombrePermitido(ByVal nombre As String) As Boolean
+Function NombrePermitido(ByVal Nombre As String) As Boolean
     '***************************************************
     'Author: Unknown
     'Last Modification: -
@@ -274,7 +274,7 @@ Function NombrePermitido(ByVal nombre As String) As Boolean
 
     For i = 1 To UBound(ForbidenNames)
 
-        If InStr(nombre, ForbidenNames(i)) Then
+        If InStr(Nombre, ForbidenNames(i)) Then
             NombrePermitido = False
             Exit Function
 
@@ -1109,19 +1109,19 @@ Sub ConnectUser(ByVal UserIndex As Integer, _
 
         End If
     
-        Dim MAPA As Integer
+        Dim Mapa As Integer
 
-        MAPA = .Pos.Map
+        Mapa = .Pos.Map
     
         '¿Mapa invalido? Lo llevamos a Ulla
-        If MAPA = 0 Then
+        If Mapa = 0 Then
 
             'Dejo esto comentado aqui por si se quiere utilizar la ciudad elegida desde el menu
              .Pos = Ciudades(.Hogar)
-             MAPA = Ciudades(.Hogar).Map
+             Mapa = Ciudades(.Hogar).Map
         Else
     
-            If Not MapaValido(MAPA) Then
+            If Not MapaValido(Mapa) Then
                 Call WriteErrorMsg(UserIndex, "El PJ se encuenta en un mapa invalido.")
                 Call CloseUser(UserIndex)
                 Exit Sub
@@ -1131,12 +1131,12 @@ Sub ConnectUser(ByVal UserIndex As Integer, _
             ' If map has different initial coords, update it
             Dim StartMap As Integer
 
-            StartMap = MapInfo(MAPA).StartPos.Map
+            StartMap = MapInfo(Mapa).StartPos.Map
 
             If StartMap <> 0 Then
                 If MapaValido(StartMap) Then
-                    .Pos = MapInfo(MAPA).StartPos
-                    MAPA = StartMap
+                    .Pos = MapInfo(Mapa).StartPos
+                    Mapa = StartMap
 
                 End If
 
@@ -1146,7 +1146,7 @@ Sub ConnectUser(ByVal UserIndex As Integer, _
     
         'Tratamos de evitar en lo posible el "Telefrag". Solo 1 intento de loguear en pos adjacentes.
         'Codigo por Pablo (ToxicWaste) y revisado por Nacho (Integer), corregido para que realmetne ande y no tire el server por Juan Martin Sotuyo Dodero (Maraxus)
-        If MapData(MAPA, .Pos.X, .Pos.Y).UserIndex <> 0 Or MapData(MAPA, .Pos.X, .Pos.Y).NpcIndex <> 0 Then
+        If MapData(Mapa, .Pos.X, .Pos.Y).UserIndex <> 0 Or MapData(Mapa, .Pos.X, .Pos.Y).NpcIndex <> 0 Then
 
             Dim FoundPlace As Boolean
 
@@ -1157,7 +1157,7 @@ Sub ConnectUser(ByVal UserIndex As Integer, _
             Dim tY         As Long
         
             FoundPlace = False
-            esAgua = HayAgua(MAPA, .Pos.X, .Pos.Y)
+            esAgua = HayAgua(Mapa, .Pos.X, .Pos.Y)
         
             For tY = .Pos.Y - 1 To .Pos.Y + 1
                 For tX = .Pos.X - 1 To .Pos.X + 1
@@ -1165,7 +1165,7 @@ Sub ConnectUser(ByVal UserIndex As Integer, _
                     If esAgua Then
 
                         'reviso que sea pos legal en agua, que no haya User ni NPC para poder loguear.
-                        If LegalPos(MAPA, tX, tY, True, False) Then
+                        If LegalPos(Mapa, tX, tY, True, False) Then
                             FoundPlace = True
                             Exit For
 
@@ -1174,7 +1174,7 @@ Sub ConnectUser(ByVal UserIndex As Integer, _
                     Else
 
                         'reviso que sea pos legal en tierra, que no haya User ni NPC para poder loguear.
-                        If LegalPos(MAPA, tX, tY, False, True) Then
+                        If LegalPos(Mapa, tX, tY, False, True) Then
                             FoundPlace = True
                             Exit For
 
@@ -1193,26 +1193,26 @@ Sub ConnectUser(ByVal UserIndex As Integer, _
             Else
 
                 'Si no encontramos un lugar, sacamos al usuario que tenemos abajo, y si es un NPC, lo pisamos.
-                If MapData(MAPA, .Pos.X, .Pos.Y).UserIndex <> 0 Then
+                If MapData(Mapa, .Pos.X, .Pos.Y).UserIndex <> 0 Then
 
                     'Si no encontramos lugar, y abajo teniamos a un usuario, lo pisamos y cerramos su comercio seguro
-                    If UserList(MapData(MAPA, .Pos.X, .Pos.Y).UserIndex).ComUsu.DestUsu > 0 Then
+                    If UserList(MapData(Mapa, .Pos.X, .Pos.Y).UserIndex).ComUsu.DestUsu > 0 Then
 
                         'Le avisamos al que estaba comerciando que se tuvo que ir.
-                        If UserList(UserList(MapData(MAPA, .Pos.X, .Pos.Y).UserIndex).ComUsu.DestUsu).flags.UserLogged Then
-                            Call FinComerciarUsu(UserList(MapData(MAPA, .Pos.X, .Pos.Y).UserIndex).ComUsu.DestUsu)
-                            Call WriteConsoleMsg(UserList(MapData(MAPA, .Pos.X, .Pos.Y).UserIndex).ComUsu.DestUsu, "Comercio cancelado. El otro usuario se ha desconectado.", FontTypeNames.FONTTYPE_WARNING)
+                        If UserList(UserList(MapData(Mapa, .Pos.X, .Pos.Y).UserIndex).ComUsu.DestUsu).flags.UserLogged Then
+                            Call FinComerciarUsu(UserList(MapData(Mapa, .Pos.X, .Pos.Y).UserIndex).ComUsu.DestUsu)
+                            Call WriteConsoleMsg(UserList(MapData(Mapa, .Pos.X, .Pos.Y).UserIndex).ComUsu.DestUsu, "Comercio cancelado. El otro usuario se ha desconectado.", FontTypeNames.FONTTYPE_WARNING)
                         End If
 
                         'Lo sacamos.
-                        If UserList(MapData(MAPA, .Pos.X, .Pos.Y).UserIndex).flags.UserLogged Then
-                            Call FinComerciarUsu(MapData(MAPA, .Pos.X, .Pos.Y).UserIndex)
-                            Call WriteErrorMsg(MapData(MAPA, .Pos.X, .Pos.Y).UserIndex, "Alguien se ha conectado donde te encontrabas, por favor reconectate...")
+                        If UserList(MapData(Mapa, .Pos.X, .Pos.Y).UserIndex).flags.UserLogged Then
+                            Call FinComerciarUsu(MapData(Mapa, .Pos.X, .Pos.Y).UserIndex)
+                            Call WriteErrorMsg(MapData(Mapa, .Pos.X, .Pos.Y).UserIndex, "Alguien se ha conectado donde te encontrabas, por favor reconectate...")
                         End If
 
                     End If
                 
-                    Call CloseUser(MapData(MAPA, .Pos.X, .Pos.Y).UserIndex)
+                    Call CloseUser(MapData(Mapa, .Pos.X, .Pos.Y).UserIndex)
 
                 End If
 
@@ -1223,7 +1223,7 @@ Sub ConnectUser(ByVal UserIndex As Integer, _
         .showName = True 'Por default los nombres son visibles
     
         'If in the water, and has a boat, equip it!
-        If .Invent.BarcoObjIndex > 0 And (HayAgua(MAPA, .Pos.X, .Pos.Y) Or BodyIsBoat(.Char.body)) Then
+        If .Invent.BarcoObjIndex > 0 And (HayAgua(Mapa, .Pos.X, .Pos.Y) Or BodyIsBoat(.Char.body)) Then
 
             .Char.Head = 0
 
@@ -1455,6 +1455,12 @@ Sub SendMOTD(ByVal UserIndex As Integer)
 
     For j = 1 To MaxLines
         Call WriteGuildChat(UserIndex, MOTD(j).texto)
+    Next j
+    
+    Call WriteGuildChat(UserIndex, "Castillos y Fortalezas:")
+    
+    For j = 1 To CastleCount
+        Call WriteGuildChat(UserIndex, Castillo(j).getNombreCastillo & " pertenece al clan " & Castillo(j).getConquistador)
     Next j
 
 End Sub

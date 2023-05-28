@@ -1,22 +1,19 @@
 'Tipo de NPC
 'NpcType:
 '  0 NPCs Comunes
-'  1 Resucitadores
-'  2 Guardias
-'  3 Entrenadores
-'  4 Banqueros
-'  5 Facciones
-'  6 (nada)
-'  7 Transportadores
-'  8 Carceleros
-'  9 (nada)
-' 10 Paga recompensas
-' 11 Veterinarias
-' 12 Apuestas
-' 13 Presentadores de Quest
-' 14 Objetivos de Quest
-' 15 Centinelas
-' 16 Subastadores
+'  1 Revividores
+'  2 GuardiaReal
+'  3 Entrenador
+'  4 Banquero
+'  5 Noble
+'  6 Dragon
+'  7 Marinero
+'  8 GuardiaCaos
+'  9 Gobernador
+'  10 Subastador
+'  11 Veterinario
+'  12 Timbero
+'  13 ReyCastillo
 
 'Propiedades
 '  Instruye
@@ -26,7 +23,7 @@
 '  VerInvi
 
 [INIT]
-NumNPCs=655
+NumNPCs=656
 
 [NPC1] 'NPC
 Name=Aldeano
@@ -8172,3 +8169,39 @@ Obj2=38-5-5 'Poción Roja
 Obj3=39-5-2 'Poción Verde
 Obj4=36-5-2 'Poción Amarilla
 Obj5=166-5-5 'Poción Violeta
+
+'*********************************************************
+'CASTILLO
+[NPC656]
+Name=Rey del Castillo
+NpcType=13
+Head=14
+Heading=3
+TipoNick=9
+Body=63
+Movement=1
+AguaValida=0
+Attackable=1
+ReSpawn=1
+Hostile=1
+Domable=0
+Alineacion=2
+Comercia=0
+GiveEXP=0
+GiveGLD=0
+MinHP=12000
+MaxHP=12000
+MaxHIT=50
+MinHIT=30
+DEF=30
+PoderAtaque=1000
+PoderEvasion=200
+LanzaSpells=5
+Sp1=3
+Sp2=10
+Sp3=30
+Sp4=31
+Sp5=1
+AfectaParalisis=1
+BackUp=0
+Nivel=50

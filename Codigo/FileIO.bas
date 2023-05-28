@@ -492,7 +492,7 @@ Public Sub CargarHechizos()
     For Hechizo = 1 To NumeroHechizos
 
         With Hechizos(Hechizo)
-            .nombre = Leer.GetValue("Hechizo" & Hechizo, "Nombre")
+            .Nombre = Leer.GetValue("Hechizo" & Hechizo, "Nombre")
             .Desc = Leer.GetValue("Hechizo" & Hechizo, "Desc")
             .PalabrasMagicas = Leer.GetValue("Hechizo" & Hechizo, "PalabrasMagicas")
             
@@ -2387,4 +2387,64 @@ LoadPacketRatePolicy_Err:
     Set Lector = Nothing
     Call TraceError(Err.Number, Err.description, "ES.LoadPacketRatePolicy", Erl)
         
+End Sub
+
+Public Sub CargarCastillos()
+    
+    On Error GoTo CargarCastillos_Err
+    
+    Dim Lector          As clsIniManager
+
+    Dim i               As Long
+    
+    Dim CastleID        As Byte
+
+    Dim CastleName      As String
+
+    Dim CastleMap       As Byte
+    
+    Dim CastleX         As Byte
+    
+    Dim CastleY         As Byte
+
+    Dim CastleKing      As Integer
+
+    Dim ConqueringGuild As String
+
+    If frmMain.Visible Then frmMain.txtStatus.Text = "Cargando Castillos."
+    
+    Set Lector = New clsIniManager
+    Call Lector.Initialize(DatPath & "Castillos.dat")
+    
+    CastleCount = val(Lector.GetValue("INIT", "CastilloCount"))
+    
+    'Si no hay castillos no tenemos nada que cargar
+    If CastleCount < 1 Then
+        Set Lector = Nothing
+        Exit Sub
+
+    End If
+    
+    ReDim Castillo(1 To CastleCount) As New clsCastillos
+    
+    'Creamos los objetos para cada castillo
+    For i = 1 To CastleCount
+        CastleID = i
+        CastleName = Lector.GetValue("CASTLE" & i, "Nombre")
+        CastleMap = val(Lector.GetValue("CASTLE" & i, "Mapa"))
+        CastleX = val(Lector.GetValue("CASTLE" & i, "X"))
+        CastleY = val(Lector.GetValue("CASTLE" & i, "Y"))
+        CastleKing = val(Lector.GetValue("CASTLE" & i, "Rey"))
+        ConqueringGuild = Lector.GetValue("CASTLE" & i, "Clan")
+        Call Castillo(i).Inicializar(CastleID, CastleName, CastleMap, CastleKing, CastleX, CastleY)
+        
+        If CastleName <> "Nadie" Then Castillo(i).setConquistador = ConqueringGuild
+    Next i
+    
+    Exit Sub
+    
+CargarCastillos_Err:
+    Set Lector = Nothing
+    Call TraceError(Err.Number, Err.description, "ES.CargarCastillos", Erl)
+
 End Sub

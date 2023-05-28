@@ -626,7 +626,7 @@ Public Sub HerreroConstruirItem(ByVal UserIndex As Integer, ByVal ItemIndex As I
         
         'Log de construccion de Items. Pablo (ToxicWaste) 10/09/07
         If ObjData(MiObj.ObjIndex).Log = 1 Then _
-            Call LogDesarrollo(.Name & " ha construido " & MiObj.Amount & " " & ObjData(MiObj.ObjIndex).Name)
+            Call LogDesarrollo(.name & " ha construido " & MiObj.Amount & " " & ObjData(MiObj.ObjIndex).name)
         
         Call SubirSkill(UserIndex, eSkill.Herreria, True)
         Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessagePlayWave(SND_TRABAJO_HERRERO, .Pos.X, .Pos.Y))
@@ -715,7 +715,7 @@ Public Sub CarpinteroConstruirItem(ByVal UserIndex As Integer, ByVal ItemIndex A
             
             'Log de construccion de Items. Pablo (ToxicWaste) 10/09/07
             If ObjData(MiObj.ObjIndex).Log = 1 Then
-                Call LogDesarrollo(.Name & " ha construido " & MiObj.Amount & " " & ObjData(MiObj.ObjIndex).Name)
+                Call LogDesarrollo(.name & " ha construido " & MiObj.Amount & " " & ObjData(MiObj.ObjIndex).name)
 
             End If
             
@@ -811,7 +811,7 @@ Public Sub SastreConstruirItem(ByVal UserIndex As Integer, ByVal ItemIndex As In
             
             'Log de construccion de Items. Pablo (ToxicWaste) 10/09/07
             If ObjData(MiObj.ObjIndex).Log = 1 Then
-                Call LogDesarrollo(.Name & " ha construido " & MiObj.Amount & " " & ObjData(MiObj.ObjIndex).Name)
+                Call LogDesarrollo(.name & " ha construido " & MiObj.Amount & " " & ObjData(MiObj.ObjIndex).name)
 
             End If
             
@@ -907,7 +907,7 @@ Public Sub AlquimistaConstruirItem(ByVal UserIndex As Integer, ByVal ItemIndex A
             
             'Log de construccion de Items. Pablo (ToxicWaste) 10/09/07
             If ObjData(MiObj.ObjIndex).Log = 1 Then
-                Call LogDesarrollo(.Name & " ha construido " & MiObj.Amount & " " & ObjData(MiObj.ObjIndex).Name)
+                Call LogDesarrollo(.name & " ha construido " & MiObj.Amount & " " & ObjData(MiObj.ObjIndex).name)
 
             End If
             
@@ -1805,7 +1805,7 @@ Public Sub DoRobar(ByVal LadrOnIndex As Integer, ByVal VictimaIndex As Integer)
                     If TieneObjetosRobables(VictimaIndex) Then
                         Call RobarObjeto(LadrOnIndex, VictimaIndex)
                     Else
-                        Call WriteConsoleMsg(LadrOnIndex, UserList(VictimaIndex).Name & " no tiene objetos.", FontTypeNames.FONTTYPE_INFO)
+                        Call WriteConsoleMsg(LadrOnIndex, UserList(VictimaIndex).name & " no tiene objetos.", FontTypeNames.FONTTYPE_INFO)
 
                     End If
 
@@ -1830,12 +1830,12 @@ Public Sub DoRobar(ByVal LadrOnIndex As Integer, ByVal VictimaIndex As Integer)
 
                         If .Stats.Gld > MAXORO Then .Stats.Gld = MAXORO
                         
-                        Call WriteConsoleMsg(LadrOnIndex, "Le has robado " & n & " monedas de oro a " & UserList(VictimaIndex).Name, FontTypeNames.FONTTYPE_INFO)
+                        Call WriteConsoleMsg(LadrOnIndex, "Le has robado " & n & " monedas de oro a " & UserList(VictimaIndex).name, FontTypeNames.FONTTYPE_INFO)
                         Call WriteUpdateGold(LadrOnIndex) 'Le actualizamos la billetera al ladron
                         
                         Call WriteUpdateGold(VictimaIndex) 'Le actualizamos la billetera a la victima
                     Else
-                        Call WriteConsoleMsg(LadrOnIndex, UserList(VictimaIndex).Name & " no tiene oro.", FontTypeNames.FONTTYPE_INFO)
+                        Call WriteConsoleMsg(LadrOnIndex, UserList(VictimaIndex).name & " no tiene oro.", FontTypeNames.FONTTYPE_INFO)
 
                     End If
 
@@ -1844,7 +1844,7 @@ Public Sub DoRobar(ByVal LadrOnIndex As Integer, ByVal VictimaIndex As Integer)
                 Call SubirSkill(LadrOnIndex, eSkill.Robar, True)
             Else
                 Call WriteConsoleMsg(LadrOnIndex, "No has logrado robar nada!", FontTypeNames.FONTTYPE_INFO)
-                Call WriteConsoleMsg(VictimaIndex, "" & .Name & " ha intentado robarte!", FontTypeNames.FONTTYPE_INFO)
+                Call WriteConsoleMsg(VictimaIndex, "" & .name & " ha intentado robarte!", FontTypeNames.FONTTYPE_INFO)
                 
                 Call SubirSkill(LadrOnIndex, eSkill.Robar, False)
 
@@ -1987,9 +1987,9 @@ Public Sub RobarObjeto(ByVal LadrOnIndex As Integer, ByVal VictimaIndex As Integ
             End If
         
             If UserList(LadrOnIndex).clase = eClass.Thief Then
-                Call WriteConsoleMsg(LadrOnIndex, "Has robado " & MiObj.Amount & " " & ObjData(MiObj.ObjIndex).Name, FontTypeNames.FONTTYPE_INFO)
+                Call WriteConsoleMsg(LadrOnIndex, "Has robado " & MiObj.Amount & " " & ObjData(MiObj.ObjIndex).name, FontTypeNames.FONTTYPE_INFO)
             Else
-                Call WriteConsoleMsg(LadrOnIndex, "Has hurtado " & MiObj.Amount & " " & ObjData(MiObj.ObjIndex).Name, FontTypeNames.FONTTYPE_INFO)
+                Call WriteConsoleMsg(LadrOnIndex, "Has hurtado " & MiObj.Amount & " " & ObjData(MiObj.ObjIndex).name, FontTypeNames.FONTTYPE_INFO)
 
             End If
 
@@ -2056,8 +2056,8 @@ Public Sub DoApunalar(ByVal UserIndex As Integer, _
                 'Renderizo el dano en render
                 Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageChatOverHead(dano, UserList(UserIndex).Char.CharIndex, vbBlue, True))
                 
-                Call WriteConsoleMsg(UserIndex, "Has apunalado a " & .Name & " por " & dano, FontTypeNames.FONTTYPE_FIGHT)
-                Call WriteConsoleMsg(VictimUserIndex, "Te ha apunalado " & UserList(UserIndex).Name & " por " & dano, FontTypeNames.FONTTYPE_FIGHT)
+                Call WriteConsoleMsg(UserIndex, "Has apunalado a " & .name & " por " & dano, FontTypeNames.FONTTYPE_FIGHT)
+                Call WriteConsoleMsg(VictimUserIndex, "Te ha apunalado " & UserList(UserIndex).name & " por " & dano, FontTypeNames.FONTTYPE_FIGHT)
 
             End With
         
@@ -2100,8 +2100,8 @@ Public Sub DoAcuchillar(ByVal UserIndex As Integer, _
         
             With UserList(VictimUserIndex)
                 .Stats.MinHp = .Stats.MinHp - dano
-                Call WriteConsoleMsg(UserIndex, "Has acuchillado a " & .Name & " por " & dano, FontTypeNames.FONTTYPE_FIGHT)
-                Call WriteConsoleMsg(VictimUserIndex, UserList(UserIndex).Name & " te ha acuchillado por " & dano, FontTypeNames.FONTTYPE_FIGHT)
+                Call WriteConsoleMsg(UserIndex, "Has acuchillado a " & .name & " por " & dano, FontTypeNames.FONTTYPE_FIGHT)
+                Call WriteConsoleMsg(VictimUserIndex, UserList(UserIndex).name & " te ha acuchillado por " & dano, FontTypeNames.FONTTYPE_FIGHT)
 
             End With
             
@@ -2161,8 +2161,8 @@ Public Sub DoGolpeCritico(ByVal UserIndex As Integer, _
                 'Renderizo el dano en render
                 Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageChatOverHead(Int(dano * 2), UserList(UserIndex).Char.CharIndex, vbBlue, True))
                 
-                Call WriteConsoleMsg(UserIndex, "Has golpeado criticamente a " & .Name & " por " & dano & ".", FontTypeNames.FONTTYPE_FIGHT)
-                Call WriteConsoleMsg(VictimUserIndex, UserList(UserIndex).Name & " te ha golpeado criticamente por " & dano & ".", FontTypeNames.FONTTYPE_FIGHT)
+                Call WriteConsoleMsg(UserIndex, "Has golpeado criticamente a " & .name & " por " & dano & ".", FontTypeNames.FONTTYPE_FIGHT)
+                Call WriteConsoleMsg(VictimUserIndex, UserList(UserIndex).name & " te ha golpeado criticamente por " & dano & ".", FontTypeNames.FONTTYPE_FIGHT)
 
             End With
             
@@ -2245,8 +2245,9 @@ Public Sub DoMeditar(ByVal UserIndex As Integer)
             Call WriteConsoleMsg(UserIndex, "Has terminado de meditar.", FontTypeNames.FONTTYPE_INFO)
             Call WriteMeditateToggle(UserIndex)
             .flags.Meditando = False
-            .Char.Particle = 0
-            Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageCreateParticleChar(.Char.CharIndex, .Char.Particle, False, 0))
+            .Char.FX = 0
+            .Char.loops = 0
+            Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageCreateFX(.Char.CharIndex, 0, 0))
             Exit Sub
 
         End If
@@ -2452,9 +2453,9 @@ Public Sub DoHurtar(ByVal UserIndex As Integer, ByVal VictimaIndex As Integer)
             End If
                 
             Call RobarObjeto(UserIndex, VictimaIndex)
-            Call WriteConsoleMsg(VictimaIndex, "" & UserList(UserIndex).Name & " es un Bandido!", FontTypeNames.FONTTYPE_INFO)
+            Call WriteConsoleMsg(VictimaIndex, "" & UserList(UserIndex).name & " es un Bandido!", FontTypeNames.FONTTYPE_INFO)
         Else
-            Call WriteConsoleMsg(UserIndex, UserList(VictimaIndex).Name & " no tiene objetos.", FontTypeNames.FONTTYPE_INFO)
+            Call WriteConsoleMsg(UserIndex, UserList(VictimaIndex).name & " no tiene objetos.", FontTypeNames.FONTTYPE_INFO)
 
         End If
 
@@ -2532,7 +2533,7 @@ Public Sub ImitateNpc(ByVal UserIndex As Integer, ByVal NpcIndex As Integer)
     With UserList(UserIndex)
         
         ' Copy desc
-        .DescRM = Npclist(NpcIndex).Name
+        .DescRM = Npclist(NpcIndex).name
         
         ' Remove Anims (Npcs don't use equipment anims yet)
         .Char.CascoAnim = NingunCasco

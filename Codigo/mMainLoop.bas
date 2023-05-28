@@ -378,6 +378,16 @@ Public Sub PasarSegundo()
         
     End If
     
+    'Timer de recompensa de castillos
+    If TimerRecompensaCastillos = 0 Then
+        Call RepartirRecompensas
+        Call SetearContador
+        
+    Else
+        TimerRecompensaCastillos = TimerRecompensaCastillos - 1
+        
+    End If
+    
     If TimerEventoRinkel > 0 Then Call modArenaRinkel.RestarTimerEvento
     If TimerRondaEventoRinkel > 0 Then Call modArenaRinkel.RestarTimerRonda
     

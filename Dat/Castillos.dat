@@ -1,0 +1,10 @@
+[INIT]
+CastilloCount=1
+
+[CASTLE1]
+Nombre=Fortaleza del Crepúsculo
+Mapa=63
+Rey=656
+X=54
+Y=38
+Clan=Powers

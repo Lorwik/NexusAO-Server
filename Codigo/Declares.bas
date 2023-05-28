@@ -431,11 +431,12 @@ Public Enum eNPCType
     Noble = 5
     DRAGON = 6
     Marinero = 7
-    Timbero
     Guardiascaos = 8
     Gobernador = 9
     Subastador = 10
     Veterinario = 11
+    Timbero = 12
+    ReyCastillo = 13
     
 End Enum
 
@@ -766,7 +767,7 @@ End Type
 
 Public Type tHechizo
 
-    nombre As String
+    Nombre As String
     Desc As String
     PalabrasMagicas As String
     
@@ -937,7 +938,7 @@ End Type
 
 Public Type FXdata
 
-    nombre As String
+    Nombre As String
     GrhIndex As Long
     Delay As Integer
 
@@ -1276,7 +1277,7 @@ End Type
 
 Public Type tQuest
 
-    nombre As String
+    Nombre As String
     Desc As String
     RequiredLevel As Byte
     
@@ -1599,7 +1600,7 @@ Public Type tFacciones
 End Type
 
 Public Type AccountCharacters
-    Id As String
+    ID As String
     name As String
     body As Integer
     Head As Integer
@@ -1618,7 +1619,7 @@ End Type
 Public Const MAXPJACCOUNTS As Byte = 10
 
 Public Type AccountUser
-    Id As Long
+    ID As Long
     username As String
     Password As String
     Email As String
@@ -1650,7 +1651,7 @@ Public Type User
     RetoTemp As tUserRetoTemp
     
     name As String
-    Id As Long 'Id del PJ logeado actualmente
+    ID As Long 'Id del PJ logeado actualmente
     
     AccountInfo As AccountUser
     AccountName As String 'Utilizado para identificar PJ colgados
@@ -2490,8 +2491,6 @@ Public ApiPath As String
 'Esta variable es para poder luego cerrar el programa cuando cerramos el cliente.
 Public ApiNodeJsTaskId As Double
 
-Public NombreServidor As String
-
 Public Security As New clsSecurity
 
 Public User_Database As New clsDataBase
@@ -2526,3 +2525,6 @@ End Type
 
 Public GlobalDROPObject() As GlobalObj
 Public NUMGLOBALDROPS As Integer
+
+Public Castillo() As New clsCastillos
+Public CastleCount As Byte

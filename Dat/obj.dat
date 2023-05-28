@@ -85,7 +85,7 @@
 
 
 [INIT]
-NumOBJs=824
+NumOBJs=825
 
 [OBJ398]'1.0 714
 Name=Garrote
@@ -12590,3 +12590,8 @@ MAXDEF=15
 Crucial=1
 RazaTipo=1
 Nosecae=1
+
+[OBJ825]
+Name=Anillo de Lider
+GrhIndex=24107
+ObjType=29
