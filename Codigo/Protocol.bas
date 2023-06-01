@@ -3746,10 +3746,10 @@ Private Sub HandleInvitarPartyClick(ByVal UserIndex As Integer)
                 If Not mdParty.PuedeCrearParty(UserIndex) Then Exit Sub
                 
                 '¿Estan creando grupo?
-                If .FormandoGrupo <> .Id Then
+                If .FormandoGrupo <> .ID Then
                     
-                    .FormandoGrupo = UserList(.flags.TargetUser).Id
-                    UserList(.flags.TargetUser).FormandoGrupo = UserList(.flags.TargetUser).Id 'Se anota asi mismo, señal que es el invitado
+                    .FormandoGrupo = UserList(.flags.TargetUser).ID
+                    UserList(.flags.TargetUser).FormandoGrupo = UserList(.flags.TargetUser).ID 'Se anota asi mismo, señal que es el invitado
                     
                     Call WriteConsoleMsg(UserIndex, "Has enviado una peticion a " & UserList(.flags.TargetUser).name & " para crear un grupo.", FontTypeNames.FONTTYPE_INFO)
                     Call WriteConsoleMsg(.flags.TargetUser, UserList(UserIndex).name & " te ha invitado para crear un grupo.", FontTypeNames.FONTTYPE_INFO)
@@ -3923,7 +3923,7 @@ Private Sub HandleSpellInfo(ByVal UserIndex As Integer)
             With Hechizos(Spell)
                 'Send information
                 Call WriteConsoleMsg(UserIndex, "%%%%%%%%%%%% INFO DEL HECHIZO %%%%%%%%%%%%" & vbCrLf _
-                                               & "Nombre:" & .nombre & vbCrLf _
+                                               & "Nombre:" & .Nombre & vbCrLf _
                                                & "Descripción:" & .Desc & vbCrLf _
                                                & "Skill requerido: " & .MinSkill & " de magia." & vbCrLf _
                                                & "Mana necesario: " & .ManaRequerido & vbCrLf _
@@ -10041,16 +10041,16 @@ Private Sub HandleGMPanel(ByVal UserIndex As Integer)
     '
     '***************************************************
     
-    Dim Id As Byte
+    Dim ID As Byte
     
     With UserList(UserIndex)
         'Remove packet ID
         Call .incomingData.ReadByte
-        Id = .incomingData.ReadByte
+        ID = .incomingData.ReadByte
         
         If .flags.Privilegios And PlayerType.User Then Exit Sub
         
-        Call WriteShowGMPanelForm(UserIndex, Id)
+        Call WriteShowGMPanelForm(UserIndex, ID)
 
     End With
 
@@ -18788,7 +18788,7 @@ On Error GoTo errHandler
         Call .WriteInteger(UserList(UserIndex).Stats.UserHechizos(Slot))
         
         If UserList(UserIndex).Stats.UserHechizos(Slot) > 0 Then
-            Call .WriteASCIIString(Hechizos(UserList(UserIndex).Stats.UserHechizos(Slot)).nombre)
+            Call .WriteASCIIString(Hechizos(UserList(UserIndex).Stats.UserHechizos(Slot)).Nombre)
         Else
             Call .WriteASCIIString("(None)")
         End If
@@ -19406,7 +19406,7 @@ Public Sub WriteFamily(ByVal UserIndex As Integer)
     With UserList(UserIndex)
         Call .outgoingData.WriteByte(ServerPacketID.Family)
         
-        Call .outgoingData.WriteASCIIString(.Familiar.nombre)
+        Call .outgoingData.WriteASCIIString(.Familiar.Nombre)
         Call .outgoingData.WriteByte(.Familiar.Tipo)
         Call .outgoingData.WriteByte(.Familiar.Nivel)
         Call .outgoingData.WriteLong(.Familiar.Exp)
@@ -20770,7 +20770,7 @@ End Sub
 ' @param    UserIndex User to which the message is intended.
 ' @remarks  The data is not actually sent until the buffer is properly flushed.
 
-Public Sub WriteShowGMPanelForm(ByVal UserIndex As Integer, ByVal Id As Byte)
+Public Sub WriteShowGMPanelForm(ByVal UserIndex As Integer, ByVal ID As Byte)
 
     '***************************************************
     'Author: Juan Martin Sotuyo Dodero (Maraxus)
@@ -20782,7 +20782,7 @@ Public Sub WriteShowGMPanelForm(ByVal UserIndex As Integer, ByVal Id As Byte)
     With UserList(UserIndex).outgoingData
     
         Call .WriteByte(ServerPacketID.ShowGMPanelForm)
-        Call .WriteByte(Id)
+        Call .WriteByte(ID)
     
     End With
 
@@ -23753,7 +23753,7 @@ Private Sub WriteEnviaRank(ByVal UserIndex As Integer)
         Call .outgoingData.WriteByte(ServerPacketID.EnviarRanking)
         
         For i = 1 To 5
-            Call .outgoingData.WriteASCIIString(Ranked(i).nombre)
+            Call .outgoingData.WriteASCIIString(Ranked(i).Nombre)
             Call .outgoingData.WriteDouble(Ranked(i).ELO)
         Next i
         

@@ -27,3 +27,23 @@ Public Sub RepartirRecompensas()
         Call Castillo(i).RecompensarGuild
     Next i
 End Sub
+
+Public Function obtenerCastilloporMapa(ByVal Mapa As Integer) As Byte
+'*****************************************
+'Autor: Lorwik
+'Fecha: 28/05/2026
+'Descripción: Obtiene la Id del castillo segun el mapa que se le mando
+'*****************************************
+
+    Dim i As Byte
+    
+    For i = 1 To CastleCount
+    
+        If Mapa = Castillo(i).getMapa Then
+            obtenerCastilloporMapa = i
+            Exit Function
+        End If
+    
+    Next i
+
+End Function

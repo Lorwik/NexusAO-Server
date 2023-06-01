@@ -37,6 +37,9 @@ Option Explicit
 
 Global LeerNPCs As clsIniManager
 
+Public Declare Function QueryPerformanceCounter Lib "Kernel32" (lpPerformanceCount As Currency) As Long
+Public Declare Function QueryPerformanceFrequency Lib "Kernel32" (lpFrequency As Currency) As Long
+
 Sub DarCuerpoDesnudo(ByVal UserIndex As Integer, _
                      Optional ByVal Mimetizado As Boolean = False)
     '***************************************************
@@ -572,6 +575,7 @@ Private Sub InitMainTimers()
         .AutoSave.Enabled = True
 
         .GameTimer.Enabled = True
+        .Segundo.Enabled = True
         .PacketResend.Enabled = True
         .TIMER_AI.Enabled = True
         .Auditoria.Enabled = True
@@ -1933,3 +1937,15 @@ Public Function HexToColor(ByRef HexColor As String) As Long
     End If
 End Function
 
+Function Clamp(X As Variant, a As Variant, b As Variant) As Variant
+        
+    On Error GoTo Clamp_Err
+        
+    Clamp = IIf(X < a, a, IIf(X > b, b, X))
+        
+    Exit Function
+
+Clamp_Err:
+    Call TraceError(Err.Number, Err.description & "Clamp_Err", Erl)
+        
+End Function

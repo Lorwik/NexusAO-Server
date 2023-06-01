@@ -2131,31 +2131,6 @@ errHandler:
 
 End Sub
 
-Sub ReloadSokcet()
-    '***************************************************
-    'Author: Unknown
-    'Last Modification: -
-    '
-    '***************************************************
-
-    On Error GoTo errHandler
-
-    Call LogApiSock("ReloadSokcet() " & NumUsers & " " & LastUser & " " & MaxUsers)
-    
-    If NumUsers <= 0 Then
-        Call WSApiReiniciarSockets
-    Else
-        'Call apiclosesocket(SockListen)
-        'SockListen = ListenForConnect(Puerto, hWndMsg, vbNullString)
-    End If
-
-    Exit Sub
-    
-errHandler:
-    Call LogError("Error en CheckSocketState " & Err.Number & ": " & Err.description)
-
-End Sub
-
 Public Sub EcharPjsNoPrivilegiados()
     '***************************************************
     'Author: Unknown

@@ -1387,6 +1387,27 @@ Sub NPCAtacado(ByVal NpcIndex As Integer, ByVal UserIndex As Integer)
             End If
     
         End If
+        
+        '¿Es un rey de castillo?
+        If .NPCtype = eNPCType.ReyCastillo Then
+            Dim Castle As Byte
+            Castle = obtenerCastilloporMapa(.Pos.Map)
+            
+            '¿Pertenece algun castillo?
+            If Castle > 0 Then
+
+                If (.Stats.MinHp / .Stats.MaxHp) * 100 = 99 Then
+                    Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg("El Rey de " & Castillo(Castle).getNombreCastillo & " esta siendo atacado por el clan " & modGuilds.GuildName(UserList(UserIndex).GuildIndex) & ".", FontTypeNames.FONTTYPE_GUILD))
+            
+                ElseIf (.Stats.MinHp / .Stats.MaxHp) * 100 = 50 Then
+                    Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg("El Rey de " & Castillo(Castle).getNombreCastillo & " esta siendo atacado por el clan " & modGuilds.GuildName(UserList(UserIndex).GuildIndex) & ".", FontTypeNames.FONTTYPE_GUILD))
+                
+                ElseIf (.Stats.MinHp / .Stats.MaxHp) * 100 = 10 Then
+                    Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg("El Rey de " & Castillo(Castle).getNombreCastillo & " esta apunto de caer por el clan " & modGuilds.GuildName(UserList(UserIndex).GuildIndex) & ".", FontTypeNames.FONTTYPE_GUILD))
+                    
+                End If
+            End If
+        End If
 
     End With
 
