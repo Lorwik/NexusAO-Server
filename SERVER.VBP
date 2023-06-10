@@ -89,6 +89,7 @@ Module=modPLantes; Codigo\modPlantes.bas
 Module=modELO; Codigo\modELO.bas
 Class=clsCastillos; Codigo\clsCastillos.cls
 Module=modCastillos; Codigo\modCastillos.bas
+Module=modTrampas; Codigo\modTrampas.bas
 IconForm="frmMain"
 Startup="Sub Main"
 HelpFile=""

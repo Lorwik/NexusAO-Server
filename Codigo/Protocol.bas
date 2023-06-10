@@ -1469,11 +1469,11 @@ Private Sub HandleGMCommands(ByVal UserIndex As Integer)
             Case eGMCommands.LimpiarMundo                       '/LIMPIARMUNDO
                 Call HandleLimpiarMundo(UserIndex)
                 
-            Case eGMCommands.EditCREDITS                        '/EDITCREDITS
-                Call HandleEditCredits(UserIndex)
+            Case eGMCommands.EditGems                        '/EDITGEMAS
+                Call HandleEditGems(UserIndex)
                 
-            Case eGMCommands.ConsultarCreditos                     '/CONSULTARCREDITS
-                Call HandleConsultarCreditos(UserIndex)
+            Case eGMCommands.ConsultarGemas                     '/CONSULTARGEMAS
+                Call HandleConsultarGemas(UserIndex)
                 
             Case eGMCommands.SilenciarGlobal
                 Call HandleSilenciarGlobal(UserIndex)
@@ -18632,6 +18632,7 @@ Public Sub WriteUpdateUserStats(ByVal UserIndex As Integer)
         Call .WriteInteger(UserList(UserIndex).Stats.MaxSta)
         Call .WriteInteger(UserList(UserIndex).Stats.MinSta)
         Call .WriteLong(UserList(UserIndex).Stats.Gld)
+        Call .WriteLong(UserList(UserIndex).AccountInfo.Gemas)
         Call .WriteByte(UserList(UserIndex).Stats.ELV)
         Call .WriteLong(UserList(UserIndex).Stats.ELU)
         Call .WriteLong(UserList(UserIndex).Stats.Exp)
@@ -22687,15 +22688,15 @@ Public Sub HandleLimpiarMundo(ByVal UserIndex As Integer)
     
 End Sub
 
-Public Sub HandleEditCredits(ByVal UserIndex As Integer)
+Public Sub HandleEditGems(ByVal UserIndex As Integer)
 '***************************************************
 'Author: Lorwik
 'Last Modification: 30/04/2020
-'Edita las Creditos del usuario
+'Edita las Gemas del usuario
 '***************************************************
     
     Dim username As String
-    Dim CantCredits As Long
+    Dim CantGems As Long
     Dim opcion As Byte
     
     With UserList(UserIndex)
@@ -22704,7 +22705,7 @@ Public Sub HandleEditCredits(ByVal UserIndex As Integer)
         Call .incomingData.ReadByte
         
         username = .incomingData.ReadASCIIString
-        CantCredits = .incomingData.ReadLong
+        CantGems = .incomingData.ReadLong
         opcion = .incomingData.ReadByte
         
         'Me fijo si es Admin
@@ -22715,37 +22716,37 @@ Public Sub HandleEditCredits(ByVal UserIndex As Integer)
             Exit Sub
         End If
         
-        If CantCredits > 10000 Then
-            Call WriteConsoleMsg(UserIndex, "El valor de las Creditos no puede superar 10000", FontTypeNames.FONTTYPE_INFO)
+        If CantGems > 10000 Then
+            Call WriteConsoleMsg(UserIndex, "El valor de las Gemas no puede superar 10000", FontTypeNames.FONTTYPE_INFO)
             Exit Sub
         End If
         
         Select Case opcion
         
-            Case 0 'Editar las Creditos
-                If Cuentas.SaveAccountEditCreditosDatabase(username, CantCredits) Then
-                    Call WriteConsoleMsg(UserIndex, "Se editaron " & CantCredits & " Creditos a la cuenta de " & username, FontTypeNames.FONTTYPE_INFO)
+            Case 0 'Editar las Gemas
+                If Cuentas.SaveAccountEditGemasDatabase(username, CantGems) Then
+                    Call WriteConsoleMsg(UserIndex, "Se editaron " & CantGems & " Gemas a la cuenta de " & username, FontTypeNames.FONTTYPE_INFO)
                     
                 Else
-                    Call WriteConsoleMsg(UserIndex, "ERROR: No se pudo editar las Creditos a la cuenta del usuario." & username, FontTypeNames.FONTTYPE_INFO)
+                    Call WriteConsoleMsg(UserIndex, "ERROR: No se pudo editar las Gemas a la cuenta del usuario." & username, FontTypeNames.FONTTYPE_INFO)
                     
                 End If
             
-            Case 1 'Sumar las Creditos
-                If Cuentas.SaveAccountSumaCreditosDatabase(username, CantCredits) Then
-                    Call WriteConsoleMsg(UserIndex, "Se sumaron " & CantCredits & " Creditos a la cuenta de " & username & ". Ahora tiene " & Cuentas.GetCreditosDatabase(username) & " Creditos. ", FontTypeNames.FONTTYPE_INFO)
+            Case 1 'Sumar las Gemas
+                If Cuentas.SaveAccountSumaGemasDatabase(username, CantGems) Then
+                    Call WriteConsoleMsg(UserIndex, "Se sumaron " & CantGems & " Gemas a la cuenta de " & username & ". Ahora tiene " & Cuentas.GetGemasDatabase(username) & " Gemas. ", FontTypeNames.FONTTYPE_INFO)
                     
                 Else
-                    Call WriteConsoleMsg(UserIndex, "ERROR: No se pudo sumar las Creditos a la cuenta del usuario." & username, FontTypeNames.FONTTYPE_INFO)
+                    Call WriteConsoleMsg(UserIndex, "ERROR: No se pudo sumar las Gemas a la cuenta del usuario." & username, FontTypeNames.FONTTYPE_INFO)
                     
                 End If
                 
-            Case 2 'Restar las Creditos
-                If Cuentas.SaveAccountRestaCreditosDatabase(username, CantCredits) Then
-                    Call WriteConsoleMsg(UserIndex, "Se restaron " & CantCredits & " Creditos a la cuenta de " & username & ". Ahora tiene " & Cuentas.GetCreditosDatabase(username) & " Creditos. ", FontTypeNames.FONTTYPE_INFO)
+            Case 2 'Restar las Gemas
+                If Cuentas.SaveAccountRestaGemasDatabase(username, CantGems) Then
+                    Call WriteConsoleMsg(UserIndex, "Se restaron " & CantGems & " Gemas a la cuenta de " & username & ". Ahora tiene " & Cuentas.GetGemasDatabase(username) & " Gemas. ", FontTypeNames.FONTTYPE_INFO)
                     
                 Else
-                    Call WriteConsoleMsg(UserIndex, "ERROR: No se pudo restar las Creditos de la cuenta del usuario." & username, FontTypeNames.FONTTYPE_INFO)
+                    Call WriteConsoleMsg(UserIndex, "ERROR: No se pudo restar las Gemas de la cuenta del usuario." & username, FontTypeNames.FONTTYPE_INFO)
                     
                 End If
         End Select
@@ -22753,11 +22754,11 @@ Public Sub HandleEditCredits(ByVal UserIndex As Integer)
     
 End Sub
 
-Public Sub HandleConsultarCreditos(ByVal UserIndex As Integer)
+Public Sub HandleConsultarGemas(ByVal UserIndex As Integer)
 '***************************************************
 'Author: Lorwik
 'Last Modification: 30/04/2020
-'Consulta las Creditos del usuario
+'Consulta las Gemas del usuario
 '***************************************************
 
     Dim username As String
@@ -22777,7 +22778,7 @@ Public Sub HandleConsultarCreditos(ByVal UserIndex As Integer)
             Exit Sub
         End If
         
-        Call WriteConsoleMsg(UserIndex, username & " tiene " & Cuentas.GetCreditosDatabase(username) & " Creditos en su cuenta.", FontTypeNames.FONTTYPE_INFO)
+        Call WriteConsoleMsg(UserIndex, username & " tiene " & Cuentas.GetGemasDatabase(username) & " Gemas en su cuenta.", FontTypeNames.FONTTYPE_INFO)
     
     End With
 End Sub

@@ -1595,7 +1595,7 @@ Sub ResetUserAccount(ByVal UserIndex As Integer)
         .AccountInfo.username = vbNullString
         .AccountInfo.Password = vbNullString
         .AccountInfo.Salt = vbNullString
-        .AccountInfo.creditos = 0
+        .AccountInfo.Gemas = 0
         .AccountInfo.status = False
         
         For i = 1 To .AccountInfo.NumPjs

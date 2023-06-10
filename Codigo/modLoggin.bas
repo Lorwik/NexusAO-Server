@@ -25,7 +25,7 @@ Private Enum type_log
 
     e_LogearEventoDeSubasta = 0
     e_LogBan = 1
-    e_LogCreditosPatreon = 2
+    e_LogGemasPatreon = 2
     e_LogShopTransactions = 3
     e_LogShopErrors = 4
     e_LogEdicionPaquete = 5
@@ -106,11 +106,11 @@ End Sub
 
 Public Sub LogearEventoDeSubasta(s As String)
 
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
 
     Call LogThis(type_log.e_LogearEventoDeSubasta, "[Subastas.log] " & s, vbLogEventTypeInformation)
     Exit Sub
-ErrHandler:
+errHandler:
 
 End Sub
 
@@ -118,164 +118,164 @@ Sub LogBan(ByVal BannedIndex As Integer, _
            ByVal UserIndex As Integer, _
            ByVal Motivo As String)
 
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
 
     Dim s As String
 
     s = UserList(BannedIndex).name & " BannedBy " & UserList(UserIndex).name & " Reason " & Motivo
     Call LogThis(type_log.e_LogBan, "[Bans] " & s, vbLogEventTypeInformation)
     Exit Sub
-ErrHandler:
+errHandler:
 
 End Sub
 
-Public Sub LogCreditosPatreon(Desc As String)
+Public Sub LogGemasPatreon(Desc As String)
 
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
 
-    Call LogThis(type_log.e_LogCreditosPatreon, "[MonetizationCreditosPatreon.log] " & Desc, vbLogEventTypeInformation)
+    Call LogThis(type_log.e_LogGemasPatreon, "[MonetizationGemasPatreon.log] " & Desc, vbLogEventTypeInformation)
     Exit Sub
-ErrHandler:
+errHandler:
 
 End Sub
 
 Public Sub LogShopTransactions(Desc As String)
 
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
 
     Call LogThis(type_log.e_LogShopTransactions, "[MonetizationShopTransactions.log] " & Desc, vbLogEventTypeInformation)
     Exit Sub
-ErrHandler:
+errHandler:
 
 End Sub
 
 Public Sub LogShopErrors(Desc As String)
 
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
 
     Call LogThis(type_log.e_LogShopErrors, "[MonetizationShopErrors.log] " & Desc, vbLogEventTypeError)
     Exit Sub
-ErrHandler:
+errHandler:
 
 End Sub
 
 Public Sub LogEdicionPaquete(texto As String)
 
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
 
     Call LogThis(type_log.e_LogEdicionPaquete, "[EdicionPaquete.log] " & texto, vbLogEventTypeWarning)
     Exit Sub
-ErrHandler:
+errHandler:
 
 End Sub
 
 Public Sub LogMacroServidor(texto As String)
 
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
 
     Call LogThis(type_log.e_LogMacroServidor, "[MacroServidor] " & texto, vbLogEventTypeInformation)
     Exit Sub
-ErrHandler:
+errHandler:
 
 End Sub
 
 Public Sub LogMacroCliente(texto As String)
 
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
 
     Call LogThis(type_log.e_LogMacroCliente, "[MacroCliente] " & texto, vbLogEventTypeInformation)
     Exit Sub
-ErrHandler:
+errHandler:
 
 End Sub
 
 Public Sub logVentaCasa(ByVal texto As String)
 
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
 
     Call LogThis(type_log.e_LogVentaCasa, "[Propiedades] " & texto, vbLogEventTypeInformation)
     Exit Sub
-ErrHandler:
+errHandler:
 
 End Sub
 
 Public Sub LogCriticEvent(Desc As String)
 
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
 
     Call LogThis(type_log.e_LogCriticEvent, "[Eventos.log] " & Desc, vbLogEventTypeWarning)
     Exit Sub
-ErrHandler:
+errHandler:
 
 End Sub
 
 Public Sub LogEjercitoReal(Desc As String)
 
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
 
     Call LogThis(type_log.e_LogEjercitoReal, "[EjercitoReal.log] " & Desc, vbLogEventTypeInformation)
     Exit Sub
-ErrHandler:
+errHandler:
 
 End Sub
 
 Public Sub LogEjercitoCaos(Desc As String)
 
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
 
     Call LogThis(type_log.e_LogEjercitoCaos, "[EjercitoCaos.log] " & Desc, vbLogEventTypeInformation)
     Exit Sub
-ErrHandler:
+errHandler:
 
 End Sub
 
 Public Sub LogError(Desc As String)
 
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
 
     Call LogThis(type_log.e_LogError, "[Errores.log] " & Desc, vbLogEventTypeError)
     Exit Sub
-ErrHandler:
+errHandler:
 
 End Sub
 
 Public Sub LogPerformance(Desc As String)
 
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
 
     Call LogThis(type_log.e_LogPerformance, "[Performance.log] " & Desc, vbLogEventTypeInformation)
     Exit Sub
-ErrHandler:
+errHandler:
 
 End Sub
 
 Public Sub LogConsulta(Desc As String)
 
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
 
     Call LogThis(type_log.e_LogConsulta, "[obtenemos.log] " & Desc, vbLogEventTypeInformation)
     Exit Sub
-ErrHandler:
+errHandler:
 
 End Sub
 
 Public Sub LogClanes(ByVal str As String)
 
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
 
     Call LogThis(type_log.e_LogClanes, "[Clans.log] " & str, vbLogEventTypeInformation)
     Exit Sub
-ErrHandler:
+errHandler:
 
 End Sub
 
 Public Sub LogGM(name As String, Desc As String)
 
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
 
     Call LogThis(type_log.e_LogGM, "[" & name & "] " & Desc, vbLogEventTypeInformation)
     Exit Sub
-ErrHandler:
+errHandler:
 
 End Sub
 
@@ -285,34 +285,34 @@ Public Sub LogPremios(GM As String, _
                       ByVal Cantidad As Integer, _
                       Motivo As String)
 
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
 
     Dim s As String
 
     s = "Item: " & ObjData(ObjIndex).name & " (" & ObjIndex & ") Cantidad: " & Cantidad & vbNewLine & "Motivo: " & Motivo & vbNewLine & vbNewLine
     Call LogThis(type_log.e_LogPremios, s, vbLogEventTypeInformation)
     Exit Sub
-ErrHandler:
+errHandler:
 
 End Sub
 
 Public Sub LogDatabaseError(Desc As String)
 
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
 
     Call LogThis(type_log.e_LogDatabaseError, "[Database.log] " & Desc, vbLogEventTypeError)
     Exit Sub
-ErrHandler:
+errHandler:
 
 End Sub
 
 Public Sub LogSecurity(str As String)
 
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
 
     Call LogThis(type_log.e_LogSecurity, "[Cheating.log] " & str, vbLogEventTypeWarning)
     Exit Sub
-ErrHandler:
+errHandler:
 
 End Sub
 

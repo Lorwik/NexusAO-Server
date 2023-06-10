@@ -251,8 +251,10 @@ Public Enum eTrigger
     ZONASEGURA = 4
     ANTIPIQUETE = 5
     ZONAPELEA = 6
-    Invocaciones = 7
-
+    INVOCACIONES = 7
+    TRAMPA_1 = 8
+    TRAMPA_2 = 9
+    SALASANGRE = 10
 End Enum
 
 ''
@@ -1625,7 +1627,7 @@ Public Type AccountUser
     Email As String
     Salt As String
     status As Boolean
-    creditos As Long
+    Gemas As Long
     
     NumPjs As Byte
     AccountPJ(1 To MAXPJACCOUNTS) As AccountCharacters
@@ -2372,8 +2374,8 @@ Public Enum eGMCommands
     SearchNpc               '/BUSCAR
     SearchObj               '/BUSCAR
     LimpiarMundo            '/LIMPIARMUNDO
-    EditCREDITS             '/EDITCREDITS
-    ConsultarCreditos       '/CONSULTARCREDITS
+    EditGems             '/EDITGEMAS
+    ConsultarGemas          '/CONSULTARGEMAS
     SilenciarGlobal         '/SILENCIARGLOBAL
     ToggleGlobal            '/TOGGLEGLOBAL
 End Enum

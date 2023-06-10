@@ -3,7 +3,7 @@ Option Explicit
 
 Public Const MAX_PJ_ACCOUNT As Byte = 8
 
-Public Sub LoginAccountDatabase(ByVal UserIndex As Integer, ByVal UserName As String)
+Public Sub LoginAccountDatabase(ByVal UserIndex As Integer, ByVal username As String)
     '***************************************************
     'Author: Lorwik
     'Last Modification: 20/05/2020
@@ -27,7 +27,7 @@ Public Sub LoginAccountDatabase(ByVal UserIndex As Integer, ByVal UserName As St
         '***********************
         'LOGIN DE LA CUENTA
         '***********************
-        If Not Account_Database.MakeQuery("SELECT id, username, email, password, salt, creditos, status FROM cuentas WHERE UPPER(username) = (?)", False, UCase$(UserName)) Then
+        If Not Account_Database.MakeQuery("SELECT id, username, email, password, salt, Gemas, status FROM cuentas WHERE UPPER(username) = (?)", False, UCase$(username)) Then
             Call WriteErrorMsg(UserIndex, "Error al cargar la cuenta.")
             Call CloseUser(UserIndex)
             Exit Sub
@@ -35,12 +35,12 @@ Public Sub LoginAccountDatabase(ByVal UserIndex As Integer, ByVal UserName As St
         End If
             
         'Guardo la información de la cuenta
-        .AccountInfo.Id = CInt(Account_Database.Database_RecordSet!Id)
-        .AccountInfo.UserName = Account_Database.Database_RecordSet!UserName
+        .AccountInfo.ID = CInt(Account_Database.Database_RecordSet!ID)
+        .AccountInfo.username = Account_Database.Database_RecordSet!username
         .AccountInfo.Email = Account_Database.Database_RecordSet!Email
         .AccountInfo.Password = Account_Database.Database_RecordSet!Password
         .AccountInfo.Salt = Account_Database.Database_RecordSet!Salt
-        .AccountInfo.creditos = CLng(Account_Database.Database_RecordSet!creditos)
+        .AccountInfo.Gemas = CLng(Account_Database.Database_RecordSet!Gemas)
         .AccountInfo.status = CBool(Account_Database.Database_RecordSet!status)
             
         Set Account_Database.Database_RecordSet = Nothing
@@ -52,7 +52,7 @@ Public Sub LoginAccountDatabase(ByVal UserIndex As Integer, ByVal UserName As St
         .AccountInfo.NumPjs = 0
         
         If User_Database.MakeQuery("SELECT id, name, level, body_id, head_id, weapon_id, shield_id, helmet_id, race_id, class_id, pos_map, rep_average, is_dead FROM personaje WHERE cuenta_id = (?) AND deleted = FALSE", _
-                                    False, UserList(UserIndex).AccountInfo.Id) Then
+                                    False, UserList(UserIndex).AccountInfo.ID) Then
         
 
             User_Database.Database_RecordSet.MoveFirst
@@ -62,8 +62,8 @@ Public Sub LoginAccountDatabase(ByVal UserIndex As Integer, ByVal UserName As St
                 'Incrementamos la cantidad de PJ creados actualmnente
                 .AccountInfo.NumPjs = .AccountInfo.NumPjs + 1
     
-                .AccountInfo.AccountPJ(.AccountInfo.NumPjs).Id = User_Database.Database_RecordSet!Id
-                .AccountInfo.AccountPJ(.AccountInfo.NumPjs).Name = User_Database.Database_RecordSet!Name
+                .AccountInfo.AccountPJ(.AccountInfo.NumPjs).ID = User_Database.Database_RecordSet!ID
+                .AccountInfo.AccountPJ(.AccountInfo.NumPjs).name = User_Database.Database_RecordSet!name
                 .AccountInfo.AccountPJ(.AccountInfo.NumPjs).body = User_Database.Database_RecordSet!body_id
                 .AccountInfo.AccountPJ(.AccountInfo.NumPjs).Head = User_Database.Database_RecordSet!head_id
                 .AccountInfo.AccountPJ(.AccountInfo.NumPjs).weapon = User_Database.Database_RecordSet!weapon_id
@@ -75,7 +75,7 @@ Public Sub LoginAccountDatabase(ByVal UserIndex As Integer, ByVal UserName As St
                 .AccountInfo.AccountPJ(.AccountInfo.NumPjs).level = User_Database.Database_RecordSet!level
                 .AccountInfo.AccountPJ(.AccountInfo.NumPjs).criminal = (User_Database.Database_RecordSet!rep_average < 0)
                 .AccountInfo.AccountPJ(.AccountInfo.NumPjs).dead = User_Database.Database_RecordSet!is_dead
-                .AccountInfo.AccountPJ(.AccountInfo.NumPjs).gameMaster = EsGmChar(User_Database.Database_RecordSet!Name)
+                .AccountInfo.AccountPJ(.AccountInfo.NumPjs).gameMaster = EsGmChar(User_Database.Database_RecordSet!name)
                     
                 If .AccountInfo.AccountPJ(.AccountInfo.NumPjs).gameMaster = True Then TieneGM = True
                         
@@ -107,7 +107,7 @@ Public Sub LoginAccountDatabase(ByVal UserIndex As Integer, ByVal UserName As St
 
     Exit Sub
 ErrorHandler:
-    Call LogDatabaseError("Error in LoginAccountDatabase: " & UserName & ". " & Err.Number & " - " & Err.description)
+    Call LogDatabaseError("Error in LoginAccountDatabase: " & username & ". " & Err.Number & " - " & Err.description)
 
 End Sub
 
@@ -141,7 +141,7 @@ Public Sub CloseAccount(ByVal UserIndex As Integer)
 
 End Sub
 
-Public Function CuentaExisteDatabase(ByVal UserName As String) As Boolean
+Public Function CuentaExisteDatabase(ByVal username As String) As Boolean
 
     '***************************************************
     'Author: Lorwik
@@ -158,7 +158,7 @@ Public Function CuentaExisteDatabase(ByVal UserName As String) As Boolean
         If Account_Database.CheckSQLStatus = False Then Account_Database.Database_Reconnect
     #End If
 
-    If Not Account_Database.MakeQuery("SELECT id FROM cuentas WHERE UPPER(username) = (?)", False, UCase$(UserName)) Then
+    If Not Account_Database.MakeQuery("SELECT id FROM cuentas WHERE UPPER(username) = (?)", False, UCase$(username)) Then
         CuentaExisteDatabase = False
         Exit Function
 
@@ -177,11 +177,11 @@ ErrorHandler:
     If Err.Number = -1207576359 Then _
         Call Account_Database.Database_Reconnect
 
-    Call LogDatabaseError("Error in CuentaExisteDatabase: " & UserName & ". " & Err.Number & " - " & Err.description)
+    Call LogDatabaseError("Error in CuentaExisteDatabase: " & username & ". " & Err.Number & " - " & Err.description)
 
 End Function
 
-Public Function CuentaVerificada(ByVal UserName As String) As Boolean
+Public Function CuentaVerificada(ByVal username As String) As Boolean
 
     '***************************************************
     'Author: Lorwik
@@ -198,7 +198,7 @@ Public Function CuentaVerificada(ByVal UserName As String) As Boolean
         If Account_Database.CheckSQLStatus = False Then Account_Database.Database_Reconnect
     #End If
     
-    If Not Account_Database.MakeQuery("SELECT status FROM cuentas WHERE UPPER(username) = (?)", False, UCase$(UserName)) Then
+    If Not Account_Database.MakeQuery("SELECT status FROM cuentas WHERE UPPER(username) = (?)", False, UCase$(username)) Then
        CuentaVerificada = False
         Exit Function
 
@@ -214,11 +214,11 @@ Public Function CuentaVerificada(ByVal UserName As String) As Boolean
     Exit Function
 
 ErrorHandler:
-    Call LogDatabaseError("Error in CuentaVerificada: " & UserName & ". " & Err.Number & " - " & Err.description)
+    Call LogDatabaseError("Error in CuentaVerificada: " & username & ". " & Err.Number & " - " & Err.description)
 
 End Function
 
-Public Function PersonajePerteneceCuenta(ByVal UserIndex As Integer, ByVal UserName As String) As Boolean
+Public Function PersonajePerteneceCuenta(ByVal UserIndex As Integer, ByVal username As String) As Boolean
 
     '***************************************************
     'Author: Lorwik
@@ -239,7 +239,7 @@ Public Function PersonajePerteneceCuenta(ByVal UserIndex As Integer, ByVal UserN
         If User_Database.CheckSQLStatus = False Then User_Database.Database_Reconnect
     #End If
 
-    If Not User_Database.MakeQuery("SELECT id FROM personaje WHERE UPPER(name) = (?) AND cuenta_id = (?)", False, UCase$(UserName), UserList(UserIndex).AccountInfo.Id) Then
+    If Not User_Database.MakeQuery("SELECT id FROM personaje WHERE UPPER(name) = (?) AND cuenta_id = (?)", False, UCase$(username), UserList(UserIndex).AccountInfo.ID) Then
         PersonajePerteneceCuenta = False
         Exit Function
 
@@ -255,7 +255,7 @@ Public Function PersonajePerteneceCuenta(ByVal UserIndex As Integer, ByVal UserN
     Exit Function
 
 ErrorHandler:
-    Call LogDatabaseError("Error in PersonajePerteneceCuenta: " & UserName & ". " & Err.Number & " - " & Err.description)
+    Call LogDatabaseError("Error in PersonajePerteneceCuenta: " & username & ". " & Err.Number & " - " & Err.description)
 
 End Function
 
@@ -279,7 +279,7 @@ Public Function GetCountUserAccount(ByVal UserIndex As Integer) As Byte
         If User_Database.CheckSQLStatus = False Then User_Database.Database_Reconnect
     #End If
     
-    If Not User_Database.MakeQuery("SELECT COUNT(*) FROM personaje WHERE deleted = 0 and cuenta_id = (?)", False, UserList(UserIndex).AccountInfo.Id) Then
+    If Not User_Database.MakeQuery("SELECT COUNT(*) FROM personaje WHERE deleted = 0 and cuenta_id = (?)", False, UserList(UserIndex).AccountInfo.ID) Then
         GetCountUserAccount = 0
         Exit Function
 
@@ -294,11 +294,11 @@ Public Function GetCountUserAccount(ByVal UserIndex As Integer) As Byte
 
     Exit Function
 ErrorHandler:
-    Call LogDatabaseError("Error in GetUserTrainingTimeDatabase: UserIndex: " & UserIndex & " - Hash: " & UserList(UserIndex).AccountInfo.Id & ". " & Err.Number & " - " & Err.description)
+    Call LogDatabaseError("Error in GetUserTrainingTimeDatabase: UserIndex: " & UserIndex & " - Hash: " & UserList(UserIndex).AccountInfo.ID & ". " & Err.Number & " - " & Err.description)
 
 End Function
 
-Public Sub BorrarUsuarioDatabase(ByVal UserName As String)
+Public Sub BorrarUsuarioDatabase(ByVal username As String)
 
     '***************************************************
     'Author: Lorwik
@@ -315,7 +315,7 @@ Public Sub BorrarUsuarioDatabase(ByVal UserName As String)
         If User_Database.CheckSQLStatus = False Then User_Database.Database_Reconnect
     #End If
 
-    Call User_Database.MakeQuery("UPDATE personaje SET name = (?), deleted = TRUE WHERE UPPER(name) = (?)", True, UCase$(UserName) & "_deleted", UCase$(UserName))
+    Call User_Database.MakeQuery("UPDATE personaje SET name = (?), deleted = TRUE WHERE UPPER(name) = (?)", True, UCase$(username) & "_deleted", UCase$(username))
     
     #If DBConexionUnica = 0 Then
         Call User_Database.Database_Close
@@ -324,7 +324,7 @@ Public Sub BorrarUsuarioDatabase(ByVal UserName As String)
     Exit Sub
 
 ErrorHandler:
-    Call LogDatabaseError("Error in BorrarUsuarioDatabase: " & UserName & ". " & Err.Number & " - " & Err.description)
+    Call LogDatabaseError("Error in BorrarUsuarioDatabase: " & username & ". " & Err.Number & " - " & Err.description)
 
 End Sub
 
@@ -400,7 +400,7 @@ ErrorHandler:
 
 End Function
 
-Public Function GetAccountID(ByVal UserName As String) As Long
+Public Function GetAccountID(ByVal username As String) As Long
 
     '***************************************************
     'Author: Lorwik
@@ -418,7 +418,7 @@ Public Function GetAccountID(ByVal UserName As String) As Long
         If User_Database.CheckSQLStatus = False Then User_Database.Database_Reconnect
     #End If
 
-    If Not User_Database.MakeQuery("SELECT cuenta_id FROM personaje WHERE UPPER(name) = (?)", False, UCase$(UserName)) Then
+    If Not User_Database.MakeQuery("SELECT cuenta_id FROM personaje WHERE UPPER(name) = (?)", False, UCase$(username)) Then
         GetAccountID = -1
         Exit Function
 
@@ -434,11 +434,11 @@ Public Function GetAccountID(ByVal UserName As String) As Long
     Exit Function
     
 ErrorHandler:
-    Call LogDatabaseError("Error in GetAccountID: " & UserName & ". " & Err.Number & " - " & Err.description)
+    Call LogDatabaseError("Error in GetAccountID: " & username & ". " & Err.Number & " - " & Err.description)
 
 End Function
 
-Public Function GetUserEmail(ByVal UserName As String) As String
+Public Function GetUserEmail(ByVal username As String) As String
 
     '***************************************************
     'Author: Lorwik
@@ -455,13 +455,13 @@ Public Function GetUserEmail(ByVal UserName As String) As String
         If Account_Database.CheckSQLStatus = False Then Account_Database.Database_Reconnect
     #End If
 
-    If Not User_Database.MakeQuery("SELECT email FROM cuentas WHERE id = (?)", False, GetAccountID(UserName)) Then
+    If Not User_Database.MakeQuery("SELECT email FROM cuentas WHERE id = (?)", False, GetAccountID(username)) Then
         GetUserEmail = vbNullString
         Exit Function
 
     End If
 
-    GetUserEmail = Account_Database.Database_RecordSet!UserName
+    GetUserEmail = Account_Database.Database_RecordSet!username
     Set Account_Database.Database_RecordSet = Nothing
     
     #If DBConexionUnica = 0 Then
@@ -470,11 +470,11 @@ Public Function GetUserEmail(ByVal UserName As String) As String
 
     Exit Function
 ErrorHandler:
-    Call LogDatabaseError("Error in GetUserEmail: " & UserName & ". " & Err.Number & " - " & Err.description)
+    Call LogDatabaseError("Error in GetUserEmail: " & username & ". " & Err.Number & " - " & Err.description)
 
 End Function
 
-Public Function SaveNewAccount(ByVal UserName As String, _
+Public Function SaveNewAccount(ByVal username As String, _
                                   ByVal Email As String, _
                                   ByVal Password As String, _
                                   ByVal Salt As String) As Boolean
@@ -493,18 +493,18 @@ Public Function SaveNewAccount(ByVal UserName As String, _
 
     query = "INSERT INTO cuentas SET username = (?), email = (?), password = (?), salt = (?), id_confirmacion = 'VERIFICADA', status = '1', date_created = NOW(), date_last_login = NOW();"
 
-    Call Account_Database.MakeQuery(query, True, UserName, Email, Password, Salt)
+    Call Account_Database.MakeQuery(query, True, username, Email, Password, Salt)
 
     SaveNewAccount = True
     
     Exit Function
 ErrorHandler:
-    Call LogDatabaseError("Error in SaveNewAccountDatabase: " & UserName & ". " & Err.Number & " - " & Err.description)
+    Call LogDatabaseError("Error in SaveNewAccountDatabase: " & username & ". " & Err.Number & " - " & Err.description)
     SaveNewAccount = False
 
 End Function
 
-Public Function SaveAccountEditCreditosDatabase(ByVal UserName As String, ByVal creditos As Long) As Boolean
+Public Function SaveAccountEditGemasDatabase(ByVal username As String, ByVal Gemas As Long) As Boolean
 
     '***************************************************
     'Author: Lorwik
@@ -522,17 +522,17 @@ Public Function SaveAccountEditCreditosDatabase(ByVal UserName As String, ByVal 
         If User_Database.CheckSQLStatus = False Then User_Database.Database_Reconnect
     #End If
     
-    UserAccId = GetAccountID(UserName)
+    UserAccId = GetAccountID(username)
     
     '¿Obtuvimos una ID nula?
     If UserAccId <> -1 Then
     
-        Call Account_Database.MakeQuery("UPDATE cuentas SET creditos = (?) WHERE id = " & UserAccId, True, creditos)
+        Call Account_Database.MakeQuery("UPDATE cuentas SET Gemas = (?) WHERE id = " & UserAccId, True, Gemas)
         
-        SaveAccountEditCreditosDatabase = True
+        SaveAccountEditGemasDatabase = True
         
     Else
-        SaveAccountEditCreditosDatabase = False
+        SaveAccountEditGemasDatabase = False
         
     End If
 
@@ -542,12 +542,12 @@ Public Function SaveAccountEditCreditosDatabase(ByVal UserName As String, ByVal 
 
     Exit Function
 ErrorHandler:
-    Call LogDatabaseError("Error in SaveAccountEditCreditosDatabase: " & UserName & ". " & Err.Number & " - " & Err.description)
-    SaveAccountEditCreditosDatabase = False
+    Call LogDatabaseError("Error in SaveAccountEditGemasDatabase: " & username & ". " & Err.Number & " - " & Err.description)
+    SaveAccountEditGemasDatabase = False
 
 End Function
 
-Public Function SaveAccountSumaCreditosDatabase(ByVal UserName As String, ByVal creditos As Long) As Boolean
+Public Function SaveAccountSumaGemasDatabase(ByVal username As String, ByVal Gemas As Long) As Boolean
 
     '***************************************************
     'Author: Lorwik
@@ -565,17 +565,17 @@ Public Function SaveAccountSumaCreditosDatabase(ByVal UserName As String, ByVal 
         If User_Database.CheckSQLStatus = False Then User_Database.Database_Reconnect
     #End If
 
-    UserAccId = GetAccountID(UserName)
+    UserAccId = GetAccountID(username)
     
     '¿Obtuvimos una ID nula?
     If UserAccId <> -1 Then
     
-        Call Account_Database.MakeQuery("UPDATE cuentas SET creditos = creditos + (?) WHERE id = " & UserAccId, True, creditos)
+        Call Account_Database.MakeQuery("UPDATE cuentas SET Gemas = Gemas + (?) WHERE id = " & UserAccId, True, Gemas)
         
-        SaveAccountSumaCreditosDatabase = True
+        SaveAccountSumaGemasDatabase = True
         
     Else
-        SaveAccountSumaCreditosDatabase = False
+        SaveAccountSumaGemasDatabase = False
         
     End If
 
@@ -585,12 +585,12 @@ Public Function SaveAccountSumaCreditosDatabase(ByVal UserName As String, ByVal 
 
     Exit Function
 ErrorHandler:
-    Call LogDatabaseError("Error in SaveAccountSumaCreditosDatabase: " & UserName & ". " & Err.Number & " - " & Err.description)
-    SaveAccountSumaCreditosDatabase = False
+    Call LogDatabaseError("Error in SaveAccountSumaGemasDatabase: " & username & ". " & Err.Number & " - " & Err.description)
+    SaveAccountSumaGemasDatabase = False
 
 End Function
 
-Public Function SaveAccountRestaCreditosDatabase(ByVal UserName As String, ByVal creditos As Long) As Boolean
+Public Function SaveAccountRestaGemasDatabase(ByVal username As String, ByVal Gemas As Long) As Boolean
 
     '***************************************************
     'Author: Lorwik
@@ -608,17 +608,17 @@ Public Function SaveAccountRestaCreditosDatabase(ByVal UserName As String, ByVal
         If User_Database.CheckSQLStatus = False Then User_Database.Database_Reconnect
     #End If
 
-    UserAccId = GetAccountID(UserName)
+    UserAccId = GetAccountID(username)
     
     '¿Obtuvimos una ID nula?
     If UserAccId <> -1 Then
     
-        Call Account_Database.MakeQuery("UPDATE cuentas SET creditos = creditos - (?) WHERE id = " & UserAccId, True, creditos)
+        Call Account_Database.MakeQuery("UPDATE cuentas SET Gemas = Gemas - (?) WHERE id = " & UserAccId, True, Gemas)
         
-        SaveAccountRestaCreditosDatabase = True
+        SaveAccountRestaGemasDatabase = True
         
     Else
-        SaveAccountRestaCreditosDatabase = False
+        SaveAccountRestaGemasDatabase = False
         
     End If
 
@@ -628,12 +628,12 @@ Public Function SaveAccountRestaCreditosDatabase(ByVal UserName As String, ByVal
 
     Exit Function
 ErrorHandler:
-    Call LogDatabaseError("Error in SaveAccountRestaCreditosDatabase: " & UserName & ". " & Err.Number & " - " & Err.description)
-    SaveAccountRestaCreditosDatabase = False
+    Call LogDatabaseError("Error in SaveAccountRestaGemasDatabase: " & username & ". " & Err.Number & " - " & Err.description)
+    SaveAccountRestaGemasDatabase = False
     
 End Function
 
-Public Function GetCreditosDatabase(ByVal UserName As String) As Long
+Public Function GetGemasDatabase(ByVal username As String) As Long
 
     '***************************************************
     'Author: Lorwik
@@ -650,15 +650,15 @@ Public Function GetCreditosDatabase(ByVal UserName As String) As Long
         If User_Database.CheckSQLStatus = False Then User_Database.Database_Reconnect
     #End If
 
-    UserAccId = GetAccountID(UserName)
+    UserAccId = GetAccountID(username)
     
-    If Not Account_Database.MakeQuery("SELECT creditos FROM cuentas WHERE id = (?)", False, UserAccId) Then
-        GetCreditosDatabase = 0
+    If Not Account_Database.MakeQuery("SELECT Gemas FROM cuentas WHERE id = (?)", False, UserAccId) Then
+        GetGemasDatabase = 0
         Exit Function
 
     End If
 
-    GetCreditosDatabase = CLng(Account_Database.Database_RecordSet!creditos)
+    GetGemasDatabase = CLng(Account_Database.Database_RecordSet!Gemas)
     Set Account_Database.Database_RecordSet = Nothing
     
     #If DBConexionUnica = 0 Then
@@ -668,11 +668,11 @@ Public Function GetCreditosDatabase(ByVal UserName As String) As Long
     Exit Function
 
 ErrorHandler:
-    Call LogDatabaseError("Error in GetCreditosDatabase: " & UserName & ". " & Err.Number & " - " & Err.description)
+    Call LogDatabaseError("Error in GetGemasDatabase: " & username & ". " & Err.Number & " - " & Err.description)
 
 End Function
 
-Public Sub SaveAccountLastLoginDatabase(ByVal UserName As String, ByVal UserIP As String)
+Public Sub SaveAccountLastLoginDatabase(ByVal username As String, ByVal UserIP As String)
 
     '***************************************************
     'Author: Lorwik
@@ -690,7 +690,7 @@ Public Sub SaveAccountLastLoginDatabase(ByVal UserName As String, ByVal UserIP A
     #End If
 
     query = "UPDATE cuentas SET date_last_login = NOW(), last_ip = (?) WHERE UPPER(username) = (?)"
-    Call Account_Database.MakeQuery(query, True, UserIP, UCase$(UserName))
+    Call Account_Database.MakeQuery(query, True, UserIP, UCase$(username))
 
     #If DBConexionUnica = 0 Then
         Call Account_Database.Database_Close
@@ -698,7 +698,7 @@ Public Sub SaveAccountLastLoginDatabase(ByVal UserName As String, ByVal UserIP A
 
     Exit Sub
 ErrorHandler:
-    Call LogDatabaseError("Error in SaveAccountLastLoginDatabase: " & UserName & ". " & Err.Number & " - " & Err.description)
+    Call LogDatabaseError("Error in SaveAccountLastLoginDatabase: " & username & ". " & Err.Number & " - " & Err.description)
 
 End Sub
 
@@ -715,15 +715,15 @@ Public Sub ActualizarPJCuentas(ByVal UserIndex As Integer)
     With UserList(UserIndex)
     
         For i = 1 To .AccountInfo.NumPjs
-            If .AccountInfo.AccountPJ(i).Id = .Id Then _
+            If .AccountInfo.AccountPJ(i).ID = .ID Then _
                 Posicion = i
         Next i
         
         '¿Posicion invalida?
         If Posicion <= 0 Then Exit Sub
 
-        .AccountInfo.AccountPJ(Posicion).Id = .Id
-        .AccountInfo.AccountPJ(Posicion).Name = .Name
+        .AccountInfo.AccountPJ(Posicion).ID = .ID
+        .AccountInfo.AccountPJ(Posicion).name = .name
         .AccountInfo.AccountPJ(Posicion).body = .Char.body
         .AccountInfo.AccountPJ(Posicion).Head = .Char.Head
         .AccountInfo.AccountPJ(Posicion).weapon = .Char.WeaponAnim
@@ -735,7 +735,7 @@ Public Sub ActualizarPJCuentas(ByVal UserIndex As Integer)
         .AccountInfo.AccountPJ(Posicion).level = .Stats.ELV
         .AccountInfo.AccountPJ(Posicion).criminal = criminal(UserIndex)
         .AccountInfo.AccountPJ(Posicion).dead = .flags.Muerto
-        .AccountInfo.AccountPJ(Posicion).gameMaster = EsGmChar(.Name)
+        .AccountInfo.AccountPJ(Posicion).gameMaster = EsGmChar(.name)
 
         'Actualiza los PJ de la cuenta
         Call WriteEnviarPJUserAccount(UserIndex)
@@ -754,8 +754,8 @@ Public Sub AddNewPJCuenta(ByVal UserIndex As Integer)
         'Incrementamos la cantidad de PJ creados actualmnente
         .AccountInfo.NumPjs = .AccountInfo.NumPjs + 1
             
-        .AccountInfo.AccountPJ(.AccountInfo.NumPjs).Id = .Id
-        .AccountInfo.AccountPJ(.AccountInfo.NumPjs).Name = .Name
+        .AccountInfo.AccountPJ(.AccountInfo.NumPjs).ID = .ID
+        .AccountInfo.AccountPJ(.AccountInfo.NumPjs).name = .name
         .AccountInfo.AccountPJ(.AccountInfo.NumPjs).body = .Char.body
         .AccountInfo.AccountPJ(.AccountInfo.NumPjs).Head = .Char.Head
         .AccountInfo.AccountPJ(.AccountInfo.NumPjs).weapon = .Char.WeaponAnim
@@ -767,7 +767,7 @@ Public Sub AddNewPJCuenta(ByVal UserIndex As Integer)
         .AccountInfo.AccountPJ(.AccountInfo.NumPjs).level = .Stats.ELV
         .AccountInfo.AccountPJ(.AccountInfo.NumPjs).criminal = criminal(UserIndex)
         .AccountInfo.AccountPJ(.AccountInfo.NumPjs).dead = .flags.Muerto
-        .AccountInfo.AccountPJ(.AccountInfo.NumPjs).gameMaster = EsGmChar(.Name)
+        .AccountInfo.AccountPJ(.AccountInfo.NumPjs).gameMaster = EsGmChar(.name)
         
     End With
     
@@ -796,8 +796,8 @@ Public Sub DeletePJCuenta(ByVal UserIndex As Integer, ByVal Slot As Byte)
         
             For i = Slot To .NumPjs - 1
             
-                .AccountPJ(i).Id = .AccountPJ(i + 1).Id
-                .AccountPJ(i).Name = .AccountPJ(i + 1).Name
+                .AccountPJ(i).ID = .AccountPJ(i + 1).ID
+                .AccountPJ(i).name = .AccountPJ(i + 1).name
                 .AccountPJ(i).body = .AccountPJ(i + 1).body
                 .AccountPJ(i).Head = .AccountPJ(i + 1).Head
                 .AccountPJ(i).weapon = .AccountPJ(i + 1).weapon
@@ -833,8 +833,8 @@ Public Sub ResetPJAccountSlot(ByVal UserIndex As Integer, ByVal Slot As Byte)
 '****************************************************
 
     With UserList(UserIndex).AccountInfo
-        .AccountPJ(Slot).Id = 0
-        .AccountPJ(Slot).Name = vbNullString
+        .AccountPJ(Slot).ID = 0
+        .AccountPJ(Slot).name = vbNullString
         .AccountPJ(Slot).body = 0
         .AccountPJ(Slot).Head = 0
         .AccountPJ(Slot).weapon = 0

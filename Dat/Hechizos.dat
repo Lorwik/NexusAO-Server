@@ -863,8 +863,8 @@ TargetMsg=te ha paralizado.
 PropioMsg=Te has paralizado.
 
 Tipo=2
-WAV=112
-FXgrh=12
+WAV=203
+FXgrh=8
 loops=1
 Paraliza=1
 

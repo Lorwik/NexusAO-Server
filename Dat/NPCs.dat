@@ -4343,8 +4343,8 @@ Hostile=0
 
 [NPC226] ' Subastador
 Name=Subastador
-NpcType=16
-Desc=Deja el objeto que desas subastar bajo tuyo y hazme click derecho. 
+NpcType=10
+Desc=Bienvenido a Subasta Goliath. ¿Quieres subastar un objeto?
 Head=9
 Body=270
 Heading=3

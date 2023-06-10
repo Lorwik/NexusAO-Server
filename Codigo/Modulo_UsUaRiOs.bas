@@ -861,7 +861,8 @@ Public Function PuedeAtravesarAgua(ByVal UserIndex As Integer) As Boolean
 
 End Function
 
-Public Function MoveUserChar(ByVal UserIndex As Integer, ByVal nHeading As eHeading) As Boolean
+Public Function MoveUserChar(ByVal UserIndex As Integer, _
+                             ByVal nHeading As eHeading) As Boolean
 
     '*************************************************
     'Author: Unknown
@@ -890,71 +891,72 @@ Public Function MoveUserChar(ByVal UserIndex As Integer, ByVal nHeading As eHead
     nPos = UserList(UserIndex).Pos
     Call HeadtoPos(nHeading, nPos)
         
-    isAdminInvi = (UserList(UserIndex).flags.AdminInvisible = 1)
+    With UserList(UserIndex)
+        
+        isAdminInvi = (.flags.AdminInvisible = 1)
     
-    If MoveToLegalPos(UserList(UserIndex).Pos.Map, nPos.X, nPos.Y, sailing, Not sailing) Then
+        If MoveToLegalPos(.Pos.Map, nPos.X, nPos.Y, sailing, Not sailing) Then
 
-        '¿Esta equitando e intentando entrar en una casa?
-        If UserList(UserIndex).flags.Equitando And (MapData(UserList(UserIndex).Pos.Map, nPos.X, nPos.Y).Trigger = eTrigger.CASA Or _
-            UserList(UserIndex).flags.Equitando And MapData(UserList(UserIndex).Pos.Map, nPos.X, nPos.Y).Trigger = eTrigger.BAJOTECHO) Then
+            '¿Esta equitando e intentando entrar en una casa?
+            If .flags.Equitando And (MapData(.Pos.Map, nPos.X, nPos.Y).Trigger = eTrigger.CASA Or .flags.Equitando And MapData(.Pos.Map, nPos.X, nPos.Y).Trigger = eTrigger.BAJOTECHO) Then
             
-            Call WritePosUpdate(UserIndex)
-            Exit Function
-        End If
-            
-        'si no estoy solo en el mapa...
-        If MapInfo(UserList(UserIndex).Pos.Map).NumUsers > 1 Then
-               
-            CasperIndex = MapData(UserList(UserIndex).Pos.Map, nPos.X, nPos.Y).UserIndex
-
-            'Si hay un usuario, y paso la validacion, entonces es un casper
-            If CasperIndex > 0 Then
-
-                ' Los admins invisibles no pueden patear caspers
-                If Not isAdminInvi Then
-                    
-                    If TriggerZonaPelea(UserIndex, CasperIndex) = TRIGGER6_PROHIBE Then
-                        If UserList(CasperIndex).flags.ModoCombate = False Then
-                            UserList(CasperIndex).flags.ModoCombate = True
-                            Call WriteMultiMessage(CasperIndex, eMessages.CombatSafeOn)
-
-                        End If
-
-                    End If
-    
-                    With UserList(CasperIndex)
-                        CasperHeading = InvertHeading(nHeading)
-                        Call HeadtoPos(CasperHeading, .Pos)
-                    
-                        ' Si es un admin invisible, no se avisa a los demas clientes
-                        If Not .flags.AdminInvisible = 1 Then Call SendData(SendTarget.ToPCAreaButIndex, CasperIndex, PrepareMessageCharacterMove(.Char.CharIndex, .Pos.X, .Pos.Y))
-                        
-                        Call WriteForceCharMove(CasperIndex, CasperHeading)
-                            
-                        'Update map and char
-                        .Char.Heading = CasperHeading
-                        MapData(.Pos.Map, .Pos.X, .Pos.Y).UserIndex = CasperIndex
-
-                    End With
-                
-                    'Actualizamos las areas de ser necesario
-                    Call Areas.CheckUpdateNeededUser(CasperIndex, CasperHeading)
-
-                End If
+                Call WritePosUpdate(UserIndex)
+                Exit Function
 
             End If
             
-            ' Si es un admin invisible, no se avisa a los demas clientes
-            If Not isAdminInvi Then Call SendData(SendTarget.ToPCAreaButIndex, UserIndex, PrepareMessageCharacterMove(UserList(UserIndex).Char.CharIndex, nPos.X, nPos.Y))
-            
-        End If
-        
-        ' Los admins invisibles no pueden patear caspers
-        If Not (isAdminInvi And (CasperIndex <> 0)) Then
+            'si no estoy solo en el mapa...
+            If MapInfo(.Pos.Map).NumUsers > 1 Then
+               
+                CasperIndex = MapData(.Pos.Map, nPos.X, nPos.Y).UserIndex
 
-            Dim oldUserIndex As Integer
+                'Si hay un usuario, y paso la validacion, entonces es un casper
+                If CasperIndex > 0 Then
+
+                    ' Los admins invisibles no pueden patear caspers
+                    If Not isAdminInvi Then
+                    
+                        If TriggerZonaPelea(UserIndex, CasperIndex) = TRIGGER6_PROHIBE Then
+                            If UserList(CasperIndex).flags.ModoCombate = False Then
+                                UserList(CasperIndex).flags.ModoCombate = True
+                                Call WriteMultiMessage(CasperIndex, eMessages.CombatSafeOn)
+
+                            End If
+
+                        End If
+    
+                        With UserList(CasperIndex)
+                            CasperHeading = InvertHeading(nHeading)
+                            Call HeadtoPos(CasperHeading, .Pos)
+                    
+                            ' Si es un admin invisible, no se avisa a los demas clientes
+                            If Not .flags.AdminInvisible = 1 Then Call SendData(SendTarget.ToPCAreaButIndex, CasperIndex, PrepareMessageCharacterMove(.Char.CharIndex, .Pos.X, .Pos.Y))
+                        
+                            Call WriteForceCharMove(CasperIndex, CasperHeading)
+                            
+                            'Update map and char
+                            .Char.Heading = CasperHeading
+                            MapData(.Pos.Map, .Pos.X, .Pos.Y).UserIndex = CasperIndex
+
+                        End With
+                
+                        'Actualizamos las areas de ser necesario
+                        Call Areas.CheckUpdateNeededUser(CasperIndex, CasperHeading)
+
+                    End If
+
+                End If
             
-            With UserList(UserIndex)
+                ' Si es un admin invisible, no se avisa a los demas clientes
+                If Not isAdminInvi Then Call SendData(SendTarget.ToPCAreaButIndex, UserIndex, PrepareMessageCharacterMove(.Char.CharIndex, nPos.X, nPos.Y))
+            
+            End If
+        
+            ' Los admins invisibles no pueden patear caspers
+            If Not (isAdminInvi And (CasperIndex <> 0)) Then
+
+                Dim oldUserIndex As Integer
+            
                 oldUserIndex = MapData(.Pos.Map, .Pos.X, .Pos.Y).UserIndex
                 
                 ' Si no hay intercambio de pos con nadie
@@ -970,31 +972,33 @@ Public Function MoveUserChar(ByVal UserIndex As Integer, ByVal nHeading As eHead
                 If HaySacerdote(UserIndex) Then Call AccionParaSacerdote(UserIndex)
                 
                 Call DoTileEvents(UserIndex, .Pos.Map, .Pos.X, .Pos.Y)
-
-            End With
             
-            'Actualizamos las areas de ser necesario
-            Call Areas.CheckUpdateNeededUser(UserIndex, nHeading)
+                'Actualizamos las areas de ser necesario
+                Call Areas.CheckUpdateNeededUser(UserIndex, nHeading)
+            Else
+                Call WritePosUpdate(UserIndex)
+
+            End If
+
         Else
             Call WritePosUpdate(UserIndex)
 
         End If
-
-    Else
-        Call WritePosUpdate(UserIndex)
-
-    End If
     
-    If UserList(UserIndex).Counters.Trabajando Then UserList(UserIndex).Counters.Trabajando = UserList(UserIndex).Counters.Trabajando - 1
+        If .Counters.Trabajando Then .Counters.Trabajando = .Counters.Trabajando - 1
 
-    If UserList(UserIndex).Counters.Ocultando Then UserList(UserIndex).Counters.Ocultando = UserList(UserIndex).Counters.Ocultando - 1
+        If .Counters.Ocultando Then .Counters.Ocultando = .Counters.Ocultando - 1
+    
+        If .flags.Muerto = 0 Then If .flags.Privilegios = PlayerType.User Then Call VigilarEventosTrampas(UserIndex)
+    
+    End With
     
     MoveUserChar = True
     
     Exit Function
     
 MoveUserChar_Err:
-     Call TraceError(Err.Number, Err.description + " UI:" + UserIndex, "UsUaRiOs.MoveUserChar", Erl)
+    Call TraceError(Err.Number, Err.description + " UI:" + UserIndex, "UsUaRiOs.MoveUserChar", Erl)
     
 End Function
 
