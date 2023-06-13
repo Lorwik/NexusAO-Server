@@ -37,8 +37,8 @@ Option Explicit
 
 Global LeerNPCs As clsIniManager
 
-Public Declare Function QueryPerformanceCounter Lib "Kernel32" (lpPerformanceCount As Currency) As Long
-Public Declare Function QueryPerformanceFrequency Lib "Kernel32" (lpFrequency As Currency) As Long
+Public Declare Function QueryPerformanceCounter Lib "kernel32" (lpPerformanceCount As Currency) As Long
+Public Declare Function QueryPerformanceFrequency Lib "kernel32" (lpFrequency As Currency) As Long
 
 Sub DarCuerpoDesnudo(ByVal UserIndex As Integer, _
                      Optional ByVal Mimetizado As Boolean = False)
@@ -370,6 +370,7 @@ Sub Main()
     
     'Carga de Castillos
     Call CargarCastillos
+    Call CargarEventosMapa
     Call modCastillos.SetearContador
     
     ' Connections
@@ -579,6 +580,7 @@ Private Sub InitMainTimers()
         .PacketResend.Enabled = True
         .TIMER_AI.Enabled = True
         .Auditoria.Enabled = True
+        .TimerEventoPortal.Enabled = True
     End With
     
 End Sub
@@ -1105,6 +1107,23 @@ Public Sub EfectoCegueEstu(ByVal UserIndex As Integer)
 
 End Sub
 
+Public Sub EfectoMorphUser(ByVal UserIndex As Integer)
+On Error GoTo fallo
+
+    If UserList(UserIndex).Counters.Morph > 0 Then
+        UserList(UserIndex).Counters.Morph = UserList(UserIndex).Counters.Morph - 1
+    Else
+        '[gau]
+        If UserList(UserIndex).flags.Morph > 0 Then Call ChangeUserChar(UserIndex, UserList(UserIndex).flags.Morph, UserList(UserIndex).OrigChar.Head, UserList(UserIndex).Char.Heading, UserList(UserIndex).Char.WeaponAnim, UserList(UserIndex).Char.ShieldAnim, UserList(UserIndex).Char.CascoAnim, UserList(UserIndex).Char.AuraAnim, UserList(UserIndex).Char.AuraColor)
+        UserList(UserIndex).flags.Morph = 0
+    End If
+    Exit Sub
+fallo:
+Call LogError("EFECTOMORPHUSER " & Err.Number & " D: " & Err.description)
+
+End Sub
+
+
 Public Sub EfectoParalisisUser(ByVal UserIndex As Integer)
     '***************************************************
     'Author: Unknown
@@ -1511,7 +1530,7 @@ Sub GuardarUsuarios()
 
     haciendoBK = True
     
-    Call SendData(SendTarget.ToAll, 0, PrepareMessagePauseToggle())
+    Call SendData(SendTarget.Toall, 0, PrepareMessagePauseToggle())
     Call SendData(SendTarget.ToGM, 0, PrepareMessageConsoleMsg("Servidor> Grabando Personajes", FontTypeNames.FONTTYPE_SERVER))
     
     Dim i As Integer
@@ -1529,7 +1548,7 @@ Sub GuardarUsuarios()
     Call SaveRecords
     
     Call SendData(SendTarget.ToGM, 0, PrepareMessageConsoleMsg("Servidor> Personajes Grabados", FontTypeNames.FONTTYPE_SERVER))
-    Call SendData(SendTarget.ToAll, 0, PrepareMessagePauseToggle())
+    Call SendData(SendTarget.Toall, 0, PrepareMessagePauseToggle())
 
     haciendoBK = False
 
@@ -1565,6 +1584,17 @@ Sub SaveUser(ByVal UserIndex As Integer, Optional ByVal SaveTimeOnline As Boolea
             ' Se fue el efecto del mimetismo, puede ser atacado por npcs
             .flags.Ignorado = False
 
+        End If
+        
+            '13/02/2016 Lorwik: Si estas Morph te devuelve a la normalidad.
+        If .flags.Morph = 1 Then
+            .Char.body = .OrigChar.body
+            .Char.Head = .OrigChar.Head
+            .Char.CascoAnim = .OrigChar.CascoAnim
+            .Char.ShieldAnim = .OrigChar.ShieldAnim
+            .Char.WeaponAnim = .OrigChar.WeaponAnim
+            .Counters.Morph = 0
+            .flags.Morph = 0
         End If
 
         Dim Prom As Long
@@ -1949,3 +1979,29 @@ Clamp_Err:
     Call TraceError(Err.Number, Err.description & "Clamp_Err", Erl)
         
 End Function
+
+Public Function esMapaPortalEvento(ByVal Mapa As Integer) As Byte
+'**********************************
+'Autor: Lorwik
+'Fecha: 11/06/2023
+'Descripcion: Busca un evento de portales por el numero de mapa
+'**********************************
+    Dim i As Byte
+    
+    If TotalEventosMap > 0 Then
+    
+        For i = 1 To TotalEventosMap
+        
+            If PortalEvento(i).getMapa = Mapa Then
+                esMapaPortalEvento = i
+                Exit Function
+            End If
+        
+        Next i
+    
+    End If
+    
+    esMapaPortalEvento = 0
+
+End Function
+

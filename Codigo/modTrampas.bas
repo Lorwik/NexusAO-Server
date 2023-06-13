@@ -87,7 +87,7 @@ Sub CasaEncantada(ByVal UserIndex As Integer)
             Call WriteConsoleMsg(UserIndex, "¡¡La habitación de sangre te ha matado!!", FontTypeNames.FONTTYPE_FIGHT)
             Call UserDie(UserIndex)
             Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessagePlayWave(102, .Pos.X, .Pos.Y))
-            Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageCreateFX(.Char.CharIndex, FxCASA, 0))
+            Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageCreateFX(.Char.CharIndex, FX_MANSION, 0))
             Exit Sub
 
         End If
@@ -104,7 +104,7 @@ Sub CasaEncantada(ByVal UserIndex As Integer)
                     Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessagePlayWave(102, .Pos.X, .Pos.Y))
                     Call TirarOro(3000, UserIndex)
                     Call WriteUpdateUserStats(UserIndex)
-                    Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageCreateFX(.Char.CharIndex, FxCASA, 0))
+                    Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageCreateFX(.Char.CharIndex, FX_MANSION, 0))
                     'Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageCreateParticle(.Char.CharIndex, 3, 0))
                     Exit Sub
 
@@ -116,10 +116,10 @@ Sub CasaEncantada(ByVal UserIndex As Integer)
                     Call WriteConsoleMsg(UserIndex, "Los Espiritus de la Casa te transforman en Cerdo.", FontTypeNames.FONTTYPE_FIGHT)
                     Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageCreateFX(.Char.CharIndex, FXIDs.FXWARP, 0))
                     Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessagePlayWave(102, .Pos.X, .Pos.Y))
-                    Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageCreateFX(.Char.CharIndex, FxCASA, 0))
+                    Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageCreateFX(.Char.CharIndex, FX_MANSION, 0))
                     .flags.Morph = .Char.body
                     .Counters.Morph = IntervaloMorphPJ
-                    Call ChangeUserChar(UserIndex, 6, 0, UserList(UserIndex).Char.Heading, 2, 2, 2)
+                    Call ChangeUserChar(UserIndex, 6, 0, UserList(UserIndex).Char.Heading, 2, 2, 2, 0, 0)
                     'Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageCreateParticle(.Char.CharIndex, 3, 0))
                     Exit Sub
 
@@ -129,7 +129,7 @@ Sub CasaEncantada(ByVal UserIndex As Integer)
                 Call WriteConsoleMsg(UserIndex, "Los Espiritus de la mansión te hacen perder el inventario.", FontTypeNames.FONTTYPE_FIGHT)
                 Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessagePlayWave(102, .Pos.X, .Pos.Y))
                 Call TirarTodosLosItems(UserIndex)
-                Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageCreateFX(.Char.CharIndex, FxCASA, 0))
+                Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageCreateFX(.Char.CharIndex, FX_MANSION, 0))
                 'Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageCreateParticle(.Char.CharIndex, 3, 0))
                 Exit Sub
             
@@ -137,7 +137,7 @@ Sub CasaEncantada(ByVal UserIndex As Integer)
                 Call WriteConsoleMsg(UserIndex, "Los Espiritus de la mansión te teleportan fuera de ella.", FontTypeNames.FONTTYPE_FIGHT)
                 Call PrepareMessagePlayWave(102, 0, 0)
                 Call WarpUserChar(UserIndex, MAP_MANSION, 50, 69, True)
-                Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageCreateFX(.Char.CharIndex, FxCASA, 0))
+                Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageCreateFX(.Char.CharIndex, FX_MANSION, 0))
                 Exit Sub
             
             Case 97

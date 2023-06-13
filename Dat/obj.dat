@@ -34,7 +34,7 @@
 ' 33 Botellas Vacías
 ' 34 Botellas Llenas
 ' 35 Manchas
-' 36 Pases
+' 36 Pasajes
 ' 37 (Nada)
 ' 38 Mapas
 ' 39 Bolsas de Oro (contienen más de 10k de oro)
@@ -85,7 +85,7 @@
 
 
 [INIT]
-NumOBJs=825
+NumOBJs=827
 
 [OBJ398]'1.0 714
 Name=Garrote
@@ -4466,7 +4466,6 @@ GrhIndex=506
 ObjType=1
 MinHAM=10
 Valor=1
-
 
 [OBJ4]
 Name=Arbol
@@ -11396,202 +11395,75 @@ ObjType=19
 Agarrable=1
 
 [OBJ731]
-Name=Nix - Banderbill
+Name=Pasaje de Nix a Nueva Esperanza
 GrhIndex=14500
-ObjType=37
-WMapa=61
-WX=42 
-WY=67
-WI=34 
+ObjType=36
+Desde=34
+Map=23
+X=78
+Y=64
+NecesitaNave=40
 Vendible=0
-Valor=10000
+Valor=100000
 
 [OBJ732]
-Name=Nix - Arghal
+Name=Pasaje de Nix a Frostdale
 GrhIndex=14500
-ObjType=37
-WMapa=98
-WX=58
-WY=66 
-WI=34 
+ObjType=36
+Desde=34
+Map=17
+X=46
+Y=25
+NecesitaNave=40
 Vendible=0
-Valor=7000
+Valor=130000
 
 [OBJ733]
-Name=Nix - Lindos
+Name=Pasaje de Frostdale a Nix
 GrhIndex=14500
-ObjType=37
-WMapa=62
-WX=27
-WY=65
-WI=34 
+ObjType=36
+Desde=17
+Map=34
+X=28
+Y=78
+NecesitaNave=40
 Vendible=0
-Valor=5000
+Valor=120000
 
 [OBJ734]
-Name=Banderbill - Nix
+Name=Pasaje de Frostdale a Nueva Esperanza
 GrhIndex=14500
-ObjType=37
-WMapa=34
-WX=28
-WY=78
-WI=61
+ObjType=36
+Desde=17
+Map=23
+X=78
+Y=64
+NecesitaNave=40
 Vendible=0
-Valor=5000
+Valor=80000
 
 [OBJ735]
-Name=Banderbill - Lindos
+Name=Pasaje de Nueva Esperanza a Nix
 GrhIndex=14500
-ObjType=37
-WMapa=62
-WX=27
-WY=65
-WI=61 
-Vendible=0
-Valor=5000
+ObjType=36
+Desde=23
+Map=34
+X=28
+Y=78
+NecesitaNave=40
+Valor=100000
 
 [OBJ736]
-Name=Banderbill - Arghal
+Name=Pasaje de Nueva Esperanza a Frostdale
 GrhIndex=14500
-ObjType=37
-WMapa=98
-WX=58
-WY=66 
-WI=61 
+ObjType=36
+Desde=23
+Map=17
+X=46
+Y=25
+NecesitaNave=40
 Vendible=0
-Valor=5000
-
-[OBJ737]
-Name=Esperanza - Nix
-GrhIndex=14500
-ObjType=37
-WMapa=34
-WX=28
-WY=78
-WI=111 
-Vendible=0
-Valor=5000
-
-[OBJ738]
-Name=Esperanza - Lindos
-GrhIndex=14500
-ObjType=37
-WMapa=62
-WX=27
-WY=65
-WI=111 
-Vendible=0
-Valor=5000
-
-[OBJ739]
-Name=Esperanza - Banderbill
-GrhIndex=14500
-ObjType=37
-WMapa=61
-WX=42 
-WY=67
-WI=111 
-Vendible=0
-Valor=5000
-
-[OBJ740]
-Name=Esperanza - Hilidian
-GrhIndex=14500
-ObjType=37
-WMapa=147
-WX=69
-WY=44 
-WI=111 
-Vendible=0
-Valor=5000
-
-[OBJ741]
-Name=Esperanza - Arghal
-GrhIndex=14500
-ObjType=37
-WMapa=98
-WX=58
-WY=66 
-WI=111
-Vendible=0
-Valor=5000
-
-[OBJ742]
-Name=Hilidian - Nix
-GrhIndex=14500
-ObjType=37
-WMapa=34
-WX=28
-WY=78 
-WI=147
-Vendible=0
-Valor=5000
-
-[OBJ743]
-Name=Hilidian - Arghal
-GrhIndex=14500
-ObjType=37
-WMapa=98
-WX=58
-WY=66 
-WI=147 
-Vendible=0
-Valor=5000
-
-[OBJ744]
-Name=Hilidian - Banderbill
-GrhIndex=14500
-ObjType=37
-WMapa=61
-WX=42 
-WY=67
-WI=147 
-Vendible=0
-Valor=5000
-
-[OBJ745]
-Name=Hilidian - Esperanza
-GrhIndex=14500
-ObjType=37
-WMapa=111
-WX=80
-WY=65 
-WI=147 
-Vendible=0
-Valor=5000
-
-[OBJ746]
-Name=Hilidian - Lindos
-GrhIndex=14500
-ObjType=37
-WMapa=62
-WX=27
-WY=65
-WI=147 
-Vendible=0
-Valor=5000
-
-[OBJ747]
-Name=Arghal - Banderbill
-GrhIndex=14500
-ObjType=37
-WMapa=61
-WX=42 
-WY=67
-WI=98 
-Vendible=0
-Valor=5000
-
-[OBJ748]
-Name=Arghal - Nix
-GrhIndex=14500
-ObjType=37
-WMapa=34
-WX=28
-WY=78 
-WI=98
-Vendible=0
-Valor=5000
+Valor=80000
 
 [OBJ749]
 Name=Llave del gran consejo
@@ -12595,3 +12467,41 @@ Nosecae=1
 Name=Anillo de Lider
 GrhIndex=24107
 ObjType=29
+
+[OBJ826]
+Name=Arbol de Sakura
+GrhIndex=36033
+Objtype=4
+Resistencia=500
+Agarrable=1
+
+[OBJ827]
+Name=Arbol de Sakura
+GrhIndex=36033
+Objtype=4
+Resistencia=500
+Agarrable=1
+
+[OBJ828]
+Name=Cartel Peligro
+GrhIndex=32800
+VGrande=501
+ObjType=8
+Texto=¡Peligro! ¡Peligro!
+Agarrable=1
+
+[OBJ829]
+Name=Cartel Peligro
+GrhIndex=32801
+VGrande=501
+ObjType=8
+Texto=¡Peligro!
+Agarrable=1
+
+[OBJ830]
+Name=Cartel Peligro
+GrhIndex=32802
+VGrande=501
+ObjType=8
+Texto=¡Peligro!
+Agarrable=1

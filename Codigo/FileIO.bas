@@ -654,12 +654,12 @@ Public Sub DoBackUp()
     'Next i
     '''''''''''/'lo pongo aca x sugernecia del yind
     
-    Call SendData(SendTarget.ToAll, 0, PrepareMessagePauseToggle())
+    Call SendData(SendTarget.Toall, 0, PrepareMessagePauseToggle())
 
     Call WorldSave
     Call modGuilds.v_RutinaElecciones
     
-    Call SendData(SendTarget.ToAll, 0, PrepareMessagePauseToggle())
+    Call SendData(SendTarget.Toall, 0, PrepareMessagePauseToggle())
 
     haciendoBK = False
     
@@ -1805,6 +1805,7 @@ Sub LoadSini()
     IntervaloUserPuedeAtacar = val(Lector.GetValue("INTERVALOS", "IntervaloUserPuedeAtacar"))
     Intervalo_Global = val(Lector.GetValue("INTERVALOS", "IntervaloGlobal"))
     IntervaloPuedeMakrear = val(Lector.GetValue("INTERVALOS", "IntervaloMakreo"))
+    IntervaloMorphPJ = val(Lector.GetValue("INTERVALOS", "IntervaloMorphPJ"))
     
     'TODO : Agregar estos intervalos al form!!!
     IntervaloMagiaGolpe = val(Lector.GetValue("INTERVALOS", "IntervaloMagiaGolpe"))
@@ -2413,6 +2414,11 @@ Public Sub CargarCastillos()
 
     If frmMain.Visible Then frmMain.txtStatus.Text = "Cargando Castillos."
     
+    If Not FileExist(DatPath & "Castillos.dat", vbArchive) Then
+        MsgBox "No se ha encontrado el archivo Castillos.dat en la carpeta " & DatPath
+        Exit Sub
+    End If
+    
     Set Lector = New clsIniManager
     Call Lector.Initialize(DatPath & "Castillos.dat")
     
@@ -2448,3 +2454,76 @@ CargarCastillos_Err:
     Call TraceError(Err.Number, Err.description, "ES.CargarCastillos", Erl)
 
 End Sub
+
+Public Sub CargarEventosMapa()
+
+    On Error GoTo CargarEventosMapa_Err
+    
+    If frmMain.Visible Then frmMain.txtStatus.Text = "Cargando Eventos Mapa."
+    
+    If Not FileExist(DatPath & "Eventos.dat", vbArchive) Then
+        MsgBox "No se ha encontrado el archivo Eventos.dat en la carpeta " & DatPath
+        Exit Sub
+    End If
+    
+    Dim Lector     As clsIniManager
+
+    Dim evNombre   As String
+
+    Dim evMapa     As Byte
+
+    Dim evX        As Byte
+
+    Dim evY        As Byte
+
+    Dim evTime     As Long
+
+    Dim PortalMap  As Byte
+
+    Dim PortalX    As Byte
+
+    Dim PortalY    As Byte
+
+    Dim evDuracion As Long
+
+    Dim i          As Byte
+    
+    Set Lector = New clsIniManager
+    Call Lector.Initialize(DatPath & "Eventos.dat")
+    
+    TotalEventosMap = val(Lector.GetValue("INIT", "Total"))
+    
+    'Si no hay eventos no tenemos nada que cargar
+    If CastleCount < 1 Then
+        Set Lector = Nothing
+        Exit Sub
+
+    End If
+    
+    ReDim PortalEvento(1 To TotalEventosMap) As New clsEventoMapa
+    
+    For i = 1 To TotalEventosMap
+        evNombre = Lector.GetValue("EVENTO" & i, "Nombre")
+        evMapa = val(Lector.GetValue("EVENTO" & i, "Mapa"))
+        evX = val(Lector.GetValue("EVENTO" & i, "X"))
+        evY = val(Lector.GetValue("EVENTO" & i, "Y"))
+        evTime = val(Lector.GetValue("EVENTO" & i, "Tiempo"))
+        PortalMap = val(Lector.GetValue("EVENTO" & i, "PortalMap"))
+        PortalX = val(Lector.GetValue("EVENTO" & i, "PortalX"))
+        PortalY = val(Lector.GetValue("EVENTO" & i, "PortalY"))
+        evDuracion = val(Lector.GetValue("EVENTO" & i, "Duracion"))
+        
+        Call PortalEvento(i).Inicializar(evNombre, evMapa, evX, evY, PortalMap, PortalX, PortalY, evDuracion)
+    Next i
+    
+    For i = 0 To 23
+        HorarioEventoPortal(i) = Lector.GetValue("EVENTOS", i)
+    Next i
+    
+    Exit Sub
+    
+CargarEventosMapa_Err:
+        Set Lector = Nothing
+        Call TraceError(Err.Number, Err.description, "ES.CargarEventosMapa", Erl)
+
+    End Sub

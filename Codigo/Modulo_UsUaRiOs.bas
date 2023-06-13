@@ -1609,7 +1609,8 @@ Public Sub UserDie(ByVal UserIndex As Integer, Optional ByVal AttackerIndex As I
         .flags.Envenenado = 0
         .flags.Incinerado = 0
         .flags.Muerto = 1
-
+        
+        .Counters.Morph = 0
         .Counters.Trabajando = 0
         
         aN = .flags.AtacadoPorNpc

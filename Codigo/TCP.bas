@@ -1346,7 +1346,7 @@ Sub ConnectUser(ByVal UserIndex As Integer, _
         MapInfo(.Pos.Map).NumUsers = MapInfo(.Pos.Map).NumUsers + 1
     
         If NumUsers > RecordUsuariosOnline Then
-            Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg("Record de usuarios conectados simultaneamente. Hay " & NumUsers & " usuarios.", FontTypeNames.FONTTYPE_INFOBOLD))
+            Call SendData(SendTarget.Toall, 0, PrepareMessageConsoleMsg("Record de usuarios conectados simultaneamente. Hay " & NumUsers & " usuarios.", FontTypeNames.FONTTYPE_INFOBOLD))
             RecordUsuariosOnline = NumUsers
             Call WriteVar(ConfigPath & "Server.ini", "INIT", "RECORD", str(RecordUsuariosOnline))
 
@@ -1418,6 +1418,18 @@ Sub ConnectUser(ByVal UserIndex As Integer, _
         If LenB(tStr) <> 0 Then
             Call WriteShowMessageBox(UserIndex, "Tu solicitud de ingreso al clan ha sido rechazada. El clan te explica que: " & tStr)
 
+        End If
+        
+        '¿Estaba en un evento de portales que ya termino?
+        If MapInfo(.Pos.Map).Restringir = eRestrict.restrict_evento Then
+            Dim EvPortal As Byte
+            'Si estaba en un evento de portales que termino lo mandamos a su casa
+            EvPortal = esMapaPortalEvento(.Pos.Map)
+            If EvPortal > 0 Then
+                
+                If Not PortalEvento(EvPortal).getEnCurso Then _
+                    Call MandaraCasa(UserIndex)
+            End If
         End If
     
         'Load the user statistics
@@ -1808,6 +1820,7 @@ Sub ResetUserFlags(ByVal UserIndex As Integer)
         .ArenaRinkel = False
         .EstaDueleando = False
         .EstaPlantando = False
+        .Morph = 0
 
         Call ResetCasteo(UserIndex)
         

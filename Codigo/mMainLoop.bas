@@ -150,6 +150,8 @@ Public Sub GameTimer()
                     
                     If .flags.Paralizado = 1 Then Call EfectoParalisisUser(iUserIndex)
                     If .flags.Ceguera = 1 Or .flags.Estupidez Then Call EfectoCegueEstu(iUserIndex)
+                    If .flags.Morph > 0 Then Call EfectoMorphUser(iUserIndex)
+                    
                     If .flags.Muerto = 0 Then
                         
                         '[Consejeros]

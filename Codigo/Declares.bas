@@ -255,6 +255,7 @@ Public Enum eTrigger
     TRAMPA_1 = 8
     TRAMPA_2 = 9
     SALASANGRE = 10
+    
 End Enum
 
 ''
@@ -303,6 +304,7 @@ Public Enum eRestrict
     restrict_armada = 2
     restrict_caos = 3
     restrict_faccion = 4
+    restrict_evento = 5
 
 End Enum
 
@@ -834,8 +836,8 @@ Public Type tHechizo
     Estupidez As Byte
     Ceguera As Byte
     Revivir As Byte
-    Morph As Byte
     Mimetiza As Byte
+    Morph As Byte
     RemueveInvisibilidadParcial As Byte
     
     Warp As Byte
@@ -1511,6 +1513,8 @@ Public Type UserFlags
     EstaPlantando As Boolean
     
     ArenaRinkel As Boolean
+    
+    Morph As Integer
 End Type
 
 Public Type UserCounters
@@ -1527,6 +1531,7 @@ Public Type UserCounters
     Veneno As Integer
     Quema As Integer
     Paralisis As Integer
+    Morph As Integer
     Ceguera As Integer
     Estupidez As Integer
     
@@ -2530,3 +2535,7 @@ Public NUMGLOBALDROPS As Integer
 
 Public Castillo() As New clsCastillos
 Public CastleCount As Byte
+
+Public PortalEvento() As New clsEventoMapa
+Public TotalEventosMap As Byte
+Public HorarioEventoPortal(23) As Byte

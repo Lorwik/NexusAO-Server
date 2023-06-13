@@ -28,6 +28,12 @@ Begin VB.Form frmMain
    ScaleWidth      =   10875
    StartUpPosition =   1  'CenterOwner
    WindowState     =   1  'Minimized
+   Begin VB.Timer TimerEventoPortal 
+      Enabled         =   0   'False
+      Interval        =   60000
+      Left            =   3180
+      Top             =   1680
+   End
    Begin VB.Frame Frame2 
       BackColor       =   &H00E0E0E0&
       Caption         =   "Información general"
@@ -715,7 +721,7 @@ Private Sub HappyHourManager()
            
             If tmpHappyHour = 1 Then ' Desactiva
                 Message = "Ha concluido la Happy Hour!"
-                Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg(Message, FontTypeNames.FONTTYPE_SERVER))
+                Call SendData(SendTarget.Toall, 0, PrepareMessageConsoleMsg(Message, FontTypeNames.FONTTYPE_SERVER))
                 HappyHourActivated = False
            
             Else ' Activa?
@@ -724,12 +730,12 @@ Private Sub HappyHourManager()
                     
                     If HappyHour <> 1 Then
                         Message = "Se ha modificado la Happy Hour, a partir de ahora las criaturas aumentan su experiencia en un " & Round((tmpHappyHour - 1) * 100, 2) & "%"
-                        Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg(Message, FontTypeNames.FONTTYPE_SERVER))
+                        Call SendData(SendTarget.Toall, 0, PrepareMessageConsoleMsg(Message, FontTypeNames.FONTTYPE_SERVER))
 
                     Else
                         Message = "Ha comenzado la Happy Hour! Las criaturas aumentan su experiencia en un " & Round((tmpHappyHour - 1) * 100, 2) & "%!"
 
-                       Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg(Message, FontTypeNames.FONTTYPE_SERVER))
+                       Call SendData(SendTarget.Toall, 0, PrepareMessageConsoleMsg(Message, FontTypeNames.FONTTYPE_SERVER))
 
                     End If
                     
@@ -745,7 +751,7 @@ Private Sub HappyHourManager()
         ' Si estaba activado, lo deshabilitamos
         If HappyHour <> 0 Then
             Call UpdateNpcsExp(1 / HappyHour)
-            Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg("Ha concluido la Happy Hour!", FontTypeNames.FONTTYPE_SERVER))
+            Call SendData(SendTarget.Toall, 0, PrepareMessageConsoleMsg("Ha concluido la Happy Hour!", FontTypeNames.FONTTYPE_SERVER))
             HappyHourActivated = False
             HappyHour = 0
         End If
@@ -824,7 +830,7 @@ Private Sub AutoSave_Timer()
     Call Actualizar_Subasta
 
     If Minutos = MinutosWs - 1 Then
-        Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg("Worldsave en 1 minuto ...", FontTypeNames.FONTTYPE_SERVER))
+        Call SendData(SendTarget.Toall, 0, PrepareMessageConsoleMsg("Worldsave en 1 minuto ...", FontTypeNames.FONTTYPE_SERVER))
         KillLog
 
     ElseIf Minutos >= MinutosWs Then
@@ -981,7 +987,7 @@ Private Sub cmdForzarCierre_Click()
 End Sub
 
 Private Sub Command1_Click()
-    Call SendData(SendTarget.ToAll, 0, PrepareMessageShowMessageBox(BroadMsg.Text))
+    Call SendData(SendTarget.Toall, 0, PrepareMessageShowMessageBox(BroadMsg.Text))
     ''''''''''''''''SOLO PARA EL TESTEO'''''''
     ''''''''''SE USA PARA COMUNICARSE CON EL SERVER'''''''''''
     txtChat.Text = txtChat.Text & vbNewLine & "Servidor> " & BroadMsg.Text
@@ -1000,7 +1006,7 @@ Public Sub InitMain(ByVal f As Byte)
 End Sub
 
 Private Sub Command2_Click()
-    Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg("Servidor> " & BroadMsg.Text, FontTypeNames.FONTTYPE_SERVER))
+    Call SendData(SendTarget.Toall, 0, PrepareMessageConsoleMsg("Servidor> " & BroadMsg.Text, FontTypeNames.FONTTYPE_SERVER))
     ''''''''''''''''SOLO PARA EL TESTEO'''''''
     ''''''''''SE USA PARA COMUNICARSE CON EL SERVER'''''''''''
     txtChat.Text = txtChat.Text & vbNewLine & "Servidor> " & BroadMsg.Text
@@ -1235,6 +1241,35 @@ Private Sub Segundo_Timer()
 
     LastTime = CurTime
     ' -----------------------------------
+End Sub
+
+Private Sub TimerEventoPortal_Timer()
+    Dim i As Byte
+    
+    '¿Hay eventos configurados?
+    If TotalEventosMap > 0 Then
+    
+        '¿En la hora actual hay algun evento?
+        If HorarioEventoPortal(Hour(Now)) > 0 Then
+        
+            i = HorarioEventoPortal(Hour(Now))
+        
+            '¿El evento aun no se inicio?
+            If Not PortalEvento(i).getEnCurso Then
+                PortalEvento(i).IniciarEvento
+                
+            Else
+                '¿El evento llego a su final?
+                If PortalEvento(i).getDuracion = 0 Then
+                    PortalEvento(i).FinalizarEvento
+                    
+                Else 'Si no llego a su final restamos un minuto
+                    PortalEvento(i).restarTiempo
+                    
+                End If
+            End If
+        End If
+    End If
 End Sub
 
 Private Sub TIMER_AI_Timer()

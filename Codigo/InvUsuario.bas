@@ -1080,6 +1080,11 @@ Sub EquiparInvItem(ByVal UserIndex As Integer, ByVal Slot As Byte)
     
     With UserList(UserIndex)
     
+        If .flags.Morph > 0 Then
+            Call WriteConsoleMsg(UserIndex, "No puedes equipar/desequipar nada mientras estas transformado.", FontTypeNames.FONTTYPE_INFOBOLD)
+            Exit Sub
+        End If
+    
         'Prevenimos posibles errores de otros codigos
         If Slot < 1 Then Exit Sub
     
@@ -1591,6 +1596,11 @@ Sub UseInvItem(ByVal UserIndex As Integer, ByVal Slot As Byte)
                 Call WriteUpdateGold(UserIndex)
                 
             Case eOBJType.otWeapon
+
+                If UserList(UserIndex).flags.Morph > 0 Then
+                    Call WriteConsoleMsg(UserIndex, "No puedes montar mientras estas transformado.", FontTypeNames.FONTTYPE_INFOBOLD)
+                    Exit Sub
+                End If
 
                 If .flags.Equitando = 1 Then
                     Call WriteConsoleMsg(UserIndex, "No puedes usar una herramienta mientras estas en tu montura!!", FontTypeNames.FONTTYPE_INFO)
@@ -2230,7 +2240,7 @@ Sub UseInvItem(ByVal UserIndex As Integer, ByVal Slot As Byte)
                 If (MapInfo(.Pos.Map).Restringir = eRestrict.restrict_no) And (.Counters.Pena = 0) Then
                     If Ciudades(.Hogar).Map <> .Pos.Map Then
                         If .flags.invisible = 0 Then
-                            Call Usuarios.SetInvisible(UserIndex, UserList(UserIndex).Char.CharIndex, False)
+                            Call UsUaRiOs.SetInvisible(UserIndex, UserList(UserIndex).Char.CharIndex, False)
                             Call WriteConsoleMsg(UserIndex, "Has vuelto a ser visible!", FontTypeNames.FONTTYPE_INFO)
         
                         End If

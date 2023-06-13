@@ -6152,6 +6152,12 @@ Private Sub HandleQuit(ByVal UserIndex As Integer)
 
         End If
         
+        If .flags.Morph = 1 Then
+            Call WriteConsoleMsg(UserIndex, "No puedes salir estando transformado.", FontTypeNames.FONTTYPE_WARNING)
+            Exit Sub
+            
+        End If
+        
         'Subastas
         If UserIndex = Subasta.UserIndex Or UserIndex = Subasta.OfertaIndex Then
             Call WriteConsoleMsg(UserIndex, "No puedes salir mientras ofertas en una subasta o realizas una subasta.", FontTypeNames.FONTTYPE_WARNING)
