@@ -171,6 +171,15 @@ Sub Accion(ByVal UserIndex As Integer, _
                 
                     .flags.Subastando = True
                     Call WriteIniciarSubastasOrConsulta(UserIndex)
+                    
+                ElseIf Npclist(tempIndex).NPCtype = eNPCType.Instructor Then
+                
+                    If Distancia(Npclist(tempIndex).Pos, .Pos) > 3 Then
+                        Call WriteConsoleMsg(UserIndex, "Estas demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
+                        Exit Sub
+                    End If
+                    
+                    Call AccionInstructor(UserIndex, tempIndex)
                   
                 End If
 

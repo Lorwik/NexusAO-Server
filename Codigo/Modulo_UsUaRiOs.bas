@@ -543,7 +543,6 @@ Public Sub CheckUserLevel(ByVal UserIndex As Integer, Optional ByVal PrintInCons
     '08/04/2011: Amraphen - Arreglada la distribucion de probabilidades para la vida en el caso de promedio entero.
     '06/09/2019: Jopi - Guardado de usuario al pasar de nivel.
     '*************************************************
-    Dim Pts              As Integer
     Dim AumentoHIT       As Integer
     Dim AumentoMANA      As Integer
     Dim AumentoSTA       As Integer
@@ -578,14 +577,6 @@ Public Sub CheckUserLevel(ByVal UserIndex As Integer, Optional ByVal PrintInCons
             If PrintInConsole Then
                 Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessagePlayWave(SND_NIVEL, .Pos.X, .Pos.Y))
                 Call WriteConsoleMsg(UserIndex, "Has subido de nivel!", FontTypeNames.FONTTYPE_INFO)
-            End If
-            
-            If .Stats.ELV = 1 Then
-                Pts = 5
-            Else
-                'For multiple levels being rised at once
-                Pts = Pts + 5
-
             End If
             
             .Stats.ELV = .Stats.ELV + 1
@@ -820,17 +811,6 @@ Public Sub CheckUserLevel(ByVal UserIndex As Integer, Optional ByVal PrintInCons
                     Call WriteConsoleMsg(UserIndex, "Debes abandonar el Dungeon Newbie.", FontTypeNames.FONTTYPE_INFO)
                 End If
 
-            End If
-
-        End If
-        
-        'Send all gained skill points at once (if any)
-        If Pts > 0 Then
-            Call WriteLevelUp(UserIndex, Pts)
-            
-            .Stats.SkillPts = .Stats.SkillPts + Pts
-            If PrintInConsole Then
-                Call WriteConsoleMsg(UserIndex, "Has ganado un total de " & Pts & " skillpoints.", FontTypeNames.FONTTYPE_INFO)
             End If
 
         End If
@@ -1401,13 +1381,13 @@ Sub NPCAtacado(ByVal NpcIndex As Integer, ByVal UserIndex As Integer)
             If Castle > 0 Then
 
                 If (.Stats.MinHp / .Stats.MaxHp) * 100 = 99 Then
-                    Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg("El Rey de " & Castillo(Castle).getNombreCastillo & " esta siendo atacado por el clan " & modGuilds.GuildName(UserList(UserIndex).GuildIndex) & ".", FontTypeNames.FONTTYPE_GUILD))
+                    Call SendData(SendTarget.Toall, 0, PrepareMessageConsoleMsg("El Rey de " & Castillo(Castle).getNombreCastillo & " esta siendo atacado por el clan " & modGuilds.GuildName(UserList(UserIndex).GuildIndex) & ".", FontTypeNames.FONTTYPE_GUILD))
             
                 ElseIf (.Stats.MinHp / .Stats.MaxHp) * 100 = 50 Then
-                    Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg("El Rey de " & Castillo(Castle).getNombreCastillo & " esta siendo atacado por el clan " & modGuilds.GuildName(UserList(UserIndex).GuildIndex) & ".", FontTypeNames.FONTTYPE_GUILD))
+                    Call SendData(SendTarget.Toall, 0, PrepareMessageConsoleMsg("El Rey de " & Castillo(Castle).getNombreCastillo & " esta siendo atacado por el clan " & modGuilds.GuildName(UserList(UserIndex).GuildIndex) & ".", FontTypeNames.FONTTYPE_GUILD))
                 
                 ElseIf (.Stats.MinHp / .Stats.MaxHp) * 100 = 10 Then
-                    Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg("El Rey de " & Castillo(Castle).getNombreCastillo & " esta apunto de caer por el clan " & modGuilds.GuildName(UserList(UserIndex).GuildIndex) & ".", FontTypeNames.FONTTYPE_GUILD))
+                    Call SendData(SendTarget.Toall, 0, PrepareMessageConsoleMsg("El Rey de " & Castillo(Castle).getNombreCastillo & " esta apunto de caer por el clan " & modGuilds.GuildName(UserList(UserIndex).GuildIndex) & ".", FontTypeNames.FONTTYPE_GUILD))
                     
                 End If
             End If
@@ -2365,7 +2345,7 @@ Sub Cerrar_Usuario(ByVal UserIndex As Integer)
         End If
         
         If UserList(UserIndex).flags.EstaDueleando Then
-            Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg("Duelos por Set: El duelo ha sido cancelado por la desconexión de " & UserList(UserIndex).name, FontTypeNames.FONTTYPE_CITIZEN))
+            Call SendData(SendTarget.Toall, 0, PrepareMessageConsoleMsg("Duelos por Set: El duelo ha sido cancelado por la desconexión de " & UserList(UserIndex).name, FontTypeNames.FONTTYPE_CITIZEN))
             Call resetDueloSet(UserList(UserIndex).flags.Oponente, UserIndex)
         End If
 

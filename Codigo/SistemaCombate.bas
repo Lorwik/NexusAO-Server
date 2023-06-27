@@ -492,7 +492,7 @@ Public Sub UserDanoNpc(ByVal UserIndex As Integer, ByVal NpcIndex As Integer)
         
         'Renderizo dano en render
         Call SendData(SendTarget.ToNPCArea, NpcIndex, PrepareMessageCreateFX(.Char.CharIndex, FXSANGRE, 0))
-        Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageChatOverHead(dano, UserList(UserIndex).Char.CharIndex, vbBlue, True))
+        Call SendData(SendTarget.ToNPCArea, NpcIndex, PrepareMessageCreateDamage(.Pos.X, .Pos.Y, dano, DAMAGE_NORMAL))
         
         If .Stats.MinHp > 0 Then
 
@@ -673,7 +673,7 @@ Public Sub NpcDano(ByVal NpcIndex As Integer, ByVal UserIndex As Integer)
         If .flags.Privilegios And PlayerType.User Then .Stats.MinHp = .Stats.MinHp - dano
         
         'Renderizo el dano en render.
-        Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageChatOverHead(dano, Npclist(NpcIndex).Char.CharIndex, vbBlue, True))
+        Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageCreateDamage(.Pos.X, .Pos.Y, dano, DAMAGE_NORMAL))
         
         If .flags.Meditando Then
             If dano > Fix(.Stats.MinHp / 100 * .Stats.UserAtributos(eAtributos.Inteligencia) * .Stats.UserSkills(eSkill.Meditar) / 100 * 12 / (RandomNumber(0, 5) + 7)) Then
@@ -930,7 +930,7 @@ Public Function NpcAtacaUser(ByVal NpcIndex As Integer, _
         Call WriteMultiMessage(UserIndex, eMessages.NPCSwing)
         
         'Renderizo el dano en render.
-        Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageChatOverHead("'FALLA'", Npclist(NpcIndex).Char.CharIndex, vbBlue, True))
+        Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageCreateDamage(UserList(UserIndex).Pos.X, UserList(UserIndex).Pos.Y, 1, DAMAGE_FALLO))
         
         Call SubirSkill(UserIndex, eSkill.Tacticas, True)
 
@@ -988,7 +988,7 @@ Public Sub NpcDanoNpc(ByVal Atacante As Integer, ByVal Victima As Integer)
         Npclist(Victima).Stats.MinHp = Npclist(Victima).Stats.MinHp - dano
         
         'Renderizo el dano en render.
-        Call SendData(SendTarget.ToPCArea, Atacante, PrepareMessageChatOverHead(dano, .Char.CharIndex, vbBlue, True))
+        Call SendData(SendTarget.ToNPCArea, Atacante, PrepareMessageCreateDamage(Npclist(Victima).Pos.X, Npclist(Victima).Pos.Y, dano, DAMAGE_NORMAL))
         
         If Npclist(Victima).Stats.MinHp < 1 Then
             .Movement = .flags.OldMovement
@@ -1082,13 +1082,13 @@ Public Sub NpcAtacaNpc(ByVal Atacante As Integer, _
                 Call SendData(SendTarget.ToNPCArea, Atacante, PrepareMessagePlayWave(SND_SWING, .Pos.X, .Pos.Y))
                 
                 'Renderizo el dano en render.
-                Call SendData(SendTarget.ToPCArea, Atacante, PrepareMessageChatOverHead("'FALLA'", .Char.CharIndex, vbBlue, True))
+                Call SendData(SendTarget.ToNPCArea, Atacante, PrepareMessageCreateDamage(Npclist(Victima).Pos.X, Npclist(Victima).Pos.Y, 1, DAMAGE_FALLO))
                 
             Else
                 Call SendData(SendTarget.ToNPCArea, Victima, PrepareMessagePlayWave(SND_SWING, Npclist(Victima).Pos.X, Npclist(Victima).Pos.Y))
                 
                 'Renderizo el dano en render.
-                Call SendData(SendTarget.ToPCArea, Atacante, PrepareMessageChatOverHead("'FALLA'", .Char.CharIndex, vbBlue, True))
+                Call SendData(SendTarget.ToNPCArea, Victima, PrepareMessageCreateDamage(Npclist(Victima).Pos.X, Npclist(Victima).Pos.Y, 1, DAMAGE_FALLO))
                 
             End If
 
@@ -1137,7 +1137,7 @@ Public Function UsuarioAtacaNpc(ByVal UserIndex As Integer, _
         Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessagePlayWave(SND_SWING, UserList(UserIndex).Pos.X, UserList(UserIndex).Pos.Y))
         
         'Renderizo el dano en render.
-        Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageChatOverHead("'FALLAS'", UserList(UserIndex).Char.CharIndex, vbBlue, True))
+        Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageCreateDamage(Npclist(NpcIndex).Pos.X, Npclist(NpcIndex).Pos.Y, 1, DAMAGE_FALLO))
         
         Call WriteMultiMessage(UserIndex, eMessages.UserSwing)
 
@@ -1604,7 +1604,7 @@ Public Function UsuarioAtacaUsuario(ByVal AtacanteIndex As Integer, _
             Call WriteMultiMessage(VictimaIndex, eMessages.UserAttackedSwing, AtacanteIndex)
             
             'Renderizo el dano en render.
-            Call SendData(SendTarget.ToPCArea, AtacanteIndex, PrepareMessageChatOverHead("'FALLAS'", .Char.CharIndex, vbBlue, True))
+            Call SendData(SendTarget.ToPCArea, AtacanteIndex, PrepareMessageCreateDamage(UserList(VictimaIndex).Pos.X, UserList(VictimaIndex).Pos.Y, 1, DAMAGE_FALLO))
             
             Call SubirSkill(VictimaIndex, eSkill.Tacticas, True)
 
@@ -1804,8 +1804,9 @@ Public Sub UserDanoUser(ByVal AtacanteIndex As Integer, ByVal VictimaIndex As In
         
         'Doble chekeo innecesario, pero bueno..
         'Hecho para que no envie apu + golpe normal.
-        If Not PuedeApunalar(AtacanteIndex) Then _
-            Call SendData(SendTarget.ToPCArea, AtacanteIndex, PrepareMessageChatOverHead(dano, .Char.CharIndex, vbBlue, True))
+        If Not PuedeApunalar(AtacanteIndex) Then
+            Call SendData(SendTarget.ToPCArea, VictimaIndex, PrepareMessageCreateDamage(UserList(VictimaIndex).Pos.X, UserList(VictimaIndex).Pos.Y, dano, DAMAGE_NORMAL))
+        End If
         
         If UserList(VictimaIndex).Stats.MinHp <= 0 Then
             

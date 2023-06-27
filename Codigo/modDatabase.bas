@@ -16,7 +16,7 @@ Sub SaveUserToDatabase(ByVal UserIndex As Integer, _
 
     With UserList(UserIndex)
 
-        If .Id > 0 Then
+        If .ID > 0 Then
             Call UpdateUserToDatabase(UserIndex, SaveTimeOnline)
         Else
             Call InsertUserToDatabase(UserIndex, SaveTimeOnline)
@@ -58,19 +58,20 @@ Sub InsertUserToDatabase(ByVal UserIndex As Integer, _
     'Basic user data
     query = "INSERT INTO personaje SET "
     query = query & "name = (?), cuenta_id = (?), level = (?), exp = (?), elu = (?), elo = (?), genre_id = (?), race_id = (?), class_id = (?), "
-    query = query & "home_id = (?), description = (?), gold = (?), free_skillpoints = (?), assigned_skillpoints = (?), pos_map = (?), pos_x = (?), pos_y = (?), "
+    query = query & "home_id = (?), description = (?), gold = (?), pos_map = (?), pos_x = (?), pos_y = (?), "
     query = query & "body_id = (?), head_id = (?), weapon_id = (?), helmet_id = (?), shield_id = (?), items_amount = (?), slot_armour = (?), slot_weapon = (?), "
     query = query & "slot_nudillos = (?), min_hp = (?), max_hp = (?), min_man = (?), max_man = (?), min_sta = (?), max_sta = (?), min_ham = (?), "
-    query = query & "max_ham = (?), min_sed = (?), max_sed = (?), min_hit = (?), max_hit = (?), rep_noble = (?), rep_plebe = (?), Pareja = (?), rep_average = (?)"
+    query = query & "max_ham = (?), min_sed = (?), max_sed = (?), min_hit = (?), max_hit = (?), rep_noble = (?), rep_plebe = (?), Pareja = (?), rep_average = (?), ProfesionA = (?), ProfesionB = (?)"
 
     With UserList(UserIndex)
     
         Call User_Database.MakeQuery(query, True, _
-                                    .name, .AccountInfo.Id, .Stats.ELV, .Stats.Exp, .Stats.ELU, .Stats.ELO, .Genero, .Raza, .clase, _
-                                    .Hogar, .Desc, .Stats.Gld, .Stats.SkillPts, .Counters.AsignedSkills, .Pos.Map, .Pos.X, .Pos.Y, _
+                                    .name, .AccountInfo.ID, .Stats.ELV, .Stats.Exp, .Stats.ELU, .Stats.ELO, .Genero, .Raza, .clase, _
+                                    .Hogar, .Desc, .Stats.Gld, .Pos.Map, .Pos.X, .Pos.Y, _
                                     .Char.body, .Char.Head, .Char.WeaponAnim, .Char.CascoAnim, .Char.ShieldAnim, .Invent.NroItems, .Invent.ArmourEqpSlot, .Invent.WeaponEqpSlot, _
                                     .Invent.NudiEqpSlot, .Stats.MinHp, .Stats.MaxHp, .Stats.MinMAN, .Stats.MaxMAN, .Stats.MinSta, .Stats.MaxSta, .Stats.MinHam, _
-                                    .Stats.MaxHam, .Stats.MinAGU, .Stats.MaxAGU, .Stats.MinHIT, .Stats.MaxHit, .Reputacion.NobleRep, .Reputacion.PlebeRep, .flags.miPareja, .Reputacion.Promedio)
+                                    .Stats.MaxHam, .Stats.MinAGU, .Stats.MaxAGU, .Stats.MinHIT, .Stats.MaxHit, .Reputacion.NobleRep, .Reputacion.PlebeRep, .flags.miPareja, .Reputacion.Promedio, _
+                                    .Profesion(0).Profesion, .Profesion(1).Profesion)
 
         'Get the user ID
         Set User_Database.Database_RecordSet = User_Database.Database_Connection.Execute("SELECT LAST_INSERT_ID();")
@@ -83,14 +84,14 @@ Sub InsertUserToDatabase(ByVal UserIndex As Integer, _
         UserID = val(User_Database.Database_RecordSet.Fields(0).Value)
         Set User_Database.Database_RecordSet = Nothing
 
-        .Id = UserID
+        .ID = UserID
         
         '*******************************************************************
         'Familiar
         '*******************************************************************
         query = "INSERT INTO familiar (user_id, nombre, level, exp, elu, tipo, min_hp, max_hp, min_hit, max_hit) VALUES (?,?,?,?,?,?,?,?,?,?)"
         
-        Call User_Database.MakeQuery(query, True, .Id, .Familiar.nombre, .Familiar.Nivel, .Familiar.Exp, .Familiar.ELU, .Familiar.Tipo, .Familiar.MinHp, .Familiar.MaxHp, .Familiar.MinHIT, .Familiar.MaxHit)
+        Call User_Database.MakeQuery(query, True, .ID, .Familiar.Nombre, .Familiar.Nivel, .Familiar.Exp, .Familiar.ELU, .Familiar.Tipo, .Familiar.MinHp, .Familiar.MaxHp, .Familiar.MinHIT, .Familiar.MaxHit)
 
         '*******************************************************************
         'Atributos
@@ -102,7 +103,7 @@ Sub InsertUserToDatabase(ByVal UserIndex As Integer, _
             If LoopC < NUMATRIBUTOS Then query = query & ", "
         Next LoopC
 
-        query = query & ") VALUES (" & .Id & ", "
+        query = query & ") VALUES (" & .ID & ", "
 
         For LoopC = 1 To NUMATRIBUTOS
             query = query & .Stats.UserAtributos(LoopC)
@@ -124,7 +125,7 @@ Sub InsertUserToDatabase(ByVal UserIndex As Integer, _
             If LoopC < MAXUSERHECHIZOS Then query = query & ", "
         Next LoopC
 
-        query = query & ") VALUES (" & .Id & ", "
+        query = query & ") VALUES (" & .ID & ", "
 
         For LoopC = 1 To MAXUSERHECHIZOS
             query = query & .Stats.UserHechizos(LoopC)
@@ -146,7 +147,7 @@ Sub InsertUserToDatabase(ByVal UserIndex As Integer, _
             If LoopC < MAX_INVENTORY_SLOTS Then query = query & ", "
         Next LoopC
         
-        query = query & ") VALUES (" & .Id & ", "
+        query = query & ") VALUES (" & .ID & ", "
         
         For LoopC = 1 To MAX_INVENTORY_SLOTS
 
@@ -171,7 +172,7 @@ Sub InsertUserToDatabase(ByVal UserIndex As Integer, _
             If LoopC < MAX_BANCOINVENTORY_SLOTS Then query = query & ", "
         Next LoopC
         
-        query = query & ") VALUES (" & .Id & ", "
+        query = query & ") VALUES (" & .ID & ", "
         
         For LoopC = 1 To MAX_BANCOINVENTORY_SLOTS
 
@@ -195,7 +196,7 @@ Sub InsertUserToDatabase(ByVal UserIndex As Integer, _
             If LoopC < NUMSKILLS Then query = query & ", "
         Next LoopC
         
-        query = query & ") VALUES (" & .Id & ", "
+        query = query & ") VALUES (" & .ID & ", "
 
         For LoopC = 1 To NUMSKILLS
             query = query & .Stats.UserSkills(LoopC) & ", "
@@ -210,6 +211,48 @@ Sub InsertUserToDatabase(ByVal UserIndex As Integer, _
         Call User_Database.Database_Connection.Execute(query)
         
         '*******************************************************************
+        'Profesion primaria
+        '*******************************************************************
+        query = "INSERT INTO profesion_primaria (user_id, profesion, "
+        
+        For LoopC = 1 To MAXUSERRECETAS
+            query = query & "receta" & LoopC
+            If LoopC < MAXUSERRECETAS Then query = query & ", "
+        Next LoopC
+
+        query = query & ") VALUES (" & .ID & ", " & .Profesion(0).Profesion & ", "
+
+        For LoopC = 1 To MAXUSERRECETAS
+            query = query & .Profesion(0).Recetas(LoopC)
+            If LoopC < MAXUSERRECETAS Then query = query & ", "
+        Next LoopC
+
+        query = query & ");"
+
+        Call User_Database.Database_Connection.Execute(query)
+        
+        '*******************************************************************
+        'Profesion secundaria
+        '*******************************************************************
+        query = "INSERT INTO profesion_secundaria (user_id, profesion, "
+        
+        For LoopC = 1 To MAXUSERRECETAS
+            query = query & "receta" & LoopC
+            If LoopC < MAXUSERRECETAS Then query = query & ", "
+        Next LoopC
+
+        query = query & ") VALUES (" & .ID & ", " & .Profesion(1).Profesion & ", "
+
+        For LoopC = 1 To MAXUSERRECETAS
+            query = query & .Profesion(1).Recetas(LoopC)
+            If LoopC < MAXUSERRECETAS Then query = query & ", "
+        Next LoopC
+
+        query = query & ");"
+
+        Call User_Database.Database_Connection.Execute(query)
+        
+        '*******************************************************************
         'Mascotas
         '*******************************************************************
         query = "INSERT INTO pet (user_id, "
@@ -219,7 +262,7 @@ Sub InsertUserToDatabase(ByVal UserIndex As Integer, _
             If LoopC < MAXMASCOTAS Then query = query & ", "
         Next LoopC
 
-        query = query & ") VALUES (" & .Id & ", "
+        query = query & ") VALUES (" & .ID & ", "
 
         For LoopC = 1 To MAXMASCOTAS
             query = query & .MascotasIndex(LoopC)
@@ -269,7 +312,7 @@ Sub UpdateUserToDatabase(ByVal UserIndex As Integer, _
     'Basic user data
         
         query = "UPDATE personaje SET "
-        query = query & "name = (?), level = (?), exp = (?), elu = (?), elo = (?), genre_id = (?), race_id = (?), class_id = (?), home_id = (?), description = (?), gold = (?), bank_gold = (?), free_skillpoints = (?), "
+        query = query & "name = (?), level = (?), exp = (?), elu = (?), elo = (?), genre_id = (?), race_id = (?), class_id = (?), home_id = (?), description = (?), gold = (?), bank_gold = (?), "
         query = query & "assigned_skillpoints = (?), pet_amount = (?), pos_map = (?), pos_x = (?), pos_y = (?), last_map = (?), body_id = (?), head_id = (?), weapon_id = (?), helmet_id = (?), shield_id = (?), "
         query = query & "aura_id = (?), aura_color = (?), heading = (?), items_amount = (?), slot_armour = (?), slot_weapon = (?), slot_nudillos = (?), slot_helmet = (?), slot_shield = (?), slot_ammo = (?), "
         query = query & "slot_ship = (?), slot_ring = (?), min_hp = (?), max_hp = (?), min_man = (?), max_man = (?), min_sta = (?), max_sta = (?), min_ham = (?), max_ham = (?), min_sed = (?), max_sed = (?), "
@@ -278,13 +321,13 @@ Sub UpdateUserToDatabase(ByVal UserIndex As Integer, _
         query = query & "counter_pena = (?), pertenece_consejo_real = (?), pertenece_consejo_caos = (?), pertenece_real = (?), pertenece_caos = (?), ciudadanos_matados = (?), criminales_matados = (?), "
         query = query & "recibio_armadura_real = (?), recibio_armadura_caos = (?), recibio_exp_real = (?), recibio_exp_caos = (?), recompensas_real = (?), recompensas_caos = (?), "
         query = query & "reenlistadas = (?), fecha_ingreso = (?), nivel_ingreso = (?), matados_ingreso = (?), siguiente_recompensa = (?), guild_index = (?), is_global = (?), "
-        query = query & "modocombate = (?), seguro = (?), pareja = (?) WHERE id = (?)"
+        query = query & "modocombate = (?), seguro = (?), pareja = (?), profesionA = (?), profesionB = (?) WHERE id = (?)"
 
     With UserList(UserIndex)
     
         Call User_Database.MakeQuery(query, True, _
-                                    .name, .Stats.ELV, .Stats.Exp, .Stats.ELU, .Stats.ELO, .Genero, .Raza, .clase, .Hogar, .Desc, .Stats.Gld, .Stats.Banco, .Stats.SkillPts, _
-                                    .Counters.AsignedSkills, .NroMascotas, .Pos.Map, .Pos.X, .Pos.Y, .flags.lastMap, .Char.body, .Char.Head, .Char.WeaponAnim, .Char.CascoAnim, .Char.ShieldAnim, _
+                                    .name, .Stats.ELV, .Stats.Exp, .Stats.ELU, .Stats.ELO, .Genero, .Raza, .clase, .Hogar, .Desc, .Stats.Gld, .Stats.Banco, _
+                                    .NroMascotas, .Pos.Map, .Pos.X, .Pos.Y, .flags.lastMap, .Char.body, .Char.Head, .Char.WeaponAnim, .Char.CascoAnim, .Char.ShieldAnim, _
                                     .Char.AuraAnim, .Char.AuraColor, .Char.Heading, .Invent.NroItems, .Invent.ArmourEqpSlot, .Invent.WeaponEqpSlot, .Invent.AnilloEqpSlot, .Invent.CascoEqpSlot, .Invent.EscudoEqpSlot, .Invent.MunicionEqpSlot, _
                                     .Invent.BarcoSlot, .Invent.AnilloEqpSlot, .Stats.MinHp, .Stats.MaxHp, .Stats.MinMAN, .Stats.MaxMAN, .Stats.MinSta, .Stats.MaxSta, .Stats.MinHam, .Stats.MaxHam, .Stats.MinAGU, .Stats.MaxAGU, _
                                     .Stats.MinHIT, .Stats.MaxHit, .Stats.NPCsMuertos, .Stats.Muertes, .Reputacion.AsesinoRep, .Reputacion.BandidoRep, .Reputacion.BurguesRep, .Reputacion.LadronesRep, .Reputacion.NobleRep, .Reputacion.PlebeRep, .Reputacion.Promedio, _
@@ -292,7 +335,8 @@ Sub UpdateUserToDatabase(ByVal UserIndex As Integer, _
                                     .Counters.Pena, (.flags.Privilegios And PlayerType.RoyalCouncil), (.flags.Privilegios And PlayerType.ChaosCouncil), .Faccion.ArmadaReal, .Faccion.FuerzasCaos, .Faccion.CiudadanosMatados, .Faccion.CriminalesMatados, _
                                     .Faccion.RecibioArmaduraReal, .Faccion.RecibioArmaduraCaos, .Faccion.RecibioExpInicialReal, .Faccion.RecibioExpInicialCaos, .Faccion.RecompensasReal, .Faccion.RecompensasCaos, _
                                     .Faccion.Reenlistadas, .Faccion.FechaIngreso, .Faccion.NivelIngreso, .Faccion.MatadosIngreso, .Faccion.NextRecompensa, .GuildIndex, .flags.Global, _
-                                    IIf(.flags.ModoCombate = True, "1", "0"), IIf(.flags.Seguro = True, "1", "0"), .flags.miPareja, .Id)
+                                    IIf(.flags.ModoCombate = True, "1", "0"), IIf(.flags.Seguro = True, "1", "0"), .flags.miPareja, _
+                                    .Profesion(0).Profesion, .Profesion(1).Profesion, .ID)
                                         
         '*******************************************************************
         'Familiar
@@ -300,8 +344,8 @@ Sub UpdateUserToDatabase(ByVal UserIndex As Integer, _
                                         
         query = "UPDATE familiar SET nombre = (?), level = (?), exp = (?), elu = (?), tipo = (?), min_hp = (?), max_hp = (?), min_hit = (?), max_hit = (?), h_id1 = (?), h_id2 = (?), h_id3 = (?), h_id4 = (?) WHERE user_id = (?)"
                                         
-        Call User_Database.MakeQuery(query, True, .Familiar.nombre, .Familiar.Nivel, .Familiar.Exp, .Familiar.ELU, .Familiar.Tipo, .Familiar.MinHp, .Familiar.MaxHp, .Familiar.MinHIT, .Familiar.MaxHit, _
-                                    .Familiar.Spell(0), .Familiar.Spell(1), .Familiar.Spell(2), .Familiar.Spell(3), .Id)
+        Call User_Database.MakeQuery(query, True, .Familiar.Nombre, .Familiar.Nivel, .Familiar.Exp, .Familiar.ELU, .Familiar.Tipo, .Familiar.MinHp, .Familiar.MaxHp, .Familiar.MinHIT, .Familiar.MaxHit, _
+                                    .Familiar.Spell(0), .Familiar.Spell(1), .Familiar.Spell(2), .Familiar.Spell(3), .ID)
                                         
         '*******************************************************************
         'Hechizos
@@ -316,7 +360,7 @@ Sub UpdateUserToDatabase(ByVal UserIndex As Integer, _
             
         Next LoopC
         
-        query = query & " WHERE user_id = '" & .Id & "'"
+        query = query & " WHERE user_id = '" & .ID & "'"
 
         Call User_Database.Database_Connection.Execute(query)
 
@@ -336,7 +380,7 @@ Sub UpdateUserToDatabase(ByVal UserIndex As Integer, _
             
         Next LoopC
         
-        query = query & " WHERE user_id = '" & .Id & "'"
+        query = query & " WHERE user_id = '" & .ID & "'"
         
         Call User_Database.Database_Connection.Execute(query)
 
@@ -355,7 +399,7 @@ Sub UpdateUserToDatabase(ByVal UserIndex As Integer, _
             
         Next LoopC
         
-        query = query & " WHERE user_id = '" & .Id & "'"
+        query = query & " WHERE user_id = '" & .ID & "'"
         
         Call User_Database.Database_Connection.Execute(query)
 
@@ -373,8 +417,36 @@ Sub UpdateUserToDatabase(ByVal UserIndex As Integer, _
 
         Next LoopC
         
-        query = query & " WHERE user_id = '" & .Id & "'"
+        query = query & " WHERE user_id = '" & .ID & "'"
         
+        Call User_Database.Database_Connection.Execute(query)
+       
+        '*******************************************************************
+        'Profesion primaria
+        '*******************************************************************
+        query = "UPDATE profesion_primaria SET profesion" & " = '" & .Profesion(0).Profesion & "', "
+        
+        For LoopC = 1 To MAXUSERRECETAS
+            query = query & "receta" & LoopC & " = '" & .Profesion(0).Recetas(LoopC) & "'"
+            If LoopC < MAXUSERRECETAS Then query = query & ", "
+        Next LoopC
+        
+        query = query & " WHERE user_id = '" & .ID & "'"
+            
+        Call User_Database.Database_Connection.Execute(query)
+        
+        '*******************************************************************
+        'Profesion secundaria
+        '*******************************************************************
+        query = "UPDATE profesion_secundaria SET profesion" & " = '" & .Profesion(1).Profesion & "', "
+        
+        For LoopC = 1 To MAXUSERRECETAS
+            query = query & "receta" & LoopC & " = '" & .Profesion(1).Recetas(LoopC) & "'"
+            If LoopC < MAXUSERRECETAS Then query = query & ", "
+        Next LoopC
+        
+        query = query & " WHERE user_id = '" & .ID & "'"
+            
         Call User_Database.Database_Connection.Execute(query)
        
         '*******************************************************************
@@ -404,7 +476,7 @@ Sub UpdateUserToDatabase(ByVal UserIndex As Integer, _
             If LoopC < MAXMASCOTAS Then query = query & ", "
         Next LoopC
         
-        query = query & "WHERE user_id = '" & .Id & "'"
+        query = query & "WHERE user_id = '" & .ID & "'"
 
         Call User_Database.Database_Connection.Execute(query)
 
@@ -448,7 +520,7 @@ Sub LoadUserFromDatabase(ByVal UserIndex As Integer)
         If Not User_Database.MakeQuery(query, False, UCase$(.name)) Then Exit Sub
 
         'Start setting data
-        .Id = User_Database.Database_RecordSet!Id
+        .ID = User_Database.Database_RecordSet!ID
         .name = User_Database.Database_RecordSet!name
         .Stats.ELV = User_Database.Database_RecordSet!level
         .Stats.Exp = User_Database.Database_RecordSet!Exp
@@ -461,8 +533,6 @@ Sub LoadUserFromDatabase(ByVal UserIndex As Integer)
         .Desc = User_Database.Database_RecordSet!description
         .Stats.Gld = User_Database.Database_RecordSet!Gold
         .Stats.Banco = User_Database.Database_RecordSet!bank_gold
-        .Stats.SkillPts = User_Database.Database_RecordSet!free_skillpoints
-        .Counters.AsignedSkills = User_Database.Database_RecordSet!assigned_skillpoints
         .NroMascotas = User_Database.Database_RecordSet!pet_amount
         .Pos.Map = User_Database.Database_RecordSet!pos_map
         .Pos.X = User_Database.Database_RecordSet!pos_x
@@ -521,6 +591,8 @@ Sub LoadUserFromDatabase(ByVal UserIndex As Integer)
         .flags.ModoCombate = User_Database.Database_RecordSet!ModoCombate
         .flags.Seguro = User_Database.Database_RecordSet!Seguro
         .flags.miPareja = User_Database.Database_RecordSet!pareja
+        .Profesion(0).Profesion = User_Database.Database_RecordSet!ProfesionA
+        .Profesion(1).Profesion = User_Database.Database_RecordSet!ProfesionB
     
         'Add Cr3p-1 agregamos esto para que funcione los casamientos. (xD)
         If Len(.flags.miPareja) > 0 Then
@@ -562,10 +634,10 @@ Sub LoadUserFromDatabase(ByVal UserIndex As Integer)
         'Familiar
         '*******************************************************************
         
-        query = "SELECT * FROM familiar WHERE user_id = " & .Id & ";"
+        query = "SELECT * FROM familiar WHERE user_id = " & .ID & ";"
         Set User_Database.Database_RecordSet = User_Database.Database_Connection.Execute(query)
         
-        .Familiar.nombre = User_Database.Database_RecordSet!nombre
+        .Familiar.Nombre = User_Database.Database_RecordSet!Nombre
         .Familiar.Nivel = User_Database.Database_RecordSet!level
         .Familiar.Exp = User_Database.Database_RecordSet!Exp
         .Familiar.ELU = User_Database.Database_RecordSet!ELU
@@ -584,7 +656,7 @@ Sub LoadUserFromDatabase(ByVal UserIndex As Integer)
         '*******************************************************************
         'Atributos
         '*******************************************************************
-        query = "SELECT * FROM atributos WHERE user_id = " & .Id & ";"
+        query = "SELECT * FROM atributos WHERE user_id = " & .ID & ";"
         Set User_Database.Database_RecordSet = User_Database.Database_Connection.Execute(query)
     
         If Not User_Database.Database_RecordSet.RecordCount = 0 Then
@@ -605,7 +677,7 @@ Sub LoadUserFromDatabase(ByVal UserIndex As Integer)
         '*******************************************************************
         'Hechizos
         '*******************************************************************
-        query = "SELECT * FROM spell WHERE user_id = " & .Id & ";"
+        query = "SELECT * FROM spell WHERE user_id = " & .ID & ";"
         Set User_Database.Database_RecordSet = User_Database.Database_Connection.Execute(query)
 
         If Not User_Database.Database_RecordSet.RecordCount = 0 Then
@@ -622,7 +694,7 @@ Sub LoadUserFromDatabase(ByVal UserIndex As Integer)
         '*******************************************************************
         'Mascotas
         '*******************************************************************
-        query = "SELECT * FROM pet WHERE user_id = " & .Id & ";"
+        query = "SELECT * FROM pet WHERE user_id = " & .ID & ";"
         Set User_Database.Database_RecordSet = User_Database.Database_Connection.Execute(query)
 
         If Not User_Database.Database_RecordSet.RecordCount = 0 Then
@@ -639,7 +711,7 @@ Sub LoadUserFromDatabase(ByVal UserIndex As Integer)
         '*******************************************************************
         'Inventario
         '*******************************************************************
-        query = "SELECT * FROM inventario_items WHERE user_id = " & .Id & ";"
+        query = "SELECT * FROM inventario_items WHERE user_id = " & .ID & ";"
         Set User_Database.Database_RecordSet = User_Database.Database_Connection.Execute(query)
 
         If Not User_Database.Database_RecordSet.RecordCount = 0 Then
@@ -658,7 +730,7 @@ Sub LoadUserFromDatabase(ByVal UserIndex As Integer)
         '*******************************************************************
         'Boveda
         '*******************************************************************
-        query = "SELECT * FROM banco_items WHERE user_id = " & .Id & ";"
+        query = "SELECT * FROM banco_items WHERE user_id = " & .ID & ";"
         Set User_Database.Database_RecordSet = User_Database.Database_Connection.Execute(query)
 
         If Not User_Database.Database_RecordSet.RecordCount = 0 Then
@@ -676,7 +748,7 @@ Sub LoadUserFromDatabase(ByVal UserIndex As Integer)
         '*******************************************************************
         'Skills
         '*******************************************************************
-        query = "SELECT * FROM skillpoint WHERE user_id = " & .Id & ";"
+        query = "SELECT * FROM skillpoint WHERE user_id = " & .ID & ";"
         Set User_Database.Database_RecordSet = User_Database.Database_Connection.Execute(query)
 
         If Not User_Database.Database_RecordSet.RecordCount = 0 Then
@@ -687,6 +759,44 @@ Sub LoadUserFromDatabase(ByVal UserIndex As Integer)
                 .Stats.ExpSkills(LoopC) = User_Database.Database_RecordSet("exp" & LoopC)
                 .Stats.EluSkills(LoopC) = User_Database.Database_RecordSet("elu" & LoopC)
                 If .Stats.EluSkills(LoopC) < 1 Then .Stats.EluSkills(LoopC) = 200
+            Next LoopC
+
+        End If
+
+        Set User_Database.Database_RecordSet = Nothing
+        
+        '*******************************************************************
+        'Profesion primaria
+        '*******************************************************************
+        query = "SELECT * FROM profesion_primaria WHERE user_id = " & .ID & ";"
+        Set User_Database.Database_RecordSet = User_Database.Database_Connection.Execute(query)
+
+        If Not User_Database.Database_RecordSet.RecordCount = 0 Then
+            User_Database.Database_RecordSet.MoveFirst
+
+            .Profesion(0).Profesion = User_Database.Database_RecordSet("profesion")
+
+            For LoopC = 1 To MAXUSERRECETAS
+                .Profesion(0).Recetas(LoopC) = User_Database.Database_RecordSet("receta" & LoopC)
+            Next LoopC
+
+        End If
+
+        Set User_Database.Database_RecordSet = Nothing
+        
+        '*******************************************************************
+        'Profesion secundaria
+        '*******************************************************************
+        query = "SELECT * FROM profesion_secundaria WHERE user_id = " & .ID & ";"
+        Set User_Database.Database_RecordSet = User_Database.Database_Connection.Execute(query)
+
+        If Not User_Database.Database_RecordSet.RecordCount = 0 Then
+            User_Database.Database_RecordSet.MoveFirst
+
+            .Profesion(1).Profesion = User_Database.Database_RecordSet("profesion")
+
+            For LoopC = 1 To MAXUSERRECETAS
+                .Profesion(1).Recetas(LoopC) = User_Database.Database_RecordSet("receta" & LoopC)
             Next LoopC
 
         End If
@@ -896,7 +1006,7 @@ Public Sub MarcarPjComoQueYaVotoDatabase(ByVal UserIndex As Integer, _
         If User_Database.CheckSQLStatus = False Then User_Database.Database_Reconnect
     #End If
 
-    Call User_Database.MakeQuery("UPDATE personaje SET votes_amount = (?) WHERE id = (?)", True, NumeroEncuesta, UserList(UserIndex).Id)
+    Call User_Database.MakeQuery("UPDATE personaje SET votes_amount = (?) WHERE id = (?)", True, NumeroEncuesta, UserList(UserIndex).ID)
     
     #If DBConexionUnica = 0 Then
         Call User_Database.Database_Close

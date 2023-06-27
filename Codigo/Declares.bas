@@ -35,6 +35,15 @@ Option Explicit
 
 #End If
 
+'********** Constantes de dano en render.
+Public Const DAMAGE_PUNAL    As Byte = 1
+Public Const DAMAGE_NORMAL   As Byte = 2
+Public Const DAMAGE_CRITICO  As Byte = 3
+Public Const DAMAGE_FALLO    As Byte = 4
+Public Const DAMAGE_CURAR    As Byte = 5
+Public Const DAMAGE_TRABAJO  As Byte = 6
+'********** Constantes de dano en render.
+
 ' Nuevo Centinela
 Type CentinelaUser
 
@@ -143,7 +152,6 @@ Public Enum eClass
     Nigromante  'Nigromante
     Mercenario  'Mercenario
     Gladiador
-    Trabajador
     
 End Enum
 
@@ -207,6 +215,14 @@ Public Const NingunArma              As Integer = 2
 Public Const NingunAura              As Integer = 0
 
 Public Const EspadaMataDragonesIndex As Integer = 402
+
+Public Const LAUDMAGICO              As Integer = 696
+
+Public Const FLAUTAMAGICA            As Integer = 208
+
+Public Const LAUDELFICO              As Integer = 1049
+
+Public Const FLAUTAELFICA            As Integer = 1050
 
 Public Const APOCALIPSIS_SPELL_INDEX As Integer = 25
 
@@ -369,7 +385,7 @@ Public Const MAXEXP                         As Long = 999999999
 
 Public Const MAXUSERMATADOS                 As Long = 65000
 
-Public Const MAXATRIBUTOS                   As Byte = 35
+Public Const MAXATRIBUTOS                   As Byte = 40
 
 Public Const MINATRIBUTOS                   As Byte = 6
 
@@ -387,6 +403,8 @@ Public Const PielOsoPolar                   As Integer = 416
 
 Public Const Lena                           As Integer = 58
 
+Public Const LenaElfica                     As Integer = 1006
+
 Public Const Raices                         As Integer = 888
 
 Public Const MAXNPCS                        As Integer = 10000
@@ -394,6 +412,8 @@ Public Const MAXNPCS                        As Integer = 10000
 Public Const MAXCHARS                       As Integer = 10000
 
 Public Const HACHA_LENADOR                  As Integer = 127
+
+Public Const HACHA_LENA_ELFICA              As Integer = 1005
 
 Public Const PIQUETE_MINERO                 As Integer = 187
 
@@ -441,6 +461,7 @@ Public Enum eNPCType
     Veterinario = 11
     Timbero = 12
     ReyCastillo = 13
+    Instructor = 14
     
 End Enum
 
@@ -458,7 +479,7 @@ Public Const NUMATRIBUTOS   As Byte = 5
 
 ''
 ' Cantidad de Clases
-Public Const NUMCLASES      As Byte = 14
+Public Const NUMCLASES      As Byte = 13
 
 ''
 ' Cantidad de Razas
@@ -553,11 +574,11 @@ Public Enum eSkill
     Comerciar = 15
     Supervivencia = 16
     Liderazgo = 17
-    Pesca = 18
+    pesca = 18
     Mineria = 19
-    talar = 20
+    Talar = 20
     Botanica = 21
-    Herreria = 22
+    herreria = 22
     Carpinteria = 23
     Alquimia = 24
     Sastreria = 25
@@ -704,7 +725,7 @@ Public Enum eOBJType
     otDummy = 45
     otNudillos = 46  '*
     otCatalizador = 47  '* (Anillos habilitadores de hechizos)
-    'Nada
+    otPlanos = 48
     otRuna = 49
     
     otInstruye = 51 'Eliminar
@@ -998,6 +1019,13 @@ Public Type tLuz
     Color As Long
 End Type
 
+Public Const MAX_ITEMS_CRAFTEO As Byte = 4
+
+Public Type tProfesion
+    Profesion As Byte 'Indica el skill
+    Categoria As Byte 'Indica la categoria
+End Type
+
 'Tipos de objetos
 Public Type ObjData
 
@@ -1023,8 +1051,10 @@ Public Type ObjData
     MinHp As Integer ' Minimo puntos de vida
     MaxHp As Integer ' Maximo puntos de vida
     
-    MineralIndex As Integer
+    RecursoIndex As Integer
     LingoteIndex As Integer
+    RecetaIndex As Integer 'Manuales de profesiones
+    Profesion As Byte 'Indica la profesion a la que va dirigida el item
     
     proyectil As Integer
     Municion As Integer
@@ -1081,14 +1111,8 @@ Public Type ObjData
 
     Agarrable As Byte
     
-    LingH As Integer
-    LingO As Integer
-    LingP As Integer
-    Madera As Integer
-    Raices As Integer
-    PielLobo As Integer
-    PielOsoPardo As Integer
-    PielOsoPolar As Integer
+    Materiales(1 To MAXMATERIALES)
+    CantMateriales(1 To MAXMATERIALES)
     
     SkHerreria As Integer
     SkCarpinteria As Integer
@@ -1156,6 +1180,9 @@ Public Type ObjData
     
     Subtipo As Byte
     CreaLuz As tLuz
+    
+    Herramienta As tProfesion
+    Recurso As tProfesion
 End Type
 
 Public Type obj
@@ -1369,7 +1396,6 @@ Public Type UserStats
     Muertes As Long
     NPCsMuertos As Integer
     
-    SkillPts As Integer
     ExpSkills(1 To NUMSKILLS) As Long
     EluSkills(1 To NUMSKILLS) As Long
     
@@ -1535,6 +1561,8 @@ Public Type UserCounters
     Ceguera As Integer
     Estupidez As Integer
     
+    MonturaCounter As Long
+    
     Invisibilidad As Integer
     TiempoOculto As Integer
     
@@ -1577,8 +1605,6 @@ Public Type UserCounters
     Cheat As modAntiCheat.TimeIntervalos
     
     failedUsageAttempts As Long
-    
-    AsignedSkills As Byte
     
     PacketsTick As Byte
 
@@ -1826,6 +1852,7 @@ Public Type NPCFlags
     
     ArenasRinkel As Byte
     
+    Recurso As tProfesion
 End Type
 
 Public Type tCriaturasEntrenador
@@ -2436,6 +2463,7 @@ Public Const GNOMO_M_ULTIMA_CABEZA                  As Integer = 473
 
 ' Por ahora la dejo constante.. SI se quisiera extender la propiedad de paralziar, se podria hacer
 ' una nueva variable en el dat.
+Public Const GUANTE_HURTO                           As Integer = 873
 
 Public Const ESPADA_VIKINGA                         As Integer = 123
 

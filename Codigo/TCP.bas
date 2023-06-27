@@ -390,9 +390,6 @@ Sub ConnectNewUser(ByVal UserIndex As Integer, _
             Suma = Suma + Abs(UserList(UserIndex).Stats.UserSkills(i))
         Next i
         
-        'Ya asigno los 10 primeros skills
-        .Counters.AsignedSkills = 10
-        
         If Suma > 10 Then
             Call LogHackAttemp(UserList(UserIndex).name & " intento hackear los skills.")
             Call CloseSocket(UserIndex)
@@ -488,7 +485,6 @@ Private Sub SetAttributesCustomToNewUser(ByVal UserIndex As Integer)
             End If
         Next i
         
-        .Stats.SkillPts = 0
     End With
 
 End Sub
@@ -1337,12 +1333,6 @@ Sub ConnectUser(ByVal UserIndex As Integer, _
         'usado para borrar Pjs
         Call UpdateUserLogged(.name, 1)
     
-        If .Stats.SkillPts > 0 Then
-            Call WriteSendSkills(UserIndex)
-            Call WriteLevelUp(UserIndex, .Stats.SkillPts)
-
-        End If
-    
         MapInfo(.Pos.Map).NumUsers = MapInfo(.Pos.Map).NumUsers + 1
     
         If NumUsers > RecordUsuariosOnline Then
@@ -1520,7 +1510,6 @@ Sub ResetContadores(ByVal UserIndex As Integer)
     With UserList(UserIndex).Counters
         .TimeFight = 0
         .AGUACounter = 0
-        .AsignedSkills = 0
         .AttackCounter = 0
         .bPuedeMeditar = True
         .Ceguera = 0
@@ -1658,7 +1647,6 @@ Sub ResetBasicUserInfo(ByVal UserIndex As Integer)
             .def = 0
             .NPCsMuertos = 0
             .Muertes = 0
-            .SkillPts = 0
             .Gld = 0
             .UserAtributos(1) = 0
             .UserAtributos(2) = 0

@@ -78,7 +78,7 @@ End Type
 Private Type tDatosNPC
     X As Integer
     Y As Integer
-    NpcIndex As Integer
+    NPCIndex As Integer
 End Type
 
 Private Type tDatosObjs
@@ -160,7 +160,7 @@ Public Sub CargarSpawnList()
             
             i = i + 1
             
-            SpawnList(i).NpcIndex = LoopC
+            SpawnList(i).NPCIndex = LoopC
             SpawnList(i).NpcName = LeerNPCs.GetValue("NPC" & LoopC, "Name")
             
         End If
@@ -779,9 +779,9 @@ Public Sub GrabarMapa(ByVal Map As Long, ByRef MAPFILE As String)
                 If .TileExit.Map Then ByFlags = ByFlags Or 1
                 
                 ' No hacer backup de los NPCs invalidos ( Mascotas, Invocados )
-                If .NpcIndex Then
+                If .NPCIndex Then
                     
-                    NpcInvalido = (Npclist(.NpcIndex).MaestroUser > 0)
+                    NpcInvalido = (Npclist(.NPCIndex).MaestroUser > 0)
                     
                     If Not NpcInvalido Then ByFlags = ByFlags Or 2
 
@@ -797,7 +797,7 @@ Public Sub GrabarMapa(ByVal Map As Long, ByRef MAPFILE As String)
                     Call InfWriter.putInteger(.TileExit.Y)
                 End If
                 
-                If .NpcIndex And Not NpcInvalido Then Call InfWriter.putInteger(Npclist(.NpcIndex).Numero)
+                If .NPCIndex And Not NpcInvalido Then Call InfWriter.putInteger(Npclist(.NPCIndex).Numero)
                 
                 If .ObjInfo.ObjIndex Then
                     Call InfWriter.putInteger(.ObjInfo.ObjIndex)
@@ -1081,24 +1081,12 @@ Sub LoadOBJData()
                 Case eOBJType.otArmadura
                     .Real = val(Leer.GetValue("OBJ" & Object, "Real"))
                     .Caos = val(Leer.GetValue("OBJ" & Object, "Caos"))
-                    .LingH = val(Leer.GetValue("OBJ" & Object, "LingH"))
-                    .LingP = val(Leer.GetValue("OBJ" & Object, "LingP"))
-                    .LingO = val(Leer.GetValue("OBJ" & Object, "LingO"))
-                    .SkHerreria = val(Leer.GetValue("OBJ" & Object, "SkHerreria"))
-                    .SkSastreria = val(Leer.GetValue("OBJ" & Object, "SkSastreria"))
-                    .PielLobo = val(Leer.GetValue("OBJ" & Object, "PielLobo"))
-                    .PielOsoPardo = val(Leer.GetValue("OBJ" & Object, "PielOsoPardo"))
-                    .PielOsoPolar = val(Leer.GetValue("OBJ" & Object, "PielOsoPolar"))
                     
                     Aura = Leer.GetValue("OBJ" & Object, "CreaGRH")
                     .GrhAura = val(ReadField(1, Aura, Asc(":")))
                     .AuraColor = HexToColor(Right(ReadField(2, Aura, Asc(":")), 6))
                     
                 Case eOBJType.otNudillos
-                    .LingH = val(Leer.GetValue("OBJ" & Object, "LingH"))
-                    .LingP = val(Leer.GetValue("OBJ" & Object, "LingP"))
-                    .LingO = val(Leer.GetValue("OBJ" & Object, "LingO"))
-                    .SkHerreria = val(Leer.GetValue("OBJ" & Object, "SkHerreria"))
                     .MaxHit = val(Leer.GetValue("OBJ" & Object, "MaxHIT"))
                     .MinHIT = val(Leer.GetValue("OBJ" & Object, "MinHIT"))
                     .WeaponAnim = val(Leer.GetValue("OBJ" & Object, "Anim"))
@@ -1107,10 +1095,6 @@ Sub LoadOBJData()
                     .ShieldAnim = val(Leer.GetValue("OBJ" & Object, "Anim"))
                     .Real = val(Leer.GetValue("OBJ" & Object, "Real"))
                     .Caos = val(Leer.GetValue("OBJ" & Object, "Caos"))
-                    .LingH = val(Leer.GetValue("OBJ" & Object, "LingH"))
-                    .LingP = val(Leer.GetValue("OBJ" & Object, "LingP"))
-                    .LingO = val(Leer.GetValue("OBJ" & Object, "LingO"))
-                    .SkHerreria = val(Leer.GetValue("OBJ" & Object, "SkHerreria"))
                     
                     Aura = Leer.GetValue("OBJ" & Object, "CreaGRH")
                     .GrhAura = val(ReadField(1, Aura, Asc(":")))
@@ -1120,14 +1104,6 @@ Sub LoadOBJData()
                     .CascoAnim = val(Leer.GetValue("OBJ" & Object, "Anim"))
                     .Real = val(Leer.GetValue("OBJ" & Object, "Real"))
                     .Caos = val(Leer.GetValue("OBJ" & Object, "Caos"))
-                    .LingH = val(Leer.GetValue("OBJ" & Object, "LingH"))
-                    .LingP = val(Leer.GetValue("OBJ" & Object, "LingP"))
-                    .LingO = val(Leer.GetValue("OBJ" & Object, "LingO"))
-                    .SkHerreria = val(Leer.GetValue("OBJ" & Object, "SkHerreria"))
-                    .SkSastreria = val(Leer.GetValue("OBJ" & Object, "SkSastreria"))
-                    .PielLobo = val(Leer.GetValue("OBJ" & Object, "PielLobo"))
-                    .PielOsoPardo = val(Leer.GetValue("OBJ" & Object, "PielOsoPardo"))
-                    .PielOsoPolar = val(Leer.GetValue("OBJ" & Object, "PielOsoPolar"))
                 
                 Case eOBJType.otWeapon
                     .WeaponAnim = val(Leer.GetValue("OBJ" & Object, "Anim"))
@@ -1142,11 +1118,6 @@ Sub LoadOBJData()
                     .Caos = val(Leer.GetValue("OBJ" & Object, "Caos"))
                     
                     .WeaponRazaEnanaAnim = val(Leer.GetValue("OBJ" & Object, "RazaEnanaAnim"))
-                    
-                    .LingH = val(Leer.GetValue("OBJ" & Object, "LingH"))
-                    .LingP = val(Leer.GetValue("OBJ" & Object, "LingP"))
-                    .LingO = val(Leer.GetValue("OBJ" & Object, "LingO"))
-                    .SkHerreria = val(Leer.GetValue("OBJ" & Object, "SkHerreria"))
             
                     Aura = Leer.GetValue("OBJ" & Object, "CreaGRH")
                     .GrhAura = val(ReadField(1, Aura, Asc(":")))
@@ -1171,7 +1142,6 @@ Sub LoadOBJData()
                     .MinModificador = val(Leer.GetValue("OBJ" & Object, "MinModificador"))
                     .DuracionEfecto = val(Leer.GetValue("OBJ" & Object, "DuracionEfecto"))
                     .SkAlquimia = val(Leer.GetValue("OBJ" & Object, "SkPociones"))
-                    .Raices = val(Leer.GetValue("OBJ" & Object, "Raices"))
                 
                 Case eOBJType.otBarcos
                     .MaxHit = val(Leer.GetValue("OBJ" & Object, "MaxHIT"))
@@ -1200,11 +1170,6 @@ Sub LoadOBJData()
                     .QueAtributo = val(Leer.GetValue("OBJ" & Object, "QueAtributo"))
                     .QueSkill = val(Leer.GetValue("OBJ" & Object, "QueSkill"))
                     
-                    .LingH = val(Leer.GetValue("OBJ" & Object, "LingH"))
-                    .LingP = val(Leer.GetValue("OBJ" & Object, "LingP"))
-                    .LingO = val(Leer.GetValue("OBJ" & Object, "LingO"))
-                    .SkHerreria = val(Leer.GetValue("OBJ" & Object, "SkHerreria"))
-                    
                 Case eOBJType.otTeleport
                     .Radio = val(Leer.GetValue("OBJ" & Object, "Radio"))
                     
@@ -1231,7 +1196,10 @@ Sub LoadOBJData()
             .HechizoIndex = val(Leer.GetValue("OBJ" & Object, "HechizoIndex"))
             
             .LingoteIndex = val(Leer.GetValue("OBJ" & Object, "LingoteIndex"))
-            .MineralIndex = val(Leer.GetValue("OBJ" & Object, "MineralIndex"))
+            
+            .RecursoIndex = val(Leer.GetValue("OBJ" & Object, "RecursoIndex"))
+            .RecetaIndex = val(Leer.GetValue("OBJ" & Object, "RecetaIndex"))
+            .Profesion = val(Leer.GetValue("OBJ" & Object, "Profesion"))
             
             .MaxHp = val(Leer.GetValue("OBJ" & Object, "MaxHP"))
             .MinHp = val(Leer.GetValue("OBJ" & Object, "MinHP"))
@@ -1298,9 +1266,16 @@ Sub LoadOBJData()
             .ResistenciaMagica = val(Leer.GetValue("OBJ" & Object, "ResistenciaMagica"))
             
             .SkCarpinteria = val(Leer.GetValue("OBJ" & Object, "SkCarpinteria"))
+            .SkHerreria = val(Leer.GetValue("OBJ" & Object, "SkHerreria"))
+            .SkSastreria = val(Leer.GetValue("OBJ" & Object, "SkSastreria"))
+            .SkAlquimia = val(Leer.GetValue("OBJ" & Object, "SkAlquimia"))
             
-            If .SkCarpinteria > 0 Then _
-                .Madera = val(Leer.GetValue("OBJ" & Object, "Madera"))
+            If .SkCarpinteria > 0 Or .SkHerreria > 0 Or .SkSastreria > 0 Or .SkAlquimia > 0 Then
+                For i = 1 To MAXMATERIALES
+                    .Materiales(i) = val(ReadField(i, Leer.GetValue("OBJ" & Object, "Materiales"), Asc("-")))
+                    .CantMateriales(i) = val(ReadField(i, Leer.GetValue("OBJ" & Object, "CantMateriales"), Asc("-")))
+                Next i
+            End If
 
            ' Skill minimo
             s = Leer.GetValue("OBJ" & Object, "SkillRequerido")
@@ -1322,6 +1297,12 @@ Sub LoadOBJData()
             .NoSeCae = val(Leer.GetValue("OBJ" & Object, "NoSeCae"))
             
             .NoRobable = val(Leer.GetValue("OBJ" & Object, "NoRobable"))
+            
+            .Herramienta.Profesion = val(ReadField(1, Leer.GetValue("OBJ" & Object, "Herramienta"), Asc("-"))) 'Profesion a la que pertenece
+            .Herramienta.Categoria = val(ReadField(2, Leer.GetValue("OBJ" & Object, "Herramienta"), Asc("-"))) 'Categoria de la herramienta
+            
+            .Recurso.Profesion = val(ReadField(1, Leer.GetValue("OBJ" & Object, "Recurso"), Asc("-"))) 'Profesion a la que pertenece
+            .Recurso.Categoria = val(ReadField(2, Leer.GetValue("OBJ" & Object, "Recurso"), Asc("-"))) 'Categoria del recurso
             
             frmCargando.cargar.Value = frmCargando.cargar.Value + 1
 
@@ -1628,27 +1609,27 @@ Public Sub CargarMapa(ByVal Map As Long, ByVal MAPFl As String)
                 ReDim NPCs(1 To .NumeroNPCs)
                 Get #fh, , NPCs
                 For i = 1 To .NumeroNPCs
-                    MapData(Map, NPCs(i).X, NPCs(i).Y).NpcIndex = NPCs(i).NpcIndex
-                    If MapData(Map, NPCs(i).X, NPCs(i).Y).NpcIndex > 0 Then
+                    MapData(Map, NPCs(i).X, NPCs(i).Y).NPCIndex = NPCs(i).NPCIndex
+                    If MapData(Map, NPCs(i).X, NPCs(i).Y).NPCIndex > 0 Then
                         
                         npcfile = DatPath & "NPCs.dat"
                         
                         'Si el npc debe hacer respawn en la pos original la guardamos
-                        If val(GetVar(npcfile, "NPC" & MapData(Map, NPCs(i).X, NPCs(i).Y).NpcIndex, "PosOrig")) = 1 Then
-                            MapData(Map, NPCs(i).X, NPCs(i).Y).NpcIndex = OpenNPC(MapData(Map, NPCs(i).X, NPCs(i).Y).NpcIndex)
-                            Npclist(MapData(Map, NPCs(i).X, NPCs(i).Y).NpcIndex).Orig.Map = Map
-                            Npclist(MapData(Map, NPCs(i).X, NPCs(i).Y).NpcIndex).Orig.X = NPCs(i).X
-                            Npclist(MapData(Map, NPCs(i).X, NPCs(i).Y).NpcIndex).Orig.Y = NPCs(i).Y
+                        If val(GetVar(npcfile, "NPC" & MapData(Map, NPCs(i).X, NPCs(i).Y).NPCIndex, "PosOrig")) = 1 Then
+                            MapData(Map, NPCs(i).X, NPCs(i).Y).NPCIndex = OpenNPC(MapData(Map, NPCs(i).X, NPCs(i).Y).NPCIndex)
+                            Npclist(MapData(Map, NPCs(i).X, NPCs(i).Y).NPCIndex).Orig.Map = Map
+                            Npclist(MapData(Map, NPCs(i).X, NPCs(i).Y).NPCIndex).Orig.X = NPCs(i).X
+                            Npclist(MapData(Map, NPCs(i).X, NPCs(i).Y).NPCIndex).Orig.Y = NPCs(i).Y
                         Else
-                            MapData(Map, NPCs(i).X, NPCs(i).Y).NpcIndex = OpenNPC(MapData(Map, NPCs(i).X, NPCs(i).Y).NpcIndex)
+                            MapData(Map, NPCs(i).X, NPCs(i).Y).NPCIndex = OpenNPC(MapData(Map, NPCs(i).X, NPCs(i).Y).NPCIndex)
                         End If
                         
-                        If Not MapData(Map, NPCs(i).X, NPCs(i).Y).NpcIndex = 0 Then
-                            Npclist(MapData(Map, NPCs(i).X, NPCs(i).Y).NpcIndex).Pos.Map = Map
-                            Npclist(MapData(Map, NPCs(i).X, NPCs(i).Y).NpcIndex).Pos.X = NPCs(i).X
-                            Npclist(MapData(Map, NPCs(i).X, NPCs(i).Y).NpcIndex).Pos.Y = NPCs(i).Y
+                        If Not MapData(Map, NPCs(i).X, NPCs(i).Y).NPCIndex = 0 Then
+                            Npclist(MapData(Map, NPCs(i).X, NPCs(i).Y).NPCIndex).Pos.Map = Map
+                            Npclist(MapData(Map, NPCs(i).X, NPCs(i).Y).NPCIndex).Pos.X = NPCs(i).X
+                            Npclist(MapData(Map, NPCs(i).X, NPCs(i).Y).NPCIndex).Pos.Y = NPCs(i).Y
        
-                            Call MakeNPCChar(True, 0, MapData(Map, NPCs(i).X, NPCs(i).Y).NpcIndex, Map, NPCs(i).X, NPCs(i).Y)
+                            Call MakeNPCChar(True, 0, MapData(Map, NPCs(i).X, NPCs(i).Y).NPCIndex, Map, NPCs(i).X, NPCs(i).Y)
                         End If
                         
                     End If
@@ -2023,7 +2004,7 @@ Function criminal(ByVal UserIndex As Integer) As Boolean
 
 End Function
 
-Sub BackUPnPc(ByVal NpcIndex As Integer, ByVal hFile As Integer)
+Sub BackUPnPc(ByVal NPCIndex As Integer, ByVal hFile As Integer)
     '***************************************************
     'Author: Unknown
     'Last Modification: 10/09/2010
@@ -2032,9 +2013,9 @@ Sub BackUPnPc(ByVal NpcIndex As Integer, ByVal hFile As Integer)
 
     Dim LoopC As Integer
     
-    Print #hFile, "[NPC" & Npclist(NpcIndex).Numero & "]"
+    Print #hFile, "[NPC" & Npclist(NPCIndex).Numero & "]"
     
-    With Npclist(NpcIndex)
+    With Npclist(NPCIndex)
         'General
         Print #hFile, "Name=" & .name
         Print #hFile, "Desc=" & .Desc
@@ -2088,7 +2069,7 @@ Sub BackUPnPc(ByVal NpcIndex As Integer, ByVal hFile As Integer)
 
 End Sub
 
-Sub CargarNpcBackUp(ByVal NpcIndex As Integer, ByVal NpcNumber As Integer)
+Sub CargarNpcBackUp(ByVal NPCIndex As Integer, ByVal NpcNumber As Integer)
     '***************************************************
     'Author: Unknown
     'Last Modification: -
@@ -2106,7 +2087,7 @@ Sub CargarNpcBackUp(ByVal NpcIndex As Integer, ByVal NpcNumber As Integer)
     npcfile = DatPath & "bkNPCs.dat"
     'End If
     
-    With Npclist(NpcIndex)
+    With Npclist(NPCIndex)
     
         .Numero = NpcNumber
         .name = GetVar(npcfile, "NPC" & NpcNumber, "Name")

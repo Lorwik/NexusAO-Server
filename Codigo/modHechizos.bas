@@ -86,6 +86,9 @@ Sub NpcLanzaSpellSobreUser(ByVal NpcIndex As Integer, _
             
             Call WriteConsoleMsg(UserIndex, Npclist(NpcIndex).name & " te ha quitado " & dano & " puntos de vida.", FontTypeNames.FONTTYPE_FIGHT)
             
+            'Renderizo el dano en render.
+            Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageCreateDamage(.Pos.X, .Pos.Y, dano, DAMAGE_NORMAL))
+            
             Call WriteUpdateUserStats(UserIndex)
         
             ' Damage
@@ -751,19 +754,19 @@ Sub HechizoInvocacion(ByVal UserIndex As Integer, ByRef HechizoCasteado As Boole
 
     With UserList(UserIndex)
 
-        Dim MAPA As Integer
+        Dim Mapa As Integer
 
-        MAPA = .Pos.Map
+        Mapa = .Pos.Map
     
         'No permitimos se invoquen criaturas en zonas seguras
-        If MapInfo(MAPA).Pk = False Or MapData(MAPA, .Pos.X, .Pos.Y).Trigger = eTrigger.ZONASEGURA Then
+        If MapInfo(Mapa).Pk = False Or MapData(Mapa, .Pos.X, .Pos.Y).Trigger = eTrigger.ZONASEGURA Then
             Call WriteConsoleMsg(UserIndex, "No puedes invocar criaturas en zona segura.", FontTypeNames.FONTTYPE_INFO)
             Exit Sub
 
         End If
     
         'No permitimos se invoquen criaturas en mapas donde esta prohibido hacerlo
-        If MapInfo(MAPA).InvocarSinEfecto = 1 Then
+        If MapInfo(Mapa).InvocarSinEfecto = 1 Then
             Call WriteConsoleMsg(UserIndex, "Invocar no esta permitido aqui! Retirate de la Zona si deseas utilizar el Hechizo.", FontTypeNames.FONTTYPE_INFO)
             Exit Sub
 
@@ -1972,6 +1975,9 @@ Sub HechizoPropNPC(ByVal SpellIndex As Integer, _
                 If .Stats.MinHp > .Stats.MaxHp Then .Stats.MinHp = .Stats.MaxHp
                 Call WriteConsoleMsg(UserIndex, "Has curado " & dano & " puntos de vida a la criatura.", FontTypeNames.FONTTYPE_FIGHT)
                 
+                'Renderizo el dano en render
+                Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageCreateDamage(.Pos.X, .Pos.Y, dano, DAMAGE_CURAR))
+                
             End If
         
         ElseIf Hechizos(SpellIndex).SubeHP = 2 Then
@@ -2231,7 +2237,7 @@ Public Function HechizoPropUsuario(ByVal UserIndex As Integer) As Boolean
             .flags.DuracionEfecto = 1200
             .Stats.UserAtributos(eAtributos.Agilidad) = .Stats.UserAtributos(eAtributos.Agilidad) + dano
 
-            If .Stats.UserAtributos(eAtributos.Agilidad) > MAXATRIBUTOS Then .Stats.UserAtributos(eAtributos.Agilidad) = MAXATRIBUTOS
+            If .Stats.UserAtributos(eAtributos.Agilidad) > MinimoInt(MAXATRIBUTOS, .Stats.UserAtributosBackUP(Agilidad) * 2) Then .Stats.UserAtributos(eAtributos.Agilidad) = MinimoInt(MAXATRIBUTOS, .Stats.UserAtributosBackUP(Agilidad) * 2)
         
             .flags.TomoPocion = True
             Call WriteUpdateDexterity(targetIndex)
@@ -2272,7 +2278,7 @@ Public Function HechizoPropUsuario(ByVal UserIndex As Integer) As Boolean
     
             .Stats.UserAtributos(eAtributos.Fuerza) = .Stats.UserAtributos(eAtributos.Fuerza) + dano
 
-            If .Stats.UserAtributos(eAtributos.Fuerza) > MAXATRIBUTOS Then .Stats.UserAtributos(eAtributos.Fuerza) = MAXATRIBUTOS
+            If .Stats.UserAtributos(eAtributos.Fuerza) > MinimoInt(MAXATRIBUTOS, .Stats.UserAtributosBackUP(Fuerza) * 2) Then .Stats.UserAtributos(eAtributos.Fuerza) = MinimoInt(MAXATRIBUTOS, .Stats.UserAtributosBackUP(Fuerza) * 2)
         
             .flags.TomoPocion = True
             Call WriteUpdateStrenght(targetIndex)
@@ -3075,6 +3081,9 @@ Private Function UserHechizoDanoUser(ByVal UserIndex As Integer, ByVal targetInd
             Call InfoHechizo(UserIndex, NoFX)
         
         .Stats.MinHp = .Stats.MinHp - dano
+        
+        'Renderizo el dano en render
+        Call SendData(SendTarget.ToPCArea, targetIndex, PrepareMessageCreateDamage(.Pos.X, .Pos.Y, dano, DAMAGE_NORMAL))
             
         Call WriteUpdateHP(targetIndex)
         
@@ -3145,9 +3154,16 @@ Private Function UserHechizoCuraUser(ByVal UserIndex As Integer, ByVal targetInd
         If UserIndex <> targetIndex Then
             Call WriteConsoleMsg(UserIndex, "Le has restaurado " & cura & " puntos de vida a " & .name & ".", FontTypeNames.FONTTYPE_FIGHT)
             Call WriteConsoleMsg(targetIndex, UserList(UserIndex).name & " te ha restaurado " & cura & " puntos de vida.", FontTypeNames.FONTTYPE_FIGHT)
+            
+            'Renderizo el cura en render
+            Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageCreateDamage(.Pos.X, .Pos.Y, cura, DAMAGE_CURAR))
+            Call SendData(SendTarget.ToPCArea, targetIndex, PrepareMessageCreateDamage(.Pos.X, .Pos.Y, cura, DAMAGE_CURAR))
                 
         Else
             Call WriteConsoleMsg(UserIndex, "Te has restaurado " & cura & " puntos de vida.", FontTypeNames.FONTTYPE_FIGHT)
+            
+            'Renderizo el cura en render
+            Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageCreateDamage(.Pos.X, .Pos.Y, cura, DAMAGE_CURAR))
 
         End If
     End With
@@ -3204,6 +3220,7 @@ Private Function UserHechizoDanoNPC(ByVal UserIndex As Integer, ByVal NpcIndex A
         If dano < 0 Then dano = 0
         
         .Stats.MinHp = .Stats.MinHp - dano
+        Call SendData(SendTarget.ToNPCArea, NpcIndex, PrepareMessageCreateDamage(.Pos.X, .Pos.Y, dano, DAMAGE_NORMAL))
         'Call WriteConsoleMsg(UserIndex, "Le has quitado " & dano & " puntos de vida a la criatura!", FontTypeNames.FONTTYPE_FIGHT)
         Call WriteMultiMessage(UserIndex, eMessages.UserHitNPC, dano)
         Call CalcularDarExp(UserIndex, NpcIndex, dano)

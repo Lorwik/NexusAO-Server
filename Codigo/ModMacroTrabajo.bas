@@ -14,7 +14,7 @@ Public Enum eMacroTrabajo '(El 0 es no activado)
     Lingotear = 1
     PescarRed = 2
     'DEBE y Coincide con el numero de los skills:
-    Pescar = 18
+    PESCAR = 18
     Minando = 19
     Talando = 20
     Plantitas = 21
@@ -71,7 +71,7 @@ Public Function PuedePescar(ByVal UserIndex As Integer) As Boolean
     
 End Function
 
-Public Function PuedeExtraer(ByVal UserIndex As Integer) As Boolean
+Public Function PuedeExtraer(ByVal UserIndex As Integer, ByVal Skill As Byte) As Boolean
 '************************************
 'Autor: Lorwik
 'Requisitos para Extraer recursos de forma pasiva
@@ -81,12 +81,25 @@ Public Function PuedeExtraer(ByVal UserIndex As Integer) As Boolean
     
         'Check interval
         If Not IntervaloPermiteTrabajar(UserIndex) Then Exit Function
-
+        
+        If ConoceProfesion(UserIndex, Skill) < 0 Then
+            Call WriteConsoleMsg(UserIndex, "No conoces esa profesion.", FontTypeNames.FONTTYPE_INFOBOLD)
+            PuedeExtraer = False
+            Exit Function
+        End If
+                
         If .Invent.WeaponEqpObjIndex = 0 Then
             Call WriteConsoleMsg(UserIndex, "Deberías equiparte la herramienta.", FontTypeNames.FONTTYPE_INFOBOLD)
             PuedeExtraer = False
             Exit Function
         End If
+                
+        If ObjData(.Invent.WeaponEqpObjIndex).Herramienta.Profesion <> Skill Then
+            Call DejardeTrabajar(UserIndex)
+            PuedeExtraer = False
+            Exit Function
+        End If
+        
         
         If MapInfo(UserList(UserIndex).Pos.Map).Pk = False Then
             Call WriteConsoleMsg(UserIndex, "No puedes extraer recursos dentro de la ciudad.", FontTypeNames.FONTTYPE_INFO)
@@ -122,6 +135,12 @@ Public Function PuedeLingotear(ByVal UserIndex As Integer) As Boolean
 
     With UserList(UserIndex)
     
+        If ConoceProfesion(UserIndex, eSkill.Mineria) < 0 Then
+            Call WriteConsoleMsg(UserIndex, "No conoces esa profesion.", FontTypeNames.FONTTYPE_INFOBOLD)
+            PuedeLingotear = False
+            Exit Function
+        End If
+    
         If .flags.Equitando Then
             Call WriteConsoleMsg(UserIndex, "No puedes fundir minerales estando montado.", FontTypeNames.FONTTYPE_INFOBOLD)
             Call DejardeTrabajar(UserIndex)
@@ -131,6 +150,13 @@ Public Function PuedeLingotear(ByVal UserIndex As Integer) As Boolean
         
         If .flags.invisible = 1 Or .flags.Oculto = 1 Then
             Call WriteConsoleMsg(UserIndex, "¡Estas Invisible!", FontTypeNames.FONTTYPE_INFOBOLD)
+            Call DejardeTrabajar(UserIndex)
+            PuedeLingotear = False
+            Exit Function
+        End If
+        
+        If .Stats.UserSkills(eSkill.Mineria) < 5 Then
+            Call WriteConsoleMsg(UserIndex, "¡No tienes conocimientos en esa profesion!", FontTypeNames.FONTTYPE_INFOBOLD)
             Call DejardeTrabajar(UserIndex)
             PuedeLingotear = False
             Exit Function
@@ -187,14 +213,29 @@ Private Function PuedeCarpinteria(ByVal UserIndex As Integer, ByVal Cantidad As 
 'Autor: Lorwik
 'Requisitos para construir carpinteria
 '************************************
+    Dim SlotProfesion As Integer
 
     With UserList(UserIndex)
-
-        If .flags.MacroTrabajo <> eSkill.Carpinteria Then
+    
+        If .flags.Trabajando <> eSkill.Carpinteria Then
             PuedeCarpinteria = False
             Exit Function
         End If
-
+    
+        SlotProfesion = ConoceProfesion(UserIndex, eSkill.Carpinteria)
+        
+        If SlotProfesion < 0 Then
+            Call WriteConsoleMsg(UserIndex, "No conoces esa profesion.", FontTypeNames.FONTTYPE_INFOBOLD)
+            PuedeCarpinteria = False
+            Exit Function
+        End If
+        
+        '¿Intento de Hack?
+        If Not TieneReceta(Item, UserIndex, SlotProfesion) Then
+            PuedeCarpinteria = False
+            Exit Function
+        End If
+        
         '¿El item es inferior a 0 (un item invalido?
         If Item < 1 Then
             Call DejardeTrabajar(UserIndex)
@@ -225,8 +266,7 @@ Private Function PuedeCarpinteria(ByVal UserIndex As Integer, ByVal Cantidad As 
         End If
         
         '¿Tiene materiales para construir el proximo item?
-        If Not CarpinteroTieneMateriales(UserIndex, Item) Then
-            Call WriteConsoleMsg(UserIndex, "No tienes materiales suficientes.", FontTypeNames.FONTTYPE_INFO)
+        If Not TieneMateriales(UserIndex, Item) Then
             Call DejardeTrabajar(UserIndex)
             PuedeCarpinteria = False
             Exit Function
@@ -235,6 +275,7 @@ Private Function PuedeCarpinteria(ByVal UserIndex As Integer, ByVal Cantidad As 
         '¿Tiene los skills para construir el item?
         If Not UserList(UserIndex).Stats.UserSkills(eSkill.Carpinteria) >= ObjData(Item).SkCarpinteria Then
             Call DejardeTrabajar(UserIndex)
+            Call WriteConsoleMsg(UserIndex, "No tienes la habilidad necesaria para construir este objeto. Necesitas " & ObjData(Item).SkCarpinteria & " Skills en Carpinteria.", FontTypeNames.FONTTYPE_INFOBOLD)
             PuedeCarpinteria = False
             Exit Function
         End If
@@ -255,10 +296,25 @@ Private Function PuedeHerreria(ByVal UserIndex As Integer, ByVal Cantidad As Int
 'Autor: Lorwik
 'Requisitos para construir Herreria
 '************************************
+    Dim SlotProfesion As Integer
     
     With UserList(UserIndex)
     
-        If .flags.MacroTrabajo <> eSkill.Herreria Then
+        If .flags.Trabajando <> eSkill.herreria Then
+            PuedeHerreria = False
+            Exit Function
+        End If
+    
+        SlotProfesion = ConoceProfesion(UserIndex, eSkill.herreria)
+    
+        If SlotProfesion < 0 Then
+            Call WriteConsoleMsg(UserIndex, "No conoces esa profesion.", FontTypeNames.FONTTYPE_INFOBOLD)
+            PuedeHerreria = False
+            Exit Function
+        End If
+        
+        '¿Intento de Hack?
+        If Not TieneReceta(Item, UserIndex, SlotProfesion) Then
             PuedeHerreria = False
             Exit Function
         End If
@@ -321,10 +377,25 @@ Private Function PuedeSastreria(ByVal UserIndex As Integer, ByVal Cantidad As In
 'Autor: Lorwik
 'Requisitos para construir sastreria
 '************************************
+    Dim SlotProfesion As Integer
 
     With UserList(UserIndex)
     
-        If .flags.MacroTrabajo <> eSkill.Sastreria Then
+        If .flags.Trabajando <> eSkill.Sastreria Then
+            PuedeSastreria = False
+            Exit Function
+        End If
+    
+        SlotProfesion = ConoceProfesion(UserIndex, eSkill.Sastreria)
+        
+        If SlotProfesion < 0 Then
+            Call WriteConsoleMsg(UserIndex, "No conoces esa profesion.", FontTypeNames.FONTTYPE_INFOBOLD)
+            PuedeSastreria = False
+            Exit Function
+        End If
+        
+        '¿Intento de Hack?
+        If Not TieneReceta(Item, UserIndex, SlotProfesion) Then
             PuedeSastreria = False
             Exit Function
         End If
@@ -359,8 +430,7 @@ Private Function PuedeSastreria(ByVal UserIndex As Integer, ByVal Cantidad As In
         End If
         
         '¿Tiene materiales para construir el proximo item?
-        If Not SastreTieneMateriales(UserIndex, Item) Then
-            Call WriteConsoleMsg(UserIndex, "No tienes materiales suficientes.", FontTypeNames.FONTTYPE_INFO)
+        If Not TieneMateriales(UserIndex, Item) Then
             Call DejardeTrabajar(UserIndex)
             PuedeSastreria = False
             Exit Function
@@ -368,6 +438,7 @@ Private Function PuedeSastreria(ByVal UserIndex As Integer, ByVal Cantidad As In
         
         '¿Tiene los skills para construir el item?
         If Not UserList(UserIndex).Stats.UserSkills(eSkill.Sastreria) >= ObjData(Item).SkSastreria Then
+            Call WriteConsoleMsg(UserIndex, "No tienes la habilidad necesaria para construir este objeto. Necesitas " & ObjData(Item).SkSastreria & " Skills en Sastreria.", FontTypeNames.FONTTYPE_INFOBOLD)
             Call DejardeTrabajar(UserIndex)
             PuedeSastreria = False
             Exit Function
@@ -389,28 +460,43 @@ Private Function PuedeAlquimia(ByVal UserIndex As Integer, ByVal Cantidad As Int
 'Autor: Lorwik
 'Requisitos para construir alquimia
 '************************************
+    Dim SlotProfesion As Integer
+
     With UserList(UserIndex)
     
-        If .flags.MacroTrabajo <> eSkill.Alquimia Then
+        If .flags.Trabajando <> eSkill.Alquimia Then
+            PuedeAlquimia = False
+            Exit Function
+        End If
+    
+        SlotProfesion = ConoceProfesion(UserIndex, eSkill.Alquimia)
+        
+        If SlotProfesion < 0 Then
+            Call WriteConsoleMsg(UserIndex, "No conoces esa profesion.", FontTypeNames.FONTTYPE_INFOBOLD)
+            PuedeAlquimia = False
+            Exit Function
+        End If
+        
+        '¿Intento de Hack?
+        If Not TieneReceta(Item, UserIndex, SlotProfesion) Then
             PuedeAlquimia = False
             Exit Function
         End If
         
         '¿El item es inferior a 0 (un item invalido?
         If Item < 1 Then
-        
             Call DejardeTrabajar(UserIndex)
             PuedeAlquimia = False
             Exit Function
         End If
-
+           
         '¿Ese objeto requiere 0 en skills?
-        If ObjData(Item).SkAlquimia = 0 Then
+        If ObjData(Item).SkSastreria = 0 Then
             Call DejardeTrabajar(UserIndex)
             PuedeAlquimia = False
             Exit Function
         End If
-
+        
         '¿El contador de objetos pendientes a construir llego a 0?
         If .flags.MacroCountObj < 1 Then
             Call DejardeTrabajar(UserIndex)
@@ -427,8 +513,7 @@ Private Function PuedeAlquimia(ByVal UserIndex As Integer, ByVal Cantidad As Int
         End If
         
         '¿Tiene materiales para construir el proximo item?
-        If Not AlquimistaTieneMateriales(UserIndex, Item) Then
-            Call WriteConsoleMsg(UserIndex, "No tienes materiales suficientes.", FontTypeNames.FONTTYPE_INFO)
+        If Not TieneMateriales(UserIndex, Item) Then
             Call DejardeTrabajar(UserIndex)
             PuedeAlquimia = False
             Exit Function
@@ -436,6 +521,7 @@ Private Function PuedeAlquimia(ByVal UserIndex As Integer, ByVal Cantidad As Int
         
         '¿Tiene los skills para construir el item?
         If Not UserList(UserIndex).Stats.UserSkills(eSkill.Alquimia) >= ObjData(Item).SkAlquimia Then
+            Call WriteConsoleMsg(UserIndex, "No tienes la habilidad necesaria para construir este objeto. Necesitas " & ObjData(Item).SkAlquimia & " Skills en Alquimia.", FontTypeNames.FONTTYPE_INFOBOLD)
             Call DejardeTrabajar(UserIndex)
             PuedeAlquimia = False
             Exit Function
@@ -462,13 +548,29 @@ Public Sub ComenzarCrafteo(ByVal UserIndex As Integer, ByVal Item As Long, ByVal
     With UserList(UserIndex)
     
         If Not IntervaloPermiteTrabajar(UserIndex) Then Exit Sub
+    
+        Select Case Profesion
+        
+            Case eSkill.herreria
+            
+                If ObjData(Item).SkHerreria = 0 Then Exit Sub
+            
+            Case eSkill.Carpinteria
+                If ObjData(Item).SkCarpinteria = 0 Then Exit Sub
+                
+            Case eSkill.Sastreria
+                If ObjData(Item).SkSastreria = 0 Then Exit Sub
+            
+            Case eSkill.Alquimia
+                If ObjData(Item).SkAlquimia = 0 Then Exit Sub
+            
+        End Select
         
         'Comprobamos que no se encuentra trabajando, para prevenir bugs y hacks
         If .flags.MacroTrabajo = 0 Then
             .flags.MacroTrabajaObj = Item
             .flags.MacroCountObj = Cantidad
             .flags.MacroTrabajo = Profesion
-
             Call WriteConsoleMsg(UserIndex, "Comienzas a trabajar.", FontTypeNames.FONTTYPE_INFO)
         Else
             Call WriteConsoleMsg(UserIndex, "Ya te encuentras trabajando.", FontTypeNames.FONTTYPE_INFO)
@@ -503,11 +605,12 @@ Public Sub MacroTrabajo(ByVal UserIndex As Integer, ByRef Tarea As eMacroTrabajo
 'Autor: Lorwik
 'Inicia la actividad
 '************************************
+
     With UserList(UserIndex)
         Select Case Tarea
         
             'Pesca con caña
-            Case eMacroTrabajo.Pescar
+            Case eMacroTrabajo.PESCAR
                 If PuedePescar(UserIndex) Then
                     Call DoPescar(UserIndex, False)
                 Else
@@ -524,7 +627,7 @@ Public Sub MacroTrabajo(ByVal UserIndex As Integer, ByRef Tarea As eMacroTrabajo
                     
             'Mineria, Talar
             Case eMacroTrabajo.Minando, eMacroTrabajo.Talando, eMacroTrabajo.Plantitas
-                If PuedeExtraer(UserIndex) Then
+                If PuedeExtraer(UserIndex, Tarea) Then
                     Call DoExtraer(UserIndex, Tarea)
                 Else
                     Call DejardeTrabajar(UserIndex)
@@ -578,4 +681,3 @@ Public Sub MacroTrabajo(ByVal UserIndex As Integer, ByRef Tarea As eMacroTrabajo
     End With
         
 End Sub
-

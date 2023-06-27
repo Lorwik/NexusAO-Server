@@ -58,7 +58,7 @@ Public Sub TIMER_AI()
 
     On Error GoTo ErrorHandler
 
-    Dim NpcIndex As Long
+    Dim NPCIndex As Long
     Dim Mapa     As Integer
     Dim e_p      As Integer
     
@@ -66,24 +66,24 @@ Public Sub TIMER_AI()
     If Not haciendoBK And Not EnPausa Then
 
         'Update NPCs
-        For NpcIndex = 1 To LastNPC
+        For NPCIndex = 1 To LastNPC
             
-            With Npclist(NpcIndex)
+            With Npclist(NPCIndex)
 
                 If .flags.NPCActive Then 'Nos aseguramos que sea INTELIGENTE!
                 
                     ' Chequea si contiua teniendo dueno
                     If .Owner > 0 Then
-                        Call ValidarPermanenciaNpc(NpcIndex)
+                        Call ValidarPermanenciaNpc(NPCIndex)
                     End If
                 
                     If .flags.Paralizado = 1 Then
-                        Call EfectoParalisisNpc(NpcIndex)
+                        Call EfectoParalisisNpc(NPCIndex)
                     Else
 
                         'Usamos AI si hay algun user en el mapa
                         If .flags.Inmovilizado = 1 Then
-                            Call EfectoParalisisNpc(NpcIndex)
+                            Call EfectoParalisisNpc(NPCIndex)
 
                         End If
                             
@@ -94,7 +94,7 @@ Public Sub TIMER_AI()
                             If MapInfo(Mapa).NumUsers > 0 Then
                                 '¿El NPC tiene movimiento?
                                 If .Movement <> TipoAI.ESTATICO Then
-                                    Call NPCAI(NpcIndex)
+                                    Call NPCAI(NPCIndex)
 
                                 End If
 
@@ -108,15 +108,15 @@ Public Sub TIMER_AI()
 
             End With
 
-        Next NpcIndex
+        Next NPCIndex
 
     End If
     
     Exit Sub
 
 ErrorHandler:
-    Call LogError("Error en TIMER_AI_Timer " & Npclist(NpcIndex).name & " mapa:" & Npclist(NpcIndex).Pos.Map)
-    Call MuereNpc(NpcIndex, 0)
+    Call LogError("Error en TIMER_AI_Timer " & Npclist(NPCIndex).name & " mapa:" & Npclist(NPCIndex).Pos.Map)
+    Call MuereNpc(NPCIndex, 0)
 
 End Sub
 
@@ -364,17 +364,17 @@ Public Sub PasarSegundo()
         Select Case tickLimpieza
                                                         
             Case 300
-                Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg("Servidor> Limpieza del mundo en 5 Minuto. Atentos!!", FontTypeNames.FONTTYPE_SERVER))
+                Call SendData(SendTarget.Toall, 0, PrepareMessageConsoleMsg("Servidor> Limpieza del mundo en 5 Minuto. Atentos!!", FontTypeNames.FONTTYPE_SERVER))
 
             Case 60
-                Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg("Servidor> Limpieza del mundo en 1 Minuto. Atentos!!", FontTypeNames.FONTTYPE_SERVER))
+                Call SendData(SendTarget.Toall, 0, PrepareMessageConsoleMsg("Servidor> Limpieza del mundo en 1 Minuto. Atentos!!", FontTypeNames.FONTTYPE_SERVER))
                 
             Case 5 To 1
-                Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg("Servidor> Limpieza del mundo en " & tickLimpieza & " segundos. Atentos!!", FontTypeNames.FONTTYPE_SERVER))
+                Call SendData(SendTarget.Toall, 0, PrepareMessageConsoleMsg("Servidor> Limpieza del mundo en " & tickLimpieza & " segundos. Atentos!!", FontTypeNames.FONTTYPE_SERVER))
             
             Case 0
                 Call BorrarObjetosLimpieza
-                Call SendData(SendTarget.ToAll, 0, PrepareMessageConsoleMsg("Servidor> Limpieza del mundo finalizada.", FontTypeNames.FONTTYPE_SERVER))
+                Call SendData(SendTarget.Toall, 0, PrepareMessageConsoleMsg("Servidor> Limpieza del mundo finalizada.", FontTypeNames.FONTTYPE_SERVER))
                 
         End Select
         
@@ -437,6 +437,9 @@ Public Sub PasarSegundo()
                     End If
 
                 End If
+                
+                ' Tiempo para volver a utilizar la montura
+                If .Counters.MonturaCounter > 0 Then .Counters.MonturaCounter = .Counters.MonturaCounter - 1
                 
                 ' Conteo de los Retos
                 If .Counters.TimeFight > 0 Then

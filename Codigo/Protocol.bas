@@ -99,11 +99,7 @@ Private Enum ServerPacketID
     ChangeBankSlot               ' SBO
     ChangeSpellSlot              ' SHS
     atributes                    ' ATR
-    BlacksmithWeapons            ' LAH
-    BlacksmithArmors             ' LAR
-    CarpenterObjects             ' OBR
-    AlquimiaObjects
-    SastreObjects
+    InitTrabajo
     RestOK                       ' DOK
     errorMsg                     ' ERR
     Blind                        ' CEGU
@@ -160,6 +156,7 @@ Private Enum ServerPacketID
     FXtoMap
     EnviarPJUserAccount
     SearchList
+    CreateDamage
     UserInEvent
     RenderMsg
     DeletedChar
@@ -175,6 +172,7 @@ Private Enum ServerPacketID
     AbrirGoliath
     OfrecerFamiliar
     EnviarRanking
+    ConfirmarInstruccion
 End Enum
 
 Private Enum ClientPacketID
@@ -217,7 +215,6 @@ Private Enum ClientPacketID
     SpellInfo                      'INFS
     EquipItem                      'EQUI
     ChangeHeading                  'CHEA
-    ModifySkills                   'SKSE
     Train                          'ENTR
     CommerceBuy                    'COMP
     BankExtractItem                'RETI
@@ -323,6 +320,7 @@ Private Enum ClientPacketID
     AdoptarFamiliar
     SolicitarRank
     BatallaPVP
+    RespuestaInstruccion
 End Enum
 
 ''
@@ -581,9 +579,6 @@ Public Function HandleIncomingData(ByVal UserIndex As Integer) As Boolean
         
         Case ClientPacketID.ChangeHeading           'CHEA
             Call HandleChangeHeading(UserIndex)
-            
-        Case ClientPacketID.ModifySkills            'SKSE
-            Call HandleModifySkills(UserIndex)
         
         Case ClientPacketID.Train                   'ENTR
             Call HandleTrain(UserIndex)
@@ -896,6 +891,9 @@ Public Function HandleIncomingData(ByVal UserIndex As Integer) As Boolean
             
         Case ClientPacketID.BatallaPVP
             Call HandleBatallaPVP(UserIndex)
+            
+        Case ClientPacketID.RespuestaInstruccion
+            Call HandleRespuestaInstruccion(UserIndex)
             
         Case Else
             'ERROR : Abort!
@@ -3506,7 +3504,7 @@ Private Sub HandleWorkLeftClick(ByVal UserIndex As Integer)
 
                 End If
                 
-            Case eSkill.Pesca
+            Case eSkill.pesca
                 WeaponIndex = .Invent.WeaponEqpObjIndex
 
                 If WeaponIndex = 0 Then Exit Sub
@@ -3531,11 +3529,11 @@ Private Sub HandleWorkLeftClick(ByVal UserIndex As Integer)
                     Select Case WeaponIndex
 
                         Case CANA_PESCA
-                            .flags.MacroTrabajo = eMacroTrabajo.Pescar
+                            .flags.MacroTrabajo = eMacroTrabajo.PESCAR
                         
                         Case RED_PESCA
                         
-                            If .Stats.UserSkills(eSkill.Pesca) < ObjData(WeaponIndex).MinSkill Then
+                            If .Stats.UserSkills(eSkill.pesca) < ObjData(WeaponIndex).MinSkill Then
                                 Call WriteConsoleMsg(UserIndex, "No tienes conocimientos en Pesca suficiente para usar la red. Necesitas al menos " & ObjData(WeaponIndex).MinSkill & " Skills.", FontTypeNames.FONTTYPE_INFO)
                                 Exit Sub
 
@@ -3562,51 +3560,32 @@ Private Sub HandleWorkLeftClick(ByVal UserIndex As Integer)
 
                 End If
             
-            Case eSkill.Mineria, eSkill.talar, eSkill.Botanica
+            Case eSkill.Mineria, eSkill.Talar, eSkill.Botanica
                 'Target whatever is in the tile
                 Call LookatTile(UserIndex, .Pos.Map, X, Y)
                 
                 DummyINT = MapData(.Pos.Map, X, Y).ObjInfo.ObjIndex
                 
                 If DummyINT > 0 Then
-
                     'Check distance
                     If Abs(.Pos.X - X) + Abs(.Pos.Y - Y) > 1 Then
                         Call WriteConsoleMsg(UserIndex, "Estás demasiado lejos.", FontTypeNames.FONTTYPE_INFO)
                         Exit Sub
-
                     End If
                     
                     DummyINT = MapData(.Pos.Map, X, Y).ObjInfo.ObjIndex 'CHECK
                     
-                    Select Case Skill
-                    
-                        Case eSkill.talar, eSkill.Botanica
-
-                            '¿Hay arbol?
-                            If ObjData(DummyINT).OBJType <> eOBJType.otArboles Then
-                                Call WriteConsoleMsg(UserIndex, "Ahí no hay ningún árbol.", FontTypeNames.FONTTYPE_INFO)
-                                Exit Sub
-
-                            End If
-                            
-                        Case eSkill.Mineria
-
-                            '¿Hay yacimiento?
-                            If ObjData(DummyINT).OBJType <> eOBJType.otYacimiento Then
-                                Call WriteConsoleMsg(UserIndex, "Ahí no hay ningún yacimiento.", FontTypeNames.FONTTYPE_INFO)
-                                Exit Sub
-
-                            End If
-
-                    End Select
-                    
-                    If PuedeExtraer(UserIndex) Then
-                        .flags.MacroTrabajo = Skill
-                        Call WriteConsoleMsg(UserIndex, "Comienzas a trabajar.", FontTypeNames.FONTTYPE_INFO)
-
-                    End If
+                    '¿Hay un yacimiento donde clickeo?
+                    If ObjData(DummyINT).Recurso.Profesion = Skill Then
+                        If PuedeExtraer(UserIndex, Skill) Then
+                            .flags.MacroTrabajo = Skill
+                            Call WriteConsoleMsg(UserIndex, "Comienzas a trabajar.", FontTypeNames.FONTTYPE_INFO)
+                        End If
                         
+                    Else
+                        Call WriteConsoleMsg(UserIndex, "Ahí no hay ninguna fuente de recursos que puedas extraer con esa herramienta.", FontTypeNames.FONTTYPE_INFO)
+                        
+                    End If
                 Else
                     Call WriteConsoleMsg(UserIndex, "Ahí no hay ninguna fuente de recursos.", FontTypeNames.FONTTYPE_INFO)
                     
@@ -3647,22 +3626,24 @@ Private Sub HandleWorkLeftClick(ByVal UserIndex As Integer)
                 End If
             
             Case FundirMetal    'UGLY!!! This is a constant, not a skill!!
-
                 If PuedeLingotear(UserIndex) Then
                     .flags.MacroTrabajo = eMacroTrabajo.Lingotear
                     Call WriteConsoleMsg(UserIndex, "Comienzas a trabajar.", FontTypeNames.FONTTYPE_INFO)
 
                 End If
             
-            Case eSkill.Herreria
+            Case eSkill.herreria
                 'Target wehatever is in that tile
                 Call LookatTile(UserIndex, .Pos.Map, X, Y)
                 
+                If ConoceProfesion(UserIndex, eSkill.herreria) < 0 Then
+                    Call WriteConsoleMsg(UserIndex, "No conoces esa profesion.", FontTypeNames.FONTTYPE_INFOBOLD)
+                    Exit Sub
+                End If
+                
                 If .flags.TargetObj > 0 Then
                     If ObjData(.flags.TargetObj).OBJType = eOBJType.otYunque Then
-                        Call EnviarArmasConstruibles(UserIndex)
-                        Call EnviarArmadurasConstruibles(UserIndex)
-                        Call WriteShowTrabajoForm(UserIndex, eSkill.Herreria)
+                        Call WriteInitTrabajo(UserIndex, eSkill.herreria)
                         
                     Else
                         Call WriteConsoleMsg(UserIndex, "Ahi no hay ningUn yunque.", FontTypeNames.FONTTYPE_INFO)
@@ -4054,86 +4035,6 @@ Private Sub HandleChangeHeading(ByVal UserIndex As Integer)
             Call ChangeUserChar(UserIndex, .Char.body, .Char.Head, .Char.Heading, .Char.WeaponAnim, .Char.ShieldAnim, .Char.CascoAnim, .Char.AuraAnim, .Char.AuraColor)
 
         End If
-
-    End With
-
-End Sub
-
-''
-' Handles the "ModifySkills" message.
-'
-' @param    userIndex The index of the user sending the message.
-
-Private Sub HandleModifySkills(ByVal UserIndex As Integer)
-
-    '***************************************************
-    'Author: Juan Martin Sotuyo Dodero (Maraxus)
-    'Last Modification: 11/19/09
-    '11/19/09: Pato - Adapting to new skills system.
-    '***************************************************
-    If UserList(UserIndex).incomingData.Length < 1 + NUMSKILLS Then
-        Err.Raise UserList(UserIndex).incomingData.NotEnoughDataErrCode
-        Exit Sub
-
-    End If
-    
-    With UserList(UserIndex)
-        'Remove packet ID
-        Call .incomingData.ReadByte
-        
-        Dim i                      As Long
-
-        Dim Count                  As Integer
-
-        Dim points(1 To NUMSKILLS) As Byte
-        
-        'Codigo para prevenir el hackeo de los skills
-        
-        For i = 1 To NUMSKILLS
-            points(i) = .incomingData.ReadByte()
-            
-            If points(i) < 0 Then
-                Call LogHackAttemp(.name & " IP:" & .IP & " trato de hackear los skills.")
-                .Stats.SkillPts = 0
-                Call CloseSocket(UserIndex)
-                Exit Sub
-
-            End If
-            
-            Count = Count + points(i)
-        Next i
-        
-        If Count > .Stats.SkillPts Then
-            Call LogHackAttemp(.name & " IP:" & .IP & " trato de hackear los skills.")
-            Call CloseSocket(UserIndex)
-            Exit Sub
-
-        End If
-        
-        .Counters.AsignedSkills = MinimoInt(10, .Counters.AsignedSkills + Count)
-        
-        With .Stats
-
-            For i = 1 To NUMSKILLS
-
-                If points(i) > 0 Then
-                    .SkillPts = .SkillPts - points(i)
-                    .UserSkills(i) = .UserSkills(i) + points(i)
-                    
-                    'Client should prevent this, but just in case...
-                    If .UserSkills(i) > 100 Then
-                        .SkillPts = .SkillPts + .UserSkills(i) - 100
-                        .UserSkills(i) = 100
-
-                    End If
-                    
-                    Call CheckEluSkill(UserIndex, i, True)
-
-                End If
-
-            Next i
-
-        End With
 
     End With
 
@@ -10764,19 +10665,6 @@ Private Sub HandleEditChar(ByVal UserIndex As Integer)
                         
                         ' Log it
                         CommandString = CommandString & "SKILLS "
-                        
-                Case eEditOptions.eo_SkillPointsLeft
-
-                        If tUser <= 0 Then ' Offline
-                            Call WriteConsoleMsg(UserIndex, "El usuario esta offline o no existe.", FontTypeNames.FONTTYPE_INFO)
-                            Call LogGM(.name, "Intento editar un usuario inexistente u offline.")
-                        Else ' Online
-                            UserList(tUser).Stats.SkillPts = val(Arg1)
-
-                        End If
-                        
-                        ' Log it
-                        CommandString = CommandString & "SKILLSLIBRES "
                     
                 Case eEditOptions.eo_Nobleza
                         Var = IIf(val(Arg1) > MAXREP, MAXREP, val(Arg1))
@@ -17228,6 +17116,41 @@ errHandler:
 End Sub
 
 ''
+' Writes the "MessageCreateDamage" message to the given user's outgoing data buffer.
+'
+' @param    UserIndex User to which the message is intended.
+' @param    CharIndex Character whose dialog will be removed.
+' @remarks  The data is not actually sent until the buffer is properly flushed.
+
+Public Sub WriteMessageCreateDamage(ByVal UserIndex As Integer, ByVal dano As Long, ByVal Damage_Type As Byte)
+
+    '***************************************************
+    'Author: Lorwik
+    'Fecha: 22/06/2020
+    'Writes the "MessageCreateDamage" message to the given user's outgoing data buffer
+    '***************************************************
+    On Error GoTo errHandler
+    
+    With UserList(UserIndex)
+    
+        Call .outgoingData.WriteASCIIStringFixed(PrepareMessageCreateDamage(.Pos.X, .Pos.Y, dano, Damage_Type))
+    
+    End With
+    
+    Exit Sub
+
+errHandler:
+
+    If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
+        Call FlushBuffer(UserIndex)
+        Resume
+
+    End If
+
+End Sub
+
+
+''
 ' Writes the "NavigateToggle" message to the given user's outgoing data buffer.
 '
 ' @param    UserIndex User to which the message is intended.
@@ -18816,261 +18739,85 @@ End Sub
 ' @param    UserIndex User to which the message is intended.
 ' @remarks  The data is not actually sent until the buffer is properly flushed.
 
-Public Sub WriteBlacksmithWeapons(ByVal UserIndex As Integer)
-'***************************************************
-'Author: Juan Martín Sotuyo Dodero (Maraxus)
-'Last Modification: 05/17/06
-'Writes the "BlacksmithWeapons" message to the given user's outgoing data buffer
-'***************************************************
-On Error GoTo errHandler
-    Dim i As Long
-    Dim obj As ObjData
-    Dim validIndexes() As Integer
-    Dim Count As Integer
+Public Sub WriteInitTrabajo(ByVal UserIndex As Integer, ByVal Profesion As Byte)
+
+    '***************************************************
+    'Author: Juan Martin Sotuyo Dodero (Maraxus)
+    'Last Modification: 04/15/2008 (NicoNZ) Habia un error al fijarse los skills del personaje
+    'Writes the "BlacksmithWeapons" message to the given user's outgoing data buffer
+    '***************************************************
+    On Error GoTo errHandler
+
+    Dim i                           As Long
+    Dim j                           As Byte
+    Dim obj(1 To MAXUSERRECETAS)    As Long
+    Dim validIndexes()              As Integer
+    Dim Count                       As Integer
+    Dim SlotProfesion               As Integer
     
-    ReDim validIndexes(1 To UBound(ArmasHerrero()))
+    With UserList(UserIndex)
     
-    With UserList(UserIndex).outgoingData
-        Call .WriteByte(ServerPacketID.BlacksmithWeapons)
+        'Obtenemos el slot de la profesion
+        SlotProfesion = ConoceProfesion(UserIndex, Profesion)
         
-        For i = 1 To UBound(ArmasHerrero())
+        'Si por un casual nos llegara que no la conoce...
+        If SlotProfesion < 0 Then Exit Sub
+    
+        Call .outgoingData.WriteByte(ServerPacketID.InitTrabajo)
+        Call .outgoingData.WriteByte(Profesion) 'Mando la profesion
+        
+        For i = 1 To MAXUSERRECETAS
+
             ' Can the user create this object? If so add it to the list....
-            If ObjData(ArmasHerrero(i)).SkHerreria <= UserList(UserIndex).Stats.UserSkills(eSkill.Herreria) \ ModHerreria(UserList(UserIndex).clase) Then
+            If .Profesion(SlotProfesion).Recetas(i) > 0 Then
                 Count = Count + 1
-                validIndexes(Count) = i
+                obj(Count) = .Profesion(SlotProfesion).Recetas(i)
+
             End If
+
         Next i
         
         ' Write the number of objects in the list
-        Call .WriteInteger(Count)
+        Call .outgoingData.WriteInteger(Count)
         
         ' Write the needed data of each object
         For i = 1 To Count
-            obj = ObjData(ArmasHerrero(validIndexes(i)))
-            Call .WriteASCIIString(obj.name)
-            Call .WriteInteger(obj.LingH)
-            Call .WriteInteger(obj.LingP)
-            Call .WriteInteger(obj.LingO)
-            Call .WriteInteger(ArmasHerrero(validIndexes(i)))
+            Call .outgoingData.WriteASCIIString(ObjData(obj(i)).name)
+            Call .outgoingData.WriteLong(ObjData(obj(i)).GrhIndex)
+            
+            For j = 1 To MAXMATERIALES
+                If ObjData(obj(i)).Materiales(j) > 0 Then
+                    Call .outgoingData.WriteLong(ObjData(ObjData(obj(i)).Materiales(j)).GrhIndex)
+                    Call .outgoingData.WriteInteger(ObjData(obj(i)).CantMateriales(j))
+                    Call .outgoingData.WriteASCIIString(ObjData(ObjData(obj(i)).Materiales(j)).name)
+                    
+                Else
+                    Call .outgoingData.WriteLong(0)
+                    Call .outgoingData.WriteInteger(0)
+                    Call .outgoingData.WriteASCIIString("Nada")
+                    
+                End If
+            Next j
+            
+            Call .outgoingData.WriteInteger(obj(i))
         Next i
+        
+        .flags.Trabajando = Profesion
+
     End With
-Exit Sub
+
+    Exit Sub
 
 errHandler:
+
     If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
         Call FlushBuffer(UserIndex)
         Resume
+
     End If
+
 End Sub
 
-''
-' Writes the "BlacksmithArmors" message to the given user's outgoing data buffer.
-'
-' @param    UserIndex User to which the message is intended.
-' @remarks  The data is not actually sent until the buffer is properly flushed.
-
-Public Sub WriteBlacksmithArmors(ByVal UserIndex As Integer)
-'***************************************************
-'Author: Juan Martín Sotuyo Dodero (Maraxus)
-'Last Modification: 05/17/06
-'Writes the "BlacksmithArmors" message to the given user's outgoing data buffer
-'***************************************************
-On Error GoTo errHandler
-    Dim i As Long
-    Dim obj As ObjData
-    Dim validIndexes() As Integer
-    Dim Count As Integer
-    
-    ReDim validIndexes(1 To UBound(ArmadurasHerrero()))
-    
-    With UserList(UserIndex).outgoingData
-        Call .WriteByte(ServerPacketID.BlacksmithArmors)
-        
-        For i = 1 To UBound(ArmadurasHerrero())
-            ' Can the user create this object? If so add it to the list....
-            If ObjData(ArmadurasHerrero(i)).SkHerreria <= UserList(UserIndex).Stats.UserSkills(eSkill.Herreria) \ ModHerreria(UserList(UserIndex).clase) Then
-                Count = Count + 1
-                validIndexes(Count) = i
-            End If
-        Next i
-        
-        ' Write the number of objects in the list
-        Call .WriteInteger(Count)
-        
-        ' Write the needed data of each object
-        For i = 1 To Count
-            obj = ObjData(ArmadurasHerrero(validIndexes(i)))
-            Call .WriteASCIIString(obj.name)
-            Call .WriteInteger(obj.LingH)
-            Call .WriteInteger(obj.LingP)
-            Call .WriteInteger(obj.LingO)
-            Call .WriteInteger(ArmadurasHerrero(validIndexes(i)))
-        Next i
-    End With
-Exit Sub
-
-errHandler:
-    If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-        Call FlushBuffer(UserIndex)
-        Resume
-    End If
-End Sub
-
-''
-' Writes the "CarpenterObjects" message to the given user's outgoing data buffer.
-'
-' @param    UserIndex User to which the message is intended.
-' @remarks  The data is not actually sent until the buffer is properly flushed.
-
-Public Sub WriteCarpenterObjects(ByVal UserIndex As Integer)
-'***************************************************
-'Author: Juan Martín Sotuyo Dodero (Maraxus)
-'Last Modification: 05/17/06
-'Writes the "CarpenterObjects" message to the given user's outgoing data buffer
-'***************************************************
-On Error GoTo errHandler
-    Dim i As Long
-    Dim obj As ObjData
-    Dim validIndexes() As Integer
-    Dim Count As Integer
-    
-    ReDim validIndexes(1 To UBound(ObjCarpintero()))
-    
-    With UserList(UserIndex).outgoingData
-        Call .WriteByte(ServerPacketID.CarpenterObjects)
-
-        For i = 1 To UBound(ObjCarpintero())
-            ' Can the user create this object? If so add it to the list....
-            If ObjData(ObjCarpintero(i)).SkCarpinteria <= UserList(UserIndex).Stats.UserSkills(eSkill.Carpinteria) \ ModCarpinteria(UserList(UserIndex).clase) Then
-                Count = Count + 1
-                validIndexes(Count) = i
-            End If
-        Next i
-        
-        ' Write the number of objects in the list
-        Call .WriteInteger(Count)
-        
-        ' Write the needed data of each object
-        For i = 1 To Count
-            obj = ObjData(ObjCarpintero(validIndexes(i)))
-            Call .WriteASCIIString(obj.name)
-            Call .WriteInteger(obj.Madera)
-            Call .WriteInteger(ObjCarpintero(validIndexes(i)))
-        Next i
-    End With
-Exit Sub
-
-errHandler:
-    If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-        Call FlushBuffer(UserIndex)
-        Resume
-    End If
-End Sub
-
-''
-' Writes the "SastreriaObjects" message to the given user's outgoing data buffer.
-'
-' @param    UserIndex User to which the message is intended.
-' @remarks  The data is not actually sent until the buffer is properly flushed.
-
-Public Sub WriteSastreRopas(ByVal UserIndex As Integer)
-'***************************************************
-'Author: Juan Martín Sotuyo Dodero (Maraxus)
-'Last Modification: 05/17/06
-'Writes the "CarpenterObjects" message to the given user's outgoing data buffer
-'***************************************************
-On Error GoTo errHandler
-    Dim i As Long
-    Dim obj As ObjData
-    Dim validIndexes() As Integer
-    Dim Count As Integer
-
-    ReDim validIndexes(1 To UBound(ObjSastre()))
-    
-    With UserList(UserIndex).outgoingData
-        Call .WriteByte(ServerPacketID.SastreObjects)
-
-        For i = 1 To UBound(ObjSastre())
-
-            ' Can the user create this object? If so add it to the list....
-            If ObjData(ObjSastre(i)).SkSastreria <= UserList(UserIndex).Stats.UserSkills(eSkill.Sastreria) \ ModSastreria(UserList(UserIndex).clase) Then
-                Count = Count + 1
-                validIndexes(Count) = i
-            End If
-        Next i
-        
-        ' Write the number of objects in the list
-        Call .WriteInteger(Count)
-        
-        ' Write the needed data of each object
-        For i = 1 To Count
-            obj = ObjData(ObjSastre(validIndexes(i)))
-            Call .WriteASCIIString(obj.name)
-            Call .WriteInteger(obj.PielLobo)
-            Call .WriteInteger(obj.PielOsoPardo)
-            Call .WriteInteger(obj.PielOsoPolar)
-            Call .WriteInteger(ObjSastre(validIndexes(i)))
-        Next i
-    End With
-Exit Sub
-
-errHandler:
-    If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-        Call FlushBuffer(UserIndex)
-        Resume
-    End If
-End Sub
-
-''
-' Writes the "AlquimiaObjects" message to the given user's outgoing data buffer.
-'
-' @param    UserIndex User to which the message is intended.
-' @remarks  The data is not actually sent until the buffer is properly flushed.
-
-Public Sub WriteAlquimistaPociones(ByVal UserIndex As Integer)
-'***************************************************
-'Author: Juan Martín Sotuyo Dodero (Maraxus)
-'Last Modification: 05/17/06
-'Writes the "CarpenterObjects" message to the given user's outgoing data buffer
-'***************************************************
-On Error GoTo errHandler
-    Dim i As Long
-    Dim obj As ObjData
-    Dim validIndexes() As Integer
-    Dim Count As Integer
-    
-    ReDim validIndexes(1 To UBound(ObjAlquimia()))
-    
-    With UserList(UserIndex).outgoingData
-        Call .WriteByte(ServerPacketID.AlquimiaObjects)
-        
-        For i = 1 To UBound(ObjAlquimia())
-            ' Can the user create this object? If so add it to the list....
-            If ObjData(ObjAlquimia(i)).SkAlquimia <= UserList(UserIndex).Stats.UserSkills(eSkill.Alquimia) \ ModAlquimia(UserList(UserIndex).clase) Then
-                Count = Count + 1
-                validIndexes(Count) = i
-            End If
-        Next i
-        
-        ' Write the number of objects in the list
-        Call .WriteInteger(Count)
-        
-        ' Write the needed data of each object
-        For i = 1 To Count
-            obj = ObjData(ObjAlquimia(validIndexes(i)))
-            Call .WriteASCIIString(obj.name)
-            Call .WriteInteger(obj.Raices)
-            Call .WriteInteger(ObjAlquimia(validIndexes(i)))
-        Next i
-    End With
-Exit Sub
-
-errHandler:
-    If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
-        Call FlushBuffer(UserIndex)
-        Resume
-    End If
-End Sub
 
 ''
 ' Writes the "Atributes" message to the given user's outgoing data buffer.
@@ -22524,6 +22271,23 @@ errHandler:
         
 End Sub
 
+Public Function PrepareMessageCreateDamage(ByVal X As Byte, ByVal Y As Byte, ByVal DamageValue As Long, ByVal DamageType As Byte)
+ 
+    ' @ Envia el paquete para crear dano (Y)
+     
+    With auxiliarBuffer
+         .WriteByte ServerPacketID.CreateDamage
+         .WriteByte X
+         .WriteByte Y
+         .WriteLong DamageValue
+         .WriteByte DamageType
+         
+         PrepareMessageCreateDamage = .ReadASCIIStringFixed(.Length)
+         
+    End With
+ 
+End Function
+
 Public Sub WriteUserInEvent(ByVal UserIndex As Integer)
     On Error GoTo errHandler
     
@@ -23348,6 +23112,50 @@ Public Sub WriteIniciarSubastasOrConsulta(ByVal UserIndex As Integer)
     With UserList(UserIndex).outgoingData
         Call .WriteByte(ServerPacketID.IniciarSubastaConsulta)
     End With
+End Sub
+
+Public Sub WriteConfirmarInstruccion(ByVal UserIndex As Integer, ByVal Mensaje As String)
+'***************************************************
+'Autor: Lorwik
+'Fecha: 19/08/2020
+'Descripcion: Pide confirmacion para aprender u olvidar una profesion
+'***************************************************
+
+    With UserList(UserIndex).outgoingData
+    
+        Call .WriteByte(ServerPacketID.ConfirmarInstruccion)
+        
+        .WriteASCIIString (Mensaje)
+        
+    End With
+End Sub
+
+Public Sub HandleRespuestaInstruccion(ByVal UserIndex As Integer)
+'***************************************************
+'Autor: Lorwik
+'Fecha: 19/08/2020
+'Descripcion: Recibe respuesta de la instruccion
+'***************************************************
+    Dim Respuesta As Boolean
+    
+    With UserList(UserIndex)
+        'Remove Packet ID
+        Call .incomingData.ReadByte
+        
+        Respuesta = .incomingData.ReadBoolean
+        
+        If Respuesta Then
+            Call AccionProfesion(UserIndex)
+            
+        Else
+            'Reseteamos los flags
+            .flags.ProfInstruyendo = 0
+            .flags.Instruyendo = 0
+            
+        End If
+        
+    End With
+    
 End Sub
 
 Public Sub WriteAbrirMapa(ByVal UserIndex As Integer)

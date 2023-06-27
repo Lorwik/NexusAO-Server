@@ -46,7 +46,7 @@
 ' 45 Puestos de Entrenamiento
 ' 46 Nudillos para Artes Marciales
 ' 47 Anillos Habilitadores de Hechizos
-' 48 (Nada)
+' 48 Planos profesion
 ' 49 Runa
 
 'TipoPocion:
@@ -83,9 +83,19 @@
 ' 18 Aumenta la probabilidad del aumento de skills en un porcentaje (Usa CuantoAumento)
 ' 19 Los golpes del personaje tienen probabilidad de envenenar al enemigo
 
+Skills Profesiones:
+
+'    Pesca = 18
+'    Mineria = 19
+'    Talar = 20
+'    Botanica = 21
+'    Herreria = 22
+'    Carpinteria = 23
+'    Alquimia = 24
+'    Sastreria = 25
 
 [INIT]
-NumOBJs=827
+NumOBJs=839
 
 [OBJ398]'1.0 714
 Name=Garrote
@@ -5857,8 +5867,6 @@ ObjType=1
 MinHAM=10
 Valor=1
 
-
-
 [OBJ160]
 Name=Cerveza
 GrhIndex=585
@@ -5882,7 +5890,8 @@ GrhIndex=586
 Objtype=20
 valor=15
 SkCarpinteria=9
-Madera=25
+Materiales=58-0-0-0
+CantMateriales=25-0-0-0
 
 [OBJ163] 
 Name=Cuchara
@@ -5891,10 +5900,8 @@ GrhIndex=587
 Objtype=20
 valor=2
 SkCarpinteria=5
-Madera=3
-
-
-
+Materiales=58-0-0-0
+CantMateriales=3-0-0-0
 
 '*************************** pocion *****************************
 'Cura envenenamiento
@@ -5916,7 +5923,8 @@ GrhIndex=593
 Objtype=20
 valor=500
 SkCarpinteria=56
-Madera=400
+Materiales=58-0-0-0
+CantMateriales=400-0-0-0
 
 [OBJ168] 
 Name=Silla
@@ -6236,9 +6244,6 @@ CP11=43
 CP14=47
 CP15=55
 CP16=56
-
-
-
 
 [OBJ197]
 Name=Flecha mágica
@@ -8073,7 +8078,8 @@ SND1=48
 SND2=48
 SND3=48
 SkCarpinteria=80
-Madera=1000
+Materiales=58-0-0-0
+CantMateriales=1000-0-0-0
 
 [OBJ363]
 Name=Provocar hambre
@@ -9177,7 +9183,8 @@ SND2=49
 SND3=49
 MinInt=16
 SkCarpinteria=80
-Madera=1000
+Materiales=58-0-0-0
+CantMateriales=1000-0-0-0
 
 [OBJ470]
 Name=Fuerza
@@ -9211,7 +9218,8 @@ Name=Barca
 GrhIndex=749
 ObjType=31
 SkCarpinteria=35
-Madera=10000
+Materiales=58-0-0-0
+CantMateriales=10000-0-0-0
 valor=24000
 NumRopaje=84
 MinSkill=35
@@ -9225,7 +9233,8 @@ Name=Galera
 GrhIndex=749
 ObjType=31
 SkCarpinteria=65
-Madera=20000
+Materiales=58-834-0-0
+CantMateriales=1000-10000-0-0
 valor=44000
 NumRopaje=85
 MinSkill=55
@@ -9239,7 +9248,8 @@ Name=Galeon
 GrhIndex=749
 ObjType=31
 SkCarpinteria=80
-Madera=30000
+Materiales=58-834-0-0
+CantMateriales=2000-15000-0-0
 valor=67000
 NumRopaje=86
 MinSkill=65
@@ -9771,7 +9781,8 @@ SND2=51
 SND3=51
 MinInt=16
 SkCarpinteria=80
-Madera=1000
+Materiales=58-0-0-0
+CantMateriales=1000-0-0-0
 
 [OBJ541]
 Name=Ceguera
@@ -12462,6 +12473,7 @@ MAXDEF=15
 Crucial=1
 RazaTipo=1
 Nosecae=1
+Speed=2.4
 
 [OBJ825]
 Name=Anillo de Lider
@@ -12505,3 +12517,83 @@ VGrande=501
 ObjType=8
 Texto=¡Peligro!
 Agarrable=1
+
+[OBJ831]
+Name=Carpinteria: Planos Barca
+GrhIndex=24047
+ObjType=48
+Agarrable=0
+Valor=5000
+RecetaIndex=474 'Indice del objeto
+Profesion=23 'Skill de la profesion
+
+[OBJ832]
+Name=Carpinteria: Planos Galera
+GrhIndex=24047
+ObjType=48
+Agarrable=0
+Valor=0
+RecetaIndex=475 'Indice del objeto
+Profesion=23 'Skill de la profesion
+
+[OBJ833]
+Name=Carpinteria: Planos Galeon
+GrhIndex=24047
+ObjType=48
+Agarrable=0
+Valor=0
+RecetaIndex=476 'Indice del objeto
+Profesion=23 'Skill de la profesion
+
+[OBJ834]
+Name=Madera Magica
+GrhIndex=1999
+ObjType=14
+Agarrable=0
+Valor=5
+Crucial=0
+
+[OBJ835]
+Name=Carpinteria: Silla
+GrhIndex=24047
+ObjType=48
+Agarrable=0
+Valor=0
+RecetaIndex=162 'Indice del objeto
+Profesion=23 'Skill de la profesion
+
+[OBJ836]
+Name=Carpinteria: Tambor
+GrhIndex=24047
+ObjType=48
+Agarrable=0
+Valor=0
+RecetaIndex=167 'Indice del objeto
+Profesion=23 'Skill de la profesion
+
+[OBJ837]
+Name=Carpinteria: Laud
+GrhIndex=24047
+ObjType=48
+Agarrable=0
+Valor=0
+RecetaIndex=469 'Indice del objeto
+Profesion=23 'Skill de la profesion
+
+[OBJ838]
+Name=Carpinteria: Flauta
+GrhIndex=24047
+ObjType=48
+Agarrable=0
+Valor=0
+RecetaIndex=560 'Indice del objeto
+Profesion=23 'Skill de la profesion
+
+[OBJ839]
+Name=Carpinteria: Mueble Rustico
+GrhIndex=24047
+ObjType=48
+Agarrable=0
+Valor=0
+RecetaIndex=167 'Indice del objeto
+Profesion=23 'Skill de la profesion

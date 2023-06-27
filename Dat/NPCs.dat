@@ -14,6 +14,7 @@
 '  11 Veterinario
 '  12 Timbero
 '  13 ReyCastillo
+'  14 Instructor
 
 'Propiedades
 '  Instruye
@@ -21,6 +22,40 @@
 '  Speed
 '  Explota
 '  VerInvi
+
+##############################################
+################INSTRUCTORES##################
+##############################################
+
+Los instructores son NPC que instruyen en una profesion, deben tener el NPCType 18,
+y la propiedad Instruye= Skill de la profesion que va a instruir.
+
+Skills Profesiones:
+
+'    Pesca = 18
+'    Mineria = 19
+'    Talar = 20
+'    Botanica = 21
+'    Herreria = 22
+'    Carpinteria = 23
+'    Alquimia = 24
+'    Sastreria = 25
+
+##############################################
+############ VELOCIDAD VARIABLE ##############
+##############################################
+
+En el server hay un intervalo global de la velocidad de los NPC actualmente establecido en 300ms.
+La velocidad estandar que debe tener un NPC es de "Speed=370" o van a correr mucho.
+El rango de valores puede ir desde 0ms a 10000ms, siendo este ultimo EXTREMADAMENTE lento.
+
+Estos valores son muy dificiles de ajustar, por lo que se recomienda ir subiendo de 10 en 10, o de 20 en 20.
+
+A partir de "Speed=480" la lentitud se empieza a notar con respecto a la velocidad standar.
+
+##############################################
+##############################################
+##############################################
 
 [INIT]
 NumNPCs=656
@@ -480,12 +515,16 @@ Attackable=0
 Comercia=1
 Hostile=0
 TipoItems=14
-NROITEMS=5
+NROITEMS=9
 Obj1=127-100
 Obj2=198-100
 Obj3=478-100
 Obj4=596-100
 Obj5=479-100
+Obj6=831-100
+Obj7=835-100
+Obj8=836-100
+Obj9=839-100
 BackUp=1
 Domable=0
 info=Carpintero de Ullathorpe
@@ -840,12 +879,16 @@ Attackable=0
 Comercia=1
 Hostile=0
 TipoItems=20
-NROITEMS=5
+NROITEMS=9
 Obj1=127-100
 Obj2=198-100
 Obj3=478-100
 Obj4=596-100
 Obj5=479-100
+Obj6=831-100
+Obj7=835-100
+Obj8=837-100
+Obj9=839-100
 BackUp=1
 info=Carpintero de Nix
 
@@ -1515,12 +1558,17 @@ Attackable=0
 Comercia=1
 Hostile=0
 TipoItems=14
-NROITEMS=5
+NROITEMS=10
 Obj1=127-100
 Obj2=198-100
 Obj3=478-100
 Obj4=596-100
 Obj5=479-100
+Obj6=831-100
+Obj7=835-100
+Obj8=836-100
+Obj9=837-100
+Obj10=838-100
 BackUp=1
 Domable=0
 info=Carpintero de Banderbille
@@ -2505,12 +2553,15 @@ Attackable=0
 Comercia=1
 Hostile=0
 TipoItems=14
-NROITEMS=5
+NROITEMS=8
 Obj1=127-100
 Obj2=198-100
 Obj3=478-100
 Obj4=596-100
 Obj5=479-100
+Obj6=831-100
+Obj7=835-100
+Obj8=838-100
 BackUp=1
 Domable=0
 info=Carpintero de Nueva Esperanza
@@ -4313,6 +4364,125 @@ Movement=1
 Comercia=0
 Alineacion=0
 ReSpawn=0
+
+[NPC228] 'Instructor de Mineria
+Name=Instructor de Mineria
+NpcType=14
+Desc=¿Te interesa aprender el apasionante mundo de la mineria y conocer todas las piedras, minerales y cristales preciosos?
+Head=5
+Heading=1
+Body=1
+Movement=1
+Attackable=0
+ReSpawn=0
+Hostile=0
+Domable=0
+Alineacion=0
+BackUp=1
+Instruye=19
+Speed=370
+
+[NPC229] 'Instructor de Taladores
+Name=Instructor de Taladores
+NpcType=14
+Desc=Talar arboles requiere de unos brazos y espalda fuerte. ¿Quieres unirte al gremio de taladores?
+Head=21
+Heading=3
+Body=2
+Movement=1
+Attackable=0
+ReSpawn=0
+Hostile=0
+Domable=0
+Alineacion=0
+BackUp=1
+Instruye=20
+Speed=370
+
+[NPC230] 'Instructor de Carpinteros
+Name=Instructor de Carpinteros
+NpcType=14
+Desc=Hijo, la artesania es un arte, ¿te interesa unirte al gremio de carpinteros y aprender dar forma a la madera con tus manos?
+Head=70
+Heading=1
+Body=100
+Movement=1
+Attackable=0
+ReSpawn=0
+Hostile=0
+Domable=0
+Alineacion=0
+BackUp=1
+Instruye=23
+Speed=370
+
+[NPC231] 'Instructor de Herreria
+Name=Instructor de Herreria
+NpcType=14
+Desc=Eh muchacho, debes avivar la caldera! Golpear y Golpear, siente la satisfacción de construir las mejores armas y armaduras de todo el imperio ¿Quieres unirte al gremio?
+Head=309
+Heading=3
+Body=110
+Movement=1
+Attackable=0
+ReSpawn=0
+Hostile=0
+Domable=0
+Alineacion=0
+BackUp=1
+Instruye=22
+Speed=370
+
+[NPC232] 'Instructor de Sastreria
+Name=Instructor de Sastreria
+NpcType=14
+Desc=Mantenerse a la moda es fundamental ¿Quieres unirte al gremio de sastreria?
+Head=20
+Heading=3
+Body=586
+Movement=1
+Attackable=0
+ReSpawn=0
+Hostile=0
+Domable=0
+Alineacion=0
+BackUp=1
+Instruye=25
+Speed=370
+
+[NPC233] 'Instructor de Alquimia
+Name=Instructor de Alquimia
+NpcType=14
+Desc=La alquimia no es solo crear pociones, es el arte de saber mezclar las hierbas adecuadas para obtener los mejores resultados ¿Quieres unirte al gremio de alquimia?
+Head=179
+Heading=3
+Body=118
+Movement=1
+Attackable=0
+ReSpawn=0
+Hostile=0
+Domable=0
+Alineacion=0
+BackUp=1
+Instruye=24
+Speed=370
+
+[NPC234] 'Instructor de Botanica
+Name=Instructor de Botanica
+NpcType=14
+Desc=¡Saludos, amante de la naturaleza! Aquí encontrarás todo lo relacionado con las plantas y su fascinante mundo. ¿Te gustaría aprender sobre los diferentes tipos de plantas y sus propiedades curativas? ¡Estoy aquí para compartir mi conocimiento contigo!
+Head=524
+Heading=3
+Body=56
+Movement=1
+Attackable=0
+ReSpawn=0
+Hostile=0
+Domable=0
+Alineacion=0
+BackUp=1
+Instruye=24
+Speed=370
 
 '<----------------- NPC HOSTILES ----------------->
 

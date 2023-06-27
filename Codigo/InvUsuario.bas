@@ -1595,11 +1595,12 @@ Sub UseInvItem(ByVal UserIndex As Integer, ByVal Slot As Byte)
                 Call UpdateUserInv(False, UserIndex, Slot)
                 Call WriteUpdateGold(UserIndex)
                 
-            Case eOBJType.otWeapon
+            Case eOBJType.otWeapon, eOBJType.otHerramientas
 
                 If UserList(UserIndex).flags.Morph > 0 Then
                     Call WriteConsoleMsg(UserIndex, "No puedes montar mientras estas transformado.", FontTypeNames.FONTTYPE_INFOBOLD)
                     Exit Sub
+
                 End If
 
                 If .flags.Equitando = 1 Then
@@ -1644,31 +1645,41 @@ Sub UseInvItem(ByVal UserIndex As Integer, ByVal Slot As Byte)
 
                 End If
 
-            Case eOBJType.otHerramientas
-                    
                 Select Case ObjIndex
                     
                     Case CANA_PESCA, RED_PESCA
                             
                         ' Lo tiene equipado?
                         If .Invent.WeaponEqpObjIndex = ObjIndex Then
-                            Call WriteMultiMessage(UserIndex, eMessages.WorkRequestTarget, eSkill.Pesca)  'Call WriteWorkRequestTarget(UserIndex, eSkill.Pesca)
+                            Call WriteMultiMessage(UserIndex, eMessages.WorkRequestTarget, eSkill.pesca)  'Call WriteWorkRequestTarget(UserIndex, eSkill.Pesca)
                         Else
                             Call WriteConsoleMsg(UserIndex, "Debes tener equipada la herramienta para trabajar.", FontTypeNames.FONTTYPE_INFO)
 
                         End If
                             
-                    Case HACHA_LENADOR
+                    Case HACHA_LENADOR, HACHA_LENA_ELFICA
+                            
+                        If ConoceProfesion(UserIndex, eSkill.Talar) < 0 Then
+                            Call WriteConsoleMsg(UserIndex, "No conoces esa profesion.", FontTypeNames.FONTTYPE_INFOBOLD)
+                            Exit Sub
+
+                        End If
                             
                         ' Lo tiene equipado?
                         If .Invent.WeaponEqpObjIndex = ObjIndex Then
-                            Call WriteMultiMessage(UserIndex, eMessages.WorkRequestTarget, eSkill.talar)
+                            Call WriteMultiMessage(UserIndex, eMessages.WorkRequestTarget, eSkill.Talar)
                         Else
                             Call WriteConsoleMsg(UserIndex, "Debes tener equipada la herramienta para trabajar.", FontTypeNames.FONTTYPE_INFO)
 
                         End If
                             
                     Case PIQUETE_MINERO
+                        
+                        If ConoceProfesion(UserIndex, eSkill.Mineria) < 0 Then
+                            Call WriteConsoleMsg(UserIndex, "No conoces esa profesion.", FontTypeNames.FONTTYPE_INFOBOLD)
+                            Exit Sub
+
+                        End If
                         
                         ' Lo tiene equipado?
                         If .Invent.WeaponEqpObjIndex = ObjIndex Then
@@ -1678,21 +1689,17 @@ Sub UseInvItem(ByVal UserIndex As Integer, ByVal Slot As Byte)
 
                         End If
                             
-                    Case TIJERAS_BOTANICA
-
-                        ' Lo tiene equipado?
-                        If .Invent.WeaponEqpObjIndex = ObjIndex Then
-                            Call WriteMultiMessage(UserIndex, eMessages.WorkRequestTarget, eSkill.Botanica)
-                        Else
-                            Call WriteConsoleMsg(UserIndex, "Debes tener equipada la herramienta para trabajar.", FontTypeNames.FONTTYPE_INFO)
+                    Case MARTILLO_HERRERO
+                        
+                        If ConoceProfesion(UserIndex, eSkill.herreria) < 0 Then
+                            Call WriteConsoleMsg(UserIndex, "No conoces esa profesion.", FontTypeNames.FONTTYPE_INFOBOLD)
+                            Exit Sub
 
                         End If
-                            
-                    Case MARTILLO_HERRERO
-
+                        
                         ' Lo tiene equipado?
                         If .Invent.WeaponEqpObjIndex = ObjIndex Then
-                            Call WriteMultiMessage(UserIndex, eMessages.WorkRequestTarget, eSkill.Herreria)
+                            Call WriteMultiMessage(UserIndex, eMessages.WorkRequestTarget, eSkill.herreria)
                         Else
                             Call WriteConsoleMsg(UserIndex, "Debes tener equipada la herramienta para trabajar.", FontTypeNames.FONTTYPE_INFO)
 
@@ -1700,10 +1707,15 @@ Sub UseInvItem(ByVal UserIndex As Integer, ByVal Slot As Byte)
                             
                     Case SERRUCHO_CARPINTERO
                             
+                        If ConoceProfesion(UserIndex, eSkill.Carpinteria) < 0 Then
+                            Call WriteConsoleMsg(UserIndex, "No conoces esa profesion.", FontTypeNames.FONTTYPE_INFOBOLD)
+                            Exit Sub
+
+                        End If
+                            
                         ' Lo tiene equipado?
                         If .Invent.WeaponEqpObjIndex = ObjIndex Then
-                            Call EnviarObjConstruibles(UserIndex)
-                            Call WriteShowTrabajoForm(UserIndex, eSkill.Carpinteria)
+                            Call WriteInitTrabajo(UserIndex, eSkill.Carpinteria)
                         Else
                             Call WriteConsoleMsg(UserIndex, "Debes tener equipada la herramienta para trabajar.", FontTypeNames.FONTTYPE_INFO)
 
@@ -1711,10 +1723,15 @@ Sub UseInvItem(ByVal UserIndex As Integer, ByVal Slot As Byte)
                             
                     Case KIT_DE_COSTURA
 
+                        If ConoceProfesion(UserIndex, eSkill.Sastreria) < 0 Then
+                            Call WriteConsoleMsg(UserIndex, "No conoces esa profesion.", FontTypeNames.FONTTYPE_INFOBOLD)
+                            Exit Sub
+
+                        End If
+                            
                         ' Lo tiene equipado?
                         If .Invent.WeaponEqpObjIndex = ObjIndex Then
-                            Call EnviarRopasConstruibles(UserIndex)
-                            Call WriteShowTrabajoForm(UserIndex, eSkill.Sastreria)
+                            Call WriteInitTrabajo(UserIndex, eSkill.Sastreria)
                                 
                         Else
                             Call WriteConsoleMsg(UserIndex, "Debes tener equipada la herramienta para trabajar.", FontTypeNames.FONTTYPE_INFO)
@@ -1723,10 +1740,15 @@ Sub UseInvItem(ByVal UserIndex As Integer, ByVal Slot As Byte)
                             
                     Case OLLA_ALQUIMISTA
 
+                        If ConoceProfesion(UserIndex, eSkill.Alquimia) < 0 Then
+                            Call WriteConsoleMsg(UserIndex, "No conoces esa profesion.", FontTypeNames.FONTTYPE_INFOBOLD)
+                            Exit Sub
+
+                        End If
+                            
                         ' Lo tiene equipado?
                         If .Invent.WeaponEqpObjIndex = ObjIndex Then
-                            Call EnviarPocionesConstruibles(UserIndex)
-                            Call WriteShowTrabajoForm(UserIndex, eSkill.Alquimia)
+                            Call WriteInitTrabajo(UserIndex, eSkill.Alquimia)
                                 
                         Else
                             Call WriteConsoleMsg(UserIndex, "Debes tener equipada la herramienta para trabajar.", FontTypeNames.FONTTYPE_INFO)
@@ -1771,6 +1793,8 @@ Sub UseInvItem(ByVal UserIndex As Integer, ByVal Slot As Byte)
                         .Stats.UserAtributos(eAtributos.Agilidad) = .Stats.UserAtributos(eAtributos.Agilidad) + RandomNumber(obj.MinModificador, obj.MaxModificador)
 
                         If .Stats.UserAtributos(eAtributos.Agilidad) > MAXATRIBUTOS Then .Stats.UserAtributos(eAtributos.Agilidad) = MAXATRIBUTOS
+
+                        If .Stats.UserAtributos(eAtributos.Agilidad) > 2 * .Stats.UserAtributosBackUP(Agilidad) Then .Stats.UserAtributos(eAtributos.Agilidad) = 2 * .Stats.UserAtributosBackUP(Agilidad)
                         
                         'Quitamos del inv el item
                         Call QuitarUserInvItem(UserIndex, Slot, 1)
@@ -1792,6 +1816,8 @@ Sub UseInvItem(ByVal UserIndex As Integer, ByVal Slot As Byte)
                         .Stats.UserAtributos(eAtributos.Fuerza) = .Stats.UserAtributos(eAtributos.Fuerza) + RandomNumber(obj.MinModificador, obj.MaxModificador)
 
                         If .Stats.UserAtributos(eAtributos.Fuerza) > MAXATRIBUTOS Then .Stats.UserAtributos(eAtributos.Fuerza) = MAXATRIBUTOS
+
+                        If .Stats.UserAtributos(eAtributos.Fuerza) > 2 * .Stats.UserAtributosBackUP(Fuerza) Then .Stats.UserAtributos(eAtributos.Fuerza) = 2 * .Stats.UserAtributosBackUP(Fuerza)
                         
                         'Quitamos del inv el item
                         Call QuitarUserInvItem(UserIndex, Slot, 1)
@@ -2079,7 +2105,65 @@ Sub UseInvItem(ByVal UserIndex As Integer, ByVal Slot As Byte)
 
                 End If
                 
-                Call DoInstrumentos(UserIndex, ObjIndex)
+                If obj.Real Then 'Es el Cuerno Real?
+                    If FaccionPuedeUsarItem(UserIndex, ObjIndex) Then
+                        If MapInfo(.Pos.Map).Pk = False Then
+                            Call WriteConsoleMsg(UserIndex, "No hay peligro aqui. Es zona segura.", FontTypeNames.FONTTYPE_INFO)
+                            Exit Sub
+
+                        End If
+                        
+                        ' Los admin invisibles solo producen sonidos a si mismos
+                        If .flags.AdminInvisible = 1 Then
+                            Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessagePlayWave(obj.Snd1, .Pos.X, .Pos.Y))
+                        Else
+                            Call AlertarFaccionarios(UserIndex)
+                            Call SendData(SendTarget.toMap, .Pos.Map, PrepareMessagePlayWave(obj.Snd1, .Pos.X, .Pos.Y))
+
+                        End If
+                        
+                        Exit Sub
+                    Else
+                        Call WriteConsoleMsg(UserIndex, "Solo miembros del ejercito real pueden usar este cuerno.", FontTypeNames.FONTTYPE_INFO)
+                        Exit Sub
+
+                    End If
+
+                ElseIf obj.Caos Then 'Es el Cuerno Legion?
+
+                    If FaccionPuedeUsarItem(UserIndex, ObjIndex) Then
+                        If MapInfo(.Pos.Map).Pk = False Then
+                            Call WriteConsoleMsg(UserIndex, "No hay peligro aqui. Es zona segura.", FontTypeNames.FONTTYPE_INFO)
+                            Exit Sub
+
+                        End If
+                        
+                        ' Los admin invisibles solo producen sonidos a si mismos
+                        If .flags.AdminInvisible = 1 Then
+                            Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessagePlayWave(obj.Snd1, .Pos.X, .Pos.Y))
+                        Else
+                            Call AlertarFaccionarios(UserIndex)
+                            Call SendData(SendTarget.toMap, .Pos.Map, PrepareMessagePlayWave(obj.Snd1, .Pos.X, .Pos.Y))
+
+                        End If
+                        
+                        Exit Sub
+                    Else
+                        Call WriteConsoleMsg(UserIndex, "Solo miembros de la legion oscura pueden usar este cuerno.", FontTypeNames.FONTTYPE_INFO)
+                        Exit Sub
+
+                    End If
+
+                End If
+
+                'Si llega aca es porque es o Laud o Tambor o Flauta
+                ' Los admin invisibles solo producen sonidos a si mismos
+                If .flags.AdminInvisible = 1 Then
+                    Call UserList(UserIndex).outgoingData.WriteASCIIStringFixed(PrepareMessagePlayWave(obj.Snd1, .Pos.X, .Pos.Y))
+                Else
+                    Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessagePlayWave(obj.Snd1, .Pos.X, .Pos.Y))
+
+                End If
                
             Case eOBJType.otBarcos
 
@@ -2101,7 +2185,7 @@ Sub UseInvItem(ByVal UserIndex As Integer, ByVal Slot As Byte)
                         ' Pero a partir de 20
                         If .Stats.ELV < 20 Then
                             
-                            If .Stats.UserSkills(eSkill.Pesca) <> 100 Then
+                            If .Stats.UserSkills(eSkill.pesca) <> 100 Then
                                 Call WriteConsoleMsg(UserIndex, "Para recorrer los mares debes ser nivel 20 y ademas tu skill en pesca debe ser 100.", FontTypeNames.FONTTYPE_INFO)
                             Else
                                 Call WriteConsoleMsg(UserIndex, "Para recorrer los mares debes ser nivel 20 o superior.", FontTypeNames.FONTTYPE_INFO)
@@ -2234,6 +2318,31 @@ Sub UseInvItem(ByVal UserIndex As Integer, ByVal Slot As Byte)
                 Call Encarcelar(UserIndex, 10)
                 Call LogGM(.name, " fue encarcelado por las esposas.")
                 
+            Case eOBJType.otPlanos
+
+                If .flags.Muerto = 1 Then
+                    'Call WriteConsoleMsg(UserIndex, "Estas muerto!! Solo puedes usar items cuando estas vivo.", FontTypeNames.FONTTYPE_INFO)
+                    Call WriteMultiMessage(UserIndex, eMessages.UserMuerto)
+                    Exit Sub
+
+                End If
+                
+                If .flags.Hambre = 0 And .flags.Sed = 0 Then
+
+                    If Not ClasePuedeUsarItem(UserIndex, ObjIndex, sMotivo) Then
+                        Call WriteConsoleMsg(UserIndex, sMotivo, FontTypeNames.FONTTYPE_INFO)
+                        Exit Sub
+                    End If
+                    
+                    Call WriteConsoleMsg(UserIndex, "¡Has aprendido una nueva receta!", FontTypeNames.FONTTYPE_INFO)
+                    
+                    Call AgregarReceta(UserIndex, Slot)
+                    Call UpdateUserInv(False, UserIndex, Slot)
+                Else
+                    Call WriteConsoleMsg(UserIndex, "Estas demasiado hambriento y sediento.", FontTypeNames.FONTTYPE_INFO)
+
+                End If
+                
             Case eOBJType.otRuna
     
                 'Si es un mapa comun...
@@ -2244,6 +2353,7 @@ Sub UseInvItem(ByVal UserIndex As Integer, ByVal Slot As Byte)
                             Call WriteConsoleMsg(UserIndex, "Has vuelto a ser visible!", FontTypeNames.FONTTYPE_INFO)
         
                         End If
+
                         .flags.CasteoSpell.Casteando = eCasteo.Runa
                         .flags.CasteoSpell.TimeCast = TIEMPO_CASTEO_RUNA
                         Call WriteConsoleMsg(UserIndex, "Sujetas la runa y comienzas a concentrarte.", FontTypeNames.FONTTYPE_INFO)

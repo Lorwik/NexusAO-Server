@@ -162,7 +162,7 @@ Public Sub DoTileEvents(ByVal UserIndex As Integer, _
                 DestPos.Map = .TileExit.Map
                 
                 If EsGm(UserIndex) Then
-                    Call LogGM(UserList(UserIndex).Name, "Utilizo un teleport hacia el mapa " & DestPos.Map & " (" & DestPos.X & "," & DestPos.Y & ")")
+                    Call LogGM(UserList(UserIndex).name, "Utilizo un teleport hacia el mapa " & DestPos.Map & " (" & DestPos.X & "," & DestPos.Y & ")")
 
                 End If
                 
@@ -325,7 +325,7 @@ Public Sub DoTileEvents(ByVal UserIndex As Integer, _
                 aN = UserList(UserIndex).flags.NPCAtacado
 
                 If aN > 0 Then
-                    If Npclist(aN).flags.AttackedFirstBy = UserList(UserIndex).Name Then
+                    If Npclist(aN).flags.AttackedFirstBy = UserList(UserIndex).name Then
                         Npclist(aN).flags.AttackedFirstBy = vbNullString
 
                     End If
@@ -749,7 +749,7 @@ Public Sub ClosestStablePos(Pos As WorldPos, ByRef nPos As WorldPos)
 
 End Sub
 
-Function NameIndex(ByVal Name As String) As Integer
+Function NameIndex(ByVal name As String) As Integer
     '***************************************************
     'Author: Unknown
     'Last Modification: -
@@ -759,20 +759,20 @@ Function NameIndex(ByVal Name As String) As Integer
     Dim UserIndex As Long
     
     'Nombre valido?
-    If LenB(Name) = 0 Then
+    If LenB(name) = 0 Then
         NameIndex = 0
         Exit Function
     End If
                                         
-    Name = UCase$(Name)
+    name = UCase$(name)
                                         
-    If InStrB(Name, "+") <> 0 Then
-        Name = Replace(Name, "+", " ")
+    If InStrB(name, "+") <> 0 Then
+        name = Replace(name, "+", " ")
     End If
     
     UserIndex = 1
     
-     Do Until StrComp(UCase$(UserList(UserIndex).Name), Name) = 0
+     Do Until StrComp(UCase$(UserList(UserIndex).name), name) = 0
         
         UserIndex = UserIndex + 1
         
@@ -814,7 +814,7 @@ Function CheckForSameIP(ByVal UserIndex As Integer, ByVal UserIP As String) As B
 
 End Function
 
-Function CheckForSameName(ByVal Name As String) As Boolean
+Function CheckForSameName(ByVal name As String) As Boolean
     '***************************************************
     'Author: Unknown
     'Last Modification: -
@@ -834,7 +834,7 @@ Function CheckForSameName(ByVal Name As String) As Boolean
             'ESE EVENTO NO DISPARA UN SAVE USER, LO QUE PUEDE SER UTILIZADO PARA DUPLICAR ITEMS
             'ESTE BUG EN ALKON PRODUJO QUE EL SERVIDOR ESTE CAIDO DURANTE 3 DIAS. ATENTOS.
             
-            If UCase$(UserList(LoopC).Name) = UCase$(Name) Then
+            If UCase$(UserList(LoopC).name) = UCase$(name) Then
                 CheckForSameName = True
                 Exit Function
 
@@ -848,7 +848,7 @@ Function CheckForSameName(ByVal Name As String) As Boolean
 
 End Function
 
-Function CheckForSameNameAccount(ByVal Name As String) As Boolean
+Function CheckForSameNameAccount(ByVal name As String) As Boolean
     '***************************************************
     'Author: Unknown
     'Last Modification: -
@@ -869,7 +869,7 @@ Function CheckForSameNameAccount(ByVal Name As String) As Boolean
             'ESE EVENTO NO DISPARA UN SAVE USER, LO QUE PUEDE SER UTILIZADO PARA DUPLICAR ITEMS
             'ESTE BUG EN ALKON PRODUJO QUE EL SERVIDOR ESTE CAIDO DURANTE 3 DIAS. ATENTOS.
             
-            If UCase$(UserList(LoopC).AccountInfo.UserName) = UCase$(Name) Then
+            If UCase$(UserList(LoopC).AccountInfo.username) = UCase$(name) Then
             
                 CheckForSameNameAccount = True
                 Exit Function
@@ -879,7 +879,7 @@ Function CheckForSameNameAccount(ByVal Name As String) As Boolean
         'Buscamos cuentas que se han podido quedar con algun PJ colgado
         ElseIf (UserList(LoopC).flags.AccountLogged = False And UserList(LoopC).flags.UserLogged) Then
             
-            If UCase$(UserList(LoopC).AccountName) = UCase$(Name) Then
+            If UCase$(UserList(LoopC).AccountName) = UCase$(name) Then
             
                 CheckForSameNameAccount = True
                 Exit Function
@@ -1206,6 +1206,8 @@ Sub LookatTile(ByVal UserIndex As Integer, _
     Dim Stat           As String
 
     Dim ft             As FontTypeNames
+    
+    Dim SupervivenciaSkill As Byte
 
     With UserList(UserIndex)
 
@@ -1269,9 +1271,9 @@ Sub LookatTile(ByVal UserIndex As Integer, _
                     .TargetObj = MapData(Map, .TargetObjX, .TargetObjY).ObjInfo.ObjIndex
 
                     If MostrarCantidad(.TargetObj) Then
-                        Call WriteConsoleMsg(UserIndex, ObjData(.TargetObj).Name & " - " & MapData(.TargetObjMap, .TargetObjX, .TargetObjY).ObjInfo.Amount & "", FontTypeNames.FONTTYPE_INFO)
+                        Call WriteConsoleMsg(UserIndex, ObjData(.TargetObj).name & " - " & MapData(.TargetObjMap, .TargetObjX, .TargetObjY).ObjInfo.Amount & "", FontTypeNames.FONTTYPE_INFO)
                     Else
-                        Call WriteConsoleMsg(UserIndex, ObjData(.TargetObj).Name, FontTypeNames.FONTTYPE_INFO)
+                        Call WriteConsoleMsg(UserIndex, ObjData(.TargetObj).name, FontTypeNames.FONTTYPE_INFO)
 
                     End If
             
@@ -1325,9 +1327,9 @@ Sub LookatTile(ByVal UserIndex As Integer, _
 
                             'Aqui ponemos o no la descripcion si tiene
                             If Len(UserList(TempCharIndex).Desc) > 1 Then
-                                Stat = "Ves a " & UserList(TempCharIndex).Name & " - " & UserList(TempCharIndex).Desc
+                                Stat = "Ves a " & UserList(TempCharIndex).name & " - " & UserList(TempCharIndex).Desc
                             Else
-                                Stat = "Ves a " & UserList(TempCharIndex).Name
+                                Stat = "Ves a " & UserList(TempCharIndex).name
                             End If
                             
                             If UserList(TempCharIndex).flags.Paralizado = 1 Then
@@ -1341,14 +1343,14 @@ Sub LookatTile(ByVal UserIndex As Integer, _
                              If UserList(TempCharIndex).flags.toyCasado = 1 Then
     
                                 If UserList(TempCharIndex).Genero = eGenero.Mujer Then
-                                    Stat = "Ves a " & UserList(TempCharIndex).Name & " Esposa de " & UserList(TempCharIndex).flags.miPareja
+                                    Stat = "Ves a " & UserList(TempCharIndex).name & " Esposa de " & UserList(TempCharIndex).flags.miPareja
                                 Else
                                     UserList(TempCharIndex).Genero = eGenero.Hombre
-                                    Stat = "Ves a " & UserList(TempCharIndex).Name & " Marido de " & UserList(TempCharIndex).flags.miPareja
+                                    Stat = "Ves a " & UserList(TempCharIndex).name & " Marido de " & UserList(TempCharIndex).flags.miPareja
                                 End If
                                 
                                 If UserList(UserIndex).Genero = UserList(TempCharIndex).Genero Then
-                                    Stat = "Ves a " & UserList(TempCharIndex).Name & " Pareja de " & UserList(TempCharIndex).flags.miPareja
+                                    Stat = "Ves a " & UserList(TempCharIndex).name & " Pareja de " & UserList(TempCharIndex).flags.miPareja
                                 End If
                                 
                                 
@@ -1390,13 +1392,13 @@ Sub LookatTile(ByVal UserIndex As Integer, _
                                     End If
                                 
                                 ElseIf criminal(TempCharIndex) Then
-                                    Stat = Stat & " Criminal de " & Trim(MapInfo(Ciudades(.Hogar).Map).Name)
+                                    Stat = Stat & " Criminal de " & Trim(MapInfo(Ciudades(.Hogar).Map).name)
                                     ft = FontTypeNames.FONTTYPE_CRIMINAL
                                 Else
                                     If .Genero = eGenero.Mujer Then
-                                        Stat = Stat & " Ciudadana de " & Trim(MapInfo(Ciudades(.Hogar).Map).Name)
+                                        Stat = Stat & " Ciudadana de " & Trim(MapInfo(Ciudades(.Hogar).Map).name)
                                     Else
-                                        Stat = Stat & " Ciudadano de " & Trim(MapInfo(Ciudades(.Hogar).Map).Name)
+                                        Stat = Stat & " Ciudadano de " & Trim(MapInfo(Ciudades(.Hogar).Map).name)
                                     End If
                                     
                                     ft = FontTypeNames.FONTTYPE_CITIZEN
@@ -1477,25 +1479,71 @@ Sub LookatTile(ByVal UserIndex As Integer, _
                 
                     MinHp = Npclist(TempCharIndex).Stats.MinHp
                     MaxHp = Npclist(TempCharIndex).Stats.MaxHp
-                
+                    SupervivenciaSkill = UserList(UserIndex).Stats.UserSkills(eSkill.Supervivencia)
+                    
                     If .Privilegios And (PlayerType.SemiDios Or PlayerType.Dios Or PlayerType.Admin) Then
                         estatus = estatus + " (" & MinHp & "/" & MaxHp & ") "
                     Else
 
                         If .Muerto = 0 Then
                     
-                            If MinHp < (MaxHp * 0.05) Then
-                                estatus = estatus + "<Casi muerto>"
-                            ElseIf MinHp < (MaxHp * 0.1) Then
-                                estatus = estatus + "<Muy Malherido>"
-                            ElseIf MinHp < (MaxHp * 0.25) Then
-                                estatus = estatus + "<Malherido>"
-                            ElseIf MinHp < (MaxHp * 0.5) Then
-                                estatus = estatus + "<Herido>"
-                            ElseIf MinHp < (MaxHp * 0.75) Then
-                                estatus = estatus + "<Levemente herido>"
+                            If SupervivenciaSkill <= 10 Then
+                                estatus = estatus + " (Dudoso)"
+                            
+                            ElseIf SupervivenciaSkill <= 20 Then
+
+                                If MinHp < (MaxHp / 2) Then
+                                    estatus = estatus + " (Herido)"
+                                Else
+                                    estatus = estatus + " (Sano)"
+
+                                End If
+                            
+                            ElseIf SupervivenciaSkill <= 30 Then
+
+                                If MinHp < (MaxHp * 0.5) Then
+                                    estatus = estatus + " (Malherido)"
+                                ElseIf MinHp < (MaxHp * 0.75) Then
+                                    estatus = estatus + " (Herido)"
+                                Else
+                                    estatus = estatus + " (Sano)"
+
+                                End If
+                            
+                            ElseIf SupervivenciaSkill <= 40 Then
+
+                                If MinHp < (MaxHp * 0.25) Then
+                                    estatus = estatus + " (Muy malherido)"
+                                ElseIf MinHp < (MaxHp * 0.5) Then
+                                    estatus = estatus + " (Herido)"
+                                ElseIf MinHp < (MaxHp * 0.75) Then
+                                    estatus = estatus + " (Levemente herido)"
+                                Else
+                                    estatus = estatus + " (Sano)"
+
+                                End If
+                            
+                            ElseIf SupervivenciaSkill < 60 Then
+
+                                If MinHp < (MaxHp * 0.05) Then
+                                    estatus = estatus + " (Agonizando)"
+                                ElseIf MinHp < (MaxHp * 0.1) Then
+                                    estatus = estatus + " (Casi muerto)"
+                                ElseIf MinHp < (MaxHp * 0.25) Then
+                                    estatus = estatus + " (Muy Malherido)"
+                                ElseIf MinHp < (MaxHp * 0.5) Then
+                                    estatus = estatus + " (Herido)"
+                                ElseIf MinHp < (MaxHp * 0.75) Then
+                                    estatus = estatus + " (Levemente herido)"
+                                ElseIf MinHp < (MaxHp) Then
+                                    estatus = estatus + " (Sano)"
+                                Else
+                                    estatus = estatus + " (Intacto)"
+
+                                End If
+
                             Else
-                                estatus = estatus + "<Intacto>"
+                                estatus = estatus + " (" & MinHp & "/" & MaxHp & ")"
 
                             End If
 
@@ -1592,10 +1640,10 @@ Sub LookatTile(ByVal UserIndex As Integer, _
                     Else
 
                         If Npclist(TempCharIndex).MaestroUser > 0 Then
-                            Call WriteConsoleMsg(UserIndex, Npclist(TempCharIndex).Name & " es mascota de " & UserList(Npclist(TempCharIndex).MaestroUser).Name & " " & estatus & Paralisis & Incinerado & Envenenado, FontTypeNames.FONTTYPE_INFO)
+                            Call WriteConsoleMsg(UserIndex, Npclist(TempCharIndex).name & " es mascota de " & UserList(Npclist(TempCharIndex).MaestroUser).name & " " & estatus & Paralisis & Incinerado & Envenenado, FontTypeNames.FONTTYPE_INFO)
                         
                         Else
-                            Call WriteConsoleMsg(UserIndex, Npclist(TempCharIndex).Name & " " & estatus & Paralisis & Incinerado & Envenenado, FontTypeNames.FONTTYPE_INFO)
+                            Call WriteConsoleMsg(UserIndex, Npclist(TempCharIndex).name & " " & estatus & Paralisis & Incinerado & Envenenado, FontTypeNames.FONTTYPE_INFO)
                             
                             If Len(Npclist(TempCharIndex).flags.AttackedFirstBy) > 0 And (UserList(UserIndex).flags.Privilegios And (PlayerType.Dios Or PlayerType.Admin)) Then
                                 Call WriteConsoleMsg(UserIndex, "Le pego primero: " & Npclist(TempCharIndex).flags.AttackedFirstBy & ".", FontTypeNames.FONTTYPE_INFO)
