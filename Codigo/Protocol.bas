@@ -109,6 +109,7 @@ Private Enum ServerPacketID
     UpdateHungerAndThirst        ' EHYS
     Fame                         ' FAMA
     Family
+    Profesion
     MiniStats                    ' MEST
     LevelUp                      ' SUNI
     AddForumMsg                  ' FMSG
@@ -192,6 +193,7 @@ Private Enum ClientPacketID
     RequestAtributes                'ATR
     RequestFame                     'FAMA
     RequestFamily
+    RequestProfesion
     RequestSkills                   'ESKI
     RequestMiniStats                'FEST
     CommerceEnd                     'FINCOM
@@ -510,6 +512,9 @@ Public Function HandleIncomingData(ByVal UserIndex As Integer) As Boolean
             
         Case ClientPacketID.RequestFamily
             Call HandleRequestFamily(UserIndex)
+            
+        Case ClientPacketID.RequestProfesion
+            Call HandleRequestProfesion(UserIndex)
         
         Case ClientPacketID.RequestSkills           'ESKI
             Call HandleRequestSkills(UserIndex)
@@ -2588,6 +2593,24 @@ Private Sub HandleRequestFamily(ByVal UserIndex As Integer)
     Call UserList(UserIndex).incomingData.ReadByte
     
     Call WriteFamily(UserIndex)
+
+End Sub
+
+''
+' Handles the "RequestProfesion" message.
+'
+' @param    userIndex The index of the user sending the message.
+
+Private Sub HandleRequestProfesion(ByVal UserIndex As Integer)
+    '***************************************************
+    'Author: Lorwik
+    'Last Modification: 28/06/2023
+    '
+    '***************************************************
+    'Remove packet ID
+    Call UserList(UserIndex).incomingData.ReadByte
+    
+    Call WriteProfesion(UserIndex)
 
 End Sub
 
@@ -19185,6 +19208,37 @@ Public Sub WriteFamily(ByVal UserIndex As Integer)
     End With
     
     Exit Sub
+
+errHandler:
+
+    If Err.Number = UserList(UserIndex).outgoingData.NotEnoughSpaceErrCode Then
+        Call FlushBuffer(UserIndex)
+        Resume
+
+    End If
+End Sub
+
+''
+' Writes the "Profesion" message to the given user's outgoing data buffer.
+'
+' @param    UserIndex User to which the message is intended.
+' @remarks  The data is not actually sent until the buffer is properly flushed.
+Public Sub WriteProfesion(ByVal UserIndex As Integer)
+    '***************************************************
+    'Author: Lorwik
+    'Last Modification: 28/06/2023
+    '***************************************************
+    On Error GoTo errHandler
+
+    With UserList(UserIndex)
+        Call .outgoingData.WriteByte(ServerPacketID.Profesion)
+        
+        Call .outgoingData.WriteByte(.Profesion(0).Profesion)
+        Call .outgoingData.WriteByte(.Profesion(1).Profesion)
+        
+    End With
+    
+        Exit Sub
 
 errHandler:
 

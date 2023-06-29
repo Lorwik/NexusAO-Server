@@ -313,7 +313,7 @@ Sub UpdateUserToDatabase(ByVal UserIndex As Integer, _
         
         query = "UPDATE personaje SET "
         query = query & "name = (?), level = (?), exp = (?), elu = (?), elo = (?), genre_id = (?), race_id = (?), class_id = (?), home_id = (?), description = (?), gold = (?), bank_gold = (?), "
-        query = query & "assigned_skillpoints = (?), pet_amount = (?), pos_map = (?), pos_x = (?), pos_y = (?), last_map = (?), body_id = (?), head_id = (?), weapon_id = (?), helmet_id = (?), shield_id = (?), "
+        query = query & "pet_amount = (?), pos_map = (?), pos_x = (?), pos_y = (?), last_map = (?), body_id = (?), head_id = (?), weapon_id = (?), helmet_id = (?), shield_id = (?), "
         query = query & "aura_id = (?), aura_color = (?), heading = (?), items_amount = (?), slot_armour = (?), slot_weapon = (?), slot_nudillos = (?), slot_helmet = (?), slot_shield = (?), slot_ammo = (?), "
         query = query & "slot_ship = (?), slot_ring = (?), min_hp = (?), max_hp = (?), min_man = (?), max_man = (?), min_sta = (?), max_sta = (?), min_ham = (?), max_ham = (?), min_sed = (?), max_sed = (?), "
         query = query & "min_hit = (?), max_hit = (?), killed_npcs = (?), killed = (?), rep_asesino = (?), rep_bandido = (?), rep_burgues = (?), rep_ladron = (?), rep_noble = (?), rep_plebe = (?), rep_average = (?), "

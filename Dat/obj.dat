@@ -4483,6 +4483,8 @@ GrhIndex=7000
 Objtype=4
 Resistencia=500
 Agarrable=1
+RecursoIndex=58
+Recurso=20-1
 
 [OBJ5]
 Name=Arbol
@@ -4490,6 +4492,8 @@ GrhIndex=7001
 Objtype=4
 Resistencia=500
 Agarrable=1
+RecursoIndex=58
+Recurso=20-1
 
 [OBJ6]
 Name=Arbol
@@ -4497,7 +4501,8 @@ GrhIndex=7002
 Objtype=4
 Resistencia=500
 Agarrable=1
-
+RecursoIndex=58
+Recurso=20-1
 
 'Puerta para negocio porque no tiene clave
 [OBJ7]
@@ -4794,6 +4799,8 @@ GrhIndex=641
 Objtype=4
 Resistencia=500
 Agarrable=1
+RecursoIndex=58
+Recurso=20-1
 
 [OBJ47]
 Name=Arbol
@@ -4801,6 +4808,8 @@ GrhIndex=643
 Objtype=4
 Resistencia=500
 Agarrable=1
+RecursoIndex=58
+Recurso=20-1
 
 [OBJ48]
 Name=Arbol
@@ -4808,6 +4817,8 @@ GrhIndex=641
 Objtype=4
 Resistencia=500
 Agarrable=1
+RecursoIndex=58
+Recurso=20-1
 
 [OBJ49]
 Name=Arbol
@@ -4815,6 +4826,8 @@ GrhIndex=644
 Objtype=4
 Resistencia=500
 Agarrable=1
+RecursoIndex=58
+Recurso=20-1
 
 [OBJ50]
 Name=Arbol
@@ -4822,6 +4835,8 @@ GrhIndex=647
 Objtype=4
 Resistencia=500
 Agarrable=1
+RecursoIndex=58
+Recurso=20-1
 
 '--------------------CASA 1 ULLA-----------------
 
@@ -5630,14 +5645,17 @@ IndexCerradaLlave=122
 [OBJ127]
 Name=Hacha de leñador
 GrhIndex=565
-Objtype=18
-MinHIT=4
-MaxHIT=10
-Valor=200
-Anim=16
+ObjType=18
+Agarrable=0
+Anim=23
+MinHit=2
+MaxHit=3
+Valor=350
 Crucial=1
-LingH=10
+Materiales=386-0-0-0
+CantMateriales=5-0-0-0
 SkHerreria=12
+Herramienta=20-1
 
 [OBJ133]
 Name=Escudo de plata
@@ -5796,9 +5814,11 @@ Name=Arbol
 GrhIndex=7001
 Objtype=4
 Agarrable=1
+RecursoIndex=58
+Recurso=20-1
 
 [OBJ148] 'NPC
-Name=Arbol de jungla
+Name=Arbol Talado
 GrhIndex=7002
 Objtype=4
 Agarrable=1
@@ -5808,36 +5828,48 @@ Name=Arbol
 GrhIndex=7000
 Objtype=4
 Agarrable=1
+RecursoIndex=58
+Recurso=20-1
 
 [OBJ150] 'NPC
 Name=Arbol
 GrhIndex=7222
 Objtype=4
 Agarrable=1
+RecursoIndex=58
+Recurso=20-1
 
 [OBJ151] 'NPC
 Name=Arbol
 GrhIndex=7223
 Objtype=4
 Agarrable=1
+RecursoIndex=58
+Recurso=20-1
 
 [OBJ152] 'NPC
 Name=Arbol
 GrhIndex=7224
 Objtype=4
 Agarrable=1
+RecursoIndex=58
+Recurso=20-1
 
 [OBJ153] 'NPC
 Name=Arbol
 GrhIndex=7225
 Objtype=4
 Agarrable=1
+RecursoIndex=58
+Recurso=20-1
 
 [OBJ154] 'NPC
 Name=Arbol
 GrhIndex=7226
 Objtype=4
 Agarrable=1
+RecursoIndex=58
+Recurso=20-1
 
 [OBJ155] 
 Name=Cama
@@ -6146,45 +6178,51 @@ IndexCerradaLlave=186
 [OBJ187]
 Name=Piquete de minero
 GrhIndex=608
-Objtype=18
-Valor=200
-Anim=16
+ObjType=18
+Agarrable=0
+Anim=30
+RazaEnanaAnim=74
+MinHit=2
+MaxHit=3
+Valor=210
 Crucial=1
-LingH=5
+Materiales=386-0-0-0
+CantMateriales=3-0-0-0
 SkHerreria=12
+Herramienta=19-1
 
 
 [OBJ188]
-Name=Yacimiento de hierro
-Info=Yacimiento minero
+Name=Yacimiento de Hierro
 GrhIndex=8616
 ObjType=22
 Agarrable=1
-MineralIndex=192
+RecursoIndex=192
+Recurso=19-1
 
 [OBJ189]
-Name=Yacimiento de hierro
-Info=Yacimiento minero
+Name=Yacimiento de Hierro
 GrhIndex=8617
 ObjType=22
 Agarrable=1
-MineralIndex=192
+RecursoIndex=192
+Recurso=19-1
 
 [OBJ190]
-Name=Yacimiento de hierro
-Info=Yacimiento minero
+Name=Yacimiento de Hierro
 GrhIndex=8618
 ObjType=22
 Agarrable=1
-MineralIndex=192
+RecursoIndex=192
+Recurso=19-1
 
 [OBJ191]
-Name=Yacimiento de hierro
-Info=Yacimiento minero
+Name=Yacimiento de Hierro
 GrhIndex=8619
 ObjType=22
 Agarrable=1
-MineralIndex=192
+RecursoIndex=192
+Recurso=19-1
 
 [OBJ192]
 Name=Hierro
@@ -6256,11 +6294,16 @@ Objtype=24
 [OBJ198]
 Name=Serrucho
 GrhIndex=607
-Objtype=18
-Valor=50
-Anim=16
+ObjType=2
+Agarrable=0
+Anim=31
+RazaEnanaAnim=73
+MinHit=1
+MaxHit=2
+Valor=140
 Crucial=1
-LingH=8
+Materiales=386-0-0-0
+CantMateriales=2-0-0-0
 SkHerreria=12
 
 [OBJ199]
@@ -6497,69 +6540,68 @@ Texto=Entrada al bosque de Dorck, mantengase se alejado.
 Agarrable=1
 
 [OBJ228]
-Name=Yacimiento de oro
-Info=Yacimiento minero
+Name=Yacimiento de Oro
 GrhIndex=8608
 ObjType=22
 Agarrable=1
-MineralIndex=194
+RecursoIndex=194
+Recurso=19-1
 
 [OBJ229]
-Name=Yacimiento de oro
-Info=Yacimiento minero
+Name=Yacimiento de Oro
 GrhIndex=8609
 ObjType=22
 Agarrable=1
-MineralIndex=194
+RecursoIndex=194
+Recurso=19-1
 
 [OBJ230]
-Name=Yacimiento de oro
-Info=Yacimiento minero
+Name=Yacimiento de Oro
 GrhIndex=8610
 ObjType=22
 Agarrable=1
-MineralIndex=194
+RecursoIndex=194
+Recurso=19-1
 
 [OBJ231]
-Name=Yacimiento de oro
-Info=Yacimiento minero
+Name=Yacimiento de Oro
 GrhIndex=8611
 ObjType=22
 Agarrable=1
-MineralIndex=194
-
+RecursoIndex=194
+Recurso=19-1
 
 [OBJ232]
-Name=Yacimiento de plata
-Info=Yacimiento minero
+Name=Yacimiento de Plata
 GrhIndex=8612
 ObjType=22
 Agarrable=1
-MineralIndex=193
+RecursoIndex=193
+Recurso=19-1
 
 [OBJ233]
-Name=Yacimiento de plata
-Info=Yacimiento minero
+Name=Yacimiento de Plata
 GrhIndex=8613
 ObjType=22
 Agarrable=1
-MineralIndex=193
+RecursoIndex=193
+Recurso=19-1
 
 [OBJ234]
-Name=Yacimiento de plata
-Info=Yacimiento minero
+Name=Yacimiento de Plata
 GrhIndex=8614
 ObjType=22
 Agarrable=1
-MineralIndex=193
+RecursoIndex=193
+Recurso=19-1
 
 [OBJ235]
-Name=Yacimiento de plata
-Info=Yacimiento minero
+Name=Yacimiento de Plata
 GrhIndex=8615
 ObjType=22
 Agarrable=1
-MineralIndex=193
+RecursoIndex=193
+Recurso=19-1
 
 [OBJ236]
 Name=Ropa de pordiosero
@@ -6572,7 +6614,6 @@ Valor=1
 RP1=2
 RP2=5
 NumRazas=2
-
 
 [OBJ237]
 Name=Armadura klox FUERA De USO
@@ -8395,16 +8436,21 @@ ObjType=29
 Valor=100
 Crucial=1
 
-[OBJ389]'PRESI
+[OBJ389]
 Name=Martillo de Herrero
 GrhIndex=726
-Objtype=18
-Valor=250
-Anim=16
+ObjType=2
+Agarrable=0
+Anim=29
+RazaEnanaAnim=75
+MinHit=2
+MaxHit=2
+Valor=140
 Crucial=1
-LingH=18
+Materiales=386-0-0-0
+CantMateriales=2-0-0-0
 SkHerreria=20
-
+Herramienta=21-1
 
 [OBJ394]
 Name=Llamado a la naturaleza
@@ -10209,24 +10255,32 @@ Name=Arbol
 GrhIndex=6789
 Objtype=4
 Agarrable=1
+RecursoIndex=58
+Recurso=20-1
 
 [OBJ605]
 Name=Arbol
 GrhIndex=6790
 Objtype=4
 Agarrable=1
+RecursoIndex=58
+Recurso=20-1
 
 [OBJ606]
 Name=Arbol
 GrhIndex=6791
 Objtype=4
 Agarrable=1
+RecursoIndex=58
+Recurso=20-1
 
 [OBJ607]
 Name=Arbol
 GrhIndex=6792
 Objtype=4
 Agarrable=1
+RecursoIndex=58
+Recurso=20-1
 
 [OBJ624] 
 Name=Banco
@@ -11132,24 +11186,33 @@ CP1=55
 NumClases=1
 
 [OBJ696]
-Name=Tijeras
-GrhIndex=939
-Objtype=18
-Valor=500
-Anim=1
+Name=Tijeras de herborista
+GrhIndex=5739
+ObjType=18
+Agarrable=0
+Anim=2
+RazaEnanaAnim=2
+MinHit=2
+MaxHit=2
+Valor=140
 Crucial=1
-LingH=16
-SkHerreria=12
+Materiales=386-0-0-0
+CantMateriales=2-0-0-0
+SkHerreria=20
+Herramienta=23-1
 
 [OBJ697]
-Name=Costurero
+Name=Kit de costura
 GrhIndex=940
-Objtype=18
-Valor=500
-Anim=1
+ObjType=18
+Agarrable=0
+Anim=2
+RazaEnanaAnim=2
+MinHit=2
+MaxHit=2
+Valor=140
 Crucial=1
-LingH=16
-SkHerreria=12
+Herramienta=22-1
 
 [OBJ700]
 Name=Galeon de Comandante
@@ -11423,7 +11486,7 @@ GrhIndex=14500
 ObjType=36
 Desde=34
 Map=17
-X=46
+X=51
 Y=25
 NecesitaNave=40
 Vendible=0
@@ -11470,7 +11533,7 @@ GrhIndex=14500
 ObjType=36
 Desde=23
 Map=17
-X=46
+X=51
 Y=25
 NecesitaNave=40
 Vendible=0
@@ -11844,42 +11907,56 @@ Name=Arbol
 GrhIndex=51849
 Objtype=4
 Agarrable=1
+RecursoIndex=58
+Recurso=20-1
 
 [OBJ773]
 Name=Arbol
 GrhIndex=51851
 Objtype=4
 Agarrable=1
+RecursoIndex=58
+Recurso=20-1
 
 [OBJ774]
 Name=Arbol
 GrhIndex=12432
 Objtype=4
 Agarrable=1
+RecursoIndex=58
+Recurso=20-1
 
 [OBJ775]
 Name=Arbol
 GrhIndex=12431
 Objtype=4
 Agarrable=1
+RecursoIndex=58
+Recurso=20-1
 
 [OBJ776]
 Name=Arbol
 GrhIndex=12339
 Objtype=4
 Agarrable=1
+RecursoIndex=58
+Recurso=20-1
 
 [OBJ777]
 Name=Arbol
 GrhIndex=12337
 Objtype=4
 Agarrable=1
+RecursoIndex=58
+Recurso=20-1
 
 [OBJ778]
 Name=Arbol
 GrhIndex=12338
 Objtype=4
 Agarrable=1
+RecursoIndex=58
+Recurso=20-1
 
 [OBJ779]
 Name=Runa de Teletransportacion
@@ -12486,6 +12563,8 @@ GrhIndex=36033
 Objtype=4
 Resistencia=500
 Agarrable=1
+RecursoIndex=58
+Recurso=20-1
 
 [OBJ827]
 Name=Arbol de Sakura
@@ -12493,6 +12572,8 @@ GrhIndex=36033
 Objtype=4
 Resistencia=500
 Agarrable=1
+RecursoIndex=58
+Recurso=20-1
 
 [OBJ828]
 Name=Cartel Peligro
