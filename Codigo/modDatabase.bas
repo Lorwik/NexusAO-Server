@@ -327,7 +327,7 @@ Sub UpdateUserToDatabase(ByVal UserIndex As Integer, _
     
         Call User_Database.MakeQuery(query, True, _
                                     .name, .Stats.ELV, .Stats.Exp, .Stats.ELU, .Stats.ELO, .Genero, .Raza, .clase, .Hogar, .Desc, .Stats.Gld, .Stats.Banco, _
-                                    .NroMascotas, .Pos.Map, .Pos.X, .Pos.Y, .flags.lastMap, .Char.body, .Char.Head, .Char.WeaponAnim, .Char.CascoAnim, .Char.ShieldAnim, _
+                                    .NroMascotas, .Pos.Map, .Pos.X, .Pos.Y, .flags.lastMap, .Char.body, .OrigChar.Head, .Char.WeaponAnim, .Char.CascoAnim, .Char.ShieldAnim, _
                                     .Char.AuraAnim, .Char.AuraColor, .Char.Heading, .Invent.NroItems, .Invent.ArmourEqpSlot, .Invent.WeaponEqpSlot, .Invent.AnilloEqpSlot, .Invent.CascoEqpSlot, .Invent.EscudoEqpSlot, .Invent.MunicionEqpSlot, _
                                     .Invent.BarcoSlot, .Invent.AnilloEqpSlot, .Stats.MinHp, .Stats.MaxHp, .Stats.MinMAN, .Stats.MaxMAN, .Stats.MinSta, .Stats.MaxSta, .Stats.MinHam, .Stats.MaxHam, .Stats.MinAGU, .Stats.MaxAGU, _
                                     .Stats.MinHIT, .Stats.MaxHit, .Stats.NPCsMuertos, .Stats.Muertes, .Reputacion.AsesinoRep, .Reputacion.BandidoRep, .Reputacion.BurguesRep, .Reputacion.LadronesRep, .Reputacion.NobleRep, .Reputacion.PlebeRep, .Reputacion.Promedio, _

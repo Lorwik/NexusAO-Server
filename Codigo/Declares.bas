@@ -72,6 +72,8 @@ Public Const MAXSPAWNATTEMPS = 60
 Public Const INFINITE_LOOPS As Integer = -1
 
 Public Const FXSANGRE = 14
+Public Const FXCURAR = 9
+Public Const FXRESU = 36
 
 Public Const MINLVLGLOBAL As Byte = 5 'Nivel minimo para poder usar el chat global.
 
@@ -627,7 +629,7 @@ Public SND_PUERTA                       As Byte
 
 Public SND_NIVEL                        As Byte
 
-Public SND_USERMUERTE                   As Byte
+Public SND_USERMUERTE                   As Integer
 
 Public SND_IMPACTO                      As Byte
 

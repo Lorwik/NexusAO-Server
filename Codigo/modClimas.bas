@@ -18,12 +18,12 @@ End Enum
 Public DayStatus As eColorEstado 'Establece el color actual del dia
 
 Public Sub SortearHorario(Optional ByVal Clima As eColorEstado)
-'***************************************************************************************
-'Autor: Lorwik
-'Ultima modificación: 23/12/2018
-'Descripción: Sorteamos el clima, si hay tormenta y es de Mañana o de Dia
-'ponemos el efecto de tarde, pero si es de Tarde o de Noche no ponemos nigun efecto.
-'***************************************************************************************
+    '***************************************************************************************
+    'Autor: Lorwik
+    'Ultima modificación: 23/12/2018
+    'Descripción: Sorteamos el clima, si hay tormenta y es de Mañana o de Dia
+    'ponemos el efecto de tarde, pero si es de Tarde o de Noche no ponemos nigun efecto.
+    '***************************************************************************************
 
     'Si esta lloviendo ignoramos el resto y solo mandamos el estado lluvia
     If Lloviendo Then
@@ -39,29 +39,30 @@ Public Sub SortearHorario(Optional ByVal Clima As eColorEstado)
         Call ColorClima(Clima)
         
     Else
-        If (Hour(Now) >= 5 And Hour(Now) < 8) Then 'Amanecer
+
+        If (Hour(Now) >= 5 And Hour(Now) <= 8) Then ' Amanecer
             Call ColorClima(eColorEstado.Amanecer)
             frmMain.lblLloviendoInfo.Caption = "Hora: Mañana - [" & Hour(Now) & ":" & Minute(Now) & "]"
-            
-        ElseIf (Hour(Now) >= 9 And Hour(Now) < 12) Then  'MedioDia
+    
+        ElseIf (Hour(Now) >= 9 And Hour(Now) <= 12) Then ' MedioDía
             Call ColorClima(eColorEstado.MedioDia)
-            frmMain.lblLloviendoInfo.Caption = "Hora: MedioDia - [" & Hour(Now) & ":" & Minute(Now) & "]"
-            
-        ElseIf (Hour(Now) >= 13 And Hour(Now) < 18) Then 'Tarde
+            frmMain.lblLloviendoInfo.Caption = "Hora: MedioDía - [" & Hour(Now) & ":" & Minute(Now) & "]"
+    
+        ElseIf (Hour(Now) >= 13 And Hour(Now) <= 18) Then ' Tarde
             Call ColorClima(eColorEstado.Tarde)
             frmMain.lblLloviendoInfo.Caption = "Hora: Tarde - [" & Hour(Now) & ":" & Minute(Now) & "]"
-            
-        ElseIf (Hour(Now) >= 19 And Hour(Now) < 4) Then 'Noche
+    
+        ElseIf (Hour(Now) >= 19 Or Hour(Now) <= 4) Then ' Noche
             Call ColorClima(eColorEstado.Noche)
             frmMain.lblLloviendoInfo.Caption = "Hora: Noche - [" & Hour(Now) & ":" & Minute(Now) & "]"
-            
-        Else  'MedioDia
+    
+        Else ' MedioDía
             Call ColorClima(eColorEstado.MedioDia)
-            frmMain.lblLloviendoInfo.Caption = "Hora: MedioDia (Temporal) - [" & Hour(Now) & ":" & Minute(Now) & "]"
+            frmMain.lblLloviendoInfo.Caption = "Hora: MedioDía (Temporal) - [" & Hour(Now) & ":" & Minute(Now) & "]"
+    
         End If
         
     End If
-
     
 End Sub
 
@@ -78,7 +79,7 @@ Private Sub ColorClima(Clima As eColorEstado)
     
     DayStatus = Clima
 
-    Call SendData(SendTarget.ToAll, 0, PrepareMessageActualizarClima())
+    Call SendData(SendTarget.Toall, 0, PrepareMessageActualizarClima())
     
 End Sub
 

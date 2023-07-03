@@ -1773,7 +1773,6 @@ Public Sub CloseServer()
     
     End
 End Sub
-
 Private Sub InicializarSonidos()
 '****************************************
 'Autor: Lorwik
@@ -1783,12 +1782,12 @@ Private Sub InicializarSonidos()
 
     SND_SWING = 2
     SND_TALAR = 13
-    SND_PESCAR = 14
-    SND_MINERO = 15
+    SND_PESCAR = 71
+    SND_MINERO = 261
     SND_WARP = 3
     SND_PUERTA = 5
     SND_NIVEL = 128
-    SND_USERMUERTE = 11
+    SND_USERMUERTE = 428
     SND_IMPACTO = 10
     SND_IMPACTO2 = 12
     SND_LENADOR = 13

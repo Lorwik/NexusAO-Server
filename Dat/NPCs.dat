@@ -172,7 +172,7 @@ Desc= Dicen que el final se aproxima, mas nosotros mantendremos nuestras posicio
 Head=0
 Body=15
 Heading=3
-Movement=3
+Movement=2
 Attackable=1
 Comercia=0
 Hostile=0
@@ -358,7 +358,7 @@ Movement=1
 Attackable=0
 Comercia=1
 TipoItems=3
-NROITEMS=28
+NROITEMS=29
 Inflacion=0
 Obj1=31-100
 Obj2=32-100
@@ -388,6 +388,7 @@ Obj25=707-100
 Obj26=510-100
 Obj27=513-100
 Obj28=697-100
+Obj29=840-100
 BackUp=1
 Domable=0
 info=Sastre de Ullathorpe
@@ -402,7 +403,7 @@ Movement=1
 Attackable=0
 Comercia=1
 TipoItems=3
-NROITEMS=7
+NROITEMS=8
 Inflacion=0
 Obj1=524-100
 Obj2=639-100
@@ -411,6 +412,7 @@ Obj4=588-100
 Obj5=525-100
 Obj6=526-100
 Obj7=619-100
+Obj8=840-100
 BackUp=1
 Domable=0
 info=Sastre de Ullathorpe (túnicas gnomo/enano)
@@ -425,7 +427,7 @@ Movement=1
 Attackable=0
 Comercia=1
 TipoItems=3
-NROITEMS=7
+NROITEMS=8
 Inflacion=0
 Obj1=239-100
 Obj2=381-100
@@ -434,6 +436,7 @@ Obj4=238-100
 Obj5=135-100
 Obj6=357-100
 Obj7=503-100
+Obj8=840-100
 BackUp=1
 Domable=0
 info=Sastre de Ullathorpe (túnicas humano/elfo/elfo oscuro)
@@ -564,11 +567,12 @@ TipoItems=24
 Hostile=0
 Alineacion=0
 ReSpawn=0
-NROITEMS=4
+NROITEMS=5
 Obj1=199-100
 Obj2=200-100
 Obj3=197-100
 Obj4=201-100
+Obj5=530-200
 Domable=0
 info=Vendedor de hechizos de Ullathorpe
 
@@ -788,7 +792,7 @@ Movement=1
 Attackable=0
 Comercia=1
 TipoItems=3
-NROITEMS=8
+NROITEMS=9
 Inflacion=0
 Obj1=524-100
 Obj2=639-100
@@ -798,6 +802,7 @@ Obj5=525-100
 Obj6=526-100
 Obj7=619-100
 Obj8=697-100
+Obj9=840-100
 BackUp=1
 Domable=0
 info=Sastre de Nix (túnicas gnomo/enano)
@@ -812,7 +817,7 @@ Movement=1
 Attackable=0
 Comercia=1
 TipoItems=3
-NROITEMS=7
+NROITEMS=8
 Inflacion=0
 Obj1=239-100
 Obj2=381-100
@@ -821,6 +826,7 @@ Obj4=238-100
 Obj5=135-100
 Obj6=357-100
 Obj7=503-100
+Obj8=840-100
 BackUp=1
 Domable=0
 info=Sastre de Nix (túnicas humano/elfo/elfo oscuro)
@@ -1007,7 +1013,7 @@ Movement=1
 Attackable=0
 info=Rey de Nix
 
-[NPC139] 'NPC Alquimia: 698, 696 'FUERA DE USO
+[NPC139] 'NPC Alquimia
 Name=Alquimista
 Desc=
 Head=0
@@ -1016,11 +1022,14 @@ Heading=3
 Movement=1
 Attackable=0
 Comercia=1
-NROITEMS=2
+NROITEMS=5
 TipoItems=11
 Inflacion=0
-Obj1=698-100
-Obj2=696-100
+Obj1=708-100
+Obj2=709-100
+Obj3=36-100
+Obj4=39-100
+Obj5=166-100
 BackUp=1
 Domable=0
 info=Alquimista de Nix
@@ -1397,7 +1406,7 @@ Movement=1
 Attackable=0
 Comercia=1
 TipoItems=3
-NROITEMS=8
+NROITEMS=89
 Inflacion=0
 Obj1=524-100
 Obj2=639-100
@@ -1407,6 +1416,7 @@ Obj5=525-100
 Obj6=526-100
 Obj7=619-100
 Obj8=697-100
+Obj9=840-100
 BackUp=1
 Domable=0
 info=Sastre de Banderbille (túnicas gnomo/enano)
@@ -1421,7 +1431,7 @@ Movement=1
 Attackable=0
 Comercia=1
 TipoItems=3
-NROITEMS=7
+NROITEMS=8
 Inflacion=0
 Obj1=239-100
 Obj2=381-100
@@ -1430,6 +1440,7 @@ Obj4=238-100
 Obj5=135-100
 Obj6=357-100
 Obj7=503-100
+Obj8=840-100
 BackUp=1
 Domable=0
 info=Sastre de Banderbille (túnicas humano/elfo/elfo oscuro)
@@ -4507,7 +4518,8 @@ PoderAtaque=15
 PoderEvasion=15
 DEF=0
 NROITEMS=0
-snd3=67
+SND1=206
+SND3=205
 
 [NPC501] 'Lobo (no ND) POTHOS 1.0
 Name=Lobo
@@ -4554,7 +4566,6 @@ NROITEMS=0
 PoderAtaque=100
 PoderEvasion=20
 SND2=33
-snd3=56
 
 [NPC503] 'Esqueleto POTHOS 1.0
 Name=Esqueleto
@@ -4621,8 +4632,8 @@ DEF=15
 NROITEMS=0
 PoderAtaque=40
 PoderEvasion=45
-snd1=55
-snd3=54
+snd1=314
+snd3=436
 
 [NPC506] 'Gallo POTHOS (ND) 1.0
 Name=Gallo salvaje
@@ -4671,7 +4682,6 @@ NROITEMS=0
 PoderAtaque=150
 PoderEvasion=40
 SND2=33
-snd3=56
 
 [NPC508] 'Esqueleto Guerrero POTHOS 1.0
 Name=Esqueleto Guerrero
@@ -4759,7 +4769,8 @@ PoderAtaque=15
 PoderEvasion=15
 DEF=0
 NROITEMS=0
-snd3=67
+SND1=206
+SND3=205
 
 [NPC512] 'Lobo (ND) POTHOS 1.0
 Name=Lobo
@@ -4874,8 +4885,8 @@ DEF=15
 NROITEMS=0
 PoderAtaque=40
 PoderEvasion=45
-snd1=55
-snd3=54
+snd1=314
+snd3=436
 
 [NPC517] 'Gallo (NO ND) POTHOS 1.0
 Name=Gallo salvaje
@@ -5086,8 +5097,6 @@ MinHIT=3
 Veneno=1
 PoderAtaque=30
 PoderEvasion=10
-snd3=53
-
 
 [NPC526] 'Araña gigante 1.0
 Name=Araña gigante
@@ -5179,8 +5188,6 @@ MinHIT=3
 Veneno=1
 PoderAtaque=30
 PoderEvasion=10
-snd3=53
-
 
 
 [NPC530] 'Bandido POTHOS 1.0
@@ -5203,6 +5210,7 @@ MinHIT=30
 PoderAtaque=70
 PoderEvasion=50
 NROITEMS=0
+SND3=11
 
 [NPC531] 'Asesino POTHOS 1.0
 Name=Asesino
@@ -5227,6 +5235,8 @@ PoderAtaque=200
 PoderEvasion=150
 Apu=1
 probabilidad=20
+SND1=58
+SND2=117
 
 [NPC532] 'Aguila POTHOS 1.0
 Name=Águila
@@ -5370,6 +5380,7 @@ PoderEvasion=45
 Domable=300
 NROITEMS=1
 Obj1=415-1
+SND3=121
 
 [NPC539] 'Tortuga gigante POTHOS 1.0
 Name=Tortuga gigante
@@ -5412,6 +5423,8 @@ DEF=0
 PoderAtaque=80
 PoderEvasion=70
 NROITEMS=0
+snd1=314
+snd3=436
 
 [NPC541] ' Ogro POTHOS 1.0
 Name=Ogro
@@ -5434,6 +5447,8 @@ NROITEMS=1
 Obj1=398-1
 PoderAtaque=260
 PoderEvasion=230
+SND2=189
+SND3=122
 
 [NPC542] ' Dragon Rojo POTHOS
 Name=Gran Dragón Rojo
@@ -5481,7 +5496,7 @@ MinHIT=250
 DEF=0
 PoderAtaque=230
 PoderEvasion=180
-
+SND2=52
 
 [NPC544] 'Lobo 1.0
 Name=Lobo
@@ -5508,9 +5523,6 @@ Snd1=35
 Snd2=9
 NROITEMS=1
 Obj1=414-1
-
-
-
 
 [NPC546] ' Zombie magico (NO DEJA ORO) 1.0
 Name=Zombie
@@ -5583,8 +5595,8 @@ PoderEvasion=180
 AguaValida=1
 TierraInvalida=1
 NpcType=6
-snd2=59
-snd3=57
+SND2=54
+SND3=53
 
 [NPC549] 'Orco brujo POTHOS 1.0
 Name=Orco brujo
@@ -5894,8 +5906,8 @@ DEF=15
 NROITEMS=0
 PoderAtaque=40
 PoderEvasion=45
-snd1=55
-snd3=54
+snd1=314
+snd3=436
 
 [NPC564] 'Escorpion NO RESPAWN 1.0
 ReSpawn=1
@@ -5918,8 +5930,6 @@ MinHIT=3
 Veneno=1
 PoderAtaque=30
 PoderEvasion=10
-snd3=53
-
 
 [NPC565] 'Serpiente cobra NO RESPAWN 1.0
 ReSpawn=1
@@ -5968,7 +5978,8 @@ PoderAtaque=15
 PoderEvasion=15
 DEF=0
 NROITEMS=0
-snd3=67
+SND1=206
+SND3=205
 
 [NPC567] 'Troll malvado POTHOS
 ReSpawn=0
@@ -6199,8 +6210,8 @@ DEF=15
 NROITEMS=0
 PoderAtaque=40
 PoderEvasion=45
-snd1=55
-snd3=54
+snd1=314
+snd3=436
 
 [NPC576]
 ReSpawn=0
@@ -6487,7 +6498,8 @@ PoderAtaque=15
 PoderEvasion=15
 DEF=0
 NROITEMS=0
-snd3=67
+SND1=206
+SND3=205
 
 [NPC588]'POTHOS
 ReSpawn=0
@@ -7421,9 +7433,9 @@ Sp1=25
 VeInvis=1
 PocaParalisis=1
 
-[NPC627]' Lagarto POTHOS
+[NPC627]' Basilisco POTHOS
 ReSpawn=0
-Name=Lagarto
+Name=Basilisco
 Body=233
 Heading=3
 Movement=3
@@ -7681,7 +7693,6 @@ MinHIT=3
 Veneno=1
 PoderAtaque=30
 PoderEvasion=10
-snd3=53
 
 [NPC640] 'POTHOS 1.0
 Name=Orco anciano
@@ -7748,7 +7759,8 @@ PoderAtaque=15
 PoderEvasion=15
 DEF=0
 NROITEMS=0
-snd3=67
+SND1=206
+SND3=205
 
 [NPC545] 'Lobo ENTRENADOR 1.0
 Name=Lobo
@@ -7817,7 +7829,6 @@ MinHIT=3
 Veneno=1
 PoderAtaque=30
 PoderEvasion=10
-snd3=53
 
 [NPC638] 'Goblin ENTRENADOR 1.0
 Name=Goblin
@@ -7840,8 +7851,8 @@ DEF=15
 NROITEMS=0
 PoderAtaque=40
 PoderEvasion=45
-snd1=55
-snd3=54
+snd1=314
+snd3=436
 
 [NPC644]
 Name=Rocabruto

@@ -1491,13 +1491,14 @@ Public Sub SacerdoteHealUser(ByVal UserIndex As Integer)
 
         'Enviamos sonido de curar
         Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessagePlayWave(SND_CURAR_SACERDOTE, .Pos.X, .Pos.Y))
-
+        Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageCreateFX(.Char.CharIndex, FXCURAR, 0))
+        
         .Stats.MinHp = .Stats.MaxHp
 
         Call WriteUpdateHP(UserIndex)
 
         Call WriteConsoleMsg(UserIndex, "El sacerdote alza las manos y notas como tus heridas comienzan a cerrarse. Te has curado!!", FontTypeNames.FONTTYPE_INFO)
-
+        
         Call SacerdoteHealEffectsAndRestoreMana(UserIndex)
 
         Call WriteUpdateUserStats(UserIndex)
@@ -1510,6 +1511,7 @@ Public Sub SacerdoteResucitateUser(ByVal UserIndex As Integer)
 
         'Enviamos sonido de resucitacion (Recox)
         Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessagePlayWave(SND_RESUCITAR_SACERDOTE, .Pos.X, .Pos.Y))
+        Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageCreateFX(.Char.CharIndex, FXRESU, 0))
         
         Call RevivirUsuario(UserIndex)
         Call WriteConsoleMsg(UserIndex, "Tu cuerpo comienza a tomar forma... Has sido resucitado!!", FontTypeNames.FONTTYPE_INFO)

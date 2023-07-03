@@ -154,6 +154,7 @@ Private Enum ServerPacketID
     MultiMessage
     StopWorking
     CancelOfferItem
+    PlayAttackAnim
     FXtoMap
     EnviarPJUserAccount
     SearchList
@@ -2393,6 +2394,9 @@ Private Sub HandleAttack(ByVal UserIndex As Integer)
         
         'Si esta casteando, lo cancelamos
         Call CancelCast(UserIndex)
+        
+        'Play AttackAnim on Clients
+        Call SendData(SendTarget.ToPCAreaButIndex, UserIndex, PrepareMessageCharacterAttackAnim(.Char.CharIndex))
         
         'Attack!
         Call UsuarioAtaca(UserIndex)
@@ -22155,6 +22159,23 @@ errHandler:
     End If
 
 End Sub
+
+Public Function PrepareMessageCharacterAttackAnim(ByVal CharIndex As Integer) As String
+
+    '***************************************************
+    'Author: Cucsijuan
+    'Last Modification: 2/9/2018
+    'Prepares the Attack animation message.
+    '***************************************************
+    With auxiliarBuffer
+        Call .WriteByte(ServerPacketID.PlayAttackAnim)
+        Call .WriteInteger(CharIndex)
+    
+        PrepareMessageCharacterAttackAnim = .ReadASCIIStringFixed(.Length)
+
+    End With
+
+End Function
 
 Public Function PrepareMessageFXtoMap(ByVal FxIndex As Integer, _
                                       ByVal loops As Byte, _

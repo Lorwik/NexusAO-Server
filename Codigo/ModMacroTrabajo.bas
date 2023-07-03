@@ -13,7 +13,7 @@ Public Enum eMacroTrabajo '(El 0 es no activado)
     Ninguno = 0
     Lingotear = 1
     PescarRed = 2
-    'DEBE y Coincide con el numero de los skills:
+    'Debe coincidir con el numero del skill que tiene en el Enum eSkills:
     PESCAR = 18
     Minando = 19
     Talando = 20
@@ -267,6 +267,7 @@ Private Function PuedeCarpinteria(ByVal UserIndex As Integer, ByVal Cantidad As 
         
         '풲iene materiales para construir el proximo item?
         If Not TieneMateriales(UserIndex, Item) Then
+            Call WriteConsoleMsg(UserIndex, "No tienes suficientes materiales para construir el objeto.", FontTypeNames.FONTTYPE_INFOBOLD)
             Call DejardeTrabajar(UserIndex)
             PuedeCarpinteria = False
             Exit Function
@@ -282,6 +283,7 @@ Private Function PuedeCarpinteria(ByVal UserIndex As Integer, ByVal Cantidad As 
         
         '풲iene el serrucho equipado?
         If Not UserList(UserIndex).Invent.WeaponEqpObjIndex = SERRUCHO_CARPINTERO Then
+            Call WriteConsoleMsg(UserIndex, "Necesitas tener equipada la herramienta para poder trabajar.", FontTypeNames.FONTTYPE_INFOBOLD)
             Call DejardeTrabajar(UserIndex)
             PuedeCarpinteria = False
             Exit Function
@@ -363,6 +365,7 @@ Private Function PuedeHerreria(ByVal UserIndex As Integer, ByVal Cantidad As Int
         
         '풲iene el martillo equipado?
         If Not UserList(UserIndex).Invent.WeaponEqpObjIndex = MARTILLO_HERRERO Then
+            Call WriteConsoleMsg(UserIndex, "Necesitas tener equipada la herramienta para poder trabajar.", FontTypeNames.FONTTYPE_INFOBOLD)
             Call DejardeTrabajar(UserIndex)
             PuedeHerreria = False
             Exit Function
@@ -431,6 +434,7 @@ Private Function PuedeSastreria(ByVal UserIndex As Integer, ByVal Cantidad As In
         
         '풲iene materiales para construir el proximo item?
         If Not TieneMateriales(UserIndex, Item) Then
+            Call WriteConsoleMsg(UserIndex, "No tienes suficientes materiales para construir el objeto.", FontTypeNames.FONTTYPE_INFOBOLD)
             Call DejardeTrabajar(UserIndex)
             PuedeSastreria = False
             Exit Function
@@ -446,6 +450,7 @@ Private Function PuedeSastreria(ByVal UserIndex As Integer, ByVal Cantidad As In
         
         '풲iene el kit de sastreria equipado?
         If Not UserList(UserIndex).Invent.WeaponEqpObjIndex = KIT_DE_COSTURA Then
+            Call WriteConsoleMsg(UserIndex, "Necesitas tener equipada la herramienta para poder trabajar.", FontTypeNames.FONTTYPE_INFOBOLD)
             Call DejardeTrabajar(UserIndex)
             PuedeSastreria = False
             Exit Function
@@ -514,6 +519,7 @@ Private Function PuedeAlquimia(ByVal UserIndex As Integer, ByVal Cantidad As Int
         
         '풲iene materiales para construir el proximo item?
         If Not TieneMateriales(UserIndex, Item) Then
+            Call WriteConsoleMsg(UserIndex, "No tienes suficientes materiales para construir el objeto.", FontTypeNames.FONTTYPE_INFOBOLD)
             Call DejardeTrabajar(UserIndex)
             PuedeAlquimia = False
             Exit Function
@@ -529,6 +535,7 @@ Private Function PuedeAlquimia(ByVal UserIndex As Integer, ByVal Cantidad As Int
         
         '풲iene el kit de sastreria equipado?
         If Not UserList(UserIndex).Invent.WeaponEqpObjIndex = OLLA_ALQUIMISTA Then
+            Call WriteConsoleMsg(UserIndex, "Necesitas tener equipada la herramienta para poder trabajar.", FontTypeNames.FONTTYPE_INFOBOLD)
             Call DejardeTrabajar(UserIndex)
             PuedeAlquimia = False
             Exit Function

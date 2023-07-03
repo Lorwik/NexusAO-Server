@@ -95,7 +95,7 @@ Skills Profesiones:
 '    Sastreria = 25
 
 [INIT]
-NumOBJs=839
+NumOBJs=840
 
 [OBJ398]'1.0 714
 Name=Garrote
@@ -5931,7 +5931,7 @@ Info=Cuchara de madera
 GrhIndex=587
 Objtype=20
 valor=2
-SkCarpinteria=5
+SkCarpinteria=1
 Materiales=58-0-0-0
 CantMateriales=3-0-0-0
 
@@ -9264,8 +9264,8 @@ Name=Barca
 GrhIndex=749
 ObjType=31
 SkCarpinteria=35
-Materiales=58-0-0-0
-CantMateriales=10000-0-0-0
+Materiales=58-840-0-0
+CantMateriales=5000-100-0-0
 valor=24000
 NumRopaje=84
 MinSkill=35
@@ -9711,12 +9711,6 @@ RP1=2
 RP2=5
 NumRazas=2
 
-
-
-
-
-
-
 [OBJ528]
 Name=Túnica (H/E/EO-H/M)
 GrhIndex=806
@@ -9731,8 +9725,6 @@ RP1=2
 RP2=5
 NumRazas=2
 NumClases=1
-
-
 
 [OBJ530]
 Name=Inmovilizar
@@ -12639,7 +12631,7 @@ Name=Carpinteria: Silla
 GrhIndex=24047
 ObjType=48
 Agarrable=0
-Valor=0
+Valor=100
 RecetaIndex=162 'Indice del objeto
 Profesion=23 'Skill de la profesion
 
@@ -12648,7 +12640,7 @@ Name=Carpinteria: Tambor
 GrhIndex=24047
 ObjType=48
 Agarrable=0
-Valor=0
+Valor=5000
 RecetaIndex=167 'Indice del objeto
 Profesion=23 'Skill de la profesion
 
@@ -12657,7 +12649,7 @@ Name=Carpinteria: Laud
 GrhIndex=24047
 ObjType=48
 Agarrable=0
-Valor=0
+Valor=5000
 RecetaIndex=469 'Indice del objeto
 Profesion=23 'Skill de la profesion
 
@@ -12666,7 +12658,7 @@ Name=Carpinteria: Flauta
 GrhIndex=24047
 ObjType=48
 Agarrable=0
-Valor=0
+Valor=5000
 RecetaIndex=560 'Indice del objeto
 Profesion=23 'Skill de la profesion
 
@@ -12675,6 +12667,11 @@ Name=Carpinteria: Mueble Rustico
 GrhIndex=24047
 ObjType=48
 Agarrable=0
-Valor=0
+Valor=1000
 RecetaIndex=167 'Indice del objeto
 Profesion=23 'Skill de la profesion
+
+[OBJ840]
+Name=Paño de tela vieja
+GrhIndex=701
+ObjType=29
