@@ -95,7 +95,7 @@ Skills Profesiones:
 '    Sastreria = 25
 
 [INIT]
-NumOBJs=840
+NumOBJs=844
 
 [OBJ398]'1.0 714
 Name=Garrote
@@ -5819,7 +5819,7 @@ Recurso=20-1
 
 [OBJ148] 'NPC
 Name=Arbol Talado
-GrhIndex=7002
+GrhIndex=51840
 Objtype=4
 Agarrable=1
 
@@ -9268,7 +9268,7 @@ Materiales=58-840-0-0
 CantMateriales=5000-100-0-0
 valor=24000
 NumRopaje=84
-MinSkill=35
+MinSkill=40
 MinHIT=1
 MaxHIT=5
 MINDEF=1
@@ -9283,7 +9283,7 @@ Materiales=58-834-0-0
 CantMateriales=1000-10000-0-0
 valor=44000
 NumRopaje=85
-MinSkill=55
+MinSkill=60
 MinHIT=20
 MaxHIT=35
 MINDEF=10
@@ -9298,7 +9298,7 @@ Materiales=58-834-0-0
 CantMateriales=2000-15000-0-0
 valor=67000
 NumRopaje=86
-MinSkill=65
+MinSkill=70
 MinHIT=45
 MaxHIT=65
 MINDEF=15
@@ -9770,6 +9770,14 @@ Valor=10
 IndexAbierta=533
 IndexCerrada=534
 Crucial=1
+
+[OBJ625]
+Name=Tumba de Sirus
+GrhIndex=513
+VGrande=514
+ObjType=8
+Texto=Aquí yace Sirus el Valiente, Héroe eterno, de corazón valiente. Con espada en mano y coraje sin fin, Luchó por la justicia, sin temor a malvin. Sus hazañas quearon grabadas en la historia, Su nombre resonará en cada victoria. Un símbolo de esperanza, un faro de luz, En el corazon de aquellos que luchan por la virtud. Descansa en paz, o valiente guerrero. Tu espíritu vive en cada batalla que se libra, Hasta que la justicia en el mundo se escribe. Honor a ti, Sius el Valiente, Tu memoria en nuestros corazones siempre esta´ra presente. Tu coraje insipira, tu valentía no morirá, Un héroe legendario que nunca olvidaremos jamás.
+Agarrable=1
 
 [OBJ536]
 Name=Invocar elemental de fuego (Druida)
@@ -10282,104 +10290,6 @@ Objtype=20
 valor=0
 SkCarpinteria=0
 Madera=0
-
-[OBJ625]
-Name=Tumba de Lord ZaKroVeF
-GrhIndex=513
-VGrande=514
-ObjType=8
-Texto=Aquí descansará por toda la eternidad el cuerpo de Lord ZaKroVeF.
-Agarrable=1
-
-[OBJ627]
-Name=Tumba de Fade Black
-GrhIndex=513
-VGrande=514
-ObjType=8
-Texto=Aquí yace Fade Black, gran guerrero que siguió al demonio hasta que fue traicionado por la codicia de su propia sangre. Los reyes de la alianza tuvieron piedad de el, y al morir, su alma fue remidida, convirtiendose en un Dios viviente.
-Agarrable=1
-
-[OBJ628]
-Name=Tumba de Pothos
-GrhIndex=513
-VGrande=514
-ObjType=8
-Texto=Aquí descansará por toda la eternidad el cuerpo de Pothos.
-Agarrable=1
-
-[OBJ629]
-Name=Tumba de Aranedhel
-GrhIndex=513
-VGrande=514
-ObjType=8
-Texto=En honor a Lord Mercy se irgue esta lapida. Recordado por pocos, aportó su grano de arena para que este mundo viera la luz. Batallador de grandes batallas, pereció a la sombra de un sauce en las cercanías de Banderbille, ya cansado de luchar contra la corrupcion de los poderosos. Su escensia y la de sus compañeros de guerra seguirán vigentes en este mundo por un largo tiempo y, si Dios lo permite, darán lugar a un nuevo legado. Que así sea.
-Agarrable=1
-
-[OBJ630]
-Name=Tumba de Dhamshoth
-GrhIndex=513
-VGrande=514
-ObjType=8
-Texto=Aquí yacen los restos de Dhamshoth, conocido estafador y tramposo de las tierras del Fénix. Su habilidad y frialdad para aprovecharse de los demás son inalcanzables hasta el día de hoy.
-Aunque se comenta que en sus últimos días, su comportamiento dió un giro inesperado. De todas formas, nunca se sabrá la verdad...
-Agarrable=1
-
-[OBJ631]
-Name=Tumba de HeroN
-GrhIndex=513
-VGrande=514
-ObjType=8
-Texto=Ubi sunt latrinae.
-Agarrable=1
-
-[OBJ632]
-Name=Tumba de Nass
-GrhIndex=513
-VGrande=514
-ObjType=8
-Texto=Aquí yace Nass, guerrero oscuro, siempre fue fiel a sus principios, es por eso que hoy se lo recuerda en esta piedra.
-Agarrable=1
-
-[OBJ633]
-Name=Tumba de CroNoS
-GrhIndex=513
-VGrande=514
-ObjType=8
-Texto=Aquí descansará por toda la eternidad el cuerpo de CroNoS
-Agarrable=1
-
-[OBJ634]
-Name=Tumba de Haldar
-GrhIndex=513
-VGrande=514
-ObjType=8
-Texto=En las entrañas de la tierra yace el cuerpo de Haldar, renombrado hermitaño y silencioso hombre de bien; siempre intentó resolver los problemas por medio de la palabra y no de la fuerza. Hoy sus restos siguen soñando con una paz venidera.
-Agarrable=1
-
-[OBJ635]
-Name=Tumba de Bladhimir
-GrhIndex=513
-VGrande=514
-ObjType=8
-Texto=Aquí descansará por toda la eternidad el cuerpo de Bladhimir.
-Agarrable=1
-
-[OBJ636]
-Name=Tumba de Grave
-GrhIndex=513
-VGrande=514
-ObjType=8
-Texto=Aquí descansará por toda la eternidad el cuerpo de Grave
-Agarrable=1
-
-[OBJ637]
-Name=Tumba de Qex
-GrhIndex=513
-VGrande=514
-ObjType=8
-Texto=Aquí descansará por toda la eternidad el cuerpo de Qex
-Agarrable=1
-
 
 [OBJ638]'PRESI
 Name=Túnica de Mago Real / Primer Jerarquia \ (Enano/Gnomo)
@@ -12675,3 +12585,39 @@ Profesion=23 'Skill de la profesion
 Name=Paño de tela vieja
 GrhIndex=701
 ObjType=29
+
+[OBJ841]
+Name=Manual de Navegacion Principiante
+GrhIndex=538
+ObjType=35
+Agarrable=0
+Valor=90000
+IndiceSkill=26
+CuantosSkill=40
+SkNecesarios=0
+
+[OBJ842]
+Name=Manual de Equitacion Principiante
+GrhIndex=538
+ObjType=35
+Agarrable=0
+Valor=90000
+IndiceSkill=27
+CuantosSkill=40
+SkNecesarios=0
+
+[OBJ843]
+Name=Incinerar
+GrhIndex=26052
+Valor=1800000
+Crucial=1
+HechizoIndex=79
+Objtype=24
+
+[OBJ7844]
+Name=Portal Planar
+GrhIndex=26029
+Valor=6700000
+Crucial=1
+HechizoIndex=53
+Objtype=24

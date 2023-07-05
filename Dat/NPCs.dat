@@ -381,14 +381,13 @@ Obj18=511-100
 Obj19=382-100
 Obj20=488-100
 Obj21=512-100
-Obj22=656-100
-Obj23=657-100
-Obj24=694-100
-Obj25=707-100
-Obj26=510-100
-Obj27=513-100
-Obj28=697-100
-Obj29=840-100
+Obj22=657-100
+Obj23=694-100
+Obj24=707-100
+Obj25=510-100
+Obj26=513-100
+Obj27=697-100
+Obj28=840-100
 BackUp=1
 Domable=0
 info=Sastre de Ullathorpe
@@ -771,13 +770,12 @@ Obj20=511-100
 Obj21=382-100
 Obj22=488-100
 Obj23=512-100
-Obj24=656-100
-Obj25=657-100
-Obj26=694-100
-Obj27=707-100
-Obj28=510-100
-Obj29=513-100
-Obj30=697-100
+Obj24=657-100
+Obj25=694-100
+Obj26=707-100
+Obj27=510-100
+Obj28=513-100
+Obj29=697-100
 BackUp=1
 Domable=0
 info=Sastre de Nix
@@ -1360,7 +1358,7 @@ Movement=1
 Attackable=0
 Comercia=1
 TipoItems=3
-NROITEMS=30
+NROITEMS=29
 Inflacion=0
 Obj1=31-100
 Obj2=32-100
@@ -1385,13 +1383,12 @@ Obj20=511-100
 Obj21=382-100
 Obj22=488-100
 Obj23=512-100
-Obj24=656-100
-Obj25=657-100
-Obj26=694-100
-Obj27=707-100
-Obj28=510-100
-Obj29=513-100
-Obj30=697-100
+Obj24=657-100
+Obj25=694-100
+Obj26=707-100
+Obj27=510-100
+Obj28=513-100
+Obj29=697-100
 BackUp=1
 Domable=0
 info=Sastre de Banderbille
@@ -1791,13 +1788,12 @@ Obj20=511-100
 Obj21=382-100
 Obj22=488-100
 Obj23=512-100
-Obj24=656-100
-Obj25=657-100
-Obj26=694-100
-Obj27=707-100
-Obj28=510-100
-Obj29=513-100
-Obj30=697-100
+Obj24=657-100
+Obj25=694-100
+Obj26=707-100
+Obj27=510-100
+Obj28=513-100
+Obj29=697-100
 BackUp=1
 Domable=0
 info=Sastre de Lindos
@@ -2113,13 +2109,12 @@ Obj20=511-100
 Obj21=382-100
 Obj22=488-100
 Obj23=512-100
-Obj24=656-100
-Obj25=657-100
-Obj26=694-100
-Obj27=707-100
-Obj28=510-100
-Obj29=513-100
-Obj30=697-100
+Obj24=657-100
+Obj25=694-100
+Obj26=707-100
+Obj27=510-100
+Obj28=513-100
+Obj29=697-100
 BackUp=1
 Domable=0
 info=Sastre de Hilidian
@@ -2444,13 +2439,12 @@ Obj20=511-100
 Obj21=382-100
 Obj22=488-100
 Obj23=512-100
-Obj24=656-100
-Obj25=657-100
-Obj26=694-100
-Obj27=707-100
-Obj28=510-100
-Obj29=513-100
-Obj30=697-100
+Obj24=657-100
+Obj25=694-100
+Obj26=707-100
+Obj27=510-100
+Obj28=513-100
+Obj29=697-100
 BackUp=1
 Domable=0
 info=Satre de Esperanza
@@ -2639,7 +2633,7 @@ info=Vendedor de bebidas de Esperanza
 
 
 
-'************************************* NPCS ARGHAL *******************************************
+'************************************* NPCS Frostdale *******************************************
 '*********************************************************************************************
 
 [NPC12] 'NPC Sastre: 697, 31, 32, 35, 80, 170, 506, 505, 504, 240, 527, 507, 502, 515, 382, 511, 550. Túnicas: 135, 381, 238, 675.
@@ -2652,7 +2646,7 @@ Movement=1
 Attackable=0
 Comercia=1
 TipoItems=3
-NROITEMS=30
+NROITEMS=29
 Inflacion=0
 Obj1=31-100
 Obj2=32-100
@@ -2677,16 +2671,15 @@ Obj20=511-100
 Obj21=382-100
 Obj22=488-100
 Obj23=512-100
-Obj24=656-100
-Obj25=657-100
-Obj26=694-100
-Obj27=707-100
-Obj28=510-100
-Obj29=513-100
-Obj30=697-100
+Obj24=657-100
+Obj25=694-100
+Obj26=707-100
+Obj27=510-100
+Obj28=513-100
+Obj29=697-100
 BackUp=1
 Domable=0
-info=Sastre de Arghal
+info=Sastre de Frostdale
 
 [NPC180]
 Name=Sastre
@@ -2733,7 +2726,7 @@ Obj7=503-100
 Obj8=697-100
 BackUp=1
 Domable=0
-info=Sastre de Arghal (túnicas humano/elfo/elfo oscuro)
+info=Sastre de Frostdale (túnicas humano/elfo/elfo oscuro)
 
 [NPC206] 'NPC Hechizos:
 Name=Mago
@@ -2748,19 +2741,21 @@ TipoItems=24
 Hostile=0
 Alineacion=0
 ReSpawn=0
-NROITEMS=6
+NROITEMS=8
 Obj1=318-100
 obj2=361-100
 Obj3=530-100
 Obj4=531-100
 Obj5=532-100
 Obj6=537-100
+Obj7=759-100
+Obj8=760-100
 Domable=0
-info=Vendedor de hechizos de Arghal
+info=Vendedor de hechizos de Frostdale
 
 [NPC205]
 Name=Mago
-Info=Mago de Arghal
+Info=Mago de Frostdale
 Desc=Te enseñaré los gorros y báculos que vendo.
 Head=2
 Body=50
@@ -2777,7 +2772,7 @@ Obj1=726-100
 Obj2=728-100
 Obj3=573-100
 Domable=0
-info=Vendedor de Gorros/Báculos Arghal
+info=Vendedor de Gorros/Báculos Frostdale
 
 [NPC117] Armas: 15, 2, 3, 579, 580, 581, 399, 125, 705.
 Name=Herrero
@@ -2807,11 +2802,11 @@ Obj11=159-100
 Obj12=759-100
 BackUp=1
 Domable=0
-info=Herrero de Arghal (armas)
+info=Herrero de Frostdale (armas)
 
 [NPC118] 'NPC Comida: 26, 25, 27.
 Name=Argal
-Desc=¡Hola buen amigo! El temor a que Arghal sea de nuevo destruida hace que muchos compren mucha comida para sus refugios!
+Desc=¡Hola buen amigo! El temor a que Frostdale sea de nuevo destruida hace que muchos compren mucha comida para sus refugios!
 Head=2
 Body=3
 Heading=3
@@ -2829,7 +2824,7 @@ Obj2=26-100
 Obj3=27-100
 BackUp=1
 Domable=0
-info=Vendedor de comida de Arghal
+info=Vendedor de comida de Frostdale
 
 [NPC120] 'NPC Armaduras: 529, 30, 659, 672, 671, 499, 359.Escudos: 404, 608.Cascos: 568, 566. 
 Name=Herrero 
@@ -2858,7 +2853,7 @@ Obj10=391-100
 Obj11=243-100
 BackUp=1
 Domable=0
-info=Herrero de Arghal (armaduras)
+info=Herrero de Frostdale (armaduras)
 
 [NPC161]
 Name=Herrero 
@@ -2880,7 +2875,7 @@ obj3=130-100
 Obj4=568-100
 BackUp=1
 Domable=0
-info=Herrero de Arghal (cascos y escudos)
+info=Herrero de Frostdale (cascos y escudos)
 
 [NPC121] 'NPCPociones: 38, 709, 37, 708, 36, 39, 166.
 Name=Hechizera
@@ -2901,11 +2896,11 @@ Obj4=39-100
 Obj5=166-100
 BackUp=1
 Domable=0
-info=Vendedor de pociones de Arghal
+info=Vendedor de pociones de Frostdale
 
 [NPC122] 'NPC Pescador: 543, 138.
 Name=Pescador
-Desc=¡Hola forastero, bienvenido a Arghal!
+Desc=¡Hola forastero, bienvenido a Frostdale!
 Head=101
 Body=3
 Heading=3
@@ -2921,7 +2916,7 @@ Obj1=138-100
 Obj2=543-100
 BackUp=1
 Domable=0
-info=Pescador de Arghal
+info=Pescador de Frostdale
 
 [NPC123] 'NPC
 Name=Banquero
@@ -2932,10 +2927,10 @@ Heading=3
 Movement=1
 NpcType=4
 Domable=0
-info=Banquero de Arghal
+info=Banquero de Frostdale
 
 [NPC138] 'NPC Bebida: 43, 160, 161, 42.
-Name=Bebida Arghal
+Name=Bebida Frostdale
 Desc=Si tienes sed, nada mejor que una de nuestras bebidas.
 Head=0
 Body=33
@@ -2955,21 +2950,21 @@ Obj3=160-100
 Obj4=161-100
 BackUp=1
 Domable=0
-info=Vendedor de bebidas de Arghal
+info=Vendedor de bebidas de Frostdale
 
-[NPC106] ' Rey de Arghal
-Name=Lord Thek, Rey de Arghal
+[NPC106] ' Rey de Frostdale
+Name=Lord Thek, Rey de Frostdale
 NpcType=5
 Faccion=2
-Desc=Arghal fue reconstruida en el desierto luego de que una gran guerra la destruyera por completo. Yo soy Lord Thek, su Rey, y si quieres evitar que el pasado se repita, escribe /ENLISTAR y únete a nosotros.
+Desc=Frostdale fue reconstruida en el desierto luego de que una gran guerra la destruyera por completo. Yo soy Lord Thek, su Rey, y si quieres evitar que el pasado se repita, escribe /ENLISTAR y únete a nosotros.
 Head=203
 Body=63
 Heading=3
 Movement=1
 Attackable=0
-info=Rey de Arghal
+info=Rey de Frostdale
 
-'************************************* NPCS ARGHAL *******************************************
+'************************************* NPCS Frostdale *******************************************
 '*********************************************************************************************
 
 [NPC63] ' Sacerdote
@@ -3943,7 +3938,7 @@ Movement=1
 Attackable=0
 Comercia=1
 TipoItems=3
-NROITEMS=30
+NROITEMS=29
 Inflacion=0
 Obj1=31-100
 Obj2=32-100
@@ -3968,16 +3963,15 @@ Obj20=511-100
 Obj21=382-100
 Obj22=488-100
 Obj23=512-100
-Obj24=656-100
-Obj25=657-100
-Obj26=694-100
-Obj27=707-100
-Obj28=510-100
-Obj29=513-100
-Obj30=697-100
+Obj24=657-100
+Obj25=694-100
+Obj26=707-100
+Obj27=510-100
+Obj28=513-100
+Obj29=697-100
 BackUp=1
 Domable=0
-info=Sastre de Arghal
+info=Sastre de Frostdale
 
 [NPC151] 'Pasajes Frostdale
 Name=Pirata

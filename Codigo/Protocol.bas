@@ -379,6 +379,7 @@ Public Enum eEditOptions
     eo_Vida
     eo_Poss
     eo_Speed
+    eo_Particle
 
 End Enum
 
@@ -10869,6 +10870,24 @@ Private Sub HandleEditChar(ByVal UserIndex As Integer)
                         UserList(tUser).flags.Velocidad = Speed
                         Call WriteSetSpeed(tUser)
                         
+                        ' Log it
+                        CommandString = CommandString & "SPEED "
+                    
+                    Case eEditOptions.eo_Particle
+                        
+                        If val(Arg1) > 1 Then
+                            Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageCreateParticleChar(.Char.CharIndex, .Char.Particle, False, 0))
+                            .Char.Particle = val(Arg1)
+                            Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageCreateParticleChar(.Char.CharIndex, .Char.Particle, True, -1))
+                            Call WriteConsoleMsg(UserIndex, "Particula " & val(Arg1) & " establecida.", FontTypeNames.FONTTYPE_INFO)
+                        Else
+                            .Char.Particle = 0
+                            Call SendData(SendTarget.ToPCArea, UserIndex, PrepareMessageCreateParticleChar(.Char.CharIndex, .Char.Particle, False, 0))
+                            Call WriteConsoleMsg(UserIndex, "Particula eliminada.", FontTypeNames.FONTTYPE_INFO)
+                        End If
+                        
+                        ' Log it
+                        CommandString = CommandString & "PARTICULA "
                 Case Else
                     Call WriteConsoleMsg(UserIndex, "Comando no permitido.", FontTypeNames.FONTTYPE_INFO)
                     CommandString = CommandString & "UNKOWN "

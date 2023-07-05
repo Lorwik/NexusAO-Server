@@ -2356,7 +2356,7 @@ Sub UseInvItem(ByVal UserIndex As Integer, ByVal Slot As Byte)
 
                         .flags.CasteoSpell.Casteando = eCasteo.Runa
                         .flags.CasteoSpell.TimeCast = TIEMPO_CASTEO_RUNA
-                        Call WriteConsoleMsg(UserIndex, "Sujetas la runa y comienzas a concentrarte.", FontTypeNames.FONTTYPE_INFO)
+                        Call WriteConsoleMsg(UserIndex, "Te concentras en la runa y comienzas a concentrarte.", FontTypeNames.FONTTYPE_INFO)
                     Else
                         Call WriteConsoleMsg(UserIndex, "Ya te encuentras en tu hogar.", FontTypeNames.FONTTYPE_INFO)
     

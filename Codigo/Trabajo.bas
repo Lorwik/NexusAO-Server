@@ -185,8 +185,6 @@ Public Sub DoNavega(ByVal UserIndex As Integer, _
 '10/12/2010: Pato - Limpio las variables del inventario que hacen referencia a la barca, sino el pirata que la ultima barca que equipo era el galeon no explotaba(Y capaz no la tenia equipada :P).
 '12/01/2020: Recox - Se refactorizo un poco para reutilizar con monturas .
 '***************************************************
-
-    Dim ModNave As Single
     
     With UserList(UserIndex)
         If .flags.Equitando = 1 Then
@@ -202,12 +200,10 @@ Public Sub DoNavega(ByVal UserIndex As Integer, _
 '            End If
 '
 '        Else
-        
-            ModNave = ModNavegacion(.clase, UserIndex)
             
-            If .Stats.UserSkills(eSkill.Navegacion) / ModNave < Barco.MinSkill Then
+            If .Stats.UserSkills(eSkill.Navegacion) < Barco.MinSkill Then
                 Call WriteConsoleMsg(UserIndex, "No tienes suficientes conocimientos para usar este barco.", FontTypeNames.FONTTYPE_INFO)
-                Call WriteConsoleMsg(UserIndex, "Para usar este barco necesitas " & Barco.MinSkill * ModNave & " puntos en navegacion.", FontTypeNames.FONTTYPE_INFO)
+                Call WriteConsoleMsg(UserIndex, "Para usar este barco necesitas " & Barco.MinSkill & " puntos en navegacion.", FontTypeNames.FONTTYPE_INFO)
                 Exit Sub
     
             End If
@@ -992,25 +988,6 @@ Public Sub DoLingotes(ByVal UserIndex As Integer)
     End With
 
 End Sub
-
-Function ModNavegacion(ByVal clase As eClass, ByVal UserIndex As Integer) As Single
-
-    '***************************************************
-    'Autor: Unknown (orginal version)
-    'Last Modification: 27/11/2009
-    '12/04/2010: ZaMa - Arreglo modificador de pescador, para que navegue con 60 skills.
-    '***************************************************
-    Select Case clase
-
-        Case eClass.Mercenario
-            ModNavegacion = 1
-
-        Case Else
-            ModNavegacion = 2
-
-    End Select
-
-End Function
 
 Function ModDomar(ByVal clase As eClass) As Integer
 

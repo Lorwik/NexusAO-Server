@@ -91,6 +91,7 @@ Module=modCastillos; Codigo\modCastillos.bas
 Module=modTrampas; Codigo\modTrampas.bas
 Class=clsEventoMapa; Codigo\clsEventoMapa.cls
 Form=Codigo\frmMain.frm
+Module=ModQuest; Codigo\ModQuest.bas
 Startup="Sub Main"
 HelpFile=""
 Title="WinterAO Resurrection Server"

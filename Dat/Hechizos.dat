@@ -1,9 +1,15 @@
 'Tipos....
 '1 actuan sobre HP,MANA,STA,HAM y SED
 '2 actuan sobre los estados de los usuarios
-'3 invocacion
-'4 materializa
-'5 metamorfosis
+'4 invocacion
+'5 crea teleport
+'6 invoca familiar
+'7 materializa
+'8 Combinacion 1, 2 y 11
+'9 Actua sobre los estados de NPCs (Domar y Calmar)
+'10 Creación de arma,escudo, casco, armadura mágica
+'11 Modificación de estado de arma, armadura, escudo, casco
+'12 Detecta invisibles
 
 'Tagets....
 '1.....Usuario
@@ -12,7 +18,7 @@
 '4.....Terreno
 
 [INIT]
-NumeroHechizos=78
+NumeroHechizos=80
 
 [HECHIZO1]
 Nombre=Curar veneno
@@ -180,13 +186,12 @@ TargetMsg=lanzó flecha electrica sobre ti.
 PropioMsg=Has lanzado flecha electrica sobre ti.
 Tipo=1
 WAV=16
-FXgrh=163
+FXgrh=0
+Particle=23
 Resis=1
-
 SubeHP=2
 MinHP=12
 MaxHP=20
-    
 MinSkill=22
 ManaRequerido=35
 StaRequerido=5
@@ -274,7 +279,8 @@ TargetMsg=te ha resucitado.
 PropioMsg=Te has resucitado.
 Tipo=2
 WAV=204
-FXgrh=36	
+FXgrh=0
+Particle=22	
 Revivir=1
 Invoca=0
 NumNpc=0
@@ -1431,4 +1437,45 @@ Cant=1
 MinSkill=0
 ManaRequerido=0
 StaRequerido=0
+Target=4
+
+[HECHIZO79]
+Nombre=Incinerar
+Desc=Una llamarada incinerará al objetivo, causando un daño considerable rápidamente.
+PalabrasMagicas=Incinera Corps
+
+HechizeroMsg=Has incinerado a
+TargetMsg=te ha incinerado.
+PropioMsg=Te has incinerado.
+
+Tipo=2
+WAV=123
+FXgrh=16
+loops=3
+
+Incinera=1
+MinSkill=90
+ManaRequerido=920
+StaRequerido=100
+
+Target=1
+
+[HECHIZO80]
+Nombre=Nexo Dimensional
+Desc=Un poderoso hechizo que permite a los practicantes abrir un portal hacia un mapa especial desde el cual pueden acceder a cualquier ciudad deseada. Al pronunciar las palabras mágicas con determinación y canalizar su energía mágica, el lanzador invoca un portal dimensional.
+PalabrasMagicas=Portalum Itineris
+HechizeroMsg=Has creado un Portal interplanar.
+Tipo=3
+Portal=1
+PortalMap=49-50-50 '(MAP)-(COR X)- (COR Y)
+Casteo=5
+CastFX=64
+WAV=129
+FXgrh=39
+loops=0
+    
+MinSkill=100
+ManaRequerido=2300
+StaRequerido=300
+
 Target=4
